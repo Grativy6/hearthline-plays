@@ -1,51 +1,42 @@
-# Hearthline Plays
+# ARC-AGI Playground
 
-A public playground for building, running, and playing games with AI models.
+**Series anchor:** `arc-agi/main`  
+[Return to the Hearthline Plays front door](https://github.com/Grativy6/hearthline-plays)
 
-This repository is organized by branch so one growing playground does not become one crowded root. `main` is the front door and shared map. Each game series has a stable anchor branch; individual titles, worlds, and bounded experiments branch from that anchor.
+This is the public development and play branch for ARC-AGI games and environments. ARC-AGI-3 can be built here as its own title branch before any separately authorized move to a competition or Kaggle environment.
 
-## Front of the playground: Finis Solutus
+## Branchline
 
-**Finis Solutus** is the current front-of-house project: an open-ended fantasy world built from persistent rules rather than a predetermined plot.
-
-- Series anchor: [`finis-solutus/main`](https://github.com/Grativy6/hearthline-plays/tree/finis-solutus/main)
-- Persistent world branches: `finis-solutus/worlds/<slug>`
-
-## Deeper branch: ARC-AGI
-
-ARC work has its own series branch so public ARC-AGI development can grow without taking over the repository entrance.
-
-- Series anchor: [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
-- Title or environment branches: `arc-agi/titles/<slug>`
-
-## Branch map
-
-| Branch pattern | Role |
+| Branch | Role |
 | --- | --- |
-| `main` | Shared front door, branch map, and license |
-| `finis-solutus/main` | Finis Solutus series anchor and common scaffold |
-| `finis-solutus/worlds/<slug>` | One persistent Finis Solutus world |
-| `arc-agi/main` | ARC-AGI series anchor and public-development boundary |
-| `arc-agi/titles/<slug>` | One ARC title, environment, or bounded experiment |
-| `<series>/main` | Future series anchor |
-| `<series>/titles/<slug>` | Future title branch created from its series anchor |
+| `arc-agi/main` | Public series anchor, shared rules, and common scaffold |
+| `arc-agi/titles/<slug>` | One title, environment, or bounded experiment created from an exact anchor commit |
 
-The `<series>/main` form is deliberate: Git cannot keep both a branch named `<series>` and descendants named `<series>/...`. Giving every series an explicit `/main` anchor leaves room for its children.
+Create each title branch from `arc-agi/main`. Keep implementation, run data, and title-specific notes on the title branch rather than at the repository front door.
 
-## Branchline rules
+A title branch README should record:
 
-1. Create each title or world from the exact commit of its series anchor.
-2. Record that parent commit and any inherited kernel, ruleset, or environment version in the child branch README.
-3. Keep ongoing state and its ancestry explicit. A migration or major upgrade creates a child branch; it does not silently rewrite an existing world or run.
-4. Keep credentials, secrets, private holdouts, and material that cannot be redistributed out of the repository.
-5. Treat third-party rules, names, datasets, assets, APIs, and trademarks according to their own terms.
+- its parent anchor commit;
+- the official public source, rules, and environment version it inherits;
+- its permitted inputs and excluded inputs;
+- how to run it locally;
+- its declared evaluator or scoring rule, if any;
+- what state or evidence is carried forward.
 
-There is intentionally no game implementation on `main`. Playable material belongs in the branch that owns its lineage.
+## Public-play boundary
+
+- Use public, authorized, source-pinned material.
+- Keep credentials, secrets, private or sealed holdouts, and non-redistributable challenge data out of the repository.
+- Keep runs reproducible enough to identify the code, configuration, and public inputs used.
+- A trace, observation, score payload, or return bundle is data brought forward. It becomes a result only when a declared evaluation rule assigns that status.
+- This series anchor does not upload submissions or claim external validation, endorsement, or competition standing.
+
+## Current state
+
+This is the series scaffold only. No ARC title or game implementation has been installed yet.
+
+ARC-AGI and related names, rules, datasets, and trademarks remain with their respective owners. This repository is an independent playground and is not affiliated with or endorsed by ARC Prize.
 
 ## License
 
-Except where a file says otherwise, original material in this repository is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
-
-Third-party material is not relicensed by its presence here.
-
-Suggested attribution: **Hearthline Plays — Christopher D. Pang — CC BY 4.0 — https://github.com/Grativy6/hearthline-plays**
+Except where a file says otherwise, original material on this branch is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Third-party material retains its own terms.
