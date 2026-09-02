@@ -1,51 +1,39 @@
-# Hearthline Plays
+# Finis Solutus
 
-A public playground for building, running, and playing games with AI models.
+**Series anchor:** `finis-solutus/main`  
+[Return to the Hearthline Plays front door](https://github.com/Grativy6/hearthline-plays)
 
-This repository is organized by branch so one growing playground does not become one crowded root. `main` is the front door and shared map. Each game series has a stable anchor branch; individual titles, worlds, and bounded experiments branch from that anchor.
+Finis Solutus is an open-ended fantasy world-system built from persistent rules rather than a predetermined plot. This branch is its stable public series parent: shared kernels, scaffolds, and series-wide material can live here before any one world begins.
 
-## Front of the playground: Finis Solutus
+## Branchline
 
-**Finis Solutus** is the current front-of-house project: an open-ended fantasy world built from persistent rules rather than a predetermined plot.
-
-- Series anchor: [`finis-solutus/main`](https://github.com/Grativy6/hearthline-plays/tree/finis-solutus/main)
-- Persistent world branches: `finis-solutus/worlds/<slug>`
-
-## Deeper branch: ARC-AGI
-
-ARC work has its own series branch so public ARC-AGI development can grow without taking over the repository entrance.
-
-- Series anchor: [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
-- Title or environment branches: `arc-agi/titles/<slug>`
-
-## Branch map
-
-| Branch pattern | Role |
+| Branch | Role |
 | --- | --- |
-| `main` | Shared front door, branch map, and license |
-| `finis-solutus/main` | Finis Solutus series anchor and common scaffold |
-| `finis-solutus/worlds/<slug>` | One persistent Finis Solutus world |
-| `arc-agi/main` | ARC-AGI series anchor and public-development boundary |
-| `arc-agi/titles/<slug>` | One ARC title, environment, or bounded experiment |
-| `<series>/main` | Future series anchor |
-| `<series>/titles/<slug>` | Future title branch created from its series anchor |
+| `finis-solutus/main` | Current series anchor |
+| `finis-solutus/worlds/<slug>` | One persistent world created from an exact anchor commit |
 
-The `<series>/main` form is deliberate: Git cannot keep both a branch named `<series>` and descendants named `<series>/...`. Giving every series an explicit `/main` anchor leaves room for its children.
+Create every world branch from `finis-solutus/main`. Do not create active world state on the anchor.
 
-## Branchline rules
+A world branch README should record:
 
-1. Create each title or world from the exact commit of its series anchor.
-2. Record that parent commit and any inherited kernel, ruleset, or environment version in the child branch README.
-3. Keep ongoing state and its ancestry explicit. A migration or major upgrade creates a child branch; it does not silently rewrite an existing world or run.
-4. Keep credentials, secrets, private holdouts, and material that cannot be redistributed out of the repository.
-5. Treat third-party rules, names, datasets, assets, APIs, and trademarks according to their own terms.
+- its parent anchor commit;
+- the inherited Finis Solutus kernel or ruleset version;
+- the world name and stable branch identity;
+- where its persistent state is kept;
+- any migration ancestry, conflicts, or transformations.
 
-There is intentionally no game implementation on `main`. Playable material belongs in the branch that owns its lineage.
+Chats are sessions. The persistent state carried by the world branch is the continuing record.
+
+## Upgrades and migrations
+
+A kernel upgrade must not silently rewrite an ongoing world. Preserve the original branch and create an explicit child branch for the migration. Record what was inherited, what changed, and what could not be carried forward cleanly.
+
+That makes each world recoverable without forcing every world to move at once.
+
+## Current state
+
+This is the series scaffold only. No persistent world has been installed yet.
 
 ## License
 
-Except where a file says otherwise, original material in this repository is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
-
-Third-party material is not relicensed by its presence here.
-
-Suggested attribution: **Hearthline Plays — Christopher D. Pang — CC BY 4.0 — https://github.com/Grativy6/hearthline-plays**
+Except where a file says otherwise, original material on this branch is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Third-party material retains its own terms.
