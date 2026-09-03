@@ -15,6 +15,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
@@ -22,5 +24,5 @@ jobs:
         run: python -B -m py_compile tools/validate_launchpad.py tools/pair_static.py tools/arc3_replay_probe.py tests/test_launchpad.py
       - name: Validate structure
         run: python -B tools/validate_launchpad.py
-      - name: Run unit tests
+      - name: Run inherited station and launchpad tests
         run: python -B -m unittest discover -s tests -p "test_*.py" -v
