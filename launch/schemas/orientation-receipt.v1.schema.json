@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/launch/schemas/orientation-receipt.v1.schema.json",
+  "title": "Hearthline Public ARC Orientation Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "status",
+    "started_at_utc",
+    "ended_at_utc",
+    "official_surface",
+    "scope",
+    "configuration",
+    "contact",
+    "counts",
+    "result",
+    "artifact_hashes",
+    "residuals",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline.public-arc-orientation-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": [
+        "PUBLIC_ORIENTATION_COMPLETE",
+        "PUBLIC_ORIENTATION_PARTIAL",
+        "BLOCKED_BEFORE_CONTACT",
+        "BLOCKED_AFTER_CONTACT"
+      ]
+    },
+    "started_at_utc": {"type": "string", "format": "date-time"},
+    "ended_at_utc": {"type": "string", "format": "date-time"},
+    "official_surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "tree"],
+      "properties": {
+        "repository": {"const": "arcprize/ARC-AGI"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_practice_only", "competition_mode", "paid_provider", "kaggle", "private_holdout"],
+      "properties": {
+        "public_practice_only": {"const": true},
+        "competition_mode": {"const": false},
+        "paid_provider": {"const": false},
+        "kaggle": {"const": false},
+        "private_holdout": {"const": false}
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "required": ["game_id", "seed", "max_actions", "max_resets", "max_wall_seconds", "policy", "python"],
+      "properties": {
+        "game_id": {"type": "string", "minLength": 1},
+        "seed": {"type": "integer"},
+        "max_actions": {"type": "integer", "minimum": 0},
+        "max_resets": {"type": "integer", "minimum": 0},
+        "max_wall_seconds": {"type": "integer", "minimum": 0},
+        "policy": {"type": "string", "minLength": 1},
+        "python": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "contact": {
+      "type": "object",
+      "required": ["anonymous_key_requested", "games_endpoint_contacted", "scorecard_opened", "environment_opened", "scorecard_closed"],
+      "properties": {
+        "anonymous_key_requested": {"type": "boolean"},
+        "games_endpoint_contacted": {"type": "boolean"},
+        "scorecard_opened": {"type": "boolean"},
+        "environment_opened": {"type": "boolean"},
+        "scorecard_closed": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "required": ["actions", "resets", "material_changes", "zero_change_actions", "prediction_matches", "prediction_mismatches"],
+      "properties": {
+        "actions": {"type": "integer", "minimum": 0},
+        "resets": {"type": "integer", "minimum": 0},
+        "material_changes": {"type": "integer", "minimum": 0},
+        "zero_change_actions": {"type": "integer", "minimum": 0},
+        "prediction_matches": {"type": "integer", "minimum": 0},
+        "prediction_mismatches": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": true
+    },
+    "result": {
+      "type": "object",
+      "required": ["official_terminal_state", "levels_completed", "win_levels", "win_observed", "stop_reason"],
+      "properties": {
+        "official_terminal_state": {"type": ["string", "null"]},
+        "levels_completed": {"type": ["integer", "null"], "minimum": 0},
+        "win_levels": {"type": ["integer", "null"], "minimum": 0},
+        "win_observed": {"type": "boolean"},
+        "stop_reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "residuals": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "claim_ceiling": {"type": "string", "minLength": 1}
+  }
+}
