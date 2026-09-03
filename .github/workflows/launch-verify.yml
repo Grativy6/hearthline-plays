@@ -1,0 +1,77 @@
+name: Verify Hearthline ARC launch kit
+
+on:
+  push:
+    paths:
+      - "LAUNCH.md"
+      - "launch/**"
+      - ".github/workflows/launch-verify.yml"
+  pull_request:
+    paths:
+      - "LAUNCH.md"
+      - "launch/**"
+      - ".github/workflows/launch-verify.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-launch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Compile launch tools
+        run: python -B -m py_compile launch/tools/*.py
+      - name: Parse launch JSON
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          paths = [Path("launch/research/official-surfaces.lock.json")]
+          paths += sorted(Path("launch/schemas").glob("*.json"))
+          paths += sorted(Path("launch/templates").glob("*.json"))
+          if len(paths) < 6:
+              raise SystemExit("expected launch JSON surfaces are missing")
+          for path in paths:
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"parsed {path}")
+          PY
+      - name: Run launch unit tests
+        run: python -B -m unittest discover -s launch/tests -p 'test_*.py'
+      - name: Guard committed secrets and local runs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          tracked = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
+          forbidden_paths = [
+              path for path in tracked
+              if path.startswith("launch/runs/")
+              or path.startswith("launch/.runtime/")
+              or Path(path).name.startswith(".env")
+              or Path(path).suffix.lower() in {".pem", ".key"}
+          ]
+          if forbidden_paths:
+              raise SystemExit("forbidden tracked launch paths: " + ", ".join(forbidden_paths))
+
+          suspicious = ("sk-", "ARC_API_KEY=", "OPENAI_API_KEY=", "Authorization: Bearer")
+          violations = []
+          for raw in tracked:
+              path = Path(raw)
+              try:
+                  text = path.read_text(encoding="utf-8")
+              except (UnicodeDecodeError, OSError):
+                  continue
+              for needle in suspicious:
+                  if needle in text:
+                      violations.append(f"{raw}: contains {needle!r}")
+          if violations:
+              raise SystemExit("\n".join(violations))
+          print("secret/path guard passed")
+          PY
