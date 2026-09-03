@@ -69,4 +69,5 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'Prepare Hearthline ARC-AGI-3 public launchpad'
+          echo "MATERIALIZED_COMMIT=$(git rev-parse HEAD)"
           git push origin "HEAD:${GITHUB_REF_NAME}"
