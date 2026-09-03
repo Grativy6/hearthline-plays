@@ -1,0 +1,109 @@
+{
+  "schema": "hearthline-plays.arc-launch-surfaces.v1",
+  "recorded_date": "2026-09-03",
+  "status": "PUBLIC_ORIENTATION_PREPARED",
+  "steward": "Christopher D. Pang",
+  "branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+  "parent_station": {
+    "repository": "Grativy6/hearthline-plays",
+    "commit": "74728f8c4ec9409bd0e6c8064a0b6b356da776f6",
+    "tree": "f6be0a2c78601ea802253e45c46775833d98b3e4"
+  },
+  "rules": {
+    "source_bytes_vendored": false,
+    "credentials_committed": false,
+    "private_holdout_admitted": false,
+    "publication_is_run_authorization": false,
+    "shared_lineage_is_independent_corroboration": false,
+    "later_success_backdates_causal_credit": false
+  },
+  "surfaces": [
+    {
+      "surface_id": "official-arcagi3-benchmarking",
+      "repository": "ARCAGI-Labs/arc-agi-3-benchmarking",
+      "branch": "main",
+      "commit": "d7e9a68a001bb95123013384eea287e95e8567e2",
+      "tree": "edc4d813ff11ceff5729527b111f324d5a165849",
+      "role": "current_public_agent_benchmark_harness_inspected_for_launch_compatibility",
+      "relationship": "PINNED_EXTERNAL_SOURCE_NOT_VENDORED",
+      "observed_interfaces": [
+        "runner and model configurations",
+        "MultimodalAgent",
+        "SessionContext persistent datastore",
+        "GameStep action and reasoning record",
+        "checkpoint and cost records",
+        "custom agent registration"
+      ],
+      "claim_ceiling": "Inspection establishes repository content at the pinned commit only. It does not establish provider access, current pricing, credential validity, environment availability, benchmark eligibility, or compatibility with an untested Hearthline adapter."
+    },
+    {
+      "surface_id": "official-public-arc-toolkit",
+      "repository": "arcprize/ARC-AGI",
+      "branch": "main",
+      "commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+      "tree": "9ee140e4183df0df109cec50b7cd0d2531c47168",
+      "declared_project_version": "0.9.9",
+      "role": "public_game_toolkit_for_provider_independent_orientation",
+      "relationship": "PINNED_EXTERNAL_SOURCE_NOT_VENDORED",
+      "observed_interfaces": [
+        "Arcade",
+        "OperationMode",
+        "EnvironmentWrapper",
+        "GameAction",
+        "FrameDataRaw",
+        "local and remote environment routes",
+        "recording and scorecard support"
+      ],
+      "claim_ceiling": "A public toolkit route is not a competition submission or private evaluation. Anonymous access, live game inventory, server behavior, and package compatibility must be observed at run time."
+    },
+    {
+      "surface_id": "hearthline-public-context",
+      "repository": "Grativy6/hearthline",
+      "branch": "main",
+      "commit": "16eab7f3d584a8215a6e1e0b2a93b157c02f787a",
+      "tree": "7c7165b2b763148f9422c50ea418ba56e74b8abd",
+      "role": "public_persona_research_station_creature_and_spark_context",
+      "relationship": "PINNED_SIBLING_CONTEXT_NOT_IMPORTED",
+      "claim_ceiling": "Public instructions and designs do not activate a runtime, grant account access, or establish implementation conformance."
+    },
+    {
+      "surface_id": "hearthline-workshop-private",
+      "repository": "Grativy6/hearthline-workshop",
+      "branch": "main",
+      "commit": "b5798da16bbd58b61453e42ba3a9e0b07727cb6e",
+      "tree": "aa81cf08107a090129d6865b837d25f571c4fe05",
+      "role": "private_workshop_implementation_and_recovery_context",
+      "relationship": "IDENTITY_PIN_ONLY_NO_PRIVATE_BYTES_COPIED",
+      "claim_ceiling": "This public lock records repository identity and commit only. It does not disclose, import, or authorize use of private contents beyond separately granted access."
+    },
+    {
+      "surface_id": "strongwiz-v3",
+      "repository": "Grativy6/strongwiz",
+      "branch": "main",
+      "commit": "edc88b80f872f766c22b3a050a7f6837d6e652d8",
+      "tree": "18dd76355decdf8b1e98fff7dffeac222c0b3aa2",
+      "role": "representation_scribe_and_evidence_yield_design_context",
+      "relationship": "PINNED_DESIGN_SOURCE_NOT_IMPORTED",
+      "claim_ceiling": "No Strongwiz code is executed or causally credited by this launch kit unless a later receipt binds an exact import, adapter, test, and result."
+    },
+    {
+      "surface_id": "historical-arc3-archive",
+      "repository": "Grativy6/ARC3",
+      "branch": "main",
+      "commit": "a1b54f77fc73cc50641cbe6952a1b683c6b5d1fb",
+      "tree": "2d8f7e7b1477a110db9923d4d76566f1705e5503",
+      "repository_state": "ARCHIVED",
+      "role": "historical_campaign_evidence_and_scientist_benchmarks",
+      "relationship": "READ_ONLY_PROVENANCE",
+      "claim_ceiling": "Historical results do not bind the current official environment, model, adapter, game version, or run budget and are not silently imported as training data."
+    }
+  ],
+  "reopen_when": [
+    "an official repository head or release changes",
+    "a live public game reports a different version or interface",
+    "a model or provider configuration is bound",
+    "source bytes are copied or patched",
+    "competition or Kaggle mode is proposed",
+    "a credential, paid budget, or private artifact would be required"
+  ]
+}
