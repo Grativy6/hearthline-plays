@@ -1,0 +1,27 @@
+{
+  "schema": "hearthline.arc3-orientation-request.v1",
+  "request_id": "ORIENT-0005",
+  "game_id": "ls20",
+  "seed": 0,
+  "mode": "PUBLIC_ORIENTATION",
+  "source_world_model": "practice/ls20/world-model.json",
+  "actions": [
+    {"action": "ACTION3", "data": {}, "hypothesis": "Traverse toward the white marker through the bottom corridor.", "expected_observable": "Controlled piece moves left one cell."},
+    {"action": "ACTION3", "data": {}, "hypothesis": "Continue toward the marker.", "expected_observable": "Controlled piece moves left one cell."},
+    {"action": "ACTION3", "data": {}, "hypothesis": "Enter the left-side lane.", "expected_observable": "Controlled piece reaches columns 19-23."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Ascend left of the central obstruction.", "expected_observable": "Controlled piece moves up one cell."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Continue ascending toward the marker.", "expected_observable": "Controlled piece moves up one cell."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Collect the white marker.", "expected_observable": "White marker disappears and target surfaces flash."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Move above the central obstruction after collection.", "expected_observable": "Controlled piece reaches the top row of the main chamber."},
+    {"action": "ACTION4", "data": {}, "hypothesis": "Cross the top corridor toward the upper neck.", "expected_observable": "Controlled piece moves right one cell."},
+    {"action": "ACTION4", "data": {}, "hypothesis": "Continue across the top corridor.", "expected_observable": "Controlled piece moves right one cell."},
+    {"action": "ACTION4", "data": {}, "hypothesis": "Align with the upper neck at columns 34-38.", "expected_observable": "Controlled piece reaches the neck column."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Enter the upper neck after collecting the marker.", "expected_observable": "Controlled piece moves up one cell."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "Approach the blue upper glyph.", "expected_observable": "Controlled piece moves into rows 15-19."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The collected marker authorizes or enables contact with the upper glyph.", "expected_observable": "Contact completes level 1 or produces a new informative transformation rather than the earlier invalid-move flash."}
+  ],
+  "max_actions": 13,
+  "close_scorecard": true,
+  "grant_ref": "launch/RUN_GRANT_2026-09-03.md",
+  "status": "AUTHORIZED"
+}
