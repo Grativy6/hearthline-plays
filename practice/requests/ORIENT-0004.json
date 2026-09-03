@@ -1,0 +1,20 @@
+{
+  "schema": "hearthline.arc3-orientation-request.v1",
+  "request_id": "ORIENT-0004",
+  "game_id": "ls20",
+  "seed": 0,
+  "mode": "PUBLIC_ORIENTATION",
+  "source_world_model": "practice/ls20/world-model.json",
+  "actions": [
+    {"action": "ACTION3", "data": {}, "hypothesis": "ACTION3 translates the controlled orange-blue piece left by one five-pixel cell.", "expected_observable": "The piece moves from columns 34-38 to 29-33."},
+    {"action": "ACTION3", "data": {}, "hypothesis": "The bottom corridor permits continued left translation.", "expected_observable": "The piece moves to columns 24-28."},
+    {"action": "ACTION3", "data": {}, "hypothesis": "The left chamber is reachable through the bottom corridor.", "expected_observable": "The piece moves to columns 19-23."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The left side of the central obstruction permits upward travel.", "expected_observable": "The piece moves to rows 40-44."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The piece can continue upward on the left side.", "expected_observable": "The piece moves to rows 35-39."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The white cross at the left chamber is a pickup, orientation operator, or other interactive marker.", "expected_observable": "Contact changes the marker, the controlled piece, the target icon, or another observable state."}
+  ],
+  "max_actions": 6,
+  "close_scorecard": true,
+  "grant_ref": "launch/RUN_GRANT_2026-09-03.md",
+  "status": "AUTHORIZED"
+}
