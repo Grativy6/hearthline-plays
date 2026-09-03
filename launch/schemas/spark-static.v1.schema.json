@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/launch/schemas/spark-static.v1.schema.json",
+  "title": "Hearthline Spark Static v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "static_id",
+    "task_id",
+    "spark_id",
+    "lens",
+    "observation_refs",
+    "claims",
+    "candidate_world_model",
+    "proposed_action",
+    "predicted_consequence",
+    "residuals",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline.spark-static.v1"},
+    "static_id": {"type": "string", "minLength": 1},
+    "predecessor_static_id": {"type": ["string", "null"]},
+    "task_id": {"type": "string", "minLength": 1},
+    "spark_id": {"type": "string", "minLength": 1},
+    "lens": {"type": "string", "minLength": 1},
+    "observation_refs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "status", "text", "evidence_refs", "confidence"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "status": {
+            "enum": ["OBSERVED", "INFERRED", "ESTIMATED", "UNRESOLVED"]
+          },
+          "text": {"type": "string", "minLength": 1},
+          "evidence_refs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "confidence": {
+            "anyOf": [
+              {"type": "number", "minimum": 0, "maximum": 1},
+              {"type": "null"}
+            ]
+          }
+        }
+      }
+    },
+    "candidate_world_model": {"type": "object"},
+    "proposed_action": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": ["action"],
+          "properties": {
+            "action": {"type": "string", "minLength": 1},
+            "data": {"type": "object"},
+            "reason": {"type": "string"}
+          },
+          "additionalProperties": false
+        },
+        {"type": "null"}
+      ]
+    },
+    "predicted_consequence": {
+      "anyOf": [
+        {"type": "object"},
+        {"type": "null"}
+      ]
+    },
+    "residuals": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "claim_ceiling": {"type": "string", "minLength": 1}
+  }
+}
