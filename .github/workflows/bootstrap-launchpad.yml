@@ -1,0 +1,69 @@
+name: Materialize Hearthline ARC-AGI-3 launchpad
+
+on:
+  push:
+    branches:
+      - arc-agi/titles/arc-agi-3-hearthline-launch-20260903
+    paths:
+      - ".github/workflows/bootstrap-launchpad.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hearthline-arc3-launchpad-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Reassemble and verify launchpad archive
+        shell: bash
+        run: |
+          cat .bootstrap/launchpart-* > /tmp/hearthline_arc3_launchpad.tar.gz.b64
+          printf '%s  %s\n' \
+            '65e73eec06290cc43864e4f652e0177470f259cf8dfff696f0b00a2ee3a959ca' \
+            '/tmp/hearthline_arc3_launchpad.tar.gz.b64' | sha256sum --check --strict
+          base64 --decode /tmp/hearthline_arc3_launchpad.tar.gz.b64 > /tmp/hearthline_arc3_launchpad.tar.gz
+          printf '%s  %s\n' \
+            '59faaa0c6b5dd6db912f48e23fbceef454f4ba698c787b8faa60bfe64dc34b08' \
+            '/tmp/hearthline_arc3_launchpad.tar.gz' | sha256sum --check --strict
+      - name: Extract with path and type guards
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import PurePosixPath
+          import tarfile
+
+          archive = "/tmp/hearthline_arc3_launchpad.tar.gz"
+          with tarfile.open(archive, "r:gz") as tf:
+              for member in tf.getmembers():
+                  path = PurePosixPath(member.name)
+                  if path.is_absolute() or ".." in path.parts:
+                      raise SystemExit(f"unsafe archive path: {member.name!r}")
+                  if not (member.isfile() or member.isdir()):
+                      raise SystemExit(f"unsupported archive member: {member.name!r}")
+              tf.extractall(".", filter="data")
+          PY
+          rm -rf .bootstrap .github/workflows/bootstrap-launchpad.yml
+      - name: Verify materialized launchpad
+        run: |
+          python -B -m py_compile tools/validate_launchpad.py tools/pair_static.py tools/arc3_replay_probe.py tests/test_launchpad.py
+          python -B tools/validate_launchpad.py
+          python -B -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Commit exact materialized tree
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Prepare Hearthline ARC-AGI-3 public launchpad'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
