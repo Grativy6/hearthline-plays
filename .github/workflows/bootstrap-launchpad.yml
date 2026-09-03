@@ -36,9 +36,10 @@ jobs:
           printf '%s  %s\n' \
             '59faaa0c6b5dd6db912f48e23fbceef454f4ba698c787b8faa60bfe64dc34b08' \
             '/tmp/hearthline_arc3_launchpad.tar.gz' | sha256sum --check --strict
-      - name: Extract with path and type guards
+      - name: Extract with path, type, and predecessor guards
         shell: bash
         run: |
+          cp README.md /tmp/research-station-README.md
           python - <<'PY'
           from pathlib import PurePosixPath
           import tarfile
@@ -53,8 +54,10 @@ jobs:
                       raise SystemExit(f"unsupported archive member: {member.name!r}")
               tf.extractall(".", filter="data")
           PY
+          mv README.md LAUNCHPAD.md
+          cp /tmp/research-station-README.md README.md
           rm -rf .bootstrap .github/workflows/bootstrap-launchpad.yml
-      - name: Verify materialized launchpad
+      - name: Verify materialized launchpad and inherited station
         run: |
           python -B -m py_compile tools/validate_launchpad.py tools/pair_static.py tools/arc3_replay_probe.py tests/test_launchpad.py
           python -B tools/validate_launchpad.py
