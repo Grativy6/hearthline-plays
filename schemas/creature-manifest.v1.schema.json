@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-research-station/schemas/creature-manifest.v1.schema.json",
+  "title": "Hearthline Creature manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "fixture_kind",
+    "status",
+    "claim_ceiling",
+    "creature",
+    "run_boundary",
+    "controller",
+    "members",
+    "thulia",
+    "comparison",
+    "source_refs",
+    "residuals"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.creature-manifest.v1"
+    },
+    "fixture_kind": {
+      "const": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY"
+    },
+    "status": {
+      "const": "PREPARED_NOT_RUN"
+    },
+    "claim_ceiling": {
+      "type": "string",
+      "minLength": 1
+    },
+    "creature": {
+      "$ref": "#/$defs/creature"
+    },
+    "run_boundary": {
+      "$ref": "#/$defs/run_boundary"
+    },
+    "controller": {
+      "$ref": "#/$defs/controller"
+    },
+    "members": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/member"
+      }
+    },
+    "thulia": {
+      "$ref": "#/$defs/thulia"
+    },
+    "comparison": {
+      "$ref": "#/$defs/comparison"
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9.-]+$"
+      }
+    },
+    "residuals": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "creature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creature_id",
+        "profile_version",
+        "purpose",
+        "branch",
+        "anchor_commit",
+        "anchor_tree",
+        "source_lock_ref",
+        "design_ref",
+        "model_identity",
+        "runtime_identity"
+      ],
+      "properties": {
+        "creature_id": {
+          "type": "string",
+          "pattern": "^synthetic-[a-z0-9-]+$"
+        },
+        "profile_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch": {
+          "const": "arc-agi/titles/arc-agi-3-research-station"
+        },
+        "anchor_commit": {
+          "const": "228d80f0559277c55031f4a80f6179320e10364c"
+        },
+        "anchor_tree": {
+          "const": "532e178ecd41410e5e9038c647141f2cbe32f01d"
+        },
+        "source_lock_ref": {
+          "const": "research/sources.lock.json"
+        },
+        "design_ref": {
+          "const": "design/CREATURES.md"
+        },
+        "model_identity": {
+          "const": "UNBOUND"
+        },
+        "runtime_identity": {
+          "const": "UNBOUND"
+        }
+      }
+    },
+    "run_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorized_to_run",
+        "kaggle_contacted",
+        "arc_environment_contacted",
+        "private_or_sealed_holdout_accessed",
+        "submission_attempted",
+        "environment_calls",
+        "holdout_consumption",
+        "official_surfaces"
+      ],
+      "properties": {
+        "authorized_to_run": {
+          "const": false
+        },
+        "kaggle_contacted": {
+          "const": false
+        },
+        "arc_environment_contacted": {
+          "const": false
+        },
+        "private_or_sealed_holdout_accessed": {
+          "const": false
+        },
+        "submission_attempted": {
+          "const": false
+        },
+        "environment_calls": {
+          "const": 0
+        },
+        "holdout_consumption": {
+          "const": 0
+        },
+        "official_surfaces": {
+          "$ref": "#/$defs/official_surfaces"
+        }
+      }
+    },
+    "official_surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arc_framework",
+        "arc_package",
+        "arc_game",
+        "evaluator",
+        "operator_model",
+        "scribe_model",
+        "budget"
+      ],
+      "properties": {
+        "arc_framework": {
+          "const": "UNBOUND"
+        },
+        "arc_package": {
+          "const": "UNBOUND"
+        },
+        "arc_game": {
+          "const": "UNBOUND"
+        },
+        "evaluator": {
+          "const": "UNBOUND"
+        },
+        "operator_model": {
+          "const": "UNBOUND"
+        },
+        "scribe_model": {
+          "const": "UNBOUND"
+        },
+        "budget": {
+          "const": "UNBOUND"
+        }
+      }
+    },
+    "controller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_operator_control_ref",
+        "external_operator_control_authority",
+        "controller_ref",
+        "controller_authority",
+        "broker_domain_writer_ref",
+        "broker_domain_writer_authority",
+        "authorized_broker_count",
+        "ambiguous_effect_policy",
+        "terminal_authority_source_ref",
+        "terminal_adapter_ref",
+        "terminal_adapter_authority",
+        "heartbeat_semantics",
+        "heartbeat_can_keep_codex_workspace_alive"
+      ],
+      "properties": {
+        "external_operator_control_ref": {
+          "const": "UNBOUND"
+        },
+        "external_operator_control_authority": {
+          "const": "GRANT_AND_REVOKE_ONLY"
+        },
+        "controller_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "controller_authority": {
+          "const": "ADMIT_AND_SERIALIZE_ONLY"
+        },
+        "broker_domain_writer_ref": {
+          "const": "UNBOUND"
+        },
+        "broker_domain_writer_authority": {
+          "const": "EXECUTE_AND_RECORD_SEPARATELY_AUTHORIZED_EFFECTS_ONLY"
+        },
+        "authorized_broker_count": {
+          "const": 0
+        },
+        "ambiguous_effect_policy": {
+          "const": "STOP_RECONCILE_DO_NOT_RETRY"
+        },
+        "terminal_authority_source_ref": {
+          "const": "UNBOUND"
+        },
+        "terminal_adapter_ref": {
+          "const": "UNBOUND"
+        },
+        "terminal_adapter_authority": {
+          "const": "VALIDATE_AND_PROJECT_ONLY"
+        },
+        "heartbeat_semantics": {
+          "const": "STATUS_AND_RECEIPT_ONLY"
+        },
+        "heartbeat_can_keep_codex_workspace_alive": {
+          "const": false
+        }
+      }
+    },
+    "member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spark_id",
+        "role",
+        "job",
+        "profile_ref",
+        "provider_ref",
+        "grant_ref",
+        "budget_ref",
+        "ledger_ref",
+        "static_ref",
+        "home_ref",
+        "committed_view_ref",
+        "action_port",
+        "authority_port",
+        "writes_other_spark_static",
+        "receives_only_receipt_bound_derivations",
+        "paired_ledger_scribe_ref",
+        "recursive_scribe"
+      ],
+      "properties": {
+        "spark_id": {
+          "type": "string",
+          "pattern": "^synthetic-spark-[a-z0-9-]+$"
+        },
+        "role": {
+          "enum": [
+            "SEEKER",
+            "EXPLORER",
+            "HANDLER"
+          ]
+        },
+        "job": {
+          "enum": [
+            "WORK",
+            "LEDGER_SCRIBE"
+          ]
+        },
+        "profile_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "provider_ref": {
+          "const": "UNBOUND"
+        },
+        "grant_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "budget_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "ledger_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "static_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "home_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "committed_view_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "action_port": {
+          "const": false
+        },
+        "authority_port": {
+          "const": false
+        },
+        "writes_other_spark_static": {
+          "const": false
+        },
+        "receives_only_receipt_bound_derivations": {
+          "type": "boolean"
+        },
+        "paired_ledger_scribe_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^synthetic-spark-[a-z0-9-]+$"
+        },
+        "recursive_scribe": {
+          "const": false
+        }
+      }
+    },
+    "thulia": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interface_ref",
+        "perch_index_ref",
+        "observes_ledger_refs",
+        "governing",
+        "action_port",
+        "authority_port",
+        "merges_ledgers",
+        "approves_carry",
+        "writes_receiving_static"
+      ],
+      "properties": {
+        "interface_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "perch_index_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "observes_ledger_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+          }
+        },
+        "governing": {
+          "const": false
+        },
+        "action_port": {
+          "const": false
+        },
+        "authority_port": {
+          "const": false
+        },
+        "merges_ledgers": {
+          "const": false
+        },
+        "approves_carry": {
+          "const": false
+        },
+        "writes_receiving_static": {
+          "const": false
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declaration_only",
+        "physically_isolated_required",
+        "shared_payload_ledger",
+        "campaign_index",
+        "arms"
+      ],
+      "properties": {
+        "declaration_only": {
+          "const": true
+        },
+        "physically_isolated_required": {
+          "const": true
+        },
+        "shared_payload_ledger": {
+          "const": false
+        },
+        "campaign_index": {
+          "$ref": "#/$defs/campaign_index"
+        },
+        "arms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/arm"
+          }
+        }
+      }
+    },
+    "campaign_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index_ref",
+        "location",
+        "identity_only",
+        "payload_ledger"
+      ],
+      "properties": {
+        "index_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "location": {
+          "const": "EXTERNAL_TO_ARMS"
+        },
+        "identity_only": {
+          "const": true
+        },
+        "payload_ledger": {
+          "const": false
+        }
+      }
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm_id",
+        "kind",
+        "lab_root_ref",
+        "ledger_ref",
+        "initial_state",
+        "shares_payload_state"
+      ],
+      "properties": {
+        "arm_id": {
+          "type": "string",
+          "pattern": "^synthetic-arm-[a-z0-9-]+$"
+        },
+        "kind": {
+          "enum": [
+            "NO_CREATURE_CONTROL",
+            "CREATURE_CANDIDATE"
+          ]
+        },
+        "lab_root_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "ledger_ref": {
+          "type": "string",
+          "pattern": "^SYNTHETIC_[A-Z0-9_]+$"
+        },
+        "initial_state": {
+          "const": "ABSENT_OR_EMPTY"
+        },
+        "shares_payload_state": {
+          "const": false
+        }
+      }
+    }
+  }
+}

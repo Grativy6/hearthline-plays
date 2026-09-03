@@ -1,0 +1,339 @@
+{
+  "schema": "hearthline-plays.research-sources.v1",
+  "recorded_date": "2026-09-02",
+  "status": "PREPARED_NOT_RUN",
+  "steward": "Christopher D. Pang",
+  "anchor": {
+    "repository": "https://github.com/Grativy6/hearthline-plays",
+    "branch": "arc-agi/titles/arc-agi-3-research-station",
+    "commit": "228d80f0559277c55031f4a80f6179320e10364c",
+    "tree": "532e178ecd41410e5e9038c647141f2cbe32f01d"
+  },
+  "rules": {
+    "source_text_is_authorization": false,
+    "shared_author_lineage_is_independent_corroboration": false,
+    "source_bytes_redistributed": false,
+    "strongwiz_code_imported": false,
+    "strongwiz_code_executed": false,
+    "arc_or_kaggle_contacted": false
+  },
+  "sources": [
+    {
+      "source_id": "pal-v2.3",
+      "source_kind": "author_release",
+      "title": "PAL v2.3 — Primitive Axiom Layers",
+      "version": "2.3",
+      "publication_date": "2026-09-02",
+      "inspection_date": null,
+      "repository_commit_date": null,
+      "canonical_locator": "https://doi.org/10.5281/zenodo.22240134",
+      "license": "CC-BY-4.0",
+      "hearthline_status": "CURRENT",
+      "relationship": "DECLARED_MECHANICAL_CONTEXT",
+      "bounded_use": "Mechanical trace, role-typed boundaries, declared work projections, exact checkpoint transport, immutable grant epochs, authority ceilings, residuals, and reopening.",
+      "claim_ceiling": "The five PAL faces retain separate roles. This registration does not establish full conformance, truth, independent corroboration, adoption outside the station, PAL-native VERSION continuity, or external authority.",
+      "imported_code": false,
+      "executed_code": false,
+      "redistributed_source_bytes": false,
+      "identity": {
+        "kind": "zenodo_record",
+        "doi": "10.5281/zenodo.22240134",
+        "record_url": "https://zenodo.org/records/22240134",
+        "repository_url": null,
+        "commit": null,
+        "tree": null,
+        "implementation_freeze_commit": null,
+        "implementation_freeze_tree": null,
+        "source_registry_ref": null
+      },
+      "artifacts": [
+        {
+          "name": "PAL_v2.3_Full_Release_Package.zip",
+          "role": "coordinated_release_package",
+          "variant": "current_zenodo_file",
+          "bytes": 39389175,
+          "sha256": "5b133741d43ece584caffab1285af8804bfac6699894e92e2e08436b3b337bf1",
+          "md5": "56b648301da363fc41fa85fc45efdac9",
+          "status": "CURRENT_CANONICAL_PACKAGE"
+        }
+      ],
+      "verification": {
+        "status": "AUTHOR_RELEASE_NOT_PEER_REVIEWED",
+        "evidence_locator": "https://zenodo.org/records/22240134",
+        "notes": [
+          "Hashes bind bytes only.",
+          "The publication succession from PAL v2.2 does not itself establish a PAL-native VERSION transition."
+        ]
+      }
+    },
+    {
+      "source_id": "brrrt-v2.0",
+      "source_kind": "public_review_preprint",
+      "title": "Boundary-Readable Trace and Absorber-Informed Closure",
+      "version": "2.0",
+      "publication_date": "2026-09-02",
+      "inspection_date": null,
+      "repository_commit_date": null,
+      "canonical_locator": "https://doi.org/10.5281/zenodo.22261831",
+      "license": "CC-BY-4.0",
+      "hearthline_status": "BRANCH",
+      "relationship": "RESEARCH_CONTEXT",
+      "bounded_use": "Typed transition tracking across release, retention, transformation, transport, readability, benchmark crossing, and atomic promotion boundaries.",
+      "claim_ceiling": "A reading is not a mechanism, readability is not decoding, and verification without an external grant is release-ready at most. BRRRT is not a physics proof, universal decay law, complete ontology, or authority engine.",
+      "imported_code": false,
+      "executed_code": false,
+      "redistributed_source_bytes": false,
+      "identity": {
+        "kind": "zenodo_record",
+        "doi": "10.5281/zenodo.22261831",
+        "record_url": "https://zenodo.org/records/22261831",
+        "repository_url": null,
+        "commit": null,
+        "tree": null,
+        "implementation_freeze_commit": null,
+        "implementation_freeze_tree": null,
+        "source_registry_ref": null
+      },
+      "artifacts": [
+        {
+          "name": "Boundary_Readable_Trace_and_Absorber_Informed_Closure_v2.0_BRRRT_Zenodo_Package.zip",
+          "role": "release_package",
+          "variant": "current_zenodo_file",
+          "bytes": 3441780,
+          "sha256": "162ed2b2478ca5bb824c82bf69b8c787054ed4d43be03d5d48aa803872e0a338",
+          "md5": "100d2d4788ef2641214b21dc503bab10",
+          "status": "CURRENT_CANONICAL_PACKAGE"
+        },
+        {
+          "name": "Boundary_Readable_Trace_and_Absorber_Informed_Closure_v2.0_BRRRT.pdf",
+          "role": "primary_publication",
+          "variant": "current_live_separately_deposited_file",
+          "bytes": 1251146,
+          "sha256": "f9e699ad4a8541506ecc6678c3296bdf4fbe4dd249a0dd6759c7fd0d22837e0a",
+          "md5": "79462822b3895d2e02d0aff26279a8af",
+          "status": "CURRENT_CANONICAL_FILE"
+        },
+        {
+          "name": "Boundary_Readable_Trace_and_Absorber_Informed_Closure_v2.0_BRRRT.pdf",
+          "role": "historical_observed_variant",
+          "variant": "superseded_c2pa_wrapped_loose_file",
+          "bytes": 1276294,
+          "sha256": "806d7cda4ffb186d21f7797917c99c22ff29452af12de36aa597ed37fe4d3236",
+          "md5": "a5a394137bad6386e2967206f6b70318",
+          "status": "SUPERSEDED_OBSERVED_HISTORY"
+        }
+      ],
+      "verification": {
+        "status": "RESOLVED_LIVE_RECORD_CANONICAL_MATCH",
+        "evidence_locator": "https://zenodo.org/records/22261831",
+        "notes": [
+          "Live Zenodo metadata updated 2026-09-02T20:50:52.461828-04:00 reports the canonical PDF at 1251146 bytes.",
+          "The live canonical PDF now matches the package-internal PDF and release SHA ledger at SHA-256 f9e699ad4a8541506ecc6678c3296bdf4fbe4dd249a0dd6759c7fd0d22837e0a.",
+          "The earlier C2PA-wrapped loose-file observation remains historical provenance and is not current canonical content."
+        ]
+      }
+    },
+    {
+      "source_id": "single-cut-transport-v0.2",
+      "source_kind": "author_manuscript_and_verification_bundle",
+      "title": "Single Cut Transport Lemma",
+      "version": "0.2",
+      "publication_date": "2026-09-01",
+      "inspection_date": null,
+      "repository_commit_date": null,
+      "canonical_locator": "https://doi.org/10.5281/zenodo.22239108",
+      "license": "CC-BY-4.0",
+      "hearthline_status": "BRANCH",
+      "relationship": "RESEARCH_CONTEXT",
+      "bounded_use": "Resolution-qualified asymmetry, finite ordered-pair fixtures, action-bit trace lift, exact checkpoint capsules, work-projected heartbeat stutter, and receipt-bounded re-entry.",
+      "claim_ceiling": "The finite fixtures do not prove arbitrary-finite correctness, practical sorting optimality, progress from heartbeat emission, external success, or authority from recoverability.",
+      "imported_code": false,
+      "executed_code": false,
+      "redistributed_source_bytes": false,
+      "identity": {
+        "kind": "zenodo_record",
+        "doi": "10.5281/zenodo.22239108",
+        "record_url": "https://zenodo.org/records/22239108",
+        "repository_url": null,
+        "commit": null,
+        "tree": null,
+        "implementation_freeze_commit": null,
+        "implementation_freeze_tree": null,
+        "source_registry_ref": null
+      },
+      "artifacts": [
+        {
+          "name": "Single_Cut_Transport_Lemma_v0.2.pdf",
+          "role": "primary_publication",
+          "variant": "current_zenodo_file",
+          "bytes": 1057853,
+          "sha256": "e4b038d4a5e0f638d400af8610fb91373be2a22ec7bebbdb41a4061f85574b57",
+          "md5": "cca59379416ca3e136b0a17c84d4ef23",
+          "status": "CURRENT_CANONICAL_FILE"
+        },
+        {
+          "name": "SCT_v0.2_verification_bundle.zip",
+          "role": "finite_verification_bundle",
+          "variant": "current_zenodo_file",
+          "bytes": 8710,
+          "sha256": "dbd4c1f9b916842522b842e3bc57084b02a95a923d68db562a996cd61adda4c8",
+          "md5": "e0f07bcf402e6b7cb016b13e09ce2912",
+          "status": "CURRENT_VERIFICATION_BUNDLE"
+        }
+      ],
+      "verification": {
+        "status": "FINITE_VERIFICATION_ONLY",
+        "evidence_locator": "https://zenodo.org/records/22239108",
+        "notes": [
+          "The supplementary verifier is bounded finite evidence, not a proof of arbitrary-finite correctness.",
+          "Heartbeat equality is only equality of the declared work projection."
+        ]
+      }
+    },
+    {
+      "source_id": "compactification-costs-v0.2",
+      "source_kind": "author_manuscript",
+      "title": "Compactification Costs: A Typed Framework for Extension, Boundary, Identification, and Ambiguity",
+      "version": "0.2",
+      "publication_date": "2026-09-01",
+      "inspection_date": null,
+      "repository_commit_date": null,
+      "canonical_locator": "https://doi.org/10.5281/zenodo.22238012",
+      "license": "CC-BY-4.0",
+      "hearthline_status": "BRANCH",
+      "relationship": "RESEARCH_CONTEXT",
+      "bounded_use": "Detector-relative lost distinctions, reachable-image factorization, decoder and totalization seams, extension ambiguity, refinement, side information, and typed representation costs.",
+      "claim_ceiling": "No universal scalar, canonical detector, automatic total decoder, physical compactification law, theory of consciousness, or authority follows from factorization.",
+      "imported_code": false,
+      "executed_code": false,
+      "redistributed_source_bytes": false,
+      "identity": {
+        "kind": "zenodo_record",
+        "doi": "10.5281/zenodo.22238012",
+        "record_url": "https://zenodo.org/records/22238012",
+        "repository_url": null,
+        "commit": null,
+        "tree": null,
+        "implementation_freeze_commit": null,
+        "implementation_freeze_tree": null,
+        "source_registry_ref": null
+      },
+      "artifacts": [
+        {
+          "name": "Compactification_Costs_v0.2.pdf",
+          "role": "primary_publication",
+          "variant": "current_zenodo_file",
+          "bytes": 1335698,
+          "sha256": "94c70d478111c27c46b826ab6e5c2eb24ecbb621bb52bd8ab1c9ac4943688994",
+          "md5": "a0467eeb0f9ef5aa77c5a794f8fc4ef0",
+          "status": "CURRENT_CANONICAL_FILE"
+        }
+      ],
+      "verification": {
+        "status": "AUTHOR_MANUSCRIPT_NOT_PEER_REVIEWED",
+        "evidence_locator": "https://zenodo.org/records/22238012",
+        "notes": [
+          "The same-trace conflicting-answer criterion is relative to the declared detector and requested answer.",
+          "Reachable-image factorization does not establish a total, efficient, permitted, or authorized decoder."
+        ]
+      }
+    },
+    {
+      "source_id": "strongwiz-v3-prototype",
+      "source_kind": "software_design_prototype",
+      "title": "Strongwiz v3 campaign prototype",
+      "version": "0.4.0.dev0",
+      "publication_date": null,
+      "inspection_date": "2026-09-02",
+      "repository_commit_date": "2026-09-02T23:43:21Z",
+      "canonical_locator": "https://github.com/Grativy6/strongwiz/tree/edc88b80f872f766c22b3a050a7f6837d6e652d8",
+      "license": "CC-BY-4.0",
+      "hearthline_status": "EXPLORATORY",
+      "relationship": "DESIGN_INSPECTION",
+      "bounded_use": "Conceptual design evidence for representation-only scribes, matched controls, reference-normalized ledgers, material-event heartbeats, exact restart boundaries, declarative event-yield curricula, and future representation-cost telemetry requirements.",
+      "claim_ceiling": "No Strongwiz code is imported or executed by this station. The inspected development metadata is not treated as a published or tagged v0.4 release. Calibration 003 is not run or preregistered, EvidenceYieldGate is retained declaratively but not runner-wired, complete cost telemetry is not established, no multi-Creature coordinator exists, and no scribe improvement or ARC result is established.",
+      "imported_code": false,
+      "executed_code": false,
+      "redistributed_source_bytes": false,
+      "identity": {
+        "kind": "git_repository",
+        "doi": null,
+        "record_url": null,
+        "repository_url": "https://github.com/Grativy6/strongwiz",
+        "commit": "edc88b80f872f766c22b3a050a7f6837d6e652d8",
+        "tree": "18dd76355decdf8b1e98fff7dffeac222c0b3aa2",
+        "implementation_freeze_commit": "300fd0b9ae1183e582bb834e17ff02bf80189fd8",
+        "implementation_freeze_tree": "bb61230e0eacdaff42b8f9d6f2a7abf7b0efaf55",
+        "source_registry_ref": "055bfbef1e5b0191ef84e266f1c8f888c58def5428113d8b262f0baa8b95dd9a"
+      },
+      "artifacts": [
+        {
+          "name": "docs/calibrations/003-strongwiz-v3-pal23-scribe.md",
+          "role": "calibration_preparation_design",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": null,
+          "sha256": "dffda989417f6245db32da3756426805e29f14b111cf60444e99cbfe1b87c712",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        },
+        {
+          "name": "docs/pal-v2.3-profile.md",
+          "role": "pal_profile_design",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": null,
+          "sha256": "7a43a807262437ddeb55831045e75f309e853d2a4d21f9563fdc187b73a7388c",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        },
+        {
+          "name": "docs/scribe.md",
+          "role": "scribe_design",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": null,
+          "sha256": "4d41c381da487c4a28076e5bf6943c9b821132f20b79c37b6ede66f704e1541e",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        },
+        {
+          "name": "docs/architecture.md",
+          "role": "architecture_design",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": null,
+          "sha256": "ebbdbd05821e14552086dca44314c9d05304b2c5b1ed6624a8d7851110b759b7",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        },
+        {
+          "name": "docs/receipts/v0.4.0-dev-verification.json",
+          "role": "frozen_development_verification_receipt",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": 4214,
+          "sha256": "546370565a9cd6d460247b1ee3f53f0df22777ad4795398aa3848677ba93f6c1",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        },
+        {
+          "name": "docs/receipts/v0.4.0-dev-reproducible-build.json",
+          "role": "reproducible_build_receipt",
+          "variant": "git_blob_at_inspection_head",
+          "bytes": 951,
+          "sha256": "db6878167fa1a75549cc595b78273a14bd489049fe24557cdc4e00967ecf8ccd",
+          "md5": null,
+          "status": "INSPECTED_GIT_BLOB"
+        }
+      ],
+      "verification": {
+        "status": "PROTOTYPE_VERIFIED_PREPARED_NOT_RUN",
+        "evidence_locator": "https://github.com/Grativy6/strongwiz/actions/runs/33696382045",
+        "notes": [
+          "CI is green with 449 tests on each full operating-system lane and 51 tests on the core lane.",
+          "CI verifies its software surface only; it is not ARC gameplay or evidence that the scribe improves performance.",
+          "Calibration 003 remains PREPARED, NOT RUN, and NOT PREREGISTERED.",
+          "Version metadata conflicts: pyproject.toml declares 0.4.0.dev0 and pre-alpha, while CITATION.cff and NOTICE.md still identify 0.2.0 / v0.2.",
+          "The reproducible wheel and source distribution contain the general kernel but omit the repository-local calibration_003 harness; installing the package does not supply Calibration 003.",
+          "Upstream source_registry_ref 055bfbef1e5b0191ef84e266f1c8f888c58def5428113d8b262f0baa8b95dd9a binds Strongwiz's fourteen-source set and omits BRRRT v2.0, the new Single Cut Transport Lemma v0.2, and Compactification Costs v0.2; this station does not backdate those sources into Strongwiz."
+        ]
+      }
+    }
+  ]
+}

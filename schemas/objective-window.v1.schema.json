@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-research-station/schemas/objective-window.v1.schema.json",
+  "title": "Hearthline Plays synthetic objective window",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "fixture_kind",
+    "status",
+    "claim_ceiling",
+    "window",
+    "objectives",
+    "events",
+    "objective_set"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.objective-window.v1"
+    },
+    "fixture_kind": {
+      "const": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY"
+    },
+    "status": {
+      "const": "PREPARED_NOT_RUN_STATIC_VALIDATED"
+    },
+    "claim_ceiling": {
+      "type": "string",
+      "minLength": 1
+    },
+    "window": {
+      "$ref": "#/$defs/window"
+    },
+    "objectives": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/objective"
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "objective_set": {
+      "$ref": "#/$defs/objectiveSet"
+    }
+  },
+  "$defs": {
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "window_id",
+        "controller_ref",
+        "external_operator_control_ref",
+        "effect_admission_ref",
+        "effect_executor_ref",
+        "terminal_authority_source_ref",
+        "accepts_new_objectives_while_another_is_suspended",
+        "completion_order_may_differ_from_open_order",
+        "heartbeat_semantics",
+        "heartbeat_is_keepalive",
+        "heartbeat_is_scheduler"
+      ],
+      "properties": {
+        "window_id": {
+          "type": "string",
+          "pattern": "^synthetic-objective-window-[0-9]+$"
+        },
+        "controller_ref": {
+          "type": "string"
+        },
+        "external_operator_control_ref": {
+          "const": "UNBOUND"
+        },
+        "effect_admission_ref": {
+          "type": "string"
+        },
+        "effect_executor_ref": {
+          "const": "UNBOUND"
+        },
+        "terminal_authority_source_ref": {
+          "const": "UNBOUND"
+        },
+        "accepts_new_objectives_while_another_is_suspended": {
+          "const": true
+        },
+        "completion_order_may_differ_from_open_order": {
+          "const": true
+        },
+        "heartbeat_semantics": {
+          "const": "INTERRUPT_AND_CHECKPOINT_RECEIPT_ONLY"
+        },
+        "heartbeat_is_keepalive": {
+          "const": false
+        },
+        "heartbeat_is_scheduler": {
+          "const": false
+        }
+      }
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objective_id",
+        "spark_or_creature_ref",
+        "scope_ref",
+        "grant_ref",
+        "budget_ref",
+        "ledger_ref",
+        "heartbeat_ref",
+        "homecoming_ref",
+        "evaluation_rule_ref"
+      ],
+      "properties": {
+        "objective_id": {
+          "type": "string",
+          "pattern": "^synthetic-objective-[a-c]$"
+        },
+        "spark_or_creature_ref": {
+          "type": "string"
+        },
+        "scope_ref": {
+          "type": "string"
+        },
+        "grant_ref": {
+          "type": "string"
+        },
+        "budget_ref": {
+          "type": "string"
+        },
+        "ledger_ref": {
+          "type": "string"
+        },
+        "heartbeat_ref": {
+          "type": "string"
+        },
+        "homecoming_ref": {
+          "type": "string"
+        },
+        "evaluation_rule_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "event",
+        "objective_id",
+        "scope_ref",
+        "grant_ref",
+        "budget_ref",
+        "ledger_ref",
+        "heartbeat_ref",
+        "homecoming_ref",
+        "evaluation_rule_ref",
+        "controller_ref",
+        "lifecycle_receipt_ref",
+        "checkpoint_receipt_ref",
+        "homecoming_custody_state",
+        "objective_disposition",
+        "external_effect_receipt_ref"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "event": {
+          "enum": [
+            "OPEN_OBJECTIVE",
+            "SUSPEND_OBJECTIVE",
+            "RESUME_OBJECTIVE",
+            "RETURN_OBJECTIVE",
+            "CLOSE_AGGREGATE_RESPONSE"
+          ]
+        },
+        "objective_id": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "scope_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "grant_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "budget_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "ledger_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "heartbeat_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "homecoming_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "evaluation_rule_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "controller_ref": {
+          "type": "string"
+        },
+        "lifecycle_receipt_ref": {
+          "type": "string"
+        },
+        "checkpoint_receipt_ref": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "homecoming_custody_state": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "objective_disposition": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "external_effect_receipt_ref": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "finalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objective_id",
+        "homecoming_custody_state",
+        "objective_disposition"
+      ],
+      "properties": {
+        "objective_id": {
+          "type": "string"
+        },
+        "homecoming_custody_state": {
+          "type": "string"
+        },
+        "objective_disposition": {
+          "type": "string"
+        }
+      }
+    },
+    "objectiveSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_ref",
+        "expected_objective_ids",
+        "return_order",
+        "final_states",
+        "all_objectives_explicitly_disposed",
+        "aggregate_response_ref",
+        "aggregate_response_closed",
+        "close_basis",
+        "external_effect_count"
+      ],
+      "properties": {
+        "snapshot_ref": {
+          "type": "string"
+        },
+        "expected_objective_ids": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "return_order": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "final_states": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/finalState"
+          }
+        },
+        "all_objectives_explicitly_disposed": {
+          "const": true
+        },
+        "aggregate_response_ref": {
+          "type": "string"
+        },
+        "aggregate_response_closed": {
+          "const": true
+        },
+        "close_basis": {
+          "const": "EXPLICIT_TYPED_CUSTODY_AND_OBJECTIVE_DISPOSITIONS"
+        },
+        "external_effect_count": {
+          "const": 0
+        }
+      }
+    }
+  }
+}

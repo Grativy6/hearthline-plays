@@ -1,0 +1,155 @@
+{
+  "schema": "hearthline-plays.creature-manifest.v1",
+  "fixture_kind": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY",
+  "status": "PREPARED_NOT_RUN",
+  "claim_ceiling": "This fabricated manifest tests station structure only. It is not an implementation, preregistration, platform receipt, Creature run, ARC attempt, score, or performance result.",
+  "creature": {
+    "creature_id": "synthetic-creature-0001",
+    "profile_version": "1.0",
+    "purpose": "Exercise the offline schema and boundary verifier without task, challenge, gameplay, or holdout data.",
+    "branch": "arc-agi/titles/arc-agi-3-research-station",
+    "anchor_commit": "228d80f0559277c55031f4a80f6179320e10364c",
+    "anchor_tree": "532e178ecd41410e5e9038c647141f2cbe32f01d",
+    "source_lock_ref": "research/sources.lock.json",
+    "design_ref": "design/CREATURES.md",
+    "model_identity": "UNBOUND",
+    "runtime_identity": "UNBOUND"
+  },
+  "run_boundary": {
+    "authorized_to_run": false,
+    "kaggle_contacted": false,
+    "arc_environment_contacted": false,
+    "private_or_sealed_holdout_accessed": false,
+    "submission_attempted": false,
+    "environment_calls": 0,
+    "holdout_consumption": 0,
+    "official_surfaces": {
+      "arc_framework": "UNBOUND",
+      "arc_package": "UNBOUND",
+      "arc_game": "UNBOUND",
+      "evaluator": "UNBOUND",
+      "operator_model": "UNBOUND",
+      "scribe_model": "UNBOUND",
+      "budget": "UNBOUND"
+    }
+  },
+  "controller": {
+    "external_operator_control_ref": "UNBOUND",
+    "external_operator_control_authority": "GRANT_AND_REVOKE_ONLY",
+    "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+    "controller_authority": "ADMIT_AND_SERIALIZE_ONLY",
+    "broker_domain_writer_ref": "UNBOUND",
+    "broker_domain_writer_authority": "EXECUTE_AND_RECORD_SEPARATELY_AUTHORIZED_EFFECTS_ONLY",
+    "authorized_broker_count": 0,
+    "ambiguous_effect_policy": "STOP_RECONCILE_DO_NOT_RETRY",
+    "terminal_authority_source_ref": "UNBOUND",
+    "terminal_adapter_ref": "UNBOUND",
+    "terminal_adapter_authority": "VALIDATE_AND_PROJECT_ONLY",
+    "heartbeat_semantics": "STATUS_AND_RECEIPT_ONLY",
+    "heartbeat_can_keep_codex_workspace_alive": false
+  },
+  "members": [
+    {
+      "spark_id": "synthetic-spark-work-0001",
+      "role": "SEEKER",
+      "job": "WORK",
+      "profile_ref": "SYNTHETIC_PROFILE_WORK_0001",
+      "provider_ref": "UNBOUND",
+      "grant_ref": "SYNTHETIC_GRANT_WORK_0001",
+      "budget_ref": "SYNTHETIC_BUDGET_WORK_0001",
+      "ledger_ref": "SYNTHETIC_LEDGER_WORK_0001",
+      "static_ref": "SYNTHETIC_STATIC_WORK_0001",
+      "home_ref": "SYNTHETIC_HOME_WORK_0001",
+      "committed_view_ref": "SYNTHETIC_VIEW_WORK_0001",
+      "action_port": false,
+      "authority_port": false,
+      "writes_other_spark_static": false,
+      "receives_only_receipt_bound_derivations": false,
+      "paired_ledger_scribe_ref": "synthetic-spark-ledger-scribe-0001",
+      "recursive_scribe": false
+    },
+    {
+      "spark_id": "synthetic-spark-ledger-scribe-0001",
+      "role": "HANDLER",
+      "job": "LEDGER_SCRIBE",
+      "profile_ref": "SYNTHETIC_PROFILE_LEDGER_SCRIBE_0001",
+      "provider_ref": "UNBOUND",
+      "grant_ref": "SYNTHETIC_GRANT_LEDGER_SCRIBE_0001",
+      "budget_ref": "SYNTHETIC_BUDGET_LEDGER_SCRIBE_0001",
+      "ledger_ref": "SYNTHETIC_LEDGER_LEDGER_SCRIBE_0001",
+      "static_ref": "SYNTHETIC_STATIC_LEDGER_SCRIBE_0001",
+      "home_ref": "SYNTHETIC_HOME_LEDGER_SCRIBE_0001",
+      "committed_view_ref": "SYNTHETIC_VIEW_RECEIPT_BOUND_DERIVATIONS_0001",
+      "action_port": false,
+      "authority_port": false,
+      "writes_other_spark_static": false,
+      "receives_only_receipt_bound_derivations": true,
+      "paired_ledger_scribe_ref": null,
+      "recursive_scribe": false
+    }
+  ],
+  "thulia": {
+    "interface_ref": "SYNTHETIC_THULIA_INTERFACE_0001",
+    "perch_index_ref": "SYNTHETIC_PARTITIONED_PERCH_INDEX_0001",
+    "observes_ledger_refs": [
+      "SYNTHETIC_LEDGER_WORK_0001",
+      "SYNTHETIC_LEDGER_LEDGER_SCRIBE_0001"
+    ],
+    "governing": false,
+    "action_port": false,
+    "authority_port": false,
+    "merges_ledgers": false,
+    "approves_carry": false,
+    "writes_receiving_static": false
+  },
+  "comparison": {
+    "declaration_only": true,
+    "physically_isolated_required": true,
+    "shared_payload_ledger": false,
+    "campaign_index": {
+      "index_ref": "SYNTHETIC_EXTERNAL_CAMPAIGN_INDEX_0001",
+      "location": "EXTERNAL_TO_ARMS",
+      "identity_only": true,
+      "payload_ledger": false
+    },
+    "arms": [
+      {
+        "arm_id": "synthetic-arm-control-0001",
+        "kind": "NO_CREATURE_CONTROL",
+        "lab_root_ref": "SYNTHETIC_ABSENT_OR_EMPTY_CONTROL_ROOT_0001",
+        "ledger_ref": "SYNTHETIC_CONTROL_LEDGER_0001",
+        "initial_state": "ABSENT_OR_EMPTY",
+        "shares_payload_state": false
+      },
+      {
+        "arm_id": "synthetic-arm-creature-0001",
+        "kind": "CREATURE_CANDIDATE",
+        "lab_root_ref": "SYNTHETIC_ABSENT_OR_EMPTY_CREATURE_ROOT_0001",
+        "ledger_ref": "SYNTHETIC_CREATURE_LEDGER_0001",
+        "initial_state": "ABSENT_OR_EMPTY",
+        "shares_payload_state": false
+      }
+    ]
+  },
+  "source_refs": [
+    "pal-v2.3",
+    "brrrt-v2.0",
+    "single-cut-transport-v0.2",
+    "compactification-costs-v0.2",
+    "strongwiz-v3-prototype"
+  ],
+  "residuals": [
+    "NO_ARC_OR_KAGGLE_CONTACT",
+    "OFFICIAL_ARC_SURFACES_UNBOUND",
+    "CALIBRATION_003_PREPARED_NOT_RUN_NOT_PREREGISTERED",
+    "EVIDENCE_YIELD_GATE_DECLARATIVE_NOT_RUNNER_WIRED",
+    "FULL_COST_TELEMETRY_REQUIREMENT_NOT_ESTABLISHED",
+    "NO_MULTI_CREATURE_COORDINATOR",
+    "STRONGWIZ_VERSION_METADATA_CONFLICT_UNRESOLVED",
+    "STRONGWIZ_DISTRIBUTION_OMITS_CALIBRATION_003_HARNESS",
+    "STRONGWIZ_SOURCE_REGISTRY_OMITS_NEW_RESEARCH_NO_BACKDATING",
+    "OPERATOR_CONTROLLER_BROKER_AUTHORITY_SEPARATED",
+    "TERMINAL_SOURCE_AND_ADAPTER_SEPARATED",
+    "HEARTBEAT_CANNOT_KEEP_CODEX_WORKSPACE_ALIVE"
+  ]
+}
