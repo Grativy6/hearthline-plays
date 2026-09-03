@@ -1,0 +1,107 @@
+{
+  "launch_branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+  "official_arc_surfaces": [
+    {
+      "code_copied": false,
+      "commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+      "execution_relationship": "installed_from_exact_git_commit_by_networked_orientation_workflow",
+      "license": "MIT",
+      "package": "arc-agi 0.9.9 source at exact commit; transitive dependencies runtime-recorded",
+      "repository": "arcprize/ARC-AGI",
+      "role": "official ARC-AGI toolkit",
+      "tree": "9ee140e4183df0df109cec50b7cd0d2531c47168",
+      "version": "0.9.9"
+    },
+    {
+      "code_copied": false,
+      "commit": "d7e9a68a001bb95123013384eea287e95e8567e2",
+      "execution_relationship": "design inspection only",
+      "license": "MIT",
+      "repository": "ARCAGI-Labs/arc-agi-3-benchmarking",
+      "role": "official public developer benchmarking harness",
+      "tree": "edc4d813ff11ceff5729527b111f324d5a165849"
+    },
+    {
+      "inspection_date": "2026-09-03",
+      "locator": "https://docs.arcprize.org/",
+      "role": "official ARC-AGI-3 quickstart and public API documentation"
+    },
+    {
+      "code_or_hidden_reasoning_access": false,
+      "inspection_date": "2026-09-03",
+      "locator": "https://arcprize.org/blog/astra",
+      "role": "public Astra evaluation analysis"
+    }
+  ],
+  "parent_station": {
+    "commit": "74728f8c4ec9409bd0e6c8064a0b6b356da776f6",
+    "repository": "Grativy6/hearthline-plays",
+    "status": "PREPARED_NOT_RUN",
+    "tree": "f6be0a2c78601ea802253e45c46775833d98b3e4"
+  },
+  "recorded_at": "2026-09-03T21:00:00Z",
+  "repo_views": [
+    {
+      "branch": "main",
+      "bytes_copied": false,
+      "commit": "16eab7f3d584a8215a6e1e0b2a93b157c02f787a",
+      "repository": "Grativy6/hearthline",
+      "role": "public Hearthline design, source map, Sparks, Static, Thulia, Homecoming, Creatures",
+      "tree": "7c7165b2b763148f9422c50ea418ba56e74b8abd",
+      "visibility": "public"
+    },
+    {
+      "branch": "main",
+      "bytes_copied": false,
+      "commit": "b5798da16bbd58b61453e42ba3a9e0b07727cb6e",
+      "privacy_rule": "No private source bytes, paths beyond public-safe identities, traces, credentials, or runtime material are copied.",
+      "repository": "Grativy6/hearthline-workshop",
+      "role": "bounded private implementation and recovery context",
+      "tree": "aa81cf08107a090129d6865b837d25f571c4fe05",
+      "visibility": "private"
+    },
+    {
+      "branch": "arc-agi/titles/arc-agi-3-research-station",
+      "bytes_copied": false,
+      "commit": "74728f8c4ec9409bd0e6c8064a0b6b356da776f6",
+      "repository": "Grativy6/hearthline-plays",
+      "role": "playground and immediate launch parent",
+      "tree": "f6be0a2c78601ea802253e45c46775833d98b3e4",
+      "visibility": "public"
+    },
+    {
+      "branch": "main",
+      "bytes_copied": false,
+      "commit": "edc88b80f872f766c22b3a050a7f6837d6e652d8",
+      "repository": "Grativy6/strongwiz",
+      "role": "representation-only Scribe and calibration design inspection",
+      "tree": "18dd76355decdf8b1e98fff7dffeac222c0b3aa2",
+      "visibility": "public"
+    },
+    {
+      "branch": "main",
+      "bytes_copied": false,
+      "commit": "a1b54f77fc73cc50641cbe6952a1b683c6b5d1fb",
+      "repository": "Grativy6/ARC3",
+      "role": "historical Scientist experiments and frozen receipts",
+      "tree": "2d8f7e7b1477a110db9923d4d76566f1705e5503",
+      "visibility": "public_archived"
+    }
+  ],
+  "run_rules": {
+    "anonymous_arc_key_permitted": true,
+    "automatic_action_selection_by_workflow": false,
+    "competition_mode_permitted": false,
+    "credentials_permitted": false,
+    "environment_outcome_is_terminal_authority_for_environment_state": true,
+    "kaggle_contact_permitted": false,
+    "paid_provider_calls_permitted": false,
+    "private_or_semi_private_games_permitted": false,
+    "public_game_implementation_source_may_be_used_as_solution_oracle": false,
+    "public_games_only": true,
+    "reasoning_payload_may_contain_hidden_chain_of_thought": false
+  },
+  "schema": "hearthline-plays.arc3-launch-source-lock.v2",
+  "status": "PUBLIC_ORIENTATION_AUTHORIZED",
+  "steward": "Christopher D. Pang"
+}

@@ -1,0 +1,96 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/orientation-request.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "ACTION1",
+              "ACTION2",
+              "ACTION3",
+              "ACTION4",
+              "ACTION5",
+              "ACTION6",
+              "ACTION7"
+            ]
+          },
+          "data": {
+            "type": "object"
+          },
+          "expected_observable": {
+            "maxLength": 400,
+            "type": "string"
+          },
+          "hypothesis": {
+            "maxLength": 400,
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "hypothesis",
+          "expected_observable"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "close_scorecard": {
+      "const": true
+    },
+    "game_id": {
+      "enum": [
+        "ls20",
+        "ft09",
+        "vc33"
+      ]
+    },
+    "grant_ref": {
+      "const": "launch/RUN_GRANT_2026-09-03.md"
+    },
+    "max_actions": {
+      "maximum": 64,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "mode": {
+      "const": "PUBLIC_ORIENTATION"
+    },
+    "request_id": {
+      "pattern": "^ORIENT-[0-9]{4}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "hearthline.arc3-orientation-request.v1"
+    },
+    "seed": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "source_world_model": {
+      "type": "string"
+    },
+    "status": {
+      "const": "AUTHORIZED"
+    }
+  },
+  "required": [
+    "schema",
+    "request_id",
+    "game_id",
+    "seed",
+    "mode",
+    "source_world_model",
+    "actions",
+    "max_actions",
+    "close_scorecard",
+    "grant_ref",
+    "status"
+  ],
+  "title": "Hearthline public ARC-AGI-3 orientation request v1",
+  "type": "object"
+}

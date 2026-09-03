@@ -1,0 +1,146 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/world-model.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "game_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "goals": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "hypotheses": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "model_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "objects": {
+      "items": {
+        "properties": {
+          "features": {
+            "type": "object"
+          },
+          "object_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "object_id",
+          "features"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "operators": {
+      "items": {
+        "properties": {
+          "action": {
+            "type": "object"
+          },
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "effect": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "operator_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operator_id",
+          "action",
+          "effect",
+          "evidence_refs",
+          "confidence"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "plan": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "present_state": {
+      "type": "object"
+    },
+    "relations": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "residuals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema": {
+      "const": "hearthline.arc3-world-model.v1"
+    },
+    "source_receipts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "EMPTY",
+        "ORIENTING",
+        "PLANNING",
+        "EXECUTING",
+        "WIN",
+        "GAME_OVER",
+        "BLOCKED",
+        "UNRESOLVED"
+      ]
+    },
+    "version": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema",
+    "model_id",
+    "game_id",
+    "version",
+    "source_receipts",
+    "present_state",
+    "objects",
+    "relations",
+    "operators",
+    "goals",
+    "hypotheses",
+    "plan",
+    "residuals",
+    "status"
+  ],
+  "title": "Hearthline ARC-AGI-3 compact world model v1",
+  "type": "object"
+}

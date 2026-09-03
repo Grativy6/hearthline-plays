@@ -1,0 +1,22 @@
+{
+  "game_id": "ls20",
+  "goals": [],
+  "hypotheses": [],
+  "model_id": "LS20-WM-0000",
+  "objects": [],
+  "operators": [],
+  "plan": [],
+  "present_state": {
+    "available_actions": [],
+    "levels_completed": null,
+    "observation": "NOT_OBSERVED"
+  },
+  "relations": [],
+  "residuals": [
+    "Initial public frame has not been observed."
+  ],
+  "schema": "hearthline.arc3-world-model.v1",
+  "source_receipts": [],
+  "status": "EMPTY",
+  "version": 0
+}

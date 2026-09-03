@@ -1,0 +1,18 @@
+{
+  "competition_mode": false,
+  "environment_action_count": 0,
+  "kaggle_contact_count": 0,
+  "last_receipt": null,
+  "last_request": null,
+  "open_blockers": [],
+  "paid_provider_calls": 0,
+  "phase": "PUBLIC_ORIENTATION_AUTHORIZED",
+  "private_holdout_access": false,
+  "public_arc_contact_count": 0,
+  "reopening": "Append a successor status after a verified workflow result; never edit a prior run receipt.",
+  "repo_prepared": false,
+  "schema": "hearthline-plays.arc3-launch-status.v1",
+  "scorecards_closed": 0,
+  "scorecards_opened": 0,
+  "updated_at": "2026-09-03T21:00:00Z"
+}

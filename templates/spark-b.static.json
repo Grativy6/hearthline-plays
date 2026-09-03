@@ -1,0 +1,16 @@
+{
+  "claims": [],
+  "dependencies": [],
+  "lens": "constraints-goals-invariants-counterfactuals",
+  "observations": [],
+  "proposed_tests": [],
+  "residuals": [
+    "No task snapshot supplied."
+  ],
+  "schema": "hearthline.spark-static.v1",
+  "source_snapshot": [],
+  "spark_id": "SPARK-B",
+  "static_id": "STATIC-B-TEMPLATE",
+  "status": "OPEN",
+  "task_id": "TASK-UNBOUND"
+}

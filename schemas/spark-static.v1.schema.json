@@ -1,0 +1,161 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/spark-static.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "claims": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "claim_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "kind": {
+            "enum": [
+              "OBSERVATION",
+              "MEASUREMENT",
+              "INFERENCE",
+              "HYPOTHESIS",
+              "PLAN_CONSTRAINT"
+            ]
+          },
+          "value": {}
+        },
+        "required": [
+          "claim_id",
+          "kind",
+          "value",
+          "confidence",
+          "evidence_refs",
+          "assumptions"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "lens": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "proposed_tests": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "type": "object"
+          },
+          "expected_discrimination": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "test_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "test_id",
+          "question",
+          "action",
+          "expected_discrimination"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "residuals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema": {
+      "const": "hearthline.spark-static.v1"
+    },
+    "source_snapshot": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "spark_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "static_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "OPEN",
+        "RETURNED",
+        "BLOCKED",
+        "UNRESOLVED"
+      ]
+    },
+    "task_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "static_id",
+    "task_id",
+    "spark_id",
+    "lens",
+    "source_snapshot",
+    "claims",
+    "dependencies",
+    "observations",
+    "proposed_tests",
+    "residuals",
+    "status"
+  ],
+  "title": "Hearthline Spark Static v1",
+  "type": "object"
+}
