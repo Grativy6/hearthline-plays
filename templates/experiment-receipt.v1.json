@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "status": "TEMPLATE_NOT_A_RUN",
+  "run_id": null,
+  "started_at_utc": null,
+  "finished_at_utc": null,
+  "code": {
+    "repository_commit": null,
+    "dirty_worktree": null,
+    "organizer_baseline_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+    "tracksdata_commit": "63a1912f3b6ebd1536a2e8a8adfdf7f5eb84efa4"
+  },
+  "inputs": {
+    "competition_data_manifest_sha256": null,
+    "split_manifest_sha256": null,
+    "configuration_sha256": null,
+    "weights_sha256": null
+  },
+  "environment": {
+    "python": null,
+    "platform": null,
+    "accelerator": null,
+    "package_inventory_sha256": null
+  },
+  "evaluation": {
+    "namespace": null,
+    "metric_implementation_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+    "local_pinned_scorer_score": null,
+    "edge_tp": null,
+    "edge_fp": null,
+    "edge_fn": null,
+    "division_tp": null,
+    "division_fp": null,
+    "division_fn": null,
+    "per_embryo_results": []
+  },
+  "resources": {
+    "elapsed_seconds": null,
+    "peak_ram_bytes": null,
+    "peak_vram_bytes": null
+  },
+  "external": {
+    "kaggle_notebook_version": null,
+    "submission_sha256": null,
+    "leaderboard_score": null
+  },
+  "claim_ceiling": "No result exists until the declared evaluator completes on the recorded inputs."
+}

@@ -1,0 +1,46 @@
+# Local Python state
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.kaggle/
+kaggle.json
+credentials.json
+configs/local.toml
+
+# Fetched public source checkouts
+.cache/
+
+# Competition data and generated artifacts never belong in Git
+data/
+datasets/
+checkpoints/
+weights/
+predictions/
+results/
+runs/
+submissions/
+/submission.csv
+/sample_submission.csv
+*.zarr
+*.geff
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.pt
+*.pth
+*.ckpt
+
+# Notebook/editor state
+.ipynb_checkpoints/
+.vscode/
+.idea/

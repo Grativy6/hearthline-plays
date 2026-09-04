@@ -1,0 +1,22 @@
+# Copy to configs/local.toml only after a suitable data drive is available.
+# The copied file is local state and must not contain Kaggle credentials.
+
+[station]
+run_enabled = false
+
+[storage]
+data_root = "CHANGE_ME/biohub-cell-tracking-during-development"
+minimum_free_gib = 200
+allow_removable = true
+forbidden_roots = ["E:/"]
+
+[validation]
+group_key = "embryo_prefix_before_first_underscore"
+visible_test_is_plumbing_only = true
+treat_unlabeled_cells_as_negative = false
+
+[submission]
+enabled = false
+required_filename = "submission.csv"
+internet_enabled = false
+maximum_runtime_hours = 12

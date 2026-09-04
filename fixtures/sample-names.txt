@@ -1,0 +1,4 @@
+# Synthetic names only; these paths do not refer to competition data.
+embryoA_fov01.zarr
+embryoA_fov02.zarr
+embryoB_fov01.zarr

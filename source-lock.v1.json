@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "observed_at_utc": "2026-09-04T15:53:31Z",
+  "lineage": {
+    "repository": "https://github.com/Grativy6/hearthline-plays",
+    "series_branch": "kaggle/main",
+    "series_anchor_commit": "8e1bdfa38d4d3169efffdd0cda2c06799981fbfe",
+    "title_branch": "kaggle/titles/biohub-cell-tracking-during-development"
+  },
+  "competition": {
+    "id": 136605,
+    "slug": "biohub-cell-tracking-during-development",
+    "title": "Biohub - Cell Tracking During Development",
+    "host": "Biohub",
+    "category": "Research",
+    "url": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development",
+    "overview_url": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview",
+    "data_url": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/data",
+    "rules_url": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/rules",
+    "entry_deadline_utc": "2026-09-22T23:59:00Z",
+    "team_merger_deadline_utc": "2026-09-22T23:59:00Z",
+    "final_submission_deadline_utc": "2026-09-29T23:59:00Z",
+    "is_notebook_submission_only": true,
+    "maximum_notebook_runtime_hours": 12,
+    "submission_internet_enabled": false,
+    "maximum_team_size": 5,
+    "maximum_daily_submissions": 5,
+    "maximum_final_submissions": 2,
+    "competition_data_license": "CC0",
+    "competition_data_access_boundary": "Live Kaggle entry and data-security rules still control access and redistribution.",
+    "winner_code_license": "MIT",
+    "rules_review_required_before_entry": true,
+    "public_data_summary": {
+      "file_count": 24886,
+      "total_bytes": 87609892618
+    },
+    "metric": {
+      "formula": "adjusted_edge_jaccard + 0.1 * division_jaccard",
+      "maximum_centroid_match_distance_micrometers": 7.0,
+      "physical_scale_zyx_micrometers_per_voxel": [
+        1.625,
+        0.40625,
+        0.40625
+      ]
+    }
+  },
+  "sources": {
+    "organizer_baseline": {
+      "repository": "https://github.com/royerlab/kaggle-cell-tracking-competition.git",
+      "commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+      "license": "BSD-3-Clause",
+      "role": "organizer architecture, conversion tools, and patched metric reference"
+    },
+    "tracksdata": {
+      "repository": "https://github.com/royerlab/tracksdata.git",
+      "commit": "63a1912f3b6ebd1536a2e8a8adfdf7f5eb84efa4",
+      "license": "BSD-3-Clause",
+      "role": "tracking graph format and operations"
+    }
+  },
+  "claim_ceiling": {
+    "public_metadata_inspected": true,
+    "organizer_sources_executed": false,
+    "competition_data_accessed": false,
+    "benchmark_reproduced": false,
+    "official_submission_made": false,
+    "scientific_or_leaderboard_result_earned": false
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "status": "PREPARED_NOT_RUN",
+  "participation_status": "NOT_ENTERED_UNVERIFIED",
+  "recorded_at_utc": "2026-09-04T15:53:31Z",
+  "lineage": {
+    "title_branch": "kaggle/titles/biohub-cell-tracking-during-development",
+    "parent_series_branch": "kaggle/main",
+    "parent_anchor_commit": "8e1bdfa38d4d3169efffdd0cda2c06799981fbfe"
+  },
+  "authorization": {
+    "allowed": [
+      "create and verify the lightweight public branch scaffold",
+      "record public source identities",
+      "run standard-library-only synthetic and structural tests"
+    ],
+    "requires_new_instruction": [
+      "authenticate to Kaggle or test stored Kaggle credentials",
+      "accept competition rules or enter a team",
+      "open or download competition data",
+      "create or run a Kaggle notebook",
+      "train or evaluate a model on competition data",
+      "make a submission or select a final submission"
+    ]
+  },
+  "hardware_plan": {
+    "run_deferred_until_pc_upgrade": true,
+    "current_machine_used_for_competition_run": false
+  },
+  "storage": {
+    "current_e_drive_allowed_for_competition_data": false,
+    "repository_may_contain_competition_data": false,
+    "future_data_home": "UNBOUND_UNTIL_INTERNAL_OR_SUITABLE_EXTERNAL_STORAGE_IS_AVAILABLE",
+    "suitable_future_external_drive_allowed_after_explicit_binding": true,
+    "minimum_recommended_free_gib": 200
+  },
+  "account_state": {
+    "credential_material_present": "NOT_RECORDED_IN_REPOSITORY",
+    "authentication_validity": "UNKNOWN_NOT_CHECKED",
+    "rules_accepted": "UNKNOWN_NOT_CHECKED",
+    "competition_entered": "UNKNOWN_NOT_CHECKED"
+  },
+  "counters": {
+    "competition_data_files_opened": 0,
+    "competition_data_files_downloaded": 0,
+    "competition_data_bytes_read": 0,
+    "notebook_runs": 0,
+    "submissions": 0,
+    "leaderboard_scores": 0
+  }
+}
