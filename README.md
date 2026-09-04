@@ -4,6 +4,12 @@ A public playground for building, running, and playing games with AI models.
 
 This repository is organized by branch so one growing playground does not become one crowded root. `main` is the front door and shared map. Each game series has a stable anchor branch; individual titles, worlds, and bounded experiments branch from that anchor.
 
+## Shared game embodiment blueprint
+
+[`Hearthline Game Embodiment Blueprint v0.1`](docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md) defines the title-neutral controller–heartbeat architecture for persistent AI play: the environment is the world and referee, the controller is the body, the heartbeat is the sensory return, and Hearthline is the player.
+
+Title branches may adopt an exact blueprint version and supply their own game adapter, controller profile, observer, heartbeat schema, persistent trace, intervention ledger, run manifest, and provenance record. The shared blueprint does not place executable game code on `main` or silently alter an existing title branch.
+
 ## Front of the playground: Finis Solutus
 
 **Finis Solutus** is the current front-of-house project: an open-ended fantasy world built from persistent rules rather than a predetermined plot.
@@ -22,7 +28,7 @@ ARC work has its own series branch so public ARC-AGI development can grow withou
 
 | Branch pattern | Role |
 | --- | --- |
-| `main` | Shared front door, branch map, and license |
+| `main` | Shared front door, branch map, cross-title blueprints, and license |
 | `finis-solutus/main` | Finis Solutus series anchor and common scaffold |
 | `finis-solutus/worlds/<slug>` | One persistent Finis Solutus world |
 | `arc-agi/main` | ARC-AGI series anchor and public-development boundary |
