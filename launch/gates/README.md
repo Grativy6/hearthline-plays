@@ -31,8 +31,12 @@ make verify-candidate
 
 Run candidate materialization and both gate commands from a Linux/POSIX host.
 They deliberately fail closed on hosts without no-follow directory-descriptor
-operations. Cross-platform tests exercise an explicit unsupported-host refusal
-and never emulate a weaker operational path check.
+operations. The research-station CI therefore exercises the operational
+candidate and gate boundary only on Linux/POSIX with Python 3.12. The gate
+suite directly exercises its unsupported-host refusal during grant
+consumption. Candidate materialization and verification are tested only on a
+supported host; no Windows compatibility claim is made, and no weaker
+operational path check is emulated there.
 
 `build/` is ignored and is never a trust root. The verifier reads its three
 files once through no-follow descriptors, regenerates their exact bytes from

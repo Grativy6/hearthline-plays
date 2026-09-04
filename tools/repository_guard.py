@@ -140,7 +140,7 @@ ALLOWED_WORKFLOW_NORMALIZED_SHA256 = {
     ".github/workflows/arc3-orientation-probe.yml": "2f766102a704b7d99a16ff3889b5c61652c0aaa4a21fd0d8c713d8d23f238158",
     ".github/workflows/launch-verify.yml": "f674e4c8a61c2c6203bd790483472464068e6df419aa397f895a7f76c7b1c50b",
     ".github/workflows/verify-launchpad.yml": "9b6676e17ed1923860329cba334b0738a0eb59cafbffddd9cf4722bcadd1df64",
-    ".github/workflows/verify.yml": "c448324219c53dff2597886c45870e9cb843ad21c0beb316ce54e24d4f6dc6a0",
+    ".github/workflows/verify.yml": "35d5207a0f60ce34088802b8ea5a2ccf0906df5fe48bd4fcb17d23077637ffb1",
 }
 WORKFLOW_GUARD_PIN = re.compile(
     rb'(?m)^(?P<prefix>[ ]+expected_guard_sha256 = ")'
@@ -206,7 +206,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tests/test_human_gates.py": "47a265e21328db78ec7dea36c11d4ead0ef5dfc85b8665355b4051c7e6aab235",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
-    "tests/test_repository_guard.py": "982ec473e727446689e6e51b0ee1ecc208fda732d2411cbd23cbffc3d2a970d1",
+    "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
     "tests/test_source_context.py": "35602b972270ed2029011a11fe5f92904e0fccdd18ced1d8be2453e17d6a01f9",
     "tests/test_verify_station.py": "366357c73c73b9248d6f8dd11ba2d6c77f9af37399a7e38a4e69ecef2d0e1f63",
     "tools/orientation_archive_guard.py": "744b2bec891cf9e4369c1a2a2fe43dc6bf38b6f22302ad3065ad888e184a33d2",
@@ -214,7 +214,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
     "tools/verify_station.py": "051460d08cba7153363d13bce1372748b907c0ef96a89e03a63844f8c3864c3a",
 }
-SELF_AST_SHA256 = "567e793ee7c32b4ba4849b640bde824d0994dd21564598a897893a9109a298cf"
+SELF_AST_SHA256 = "21fd7875f5b7c6b838897f73c9df98e6e0bf40bb76b56586946edbb129c887e3"
 
 
 class GuardError(RuntimeError):

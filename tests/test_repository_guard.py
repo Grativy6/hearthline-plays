@@ -678,6 +678,30 @@ class RepositoryGuardTests(unittest.TestCase):
         self.assertIn("  pull_request:\n", launch)
         self.assertIn("  verify-launch:\n    needs: guard-repository\n", launch)
         self.assertIn("  verify:\n    needs: guard-repository\n", verify)
+        self.assertIn("    name: Python 3.12 on ubuntu-latest\n", verify)
+        self.assertIn("    runs-on: ubuntu-latest\n", verify)
+        self.assertIn('          python-version: "3.12"\n', verify)
+        self.assertNotIn("windows-latest", verify)
+        self.assertNotIn("macos-", verify)
+        self.assertNotIn("    strategy:\n", verify)
+        self.assertNotIn("      matrix:\n", verify)
+        self.assertNotIn("${{ matrix.", verify)
+        self.assertNotIn("matrix.os", verify)
+        self.assertNotIn("matrix.python-version", verify)
+        self.assertIn(
+            "      - name: Assert Linux/POSIX no-follow directory-descriptor support\n",
+            verify,
+        )
+        self.assertIn(
+            "          required = (os.open, os.mkdir, os.rename, os.stat, os.unlink, os.rmdir)\n",
+            verify,
+        )
+        self.assertIn('              os.name == "posix"\n', verify)
+        self.assertIn('              and hasattr(os, "O_NOFOLLOW")\n', verify)
+        self.assertIn(
+            "              and all(function in os.supports_dir_fd for function in required)\n",
+            verify,
+        )
 
     def test_guard_only_regular_blob_change_is_stopped_by_workflow_pin(self) -> None:
         path_text = ".github/workflows/launch-verify.yml"
