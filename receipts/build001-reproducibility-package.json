@@ -1,0 +1,19 @@
+{
+  "schema": "hearthline-farm.reproducibility-package.v1",
+  "recorded_utc": "2026-09-04T02:41:00Z",
+  "filename": "hearthline-farm-build001-repro.tar.gz",
+  "bytes": 75566,
+  "sha256": "3b329110e8c6106f719e65dd56b66222519d584bf372396a85736e0948c9ced2",
+  "contains": [
+    "frozen candidate main.py",
+    "pinned public referee Python and JSON bytes",
+    "minimal compatibility wrapper",
+    "separate instrumented simulator",
+    "campaign and paired evaluation scripts",
+    "tests",
+    "development and unseen receipts",
+    "first-furrow full replay and compact day report",
+    "Astra-exclusion attestation and source manifests"
+  ],
+  "authority_ceiling": "Portable local reproduction package; not an official Kaggle submission, score, or leaderboard artifact."
+}

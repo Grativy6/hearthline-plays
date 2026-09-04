@@ -1,0 +1,38 @@
+{
+  "schema": "hearthline-farm.evaluation-manifest.v1",
+  "recorded_utc": "2026-09-04T02:27:46Z",
+  "title": "Build 001 First Furrow matched evaluation",
+  "candidate": {
+    "path": "main.py",
+    "sha256": "c8408e411a433a5e9cebf90648302c20f7528e2119fc22c22bebe7cb0d49f193",
+    "runtime_model_inference": false,
+    "description": "Deterministic observation-only Hearthline Farm policy"
+  },
+  "environment": {
+    "repository": "Kaggle/kaggle-environments",
+    "commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "declared_version": "0.1.0",
+    "configuration": {
+      "episodeSteps": 720,
+      "boardSize": 10,
+      "startingMoney": 3000,
+      "turnsPerDay": 24,
+      "shedCapacity": 100,
+      "maxMarketOrdersPerTurn": 10
+    }
+  },
+  "opponent": "pinned built-in starter_agent",
+  "seed_sets": {
+    "development": [101, 202, 303, 404],
+    "unseen": [1009, 2003, 3001, 4001, 5003, 6007, 7001, 8009, 9001, 10007, 11003, 12007]
+  },
+  "seat_rule": "Each seed is run once with Hearthline in seat 0 and once in seat 1.",
+  "freeze_rule": "Do not change main.py after inspecting unseen results. Any repair creates a new candidate hash and manifest version.",
+  "lineage": {
+    "human_originator_operator": "Christopher D. Pang",
+    "framework": "PAL-informed Hearthline",
+    "authorized_ai_development_tool": "GPT-5.6 Sol",
+    "astra_status": "NO GPT-6 ASTRA OUTPUT, CODE, STRATEGY, ANALYSIS, RECOMMENDATION, OR RUNTIME INFERENCE USED"
+  },
+  "authority_ceiling": "This manifest freezes a local compatibility-harness experiment. It is not proof of upstream package parity, an official Kaggle score, or submission authorization."
+}

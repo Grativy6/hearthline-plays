@@ -1,0 +1,61 @@
+{
+  "advantage": 30924.0,
+  "authority_ceiling": "Local compatibility-harness result; not an official Kaggle score or upstream-package parity certificate.",
+  "candidate_sha256": "c8408e411a433a5e9cebf90648302c20f7528e2119fc22c22bebe7cb0d49f193",
+  "day_report": {
+    "path": "runs/first-furrow-seed101-seat0/day-report.md",
+    "sha256": "44f6a278fd2fbd5dfc56f4d6e128f2c9001d15367150c6d2f0e9dbbfb7b5ec25"
+  },
+  "engine": "source-faithful-local-compatibility-harness",
+  "hearthline_final_bank": 34351.0,
+  "hearthline_seat": 0,
+  "metrics": {
+    "agent_exceptions": 0,
+    "animals_lost_unfed": 0,
+    "crops_lost_decay": 0,
+    "crops_lost_unwatered": 0,
+    "idle_actions": 2437,
+    "malformed_actions": 0,
+    "movement_turns": 1118,
+    "overflow_discarded": 0,
+    "productive_actions": 609,
+    "revenue": {
+      "CARROT": 3621.0,
+      "MELON": 31290.0
+    },
+    "spend": {
+      "animals": 0.0,
+      "hires": 360.0,
+      "land": 0.0,
+      "products": 0.0,
+      "seeds": 3200.0
+    },
+    "suspected_unit_noops": 0,
+    "units_harvested": {
+      "CARROT": 96,
+      "MELON": 192
+    },
+    "units_sold": {
+      "CARROT": 96,
+      "MELON": 192
+    },
+    "weeds_spawned": 1
+  },
+  "recorded_utc": "2026-09-04T02:27:52.347082+00:00",
+  "remaining_inventory": {
+    "field": {},
+    "seeds": {},
+    "shed": {}
+  },
+  "replay": {
+    "path": "runs/first-furrow-seed101-seat0/replay.json",
+    "sha256": "43296bc6cc32bffabe879c1b5c003af66bdb71a4940561cd814b22704f38645f"
+  },
+  "runtime_seconds": 0.02759231399897999,
+  "schema": "hearthline-farm.campaign-receipt.v1",
+  "seed": 101,
+  "source_commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "starter_final_bank": 3427.0,
+  "steps_processed": 719,
+  "winner": "HEARTHLINE"
+}
