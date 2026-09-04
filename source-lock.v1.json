@@ -1,0 +1,159 @@
+{
+  "schema_version": "source-lock.v1",
+  "generated_at_utc": "2026-09-04T19:33:40Z",
+  "experiment_id": "ROSETTA-001",
+  "station_status": "PREPARED_NOT_RUN",
+  "lineage": {
+    "repository": "hearthline-plays",
+    "series_anchor_commit": "c6077763fedb768e599031982a840ad324eb1051",
+    "branch": "kaggle/titles/rosetta"
+  },
+  "materialization": {
+    "source_repositories_cloned": false,
+    "benchmark_data_downloaded": false,
+    "benchmark_task_content_downloaded": false,
+    "model_or_evaluator_invoked": false
+  },
+  "sources": {
+    "rosettabench": {
+      "repository": "https://github.com/namanbnsl/RosettaBench.git",
+      "ref": "refs/heads/main",
+      "commit": "099b4837252becbd2c650ca54b206ac1a6bc3470",
+      "commit_time_utc": "2026-05-17T12:35:23Z",
+      "fetch_class": "public_code",
+      "files_observed_as_metadata": {
+        "README.md": {
+          "git_blob": "54fed83c45d1b0849eda53e63128f8831ef579cf",
+          "bytes": 10072
+        },
+        "rosetta-core.ipynb": {
+          "git_blob": "5a0efd6c13482cf5ffde958a6625f4b198a6884b",
+          "bytes": 18717243
+        },
+        "rosetta-baselines.ipynb": {
+          "git_blob": "75d7f188ef0815e181b75fd5368b5f52695e2f0a",
+          "bytes": 13168225
+        },
+        "rosetta-dataset-builder.ipynb": {
+          "git_blob": "df6e45c7e6d876afc66f1c0fa18c7e64b1fbbbee",
+          "bytes": 120787
+        }
+      },
+      "license": {
+        "status": "UNRESOLVED_NO_LICENSE_FILE",
+        "evidence": "The complete pinned tree contains no LICENSE, COPYING, or NOTICE file."
+      },
+      "fetched": false
+    },
+    "kaggle_benchmarks": {
+      "repository": "https://github.com/Kaggle/kaggle-benchmarks.git",
+      "ref": "refs/heads/ci",
+      "commit": "ab291417d9a4c731ccfbfb03ac0b8316cb843683",
+      "commit_time_utc": "2026-09-03T14:23:38Z",
+      "fetch_class": "public_code",
+      "source_version": "0.6.1",
+      "requires_python": ">=3.11",
+      "license": "Apache-2.0",
+      "fetched": false
+    },
+    "rosetta_dataset_hf": {
+      "repository": "https://huggingface.co/datasets/namanbnsl/rosettabench-150-stratified-compressed",
+      "ref": "refs/heads/main",
+      "commit": "87567193229336fae36f0da95c4af6a2a46bf90f",
+      "last_modified_utc": "2026-04-24T06:58:20Z",
+      "fetch_class": "metadata_only_non_fetchable",
+      "public": true,
+      "gated": false,
+      "parquet": {
+        "path": "rosetta_150_stratified-compressed.parquet",
+        "bytes": 737192984,
+        "lfs_sha256": "f88cc5fe128b6fca5cb7103479b3ba253ff8989162c2c273ccc2fa2160f2a0ab",
+        "decoded_dataset_bytes_reported": 1031366466,
+        "examples": 150
+      },
+      "license": {
+        "declared_label": "cc",
+        "status": "UNRESOLVED_UNSPECIFIED_CC_VARIANT"
+      },
+      "fetched": false
+    },
+    "rosetta_dataset_kaggle": {
+      "repository": "https://www.kaggle.com/datasets/namanbnsl/rosettabench-150-stratified-compressed",
+      "dataset_id": 10026136,
+      "version": 1,
+      "status": "Ready",
+      "last_updated_utc": "2026-04-11T05:15:43.127Z",
+      "fetch_class": "metadata_only_non_fetchable",
+      "metadata_api": "https://www.kaggle.com/api/v1/datasets/view/namanbnsl/rosettabench-150-stratified-compressed",
+      "metadata_total_bytes": 736965670,
+      "license": "MIT",
+      "fetched": false
+    },
+    "kaggle_cli_docs": {
+      "repository": "https://github.com/Kaggle/kaggle-cli.git",
+      "commit": "db63063b817cfbc0abe0e001870edda462e569da",
+      "path": "docs/benchmarks.md",
+      "permalink": "https://github.com/Kaggle/kaggle-cli/blob/db63063b817cfbc0abe0e001870edda462e569da/docs/benchmarks.md",
+      "fetch_class": "metadata_only_non_fetchable",
+      "purpose": "Public command semantics and authentication side-effect documentation only",
+      "fetched": false
+    }
+  },
+  "kaggle_benchmark": {
+    "slug": "namanbnsl/rosetta",
+    "url": "https://www.kaggle.com/benchmarks/namanbnsl/rosetta",
+    "public_leaderboard_api": "https://www.kaggle.com/api/v1/benchmarks/namanbnsl/rosetta/leaderboard",
+    "tasks": [
+      {
+        "name": "RosettaBench Core",
+        "slug": "namanbnsl/rosettabench-core",
+        "version": 1,
+        "url": "https://www.kaggle.com/benchmarks/tasks/namanbnsl/rosettabench-core",
+        "license_status": "UNVERIFIED_FOR_THIS_TASK"
+      },
+      {
+        "name": "RosettaBench: Python Baseline (Control)",
+        "slug": "namanbnsl/rosettabench-python-baseline-control",
+        "version": 1,
+        "url": "https://www.kaggle.com/benchmarks/tasks/namanbnsl/rosettabench-python-baseline-control",
+        "license_status": "APACHE-2.0_DECLARED_ON_TASK_PAGE"
+      }
+    ],
+    "task_content_downloaded": false,
+    "run_scheduled": false
+  },
+  "kaggle_writeup": {
+    "url": "https://www.kaggle.com/competitions/kaggle-measuring-agi/writeups/rosettabench",
+    "published_date": "2026-04-16",
+    "license": "CC0_FOR_WRITEUP_ONLY"
+  },
+  "license_resolution": {
+    "status": "UNRESOLVED_CROSS_SURFACE",
+    "notes": [
+      "The Kaggle dataset MIT declaration does not license the separate GitHub repository.",
+      "The Hugging Face mirror's cc label does not identify a Creative Commons variant.",
+      "The CC0 declaration applies to the Kaggle writeup, not automatically to code or data.",
+      "The Apache-2.0 SDK and Python-control task declarations do not automatically cover RosettaBench source or the Core task."
+    ]
+  },
+  "selection": {
+    "target_pilot_size": 15,
+    "target_strata": {
+      "easy": 5,
+      "medium": 5,
+      "hard": 5
+    },
+    "status": "PILOT_UNSELECTED_UNCONSUMED",
+    "selected_task_ids": [],
+    "task_set_digest": null
+  },
+  "claims_not_earned": {
+    "sol_available_for_both_tasks": false,
+    "astra_exclusion_attested": false,
+    "systems_frozen": false,
+    "pilot_selected": false,
+    "benchmark_run": false,
+    "public_leaderboard_comparability": false,
+    "scientific_result": false
+  }
+}

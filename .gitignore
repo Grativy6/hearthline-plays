@@ -1,0 +1,45 @@
+# Local Python state
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Credentials and provider configuration
+.env
+.env.*
+!.env.example
+.kaggle/
+kaggle.json
+access_token
+credentials.json
+
+# Public source caches and benchmark material
+.cache/
+data/
+datasets/
+benchmark-data/
+task-material/
+hidden-tests/
+*.parquet
+*.ipynb
+
+# Model and evaluator outputs
+runs/
+results/
+responses/
+checkpoints/
+*.run.json
+*.task.json
+*.log
+
+# Local configuration and private evidence
+configs/local.toml
+evidence/private/
+
+# Editor state
+.ipynb_checkpoints/
+.vscode/
+.idea/

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "station_status": "PREPARED_NOT_RUN",
+  "experiment_id": "ROSETTA-001",
+  "experiment_status": "UNFROZEN_UNSELECTED",
+  "recorded_at_utc": "2026-09-04T19:33:33Z",
+  "lineage": {
+    "title_branch": "kaggle/titles/rosetta",
+    "parent_series_branch": "kaggle/main",
+    "parent_anchor_commit": "c6077763fedb768e599031982a840ad324eb1051"
+  },
+  "platform": {
+    "authentication": "NOT_ATTEMPTED",
+    "benchmark_initialization": "NOT_ATTEMPTED",
+    "sol_model_availability": "UNVERIFIED",
+    "task_push": "NOT_ATTEMPTED",
+    "hosted_execution": "NOT_ATTEMPTED",
+    "publication": "NOT_AUTHORIZED"
+  },
+  "experiment_bindings": {
+    "sdk_runtime": "UNBOUND",
+    "model_snapshot": "UNBOUND",
+    "hearthline_artifact": "UNBOUND",
+    "gloss_artifact": "UNBOUND",
+    "pilot_manifest": "UNBOUND",
+    "astra_exclusion_attestation": "UNATTESTED_NOT_FROZEN"
+  },
+  "authorization": {
+    "allowed": [
+      "create and verify the lightweight public branch scaffold",
+      "record public source and platform metadata",
+      "run standard-library-only synthetic and structural tests"
+    ],
+    "requires_new_instruction": [
+      "authenticate to Kaggle or initialize Kaggle Benchmarks credentials",
+      "install or execute the Kaggle Benchmarks SDK",
+      "download or open Rosetta benchmark task material or evaluator tests",
+      "select or expose the ROSETTA-001 pilot identifiers",
+      "call a model or execute Rosetta code and tests",
+      "push a Kaggle task or schedule a hosted benchmark run",
+      "publish a task, notebook, benchmark, result, or leaderboard entry"
+    ]
+  },
+  "astra_exclusion": {
+    "required_for_experiment": true,
+    "status": "UNATTESTED_NOT_FROZEN",
+    "claim_currently_earned": false
+  },
+  "counters": {
+    "source_repository_clones": 0,
+    "sdk_installs": 0,
+    "dataset_files_downloaded": 0,
+    "dataset_bytes_downloaded": 0,
+    "benchmark_task_identifiers_selected": 0,
+    "benchmark_task_prompts_opened": 0,
+    "evaluator_test_cases_opened": 0,
+    "benchmark_model_calls": 0,
+    "evaluator_runs": 0,
+    "kaggle_task_pushes": 0,
+    "kaggle_hosted_runs": 0,
+    "publications": 0
+  },
+  "claim_ceiling": "Branch preparation only; no pilot, model, benchmark, learning-tax, Gloss benefit, or Astra-exclusion result exists."
+}

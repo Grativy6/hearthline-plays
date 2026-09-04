@@ -1,0 +1,193 @@
+{
+  "schema_version": "public-observation.v1",
+  "observed_at_utc": "2026-09-04T19:33:40Z",
+  "experiment_id": "ROSETTA-001",
+  "collection_boundary": {
+    "public_unauthenticated_metadata_only": true,
+    "kaggle_auth_attempted": false,
+    "dataset_downloaded": false,
+    "benchmark_task_content_downloaded": false,
+    "source_repository_cloned": false,
+    "model_invoked": false,
+    "evaluator_invoked": false,
+    "pilot_tasks_selected_or_consumed": false
+  },
+  "station_state": {
+    "preparation": "PREPARED_NOT_RUN",
+    "authentication": "AUTH_NOT_ATTEMPTED",
+    "data": "DATA_NOT_DOWNLOADED",
+    "sol_model_availability": "SOL_MODEL_AVAILABILITY_UNVERIFIED",
+    "pilot": "PILOT_UNSELECTED_UNCONSUMED",
+    "astra_exclusion": "REQUIRED_UNATTESTED_NOT_FROZEN"
+  },
+  "benchmark_shape": {
+    "benchmark_slug": "namanbnsl/rosetta",
+    "task_versions": {
+      "rosettabench-core": 1,
+      "rosettabench-python-baseline-control": 1
+    },
+    "problem_count": 150,
+    "source_pool_after_filter": 342,
+    "strata": {
+      "easy": 40,
+      "medium": 50,
+      "hard": 60
+    },
+    "platform": "atcoder",
+    "source_release": "LiveCodeBench release_v5",
+    "contest_date_min": "2023-05-13T00:00:00Z",
+    "contest_date_max": "2024-12-28T00:00:00Z",
+    "few_shot_pairs_per_core_problem": 6,
+    "unique_problem_local_languages_reported": 150,
+    "mapping_inventory_reported": {
+      "keywords": 35,
+      "builtins": 77,
+      "methods": 55,
+      "operators": 25,
+      "delimiters": 4,
+      "sum": 196
+    },
+    "execution_timeout_seconds_reported": 30,
+    "score_rule_reported": "passed_problem_count / total_problem_count",
+    "llm_judge_reported": false,
+    "outcome_codes_reported": [
+      "PASS",
+      "NO_CODE",
+      "PYTHON_LEAK",
+      "SYNTAX_ERROR",
+      "RUNTIME_ERROR",
+      "WRONG_ANSWER"
+    ]
+  },
+  "dataset_metadata_discrepancies": {
+    "card_claims": {
+      "lang_seed_column": true,
+      "all_tests_type": "list"
+    },
+    "actual_hugging_face_schema": {
+      "columns": [
+        "question_title",
+        "question_content",
+        "platform",
+        "question_id",
+        "contest_id",
+        "contest_date",
+        "starter_code",
+        "difficulty",
+        "public_test_cases",
+        "private_test_cases",
+        "metadata",
+        "all_tests"
+      ],
+      "lang_seed_present": false,
+      "all_tests_type": "string",
+      "private_test_cases_type": "string"
+    },
+    "statistics_observation": {
+      "all_tests_string_length_min": 175,
+      "all_tests_string_length_max": 1144,
+      "public_test_cases_string_length_min": 175,
+      "public_test_cases_string_length_max": 1144,
+      "private_test_cases_string_length_min": 156,
+      "private_test_cases_string_length_max": 91979992,
+      "inference": "Aggregate all_tests statistics match public_test_cases, suggesting but not proving row-wise equality."
+    }
+  },
+  "licensing_observation": {
+    "kaggle_dataset_v1": "MIT",
+    "hugging_face_mirror": "cc_UNSPECIFIED",
+    "kaggle_python_control_task_v1": "Apache-2.0",
+    "kaggle_core_task_v1": "UNVERIFIED",
+    "kaggle_writeup": "CC0_WRITEUP_ONLY",
+    "kaggle_benchmarks_sdk": "Apache-2.0",
+    "rosettabench_git_repository": "UNRESOLVED_NO_LICENSE_FILE",
+    "cross_surface_status": "UNRESOLVED_CROSS_SURFACE"
+  },
+  "author_static_snapshot": {
+    "source_commit": "099b4837252becbd2c650ca54b206ac1a6bc3470",
+    "model_count": 16,
+    "selected_rows_as_displayed": [
+      {
+        "model": "Gemini 3.1 Pro Preview",
+        "core_percent": 88.0,
+        "python_percent": 95.0,
+        "displayed_learning_tax_percentage_points": 7.0
+      },
+      {
+        "model": "GPT-5.4",
+        "core_percent": 29.3,
+        "python_percent": 75.0,
+        "displayed_learning_tax_percentage_points": 45.7
+      },
+      {
+        "model": "Gemma 3 27B",
+        "core_percent": 3.3,
+        "python_percent": 32.0,
+        "displayed_learning_tax_percentage_points": 28.7
+      }
+    ],
+    "author_reported_failure_observations": [
+      "PYTHON_LEAK was dominant for 14 of 16 models.",
+      "For abc357_b, all but Gemini 3 Flash Preview and Gemini 3.1 Pro Preview reportedly invented an unavailable upper operation; those two reportedly reformulated from demonstrated operations."
+    ],
+    "independent_recalculation_performed": false,
+    "internal_text_caution": "The README says every model outside the top two loses at least 40 points, but its Gemma 3 27B row reports a 28.7-point tax. The weaker statement that most models lose at least 40 is supported by 13 of 16 displayed rows."
+  },
+  "live_kaggle_leaderboard": {
+    "api": "https://www.kaggle.com/api/v1/benchmarks/namanbnsl/rosetta/leaderboard",
+    "row_count": 22,
+    "selected_rows": [
+      {
+        "model": "GPT-5.6 Sol",
+        "slug": "gpt-5.6-sol",
+        "core_result_case": "booleanResult",
+        "core_boolean": false,
+        "core_numeric": null,
+        "core_evaluation_time_utc": "2026-08-19T14:48:28.618404Z",
+        "python_result_case": "none",
+        "python_numeric": null,
+        "interpretation": "No valid paired numeric Sol result is present. Boolean false must not be reported as a zero Core score."
+      },
+      {
+        "model": "GPT-5.6 Terra",
+        "slug": "gpt-5.6-terra",
+        "core_numeric": 0.49333333333333335,
+        "python_numeric": 0.8933333333333333,
+        "exact_learning_tax": 0.4
+      },
+      {
+        "model": "GPT-5.6 Luna",
+        "slug": "gpt-5.6-luna",
+        "core_numeric": 0.36666666666666664,
+        "python_numeric": 0.8866666666666667,
+        "exact_learning_tax": 0.52
+      },
+      {
+        "model": "Gemini 3.1 Pro Preview",
+        "slug": "gemini-3.1-pro-preview",
+        "core_numeric": 0.88,
+        "python_numeric": 0.9466666666666667,
+        "exact_learning_tax": 0.06666666666666665
+      },
+      {
+        "model": "GPT-5.4",
+        "slug": "gpt-5.4-2026-03-05",
+        "core_numeric": 0.29333333333333333,
+        "python_numeric": 0.7466666666666667,
+        "exact_learning_tax": 0.45333333333333337,
+        "rounding_note": "The exact API-derived tax is 45.333 percentage points, not the README's tax computed from separately rounded display values."
+      }
+    ]
+  },
+  "interpretation_boundaries": {
+    "contamination_free": "AUTHOR_DESCRIPTION_NOT_VERIFIED_CURRENT_PROPERTY",
+    "reasons": [
+      "The underlying AtCoder problems are public.",
+      "The generator notebooks and deterministic mapping procedure are public.",
+      "The public dataset includes evaluator-relevant encoded test material.",
+      "A fresh sealed salt would create a Rosetta-derived experiment rather than the public benchmark."
+    ],
+    "gloss": "Task-local Gloss is a Hearthline experimental adapter, not a RosettaBench component and not canonical Bridge Gloss.",
+    "public_comparability": "Hearthline and task-local Gloss conditions are derived system results. Bare Sol remains only a comparability candidate until exact model and harness evidence exists."
+  }
+}

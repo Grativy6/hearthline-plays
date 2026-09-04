@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ROSETTA-001",
+  "status": "TEMPLATE_NOT_A_RUN",
+  "pilot_manifest_sha256": null,
+  "source_lock_sha256": null,
+  "model": {
+    "family": "GPT-5.6 Sol",
+    "platform_slug": null,
+    "snapshot": null,
+    "reasoning_setting": null,
+    "sampling_configuration_sha256": null,
+    "provider_seed_effective": null,
+    "provider_temperature_effective": null
+  },
+  "systems": {
+    "hearthline_commit": null,
+    "hearthline_sha256": null,
+    "gloss_commit": null,
+    "gloss_sha256": null,
+    "astra_exclusion_attestation_sha256": null
+  },
+  "execution": {
+    "n_jobs": 1,
+    "max_attempts": 1,
+    "on_failure": "continue",
+    "internet_enabled": false,
+    "retrieval_enabled": false,
+    "model_tools_enabled": false,
+    "llm_judge_enabled": false
+  },
+  "conditions": [
+    {"id": "C01_BARE_SOL_PYTHON", "system": "bare", "task_form": "python", "results": []},
+    {"id": "C02_BARE_SOL_CORE", "system": "bare", "task_form": "core", "results": []},
+    {"id": "C03_HEARTHLINE_SOL_PYTHON", "system": "hearthline", "task_form": "python", "results": []},
+    {"id": "C04_HEARTHLINE_SOL_CORE", "system": "hearthline", "task_form": "core", "results": []},
+    {"id": "C05_HEARTHLINE_SOL_TASK_GLOSS_PYTHON", "system": "hearthline_gloss", "task_form": "python", "results": []},
+    {"id": "C06_HEARTHLINE_SOL_TASK_GLOSS_CORE", "system": "hearthline_gloss", "task_form": "core", "results": []}
+  ],
+  "summary": {
+    "bare_learning_tax": null,
+    "hearthline_learning_tax": null,
+    "hearthline_gloss_learning_tax": null
+  },
+  "claim_ceiling": "Structural validation only; not a public leaderboard result or scientific conclusion."
+}

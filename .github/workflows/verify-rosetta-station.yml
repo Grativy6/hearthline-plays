@@ -1,0 +1,25 @@
+name: Verify Rosetta station
+
+on:
+  push:
+    branches:
+      - kaggle/titles/rosetta
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-structure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run standard-library tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify preparation boundary
+        run: python tools/verify_station.py

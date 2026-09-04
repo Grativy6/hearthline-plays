@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ROSETTA-001",
+  "status": "TEMPLATE_UNSELECTED",
+  "source_dataset_commit": "87567193229336fae36f0da95c4af6a2a46bf90f",
+  "source_index_sha256": null,
+  "selection": {
+    "method": "sha256-rank-v1",
+    "seed_sha256": "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6",
+    "requested_by_difficulty": {
+      "easy": 5,
+      "medium": 5,
+      "hard": 5
+    },
+    "selected": []
+  },
+  "task_material_opened_during_selection": false,
+  "frozen_at_utc": null
+}

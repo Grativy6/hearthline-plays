@@ -1,0 +1,98 @@
+[station]
+experiment_id = "ROSETTA-001"
+station_status = "PREPARED_NOT_RUN"
+run_enabled = false
+
+[lineage]
+title_branch = "kaggle/titles/rosetta"
+series_anchor_commit = "c6077763fedb768e599031982a840ad324eb1051"
+astra_exclusion_required = true
+astra_attestation_status = "UNATTESTED_NOT_FROZEN"
+
+[kaggle]
+authentication_enabled = false
+benchmark_init_enabled = false
+task_push_enabled = false
+hosted_run_enabled = false
+publication_enabled = false
+sol_model_availability = "UNVERIFIED"
+
+[benchmark]
+public_benchmark = "namanbnsl/rosetta"
+public_core_task_version = 1
+public_python_task_version = 1
+dataset_materialized = false
+task_material_opened = false
+evaluator_executed = false
+public_leaderboard_comparability_claimed = false
+
+[pilot]
+status = "UNSELECTED_UNCONSUMED"
+selection_method = "sha256-rank-v1"
+selection_seed_sha256 = "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6"
+easy = 5
+medium = 5
+hard = 5
+
+[execution]
+model_family = "GPT-5.6 Sol"
+model_slug = "UNBOUND"
+model_snapshot = "UNBOUND"
+reasoning_setting = "UNBOUND"
+sampling_configuration = "UNBOUND"
+provider_seed_effective = "UNVERIFIED"
+provider_temperature_effective = "UNVERIFIED"
+n_jobs = 1
+max_attempts = 1
+on_failure = "continue"
+internet_enabled = false
+retrieval_enabled = false
+model_tools_enabled = false
+llm_judge_enabled = false
+
+[systems.bare]
+artifact = "UNBOUND"
+frozen = false
+
+[systems.hearthline]
+artifact_commit = "UNBOUND"
+artifact_sha256 = "UNBOUND"
+frozen = false
+
+[systems.gloss]
+artifact_commit = "UNBOUND"
+artifact_sha256 = "UNBOUND"
+frozen = false
+mapping_scope = "PROBLEM_LOCAL"
+hidden_map_access = false
+evaluator_test_access = false
+
+[[conditions]]
+id = "C01_BARE_SOL_PYTHON"
+system = "bare"
+task_form = "python"
+
+[[conditions]]
+id = "C02_BARE_SOL_CORE"
+system = "bare"
+task_form = "core"
+
+[[conditions]]
+id = "C03_HEARTHLINE_SOL_PYTHON"
+system = "hearthline"
+task_form = "python"
+
+[[conditions]]
+id = "C04_HEARTHLINE_SOL_CORE"
+system = "hearthline"
+task_form = "core"
+
+[[conditions]]
+id = "C05_HEARTHLINE_SOL_TASK_GLOSS_PYTHON"
+system = "hearthline_gloss"
+task_form = "python"
+
+[[conditions]]
+id = "C06_HEARTHLINE_SOL_TASK_GLOSS_CORE"
+system = "hearthline_gloss"
+task_form = "core"
