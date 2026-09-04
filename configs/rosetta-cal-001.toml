@@ -1,6 +1,6 @@
 [calibration]
 experiment_id = "ROSETTA-CAL-001"
-status = "AUTHORIZED_NOT_DISPATCHED"
+status = "AUTHORIZED_BUILD_REPAIR_PENDING"
 classification = "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION"
 question_ids = ["abc357_b"]
 formal_pilot_exclusion_sha256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
@@ -23,7 +23,7 @@ slug = "hearthline-rosetta-cal-001-abc357b"
 private = true
 persistent = true
 publication_enabled = false
-source_sha256 = "388f883106a074b0ed05483169de2604c8855300a5b0256c3c2b087c6451c3f9"
+source_sha256 = "270445c7746e4639158456eecc8f48915103afc3d61a80bed733a6f503e3d668"
 
 [model]
 requested_formal_model = "gpt-5.6-sol"

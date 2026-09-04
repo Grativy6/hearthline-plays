@@ -1,10 +1,11 @@
 {
   "schema_version": "rosetta-cal-status.v1",
   "experiment_id": "ROSETTA-CAL-001",
-  "status": "AUTHORIZED_NOT_DISPATCHED",
-  "recorded_at_utc": "2026-09-04T22:09:11Z",
+  "status": "AUTHORIZED_BUILD_REPAIR_PENDING",
+  "recorded_at_utc": "2026-09-04T22:29:58Z",
   "authorization": {
     "private_task_pushes_authorized": 1,
+    "same_task_build_repair_pushes_authorized": 1,
     "hosted_runs_authorized": 1,
     "model_calls_authorized_maximum": 4,
     "automatic_retries_authorized": false,
@@ -35,24 +36,28 @@
     "dataset": "namanbnsl/rosettabench-150-stratified-compressed",
     "dataset_version_observed": 1,
     "dataset_total_bytes_observed": 736965670,
-    "duplicate_private_task_matches": 0,
+    "duplicate_private_task_matches": 1,
     "recheck_immediately_before_push": true
   },
   "source_binding": {
     "path": "calibration/rosetta_cal_001_task.py",
-    "sha256": "388f883106a074b0ed05483169de2604c8855300a5b0256c3c2b087c6451c3f9"
+    "sha256": "270445c7746e4639158456eecc8f48915103afc3d61a80bed733a6f503e3d668"
   },
   "dispatch": {
     "task_slug": "hearthline-rosetta-cal-001-abc357b",
     "private": true,
     "client_side_creation_rejections": 1,
     "client_side_last_error": "NO_LITERAL_TASK_DECORATOR_CORRECTED_BEFORE_EXTERNAL_WRITE",
-    "task_pushes": 0,
+    "server_side_creation_failures": 1,
+    "server_side_last_error": "BUILD_PLACEHOLDER_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
+    "task_pushes": 1,
+    "task_versions_created": 1,
+    "hosted_run_requests_rejected_pre_dispatch": 1,
     "hosted_runs": 0,
     "model_calls": 0,
     "evaluator_runs": 0,
     "publications": 0,
-    "task_reference": null,
+    "task_reference": "PRIVATE_TASK_VERSION_1_WITHHELD",
     "run_reference": null,
     "uncertain_external_effect": false
   },
@@ -64,5 +69,5 @@
     "model_calls": 0,
     "evaluator_runs": 0
   },
-  "claim_ceiling": "Private one-task orientation setup only; no run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+  "claim_ceiling": "Private one-task build repair only; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
 }

@@ -25,10 +25,13 @@ On the E: filesystem, invoke Git with the exact worktree supplied to
 The user's 2026-09-04 instruction expands authority for exactly the bounded
 `ROSETTA-CAL-001` setup and orientation run described in
 `docs/ROSETTA_CAL_001.md`. It permits a clean environment and source cache on
-the fixed C: drive, Kaggle OAuth, one duplicate-checked private task push,
+the fixed C: drive, Kaggle OAuth, one duplicate-checked private task creation,
 attachment of dataset version 1, and one hosted Terra run whose task makes at
-most four calls. It does not authorize retries, publication, or formal-pilot
-consumption.
+most four calls. Task version 1 failed during Kaggle's model-less build probe,
+before data or model access. One recorded corrective push to the same private
+task is permitted to finish that creation; it is not a model retry. It does
+not authorize any further task version, model retry, publication, or
+formal-pilot consumption.
 
 Outside that one-shot calibration grant, do not:
 

@@ -502,6 +502,48 @@ class HostedSdkBoundaryTests(unittest.TestCase):
 
         self.assertFalse(loaded)
 
+    def test_task_creation_placeholder_is_allowed_without_a_model_call(self) -> None:
+        task_view, test_view, binding = fixture_material()
+        loaded = calibration.LoadedCalibrationData(task_view, test_view, binding)
+
+        class FakeChat:
+            usage = types.SimpleNamespace()
+
+            def __enter__(self) -> FakeChat:
+                return self
+
+            def __exit__(self, *_args: object) -> None:
+                return None
+
+        class FakeChats:
+            def new(self, _name: str) -> FakeChat:
+                return FakeChat()
+
+        class BuildPlaceholder:
+            name = "llm"
+
+            def prompt(self, _message: str, **_kwargs: object) -> str:
+                raise RuntimeError("model proxy is intentionally absent during task creation")
+
+        def task_decorator(*, name: str):
+            del name
+            return lambda function: function
+
+        fake_sdk = types.SimpleNamespace(task=task_decorator, chats=FakeChats())
+        with (
+            patch.dict(sys.modules, {"kaggle_benchmarks": fake_sdk}),
+            patch.object(calibration, "require_kaggle_kernel"),
+            patch.object(calibration, "load_attached_calibration_data", return_value=loaded),
+        ):
+            receipt = calibration.build_kaggle_task()(BuildPlaceholder())
+
+        self.assertIsNone(receipt["call_policy"]["model"])  # type: ignore[index]
+        self.assertEqual(receipt["call_policy"]["actual_calls"], 1)  # type: ignore[index]
+        self.assertEqual(
+            receipt["cells"][0]["disposition"],  # type: ignore[index]
+            calibration.Disposition.INFRASTRUCTURE_FAILURE,
+        )
+
 
 class ImportBoundaryTests(unittest.TestCase):
     def test_import_does_not_import_sdk_load_data_or_run_task(self) -> None:

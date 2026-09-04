@@ -1407,7 +1407,10 @@ def build_kaggle_task() -> Any:
         require_kaggle_kernel()
         actor_model_raw = getattr(llm, "model", None)
         actor_model = str(actor_model_raw)[:256] if actor_model_raw is not None else None
-        if actor_model not in EXPECTED_MODEL_SLUGS:
+        # Task creation supplies Kaggle's model-less ``kbench.llm`` placeholder.
+        # A hosted run supplies a concrete model identifier, which remains
+        # fail-closed to Terra.
+        if actor_model is not None and actor_model not in EXPECTED_MODEL_SLUGS:
             raise CalibrationError(
                 "hosted actor must be the frozen gpt-5.6-terra calibration model"
             )
