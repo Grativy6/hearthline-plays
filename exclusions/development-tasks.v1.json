@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ROSETTA-001",
+  "status": "FROZEN_DEVELOPMENT_EXCLUSIONS",
+  "source_dataset_commit": "87567193229336fae36f0da95c4af6a2a46bf90f",
+  "excluded": [
+    {
+      "question_id": "abc357_b",
+      "reason": "ROSETTA-CAL-001_PUBLICLY_DISCLOSED_DEVELOPMENT_TASK",
+      "public_source": "https://github.com/namanbnsl/RosettaBench/blob/099b4837252becbd2c650ca54b206ac1a6bc3470/README.md"
+    }
+  ]
+}

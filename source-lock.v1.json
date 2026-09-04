@@ -1,6 +1,6 @@
 {
   "schema_version": "source-lock.v1",
-  "generated_at_utc": "2026-09-04T19:33:40Z",
+  "generated_at_utc": "2026-09-04T22:17:52Z",
   "experiment_id": "ROSETTA-001",
   "station_status": "PREPARED_NOT_RUN",
   "lineage": {
@@ -142,6 +142,14 @@
       "easy": 5,
       "medium": 5,
       "hard": 5
+    },
+    "method": "sha256-rank-with-frozen-exclusions-v2",
+    "development_exclusion_manifest": {
+      "path": "exclusions/development-tasks.v1.json",
+      "sha256": "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389",
+      "excluded_task_ids": [
+        "abc357_b"
+      ]
     },
     "status": "PILOT_UNSELECTED_UNCONSUMED",
     "selected_task_ids": [],

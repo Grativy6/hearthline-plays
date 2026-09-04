@@ -14,47 +14,62 @@ Before acting, read `README.md`, `source-lock.v1.json`,
 - Series anchor: `c6077763fedb768e599031982a840ad324eb1051`
 - Branch: `kaggle/titles/rosetta`
 - Experiment ID: `ROSETTA-001`
-- Current state: `PREPARED_NOT_RUN`
+- Formal experiment state: `ROSETTA-001 / PREPARED_NOT_RUN`
+- Development calibration: `ROSETTA-CAL-001 / AUTHORIZED_NOT_DISPATCHED`
 
 On the E: filesystem, invoke Git with the exact worktree supplied to
 `safe.directory`. Do not alter another Hearthline checkout or title branch.
 
 ## Current authority
 
-Current authority covers documentation, public-metadata verification, and
-offline validation of files that do not contain benchmark tasks or data. It
-does not cover execution or external state changes.
+The user's 2026-09-04 instruction expands authority for exactly the bounded
+`ROSETTA-CAL-001` setup and orientation run described in
+`docs/ROSETTA_CAL_001.md`. It permits a clean environment and source cache on
+the fixed C: drive, Kaggle OAuth, one duplicate-checked private task push,
+attachment of dataset version 1, and one hosted Terra run whose task makes at
+most four calls. It does not authorize retries, publication, or formal-pilot
+consumption.
 
-Until the user explicitly expands authority, do not:
+Outside that one-shot calibration grant, do not:
 
 - authenticate to Kaggle or test stored credentials;
 - invoke `kaggle benchmarks auth` or `kaggle benchmarks init`;
 - push, publish, schedule, run, delete, or download a Kaggle benchmark task;
-- clone RosettaBench or the Kaggle Benchmarks SDK;
+- clone RosettaBench or the Kaggle Benchmarks SDK anywhere except the recorded
+  fixed-drive calibration cache;
 - download, preview, enumerate, or otherwise consume benchmark task rows;
 - select the 15 pilot problems;
 - reveal or inspect evaluator-only tests, language seeds, or full maps;
 - invoke GPT-5.6 Sol, Astra, or another model as an experimental subject or
-  task solver, or invoke the Rosetta evaluator;
+  task solver, or invoke the Rosetta evaluator, except for the exact capped
+  `gpt-5.6-terra` calibration dispatch;
 - compile or execute generated candidate programs;
 - claim a score, failure profile, learning tax, cost, latency, or scientific
   conclusion;
 - publish a derived Hearthline result as a vanilla Rosetta leaderboard result.
 
-`AUTH_NOT_ATTEMPTED`, `DATA_NOT_DOWNLOADED`, and
-`SOL_MODEL_AVAILABILITY_UNVERIFIED` are factual states, not missing chores to
-silently complete.
+The zero-action labels in `status/station-status.v1.json` and
+`metadata/public-observation.v1.json` are scoped to the formal station and its
+immutable pre-calibration observation. They are not current host-state claims
+for `ROSETTA-CAL-001`; use `status/rosetta-cal-001-status.v1.json` for that
+separate calibration. Formal `DATA_NOT_DOWNLOADED` and unselected-pilot states
+remain current even after the bounded calibration.
 
 ## Experimental invariants
 
-Preserve all six condition IDs and both paired task forms exactly as documented.
-Do not drop the Python controls, substitute a different model for Sol, or merge
-the Hearthline and Gloss arms.
+Preserve all six `ROSETTA-001` condition IDs and both paired task forms exactly
+as documented. Do not drop its Python controls, substitute a different model
+for Sol, or merge its Hearthline and Gloss arms. The separately identified
+Terra calibration is not a substitution into `ROSETTA-001`.
 
 The pilot remains `PILOT_UNSELECTED_UNCONSUMED`: five easy, five medium, and
 five hard are intended, but their identities are not chosen. Preparation,
 synthetic fixtures, schema checks, or public leaderboard inspection do not
 count as a pilot or benchmark run.
+
+`abc357_b` is permanently reserved for `ROSETTA-CAL-001` and must be removed by
+the digest-bound exclusion manifest before formal pilot ranking. It may never
+enter the 15-task pilot.
 
 Checkpoint identity must include at least the experiment ID, condition ID,
 exact task version, task-set digest, model identifier, system digest, sampling

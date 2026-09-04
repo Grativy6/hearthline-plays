@@ -4,20 +4,23 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
 import tomllib
-from typing import Iterable, Mapping, Sequence
-
+from collections.abc import Iterable, Mapping, Sequence
+from pathlib import Path, PurePosixPath
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT_ID = "ROSETTA-001"
 BRANCH = "kaggle/titles/rosetta"
 ANCHOR = "c6077763fedb768e599031982a840ad324eb1051"
 SELECTION_SEED = "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6"
+SELECTION_METHOD = "sha256-rank-with-frozen-exclusions-v2"
+EXCLUSION_MANIFEST_SHA256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
+DEVELOPMENT_EXCLUDED_IDS = ["abc357_b"]
 ROSETTABENCH_COMMIT = "099b4837252becbd2c650ca54b206ac1a6bc3470"
 KAGGLE_BENCHMARKS_COMMIT = "ab291417d9a4c731ccfbfb03ac0b8316cb843683"
 DATASET_COMMIT = "87567193229336fae36f0da95c4af6a2a46bf90f"
@@ -59,25 +62,33 @@ REQUIRED_FILES = {
     "LICENSE",
     "README.md",
     "THIRD_PARTY_NOTICES.md",
+    "calibration/rosetta_cal_001_task.py",
     "configs/rosetta-001.example.toml",
+    "configs/rosetta-cal-001.toml",
     "docs/GETTING_STARTED.md",
     "docs/GLOSS_CONTRACT.md",
     "docs/KAGGLE_BENCHMARKS_SDK.md",
+    "docs/ROSETTA_CAL_001.md",
     "docs/ROSETTA_001_PROTOCOL.md",
+    "exclusions/development-tasks.v1.json",
     "metadata/public-observation.v1.json",
     "pyproject.toml",
     "source-lock.v1.json",
     "status/station-status.v1.json",
+    "status/rosetta-cal-001-status.v1.json",
     "templates/pilot-selection.v1.json",
     "templates/result-bundle.v1.json",
     "tools/bootstrap_environment.ps1",
     "tools/fetch_pinned_code.py",
     "tools/select_pilot.py",
     "tools/validate_result_bundle.py",
+    "tools/verify_calibration.py",
     "tools/verify_station.py",
     "tests/test_fetch_pinned_code.py",
     "tests/test_select_pilot.py",
     "tests/test_validate_result_bundle.py",
+    "tests/test_rosetta_cal_001_task.py",
+    "tests/test_verify_calibration.py",
     "tests/test_verify_station.py",
 }
 PROHIBITED_DIRECTORIES = {
@@ -160,6 +171,42 @@ def _require_exact_keys(
     result = _require_object(value, label)
     _require(set(result) == expected, f"{label} fields mismatch")
     return result
+
+
+def validate_development_exclusions(path: Path) -> None:
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise VerificationError(f"cannot read development exclusions: {exc}") from exc
+    _require(
+        hashlib.sha256(raw).hexdigest() == EXCLUSION_MANIFEST_SHA256,
+        "development exclusion manifest digest mismatch",
+    )
+    document = _require_exact_keys(
+        _load_json(path),
+        {"schema_version", "experiment_id", "status", "source_dataset_commit", "excluded"},
+        "development exclusion manifest",
+    )
+    _require(document.get("schema_version") == "1.0", "development exclusion schema mismatch")
+    _require(document.get("experiment_id") == EXPERIMENT_ID, "development exclusion experiment mismatch")
+    _require(
+        document.get("status") == "FROZEN_DEVELOPMENT_EXCLUSIONS",
+        "development exclusions are not frozen",
+    )
+    _require(
+        document.get("source_dataset_commit") == DATASET_COMMIT,
+        "development exclusion dataset mismatch",
+    )
+    rows = document.get("excluded")
+    _require(isinstance(rows, list) and len(rows) == 1, "development exclusion count mismatch")
+    row = _require_exact_keys(
+        rows[0], {"question_id", "reason", "public_source"}, "development exclusion row"
+    )
+    _require(row.get("question_id") == "abc357_b", "development exclusion ID mismatch")
+    _require(
+        row.get("reason") == "ROSETTA-CAL-001_PUBLICLY_DISCLOSED_DEVELOPMENT_TASK",
+        "development exclusion reason mismatch",
+    )
 
 
 def validate_source_lock(document: object) -> None:
@@ -413,13 +460,39 @@ def validate_source_lock(document: object) -> None:
 
     selection = _require_exact_keys(
         root.get("selection"),
-        {"target_pilot_size", "target_strata", "status", "selected_task_ids", "task_set_digest"},
+        {
+            "target_pilot_size",
+            "target_strata",
+            "method",
+            "development_exclusion_manifest",
+            "status",
+            "selected_task_ids",
+            "task_set_digest",
+        },
         "source-lock selection",
     )
     _require(selection.get("target_pilot_size") == 15, "source lock pilot size mismatch")
     _require(
         selection.get("target_strata") == {"easy": 5, "medium": 5, "hard": 5},
         "source lock pilot strata mismatch",
+    )
+    _require(selection.get("method") == SELECTION_METHOD, "source lock selection method mismatch")
+    exclusion = _require_exact_keys(
+        selection.get("development_exclusion_manifest"),
+        {"path", "sha256", "excluded_task_ids"},
+        "source-lock development exclusion manifest",
+    )
+    _require(
+        exclusion.get("path") == "exclusions/development-tasks.v1.json",
+        "source lock exclusion path mismatch",
+    )
+    _require(
+        exclusion.get("sha256") == EXCLUSION_MANIFEST_SHA256,
+        "source lock exclusion digest mismatch",
+    )
+    _require(
+        exclusion.get("excluded_task_ids") == DEVELOPMENT_EXCLUDED_IDS,
+        "source lock exclusion identifiers mismatch",
     )
     _require(selection.get("status") == "PILOT_UNSELECTED_UNCONSUMED", "source lock selects a pilot")
     _require(selection.get("selected_task_ids") == [], "source lock contains selected IDs")
@@ -803,12 +876,24 @@ def validate_config(document: Mapping[str, object]) -> None:
         _require(benchmark.get(key) is False, f"config must disable benchmark.{key}")
     pilot = _require_exact_keys(
         document.get("pilot"),
-        {"status", "selection_method", "selection_seed_sha256", "easy", "medium", "hard"},
+        {
+            "status",
+            "selection_method",
+            "selection_seed_sha256",
+            "development_exclusion_manifest_sha256",
+            "easy",
+            "medium",
+            "hard",
+        },
         "config pilot",
     )
     _require(pilot.get("status") == "UNSELECTED_UNCONSUMED", "config pilot must be unselected")
-    _require(pilot.get("selection_method") == "sha256-rank-v1", "selection method mismatch")
+    _require(pilot.get("selection_method") == SELECTION_METHOD, "selection method mismatch")
     _require(pilot.get("selection_seed_sha256") == SELECTION_SEED, "selection seed mismatch")
+    _require(
+        pilot.get("development_exclusion_manifest_sha256") == EXCLUSION_MANIFEST_SHA256,
+        "config exclusion digest mismatch",
+    )
     _require(
         {key: pilot.get(key) for key in ("easy", "medium", "hard")}
         == {"easy": 5, "medium": 5, "hard": 5},
@@ -897,6 +982,8 @@ def validate_templates(pilot_document: object, result_document: object) -> None:
             "status",
             "source_dataset_commit",
             "source_index_sha256",
+            "development_exclusion_manifest_sha256",
+            "development_excluded_question_ids",
             "selection",
             "task_material_opened_during_selection",
             "frozen_at_utc",
@@ -909,14 +996,35 @@ def validate_templates(pilot_document: object, result_document: object) -> None:
     _require(pilot.get("source_dataset_commit") == DATASET_COMMIT, "pilot dataset pin mismatch")
     for key in ("source_index_sha256", "frozen_at_utc"):
         _require(pilot.get(key) is None, f"pilot template {key} must be null")
+    _require(
+        pilot.get("development_exclusion_manifest_sha256") == EXCLUSION_MANIFEST_SHA256,
+        "pilot template exclusion digest mismatch",
+    )
+    _require(
+        pilot.get("development_excluded_question_ids") == DEVELOPMENT_EXCLUDED_IDS,
+        "pilot template exclusion identifiers mismatch",
+    )
     _require(pilot.get("task_material_opened_during_selection") is False, "pilot template records material access")
     selection = _require_object(pilot.get("selection"), "pilot selection")
     _require(
-        set(selection) == {"method", "seed_sha256", "requested_by_difficulty", "selected"},
+        set(selection)
+        == {
+            "method",
+            "seed_sha256",
+            "population_by_difficulty",
+            "eligible_by_difficulty",
+            "requested_by_difficulty",
+            "selected",
+        },
         "pilot selection fields mismatch",
     )
-    _require(selection.get("method") == "sha256-rank-v1", "pilot template method mismatch")
+    _require(selection.get("method") == SELECTION_METHOD, "pilot template method mismatch")
     _require(selection.get("seed_sha256") == SELECTION_SEED, "pilot template seed mismatch")
+    _require(
+        selection.get("population_by_difficulty") == {"easy": 40, "medium": 50, "hard": 60},
+        "pilot template population mismatch",
+    )
+    _require(selection.get("eligible_by_difficulty") is None, "pilot template eligible counts must be null")
     _require(
         selection.get("requested_by_difficulty") == {"easy": 5, "medium": 5, "hard": 5},
         "pilot template strata mismatch",
@@ -1100,6 +1208,7 @@ def verify_station(repo_root: Path = REPO_ROOT, *, candidate_paths: Iterable[str
     root = repo_root.resolve(strict=True)
     missing = sorted(relative for relative in REQUIRED_FILES if not (root / relative).is_file())
     _require(not missing, "missing required files: " + ", ".join(missing))
+    validate_development_exclusions(root / "exclusions" / "development-tasks.v1.json")
     validate_source_lock(_load_json(root / "source-lock.v1.json"))
     validate_public_observation(_load_json(root / "metadata" / "public-observation.v1.json"))
     validate_status(_load_json(root / "status" / "station-status.v1.json"))

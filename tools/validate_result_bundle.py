@@ -22,6 +22,9 @@ from typing import Mapping, Sequence
 EXPERIMENT_ID = "ROSETTA-001"
 DATASET_COMMIT = "87567193229336fae36f0da95c4af6a2a46bf90f"
 SELECTION_SEED = "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6"
+SELECTION_METHOD = "sha256-rank-with-frozen-exclusions-v2"
+EXCLUSION_MANIFEST_SHA256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
+DEVELOPMENT_EXCLUDED_IDS = ["abc357_b"]
 RESULT_STATUS = "RESULTS_RECORDED_NOT_PUBLIC"
 CLAIM_CEILING = (
     "Structural validation only; not a public leaderboard result or scientific conclusion."
@@ -231,6 +234,8 @@ def verify_external_bindings(
             "status",
             "source_dataset_commit",
             "source_index_sha256",
+            "development_exclusion_manifest_sha256",
+            "development_excluded_question_ids",
             "selection",
             "task_material_opened_during_selection",
             "frozen_at_utc",
@@ -244,6 +249,10 @@ def verify_external_bindings(
     if pilot.get("source_dataset_commit") != DATASET_COMMIT:
         raise BundleError("pilot manifest dataset commit mismatch")
     _sha256(pilot.get("source_index_sha256"), "pilot manifest source_index_sha256")
+    if pilot.get("development_exclusion_manifest_sha256") != EXCLUSION_MANIFEST_SHA256:
+        raise BundleError("pilot manifest development exclusion digest mismatch")
+    if pilot.get("development_excluded_question_ids") != DEVELOPMENT_EXCLUDED_IDS:
+        raise BundleError("pilot manifest development exclusion identifiers mismatch")
     if pilot.get("task_material_opened_during_selection") is not False:
         raise BundleError("pilot manifest records task-material access during selection")
     selection = _exact_object(
@@ -253,17 +262,28 @@ def verify_external_bindings(
             "seed_sha256",
             "rank_input",
             "population_by_difficulty",
+            "eligible_by_difficulty",
             "requested_by_difficulty",
             "selected",
         },
         "pilot manifest selection",
     )
-    if selection.get("method") != "sha256-rank-v1":
+    if selection.get("method") != SELECTION_METHOD:
         raise BundleError("pilot manifest selection method mismatch")
     if selection.get("seed_sha256") != SELECTION_SEED:
         raise BundleError("pilot manifest selection seed mismatch")
     if selection.get("population_by_difficulty") != {"easy": 40, "medium": 50, "hard": 60}:
         raise BundleError("pilot manifest population mismatch")
+    eligible = selection.get("eligible_by_difficulty")
+    if not isinstance(eligible, dict) or set(eligible) != set(DIFFICULTY_ORDER):
+        raise BundleError("pilot manifest eligible population mismatch")
+    if any(type(eligible[key]) is not int or eligible[key] < 0 for key in DIFFICULTY_ORDER):
+        raise BundleError("pilot manifest eligible counts must be nonnegative integers")
+    population = {"easy": 40, "medium": 50, "hard": 60}
+    if sum(eligible.values()) != 149 or sum(population[key] - eligible[key] for key in DIFFICULTY_ORDER) != 1:
+        raise BundleError("pilot manifest must exclude exactly one development task")
+    if any(eligible[key] > population[key] for key in DIFFICULTY_ORDER):
+        raise BundleError("pilot manifest eligible counts exceed the source population")
     if selection.get("requested_by_difficulty") != {"easy": 5, "medium": 5, "hard": 5}:
         raise BundleError("pilot manifest requested strata mismatch")
     selected = selection.get("selected")
@@ -288,6 +308,8 @@ def verify_external_bindings(
         pilot_order.append((question_id, difficulty))
     if len({question_id for question_id, _ in pilot_order}) != 15:
         raise BundleError("pilot manifest contains duplicate question identifiers")
+    if set(DEVELOPMENT_EXCLUDED_IDS) & {question_id for question_id, _ in pilot_order}:
+        raise BundleError("pilot manifest contains a frozen development exclusion")
     if [difficulty for _, difficulty in pilot_order] != EXPECTED_DIFFICULTIES:
         raise BundleError("pilot manifest must order 5 easy, 5 medium, then 5 hard identifiers")
 
@@ -315,6 +337,7 @@ def verify_external_bindings(
             "experiment_ids_match": source_lock.get("experiment_id") == EXPERIMENT_ID,
             "source_dataset_commit_matches": True,
             "pilot_identifiers_and_order_match_results": True,
+            "development_exclusions_enforced": True,
         },
     }
 
@@ -348,6 +371,16 @@ def _require_source_lock_binding(document: object, pilot: dict[str, object]) -> 
     hf = sources.get("rosetta_dataset_hf")
     if not isinstance(hf, dict) or hf.get("commit") != pilot.get("source_dataset_commit"):
         raise BundleError("source-lock dataset commit does not match the pilot manifest")
+    selection = source_lock.get("selection")
+    if not isinstance(selection, dict) or selection.get("method") != SELECTION_METHOD:
+        raise BundleError("source-lock selection method does not match the pilot manifest")
+    exclusion = selection.get("development_exclusion_manifest")
+    if not isinstance(exclusion, dict):
+        raise BundleError("source lock has no development exclusion binding")
+    if exclusion.get("sha256") != pilot.get("development_exclusion_manifest_sha256"):
+        raise BundleError("source-lock development exclusion digest mismatch")
+    if exclusion.get("excluded_task_ids") != pilot.get("development_excluded_question_ids"):
+        raise BundleError("source-lock development exclusion identifiers mismatch")
     return source_lock
 
 

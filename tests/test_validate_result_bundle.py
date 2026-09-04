@@ -290,11 +290,14 @@ class ValidateResultBundleTests(unittest.TestCase):
             "status": "SELECTED_IDS_ONLY_NOT_RUN",
             "source_dataset_commit": validator.DATASET_COMMIT,
             "source_index_sha256": "9" * 64,
+            "development_exclusion_manifest_sha256": validator.EXCLUSION_MANIFEST_SHA256,
+            "development_excluded_question_ids": validator.DEVELOPMENT_EXCLUDED_IDS,
             "selection": {
-                "method": "sha256-rank-v1",
+                "method": validator.SELECTION_METHOD,
                 "seed_sha256": validator.SELECTION_SEED,
                 "rank_input": "seed_sha256 + NUL + difficulty + NUL + question_id",
                 "population_by_difficulty": {"easy": 40, "medium": 50, "hard": 60},
+                "eligible_by_difficulty": {"easy": 39, "medium": 50, "hard": 60},
                 "requested_by_difficulty": {"easy": 5, "medium": 5, "hard": 5},
                 "selected": [
                     {
@@ -320,7 +323,14 @@ class ValidateResultBundleTests(unittest.TestCase):
             "kaggle_benchmark": {},
             "kaggle_writeup": {},
             "license_resolution": {},
-            "selection": {},
+            "selection": {
+                "method": validator.SELECTION_METHOD,
+                "development_exclusion_manifest": {
+                    "path": "exclusions/development-tasks.v1.json",
+                    "sha256": validator.EXCLUSION_MANIFEST_SHA256,
+                    "excluded_task_ids": validator.DEVELOPMENT_EXCLUDED_IDS,
+                },
+            },
             "claims_not_earned": {},
         }
         with tempfile.TemporaryDirectory() as temporary:
@@ -347,6 +357,69 @@ class ValidateResultBundleTests(unittest.TestCase):
             document["conditions"][0]["results"][0]["question_id"] = "different"
             with self.assertRaisesRegex(validator.BundleError, "do not match"):
                 validator.verify_external_bindings(document, pilot_path, source_path)
+
+    def test_external_binding_rejects_frozen_development_task(self) -> None:
+        document = bundle()
+        pilot = {
+            "schema_version": "1.0",
+            "experiment_id": "ROSETTA-001",
+            "status": "SELECTED_IDS_ONLY_NOT_RUN",
+            "source_dataset_commit": validator.DATASET_COMMIT,
+            "source_index_sha256": "9" * 64,
+            "development_exclusion_manifest_sha256": validator.EXCLUSION_MANIFEST_SHA256,
+            "development_excluded_question_ids": validator.DEVELOPMENT_EXCLUDED_IDS,
+            "selection": {
+                "method": validator.SELECTION_METHOD,
+                "seed_sha256": validator.SELECTION_SEED,
+                "rank_input": "seed_sha256 + NUL + difficulty + NUL + question_id",
+                "population_by_difficulty": {"easy": 40, "medium": 50, "hard": 60},
+                "eligible_by_difficulty": {"easy": 39, "medium": 50, "hard": 60},
+                "requested_by_difficulty": {"easy": 5, "medium": 5, "hard": 5},
+                "selected": [
+                    {
+                        "order": index,
+                        "question_id": "abc357_b" if index == 0 else question_id,
+                        "difficulty": difficulty,
+                        "rank_sha256": "a" * 64,
+                    }
+                    for index, (question_id, difficulty) in enumerate(IDS)
+                ],
+            },
+            "task_material_opened_during_selection": False,
+            "frozen_at_utc": "2026-09-04T00:00:00Z",
+        }
+        source_lock = {
+            "schema_version": "source-lock.v1",
+            "generated_at_utc": "2026-09-04T00:00:00Z",
+            "experiment_id": "ROSETTA-001",
+            "station_status": "PREPARED_NOT_RUN",
+            "lineage": {},
+            "materialization": {},
+            "sources": {"rosetta_dataset_hf": {"commit": validator.DATASET_COMMIT}},
+            "kaggle_benchmark": {},
+            "kaggle_writeup": {},
+            "license_resolution": {},
+            "selection": {
+                "method": validator.SELECTION_METHOD,
+                "development_exclusion_manifest": {
+                    "path": "exclusions/development-tasks.v1.json",
+                    "sha256": validator.EXCLUSION_MANIFEST_SHA256,
+                    "excluded_task_ids": validator.DEVELOPMENT_EXCLUDED_IDS,
+                },
+            },
+            "claims_not_earned": {},
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "pilot.json"
+            source_path = Path(temporary) / "source-lock.json"
+            path.write_text(json.dumps(pilot) + "\n", encoding="utf-8", newline="\n")
+            source_path.write_text(
+                json.dumps(source_lock) + "\n", encoding="utf-8", newline="\n"
+            )
+            document["pilot_manifest_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+            document["source_lock_sha256"] = hashlib.sha256(source_path.read_bytes()).hexdigest()
+            with self.assertRaisesRegex(validator.BundleError, "frozen development exclusion"):
+                validator.verify_external_bindings(document, path, source_path)
 
 
 if __name__ == "__main__":

@@ -4,9 +4,19 @@
   "status": "TEMPLATE_UNSELECTED",
   "source_dataset_commit": "87567193229336fae36f0da95c4af6a2a46bf90f",
   "source_index_sha256": null,
+  "development_exclusion_manifest_sha256": "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389",
+  "development_excluded_question_ids": [
+    "abc357_b"
+  ],
   "selection": {
-    "method": "sha256-rank-v1",
+    "method": "sha256-rank-with-frozen-exclusions-v2",
     "seed_sha256": "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6",
+    "population_by_difficulty": {
+      "easy": 40,
+      "medium": 50,
+      "hard": 60
+    },
+    "eligible_by_difficulty": null,
     "requested_by_difficulty": {
       "easy": 5,
       "medium": 5,

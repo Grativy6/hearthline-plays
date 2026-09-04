@@ -12,10 +12,13 @@ import sys
 from typing import Mapping, Sequence
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT_ID = "ROSETTA-001"
 DATASET_COMMIT = "87567193229336fae36f0da95c4af6a2a46bf90f"
-SELECTION_METHOD = "sha256-rank-v1"
+SELECTION_METHOD = "sha256-rank-with-frozen-exclusions-v2"
 FIXED_SEED_SHA256 = "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6"
+EXCLUSION_MANIFEST_PATH = REPO_ROOT / "exclusions" / "development-tasks.v1.json"
+EXCLUSION_MANIFEST_SHA256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
 EXPECTED_COUNTS = {"easy": 40, "medium": 50, "hard": 60}
 PILOT_COUNTS = {"easy": 5, "medium": 5, "hard": 5}
 DIFFICULTY_ORDER = ("easy", "medium", "hard")
@@ -49,6 +52,53 @@ def load_index(path: Path) -> tuple[list[object], str]:
     if not isinstance(document, list):
         raise SelectionError("index root must be a JSON list")
     return document, hashlib.sha256(raw).hexdigest()
+
+
+def load_exclusions(
+    path: Path = EXCLUSION_MANIFEST_PATH,
+    *,
+    expected_sha256: str = EXCLUSION_MANIFEST_SHA256,
+) -> tuple[frozenset[str], str]:
+    raw = path.read_bytes()
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    if actual_sha256 != expected_sha256:
+        raise SelectionError("development exclusion manifest SHA-256 mismatch")
+    try:
+        document = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=_reject_duplicate_keys)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise SelectionError(f"invalid exclusion manifest JSON: {exc}") from exc
+    if not isinstance(document, dict) or set(document) != {
+        "schema_version",
+        "experiment_id",
+        "status",
+        "source_dataset_commit",
+        "excluded",
+    }:
+        raise SelectionError("development exclusion manifest fields mismatch")
+    if document["schema_version"] != "1.0" or document["experiment_id"] != EXPERIMENT_ID:
+        raise SelectionError("development exclusion manifest identity mismatch")
+    if document["status"] != "FROZEN_DEVELOPMENT_EXCLUSIONS":
+        raise SelectionError("development exclusion manifest is not frozen")
+    if document["source_dataset_commit"] != DATASET_COMMIT:
+        raise SelectionError("development exclusion manifest dataset mismatch")
+    excluded_rows = document["excluded"]
+    if not isinstance(excluded_rows, list) or not excluded_rows:
+        raise SelectionError("development exclusion manifest must contain at least one row")
+    excluded_ids: set[str] = set()
+    for offset, row in enumerate(excluded_rows, start=1):
+        if not isinstance(row, dict) or set(row) != {"question_id", "reason", "public_source"}:
+            raise SelectionError(f"development exclusion row {offset} fields mismatch")
+        question_id = row["question_id"]
+        if not isinstance(question_id, str) or not question_id or question_id.strip() != question_id:
+            raise SelectionError(f"development exclusion row {offset} has an invalid question_id")
+        if question_id in excluded_ids:
+            raise SelectionError(f"duplicate development exclusion: {question_id}")
+        for field in ("reason", "public_source"):
+            value = row[field]
+            if not isinstance(value, str) or not value or value.strip() != value:
+                raise SelectionError(f"development exclusion row {offset}.{field} is invalid")
+        excluded_ids.add(question_id)
+    return frozenset(excluded_ids), actual_sha256
 
 
 def validate_index(
@@ -96,6 +146,22 @@ def validate_index(
     return grouped
 
 
+def apply_exclusions(
+    grouped: Mapping[str, list[str]], excluded_ids: frozenset[str]
+) -> dict[str, list[str]]:
+    observed = {question_id for ids in grouped.values() for question_id in ids}
+    missing = sorted(excluded_ids - observed)
+    if missing:
+        raise SelectionError(
+            "frozen development exclusions are absent from the source index: "
+            + ", ".join(missing)
+        )
+    return {
+        difficulty: [question_id for question_id in grouped[difficulty] if question_id not in excluded_ids]
+        for difficulty in DIFFICULTY_ORDER
+    }
+
+
 def rank_digest(question_id: str, difficulty: str, *, seed: str = FIXED_SEED_SHA256) -> str:
     if not isinstance(seed, str) or len(seed) != 64 or any(c not in "0123456789abcdef" for c in seed):
         raise SelectionError("selection seed must be 64 lowercase hexadecimal characters")
@@ -138,20 +204,34 @@ def select_pilot(
     return selected
 
 
-def build_manifest(document: list[object], *, source_index_sha256: str) -> dict[str, object]:
+def build_manifest(
+    document: list[object],
+    *,
+    source_index_sha256: str,
+    excluded_ids: frozenset[str] | None = None,
+    exclusion_manifest_sha256: str = EXCLUSION_MANIFEST_SHA256,
+) -> dict[str, object]:
     grouped = validate_index(document)
-    selected = select_pilot(grouped)
+    if excluded_ids is None:
+        excluded_ids, exclusion_manifest_sha256 = load_exclusions()
+    eligible = apply_exclusions(grouped, excluded_ids)
+    selected = select_pilot(eligible)
     manifest: dict[str, object] = {
         "schema_version": "1.0",
         "experiment_id": EXPERIMENT_ID,
         "status": "SELECTED_IDS_ONLY_NOT_RUN",
         "source_dataset_commit": DATASET_COMMIT,
         "source_index_sha256": source_index_sha256,
+        "development_exclusion_manifest_sha256": exclusion_manifest_sha256,
+        "development_excluded_question_ids": sorted(excluded_ids),
         "selection": {
             "method": SELECTION_METHOD,
             "seed_sha256": FIXED_SEED_SHA256,
             "rank_input": "seed_sha256 + NUL + difficulty + NUL + question_id",
             "population_by_difficulty": dict(EXPECTED_COUNTS),
+            "eligible_by_difficulty": {
+                difficulty: len(eligible[difficulty]) for difficulty in DIFFICULTY_ORDER
+            },
             "requested_by_difficulty": dict(PILOT_COUNTS),
             "selected": selected,
         },
@@ -174,7 +254,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.index.resolve(strict=True) == args.output.resolve(strict=False):
             raise SelectionError("output must not replace the input index")
         document, source_hash = load_index(args.index)
-        manifest = build_manifest(document, source_index_sha256=source_hash)
+        excluded_ids, exclusion_hash = load_exclusions()
+        manifest = build_manifest(
+            document,
+            source_index_sha256=source_hash,
+            excluded_ids=excluded_ids,
+            exclusion_manifest_sha256=exclusion_hash,
+        )
         encoded = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
         with args.output.open("xb") as handle:
             handle.write(encoded)

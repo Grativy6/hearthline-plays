@@ -1,0 +1,63 @@
+[calibration]
+experiment_id = "ROSETTA-CAL-001"
+status = "AUTHORIZED_NOT_DISPATCHED"
+classification = "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION"
+question_ids = ["abc357_b"]
+formal_pilot_exclusion_sha256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
+
+[storage]
+execution_root = "C:\\Users\\cdpan\\HearthlineData\\RosettaBench"
+drive = "C:"
+filesystem = "NTFS"
+forbidden_data_drive = "E:"
+
+[sources]
+kaggle_benchmarks_commit = "ab291417d9a4c731ccfbfb03ac0b8316cb843683"
+rosettabench_inspection_commit = "099b4837252becbd2c650ca54b206ac1a6bc3470"
+kaggle_dataset = "namanbnsl/rosettabench-150-stratified-compressed"
+kaggle_dataset_expected_version = 1
+kaggle_dataset_expected_total_bytes = 736965670
+
+[hosted_task]
+slug = "hearthline-rosetta-cal-001-abc357b"
+private = true
+persistent = true
+publication_enabled = false
+source_sha256 = "47f4c64a1cc82f0fb84514451407cfc8bc4e9c03764f1ce9bc513b3ab0a1e28e"
+
+[model]
+requested_formal_model = "gpt-5.6-sol"
+requested_formal_model_status = "ABSENT_FROM_AUTHENTICATED_KAGGLE_MODEL_LIST"
+calibration_model = "gpt-5.6-terra"
+reasoning = "low"
+max_completion_tokens = 2048
+
+[execution]
+fresh_chat_per_cell = true
+max_model_calls = 4
+max_attempts_per_cell = 1
+automatic_retries = false
+model_tools_enabled = false
+retrieval_enabled = false
+cross_cell_memory_enabled = false
+local_generated_code_execution = false
+
+[[cells]]
+id = "CAL01_BARE_PYTHON"
+system = "bare"
+task_form = "python"
+
+[[cells]]
+id = "CAL02_BARE_CORE"
+system = "bare"
+task_form = "core"
+
+[[cells]]
+id = "CAL03_HEARTHLINE_CORE"
+system = "hearthline"
+task_form = "core"
+
+[[cells]]
+id = "CAL04_HEARTHLINE_TASK_GLOSS_CORE"
+system = "hearthline_task_gloss"
+task_form = "core"

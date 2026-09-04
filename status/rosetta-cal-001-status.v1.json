@@ -1,0 +1,66 @@
+{
+  "schema_version": "rosetta-cal-status.v1",
+  "experiment_id": "ROSETTA-CAL-001",
+  "status": "AUTHORIZED_NOT_DISPATCHED",
+  "recorded_at_utc": "2026-09-04T22:09:11Z",
+  "authorization": {
+    "private_task_pushes_authorized": 1,
+    "hosted_runs_authorized": 1,
+    "model_calls_authorized_maximum": 4,
+    "automatic_retries_authorized": false,
+    "publication_authorized": false,
+    "formal_pilot_consumption_authorized": false
+  },
+  "host_setup": {
+    "execution_root": "C:\\Users\\cdpan\\HearthlineData\\RosettaBench",
+    "fixed_drive": "C:",
+    "filesystem": "NTFS",
+    "forbidden_data_drive": "E:",
+    "python_version": "3.12.14",
+    "kaggle_cli_version": "2.2.4",
+    "sdk_version": "0.6.1",
+    "sdk_commit": "ab291417d9a4c731ccfbfb03ac0b8316cb843683",
+    "environment_freeze_sha256": "e9428d7ebb71e514f3afb4aba28259ead1101b904afb5599e4d70d2677f0918b",
+    "environment_package_count": 146,
+    "rosettabench_commit": "099b4837252becbd2c650ca54b206ac1a6bc3470",
+    "local_dataset_files": 0,
+    "local_dataset_bytes": 0
+  },
+  "platform_preflight": {
+    "authentication": "AUTHENTICATED",
+    "requested_formal_model": "gpt-5.6-sol",
+    "requested_formal_model_status": "ABSENT_FROM_AUTHENTICATED_KAGGLE_MODEL_LIST",
+    "calibration_model": "gpt-5.6-terra",
+    "calibration_model_status": "AVAILABLE",
+    "dataset": "namanbnsl/rosettabench-150-stratified-compressed",
+    "dataset_version_observed": 1,
+    "dataset_total_bytes_observed": 736965670,
+    "duplicate_private_task_matches": 0,
+    "recheck_immediately_before_push": true
+  },
+  "source_binding": {
+    "path": "calibration/rosetta_cal_001_task.py",
+    "sha256": "47f4c64a1cc82f0fb84514451407cfc8bc4e9c03764f1ce9bc513b3ab0a1e28e"
+  },
+  "dispatch": {
+    "task_slug": "hearthline-rosetta-cal-001-abc357b",
+    "private": true,
+    "task_pushes": 0,
+    "hosted_runs": 0,
+    "model_calls": 0,
+    "evaluator_runs": 0,
+    "publications": 0,
+    "task_reference": null,
+    "run_reference": null,
+    "uncertain_external_effect": false
+  },
+  "formal_experiment": {
+    "experiment_id": "ROSETTA-001",
+    "status": "PREPARED_NOT_RUN",
+    "pilot_status": "PILOT_UNSELECTED_UNCONSUMED",
+    "pilot_identifiers_selected": 0,
+    "model_calls": 0,
+    "evaluator_runs": 0
+  },
+  "claim_ceiling": "Private one-task orientation setup only; no run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+}

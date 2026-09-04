@@ -51,6 +51,9 @@ class VerifyStationTests(unittest.TestCase):
             lambda doc: doc["sources"]["kaggle_benchmarks"].__setitem__("license", "MIT"),
             lambda doc: doc["sources"]["rosetta_dataset_hf"]["license"].__setitem__("status", "CC0"),
             lambda doc: doc["materialization"].__setitem__("benchmark_data_downloaded", True),
+            lambda doc: doc["selection"]["development_exclusion_manifest"].__setitem__(
+                "sha256", "0" * 64
+            ),
         )
         for mutate in mutations:
             with self.subTest(mutate=mutate):

@@ -1,7 +1,7 @@
 # Hearthline Playground — RosettaBench
 
-This title branch reserves a no-run research station for RosettaBench and the
-local experiment identifier `ROSETTA-001`.
+This title branch carries a sealed no-run research station for `ROSETTA-001`
+and a separate one-problem development calibration, `ROSETTA-CAL-001`.
 
 RosettaBench tests whether a model can solve programming problems through a
 new, problem-local symbolic interface. Its public Core task presents each of
@@ -13,10 +13,10 @@ problem set as a control. The author defines:
 learning tax = Python pass rate - Rosetta Core pass rate
 ```
 
-This branch contains lightweight instructions, public metadata, and offline
-preparation tools only. It does not contain Rosetta source notebooks, benchmark
-data, test cases, generated mappings, model outputs, credentials, or evaluator
-artifacts.
+The Git branch contains lightweight instructions, public metadata, calibration
+source, and offline verification tools. It does not contain Rosetta notebooks,
+benchmark data, test cases, model outputs, credentials, or private run
+artifacts. External setup and private receipts live on the fixed C: drive.
 
 ## Station state
 
@@ -29,11 +29,30 @@ artifacts.
 | Pilot | `PILOT_UNSELECTED_UNCONSUMED` |
 | Astra exclusion | `REQUIRED_UNATTESTED_NOT_FROZEN` |
 
+These rows describe the formal `ROSETTA-001` experiment. It remains unrun and
+its 15 task IDs remain unselected. The separate calibration state and exact
+four-call ceiling are recorded in
+[the calibration protocol](docs/ROSETTA_CAL_001.md).
+
 The public leaderboard currently contains a row named GPT-5.6 Sol, but that row
 has no numeric Core score and no Python-control result. Presence in the table is
 not evidence that a paired Sol run is available or operational.
 
-## Frozen design target
+## Development calibration
+
+`ROSETTA-CAL-001` uses only the already-publicly-discussed `abc357_b` task. It
+is permanently excluded from the later pilot through
+[`exclusions/development-tasks.v1.json`](exclusions/development-tasks.v1.json).
+The current Kaggle account exposes Terra and Luna but not Sol, so any completed
+calibration is explicitly a Terra orientation result, never a Sol substitute
+or public Rosetta score.
+
+The calibration has four fresh-chat cells: bare Python, bare synthetic Core,
+Hearthline synthetic Core, and Hearthline plus deterministic task-local Gloss
+synthetic Core. It permits at most four model calls, no retries, and no
+publication. See [the calibration protocol](docs/ROSETTA_CAL_001.md).
+
+## Frozen formal design target
 
 `ROSETTA-001` is a three-system by two-task-form design:
 
@@ -68,8 +87,9 @@ is not a second Thulia ledger. See [the Gloss contract](docs/GLOSS_CONTRACT.md).
 
 Start with [the preparation guide](docs/GETTING_STARTED.md). The branch includes
 an offline station verifier, an offline check-only/explicit code-fetch split, a
-strict metadata-only pilot selector for later authorization, and a structural
-result-bundle validator. It contains no task runner or publication command.
+strict exclusion-aware metadata-only pilot selector, a structural result-bundle
+validator, and one bounded private calibration task. It contains no publication
+command.
 
 ## Before any run
 
@@ -86,9 +106,9 @@ authorized run needs:
 6. isolation of tests, language seeds, evaluator maps, and generated code;
 7. explicit run authority and receipt locations.
 
-Do not use `kaggle benchmarks init`, authenticate, download either dataset
-distribution, clone either source repository, schedule a model, or execute the
-evaluator as a setup check. Those actions cross gates that remain closed.
+Those gates remain closed for `ROSETTA-001`. The exact, separately authorized
+calibration exception is recorded in `docs/ROSETTA_CAL_001.md`; it does not
+open the formal pilot or authorize a public task or leaderboard entry.
 
 ## Public source snapshot
 

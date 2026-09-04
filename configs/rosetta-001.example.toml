@@ -28,7 +28,8 @@ public_leaderboard_comparability_claimed = false
 
 [pilot]
 status = "UNSELECTED_UNCONSUMED"
-selection_method = "sha256-rank-v1"
+selection_method = "sha256-rank-with-frozen-exclusions-v2"
+development_exclusion_manifest_sha256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"
 selection_seed_sha256 = "cf11bdacd7729ac263dd7684b27ce1adc33dbf83f268d02cbe087aceb718d5e6"
 easy = 5
 medium = 5

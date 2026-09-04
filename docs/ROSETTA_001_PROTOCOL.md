@@ -73,16 +73,20 @@ problem-solving channel. Its Core behavior is constrained by
 The intended first crossing is exactly 15 distinct problems: five easy, five
 medium, and five hard.
 
-No problem identities have been selected or consumed. Selection occurs only
-after the model, system, sampling, budget, Astra-exclusion, licensing, and
-evaluator boundaries are frozen.
+No pilot identities have been selected or consumed. `abc357_b` is a disclosed
+development task for `ROSETTA-CAL-001`; it is permanently ineligible for this
+pilot through the digest-bound
+`exclusions/development-tasks.v1.json` manifest. Selection occurs only after
+the model, system, sampling, budget, Astra-exclusion, licensing, and evaluator
+boundaries are frozen.
 
 A future authorized metadata-only selector must:
 
 1. read only a separately verified index containing exactly `question_id` and
    `difficulty`, tied by digest to the exact pinned dataset distribution;
 2. validate 40/50/60 source strata before selection;
-3. select 5/5/5 with a frozen, recorded procedure and seed;
+3. verify the frozen development-exclusion digest, remove all excluded IDs,
+   then select 5/5/5 with a frozen, recorded procedure and seed;
 4. reject duplicate `question_id` values;
 5. emit a sealed ordered task manifest and report the SHA-256 of the exact
    UTF-8 file bytes (the manifest does not contain a self-hash);
@@ -90,6 +94,11 @@ A future authorized metadata-only selector must:
    to every model-facing component;
 7. expose a problem statement and the task-authorized demonstrations only when
    that problem's turn begins.
+
+The one-task calibration is development input, not a partial pilot. Its model,
+fresh dialect, four asymmetric cells, evaluator, and claim ceiling are defined
+in `docs/ROSETTA_CAL_001.md`. No calibration observation may be used to repair
+or tune a frozen pilot arm after pilot selection.
 
 The same ordered 15 tasks must be used in all six conditions. Order effects
 must be handled by one preregistered policy; ad hoc reshuffling after seeing an

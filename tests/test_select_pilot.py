@@ -19,6 +19,12 @@ def make_index(counts: dict[str, int]) -> list[dict[str, str]]:
     ]
 
 
+def make_full_index_with_exclusion() -> list[dict[str, str]]:
+    index = make_index(selector.EXPECTED_COUNTS)
+    index[0]["question_id"] = "abc357_b"
+    return index
+
+
 class SelectPilotTests(unittest.TestCase):
     def test_validates_synthetic_counts_and_selects_deterministically(self) -> None:
         counts = {"easy": 6, "medium": 7, "hard": 8}
@@ -72,12 +78,34 @@ class SelectPilotTests(unittest.TestCase):
         with self.assertRaisesRegex(selector.SelectionError, "difficulty counts"):
             selector.validate_index(wrong_strata)
 
+    def test_frozen_development_task_is_removed_before_ranking(self) -> None:
+        grouped = selector.validate_index(make_full_index_with_exclusion())
+        eligible = selector.apply_exclusions(grouped, frozenset({"abc357_b"}))
+        self.assertNotIn("abc357_b", eligible["easy"])
+        selected = selector.select_pilot(eligible)
+        self.assertNotIn("abc357_b", {row["question_id"] for row in selected})
+
+    def test_missing_frozen_exclusion_fails_closed(self) -> None:
+        grouped = selector.validate_index(make_index(selector.EXPECTED_COUNTS))
+        with self.assertRaisesRegex(selector.SelectionError, "absent from the source index"):
+            selector.apply_exclusions(grouped, frozenset({"abc357_b"}))
+
+    def test_exclusion_manifest_is_digest_bound(self) -> None:
+        excluded, digest = selector.load_exclusions()
+        self.assertEqual(excluded, frozenset({"abc357_b"}))
+        self.assertEqual(digest, selector.EXCLUSION_MANIFEST_SHA256)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "tampered.json"
+            path.write_text("{}\n", encoding="utf-8")
+            with self.assertRaisesRegex(selector.SelectionError, "SHA-256 mismatch"):
+                selector.load_exclusions(path)
+
     def test_cli_writes_only_the_explicit_new_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             input_path = root / "metadata-index.json"
             output_path = root / "pilot.json"
-            input_path.write_text(json.dumps(make_index(selector.EXPECTED_COUNTS)), encoding="utf-8")
+            input_path.write_text(json.dumps(make_full_index_with_exclusion()), encoding="utf-8")
             output = io.StringIO()
             with redirect_stdout(output):
                 self.assertEqual(
@@ -88,6 +116,15 @@ class SelectPilotTests(unittest.TestCase):
             manifest = json.loads(output_path.read_text(encoding="utf-8"))
             self.assertEqual(manifest["status"], "SELECTED_IDS_ONLY_NOT_RUN")
             self.assertEqual(len(manifest["selection"]["selected"]), 15)
+            self.assertEqual(manifest["development_excluded_question_ids"], ["abc357_b"])
+            self.assertEqual(
+                manifest["development_exclusion_manifest_sha256"],
+                selector.EXCLUSION_MANIFEST_SHA256,
+            )
+            self.assertNotIn(
+                "abc357_b",
+                {row["question_id"] for row in manifest["selection"]["selected"]},
+            )
             self.assertFalse(manifest["task_material_opened_during_selection"])
             expected_digest = hashlib.sha256(output_path.read_bytes()).hexdigest()
             self.assertIn(f"pilot_manifest_sha256={expected_digest}", output.getvalue())
@@ -98,7 +135,7 @@ class SelectPilotTests(unittest.TestCase):
             root = Path(temporary)
             input_path = root / "metadata-index.json"
             output_path = root / "pilot.json"
-            input_path.write_text(json.dumps(make_index(selector.EXPECTED_COUNTS)), encoding="utf-8")
+            input_path.write_text(json.dumps(make_full_index_with_exclusion()), encoding="utf-8")
             output_path.write_text("keep me", encoding="utf-8")
             with redirect_stderr(io.StringIO()):
                 self.assertEqual(

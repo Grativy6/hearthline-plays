@@ -2,6 +2,11 @@
 
 Status: `PREPARED_NOT_RUN`
 
+This status applies to the formal `ROSETTA-001` experiment. A separately
+authorized, four-call development probe is defined in
+[`ROSETTA_CAL_001.md`](ROSETTA_CAL_001.md); it does not select or run the formal
+pilot.
+
 This branch makes room for a future RosettaBench experiment. It deliberately
 does not install software, authenticate to Kaggle, choose or download tasks,
 invoke a model, execute an evaluator, upload a notebook, or publish a
@@ -197,15 +202,17 @@ py tools/fetch_pinned_code.py --fetch-code --cache <ABSOLUTE_APPROVED_CODE_CACHE
 
 Pilot selection is also inert until explicitly invoked. It accepts only a
 small JSON list whose 150 entries contain exactly `question_id` and
-`difficulty`; it rejects prompt, test, mapping, and other task fields and
-creates rather than overwrites its output:
+`difficulty`; it rejects prompt, test, mapping, and other task fields, removes
+the digest-bound development exclusion `abc357_b`, and creates rather than
+overwrites its output:
 
 ```text
 py tools/select_pilot.py <METADATA_ONLY_INDEX.json> --output <NEW_SEALED_MANIFEST.json>
 ```
 
 That command selects identifiers, so do not run it under the current
-`PILOT_UNSELECTED_UNCONSUMED` authority. On success it prints
+`PILOT_UNSELECTED_UNCONSUMED` authority. It fails if the frozen exclusion is
+missing or altered. On success it prints
 `pilot_manifest_sha256`, defined as SHA-256 over the exact emitted UTF-8 file
 bytes. The manifest deliberately has no ambiguous embedded self-hash.
 

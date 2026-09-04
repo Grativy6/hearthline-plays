@@ -2,6 +2,14 @@
 
 Status: `PREPARED_NOT_RUN`
 
+This status is the formal `ROSETTA-001` boundary. Under the later
+`ROSETTA-CAL-001` grant, the exact source commit below was cloned and installed
+into a Python 3.12.14 environment under
+`C:\Users\cdpan\HearthlineData\RosettaBench`; the authenticated model list was
+read, and Kaggle OAuth was refreshed. Those actions support only the bounded
+development calibration described in `ROSETTA_CAL_001.md`. They do not bind or
+run the formal pilot.
+
 This note records the public SDK identity and the interfaces Hearthline may use
 later. It is not an installation receipt, an authenticated Kaggle session, a
 model-availability check, a benchmark run, or permission to publish anything.
