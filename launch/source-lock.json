@@ -1,0 +1,53 @@
+{
+  "schema": "hearthline-plays.source-lock.v1",
+  "recorded_date": "2026-09-03",
+  "title_branch": "kaggle/titles/kaggriculture-hearthline-farm",
+  "title_parent": {
+    "branch": "kaggle/main",
+    "commit": "b88571603698205c2be94b7b0d652fa3c096d67d"
+  },
+  "environment": {
+    "repository": "Kaggle/kaggle-environments",
+    "commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+    "declared_name": "kaggriculture",
+    "declared_version": "0.1.0",
+    "files": [
+      {
+        "path": "kaggle_environments/envs/kaggriculture/README.md",
+        "git_blob_sha1": "03758e5878dd5b050178ba22755c4a81d3e3b829"
+      },
+      {
+        "path": "kaggle_environments/envs/kaggriculture/AGENTS.md",
+        "git_blob_sha1": "fe7ed537299bdabcf748059fd8025be9eaf86737"
+      },
+      {
+        "path": "kaggle_environments/envs/kaggriculture/kaggriculture.json",
+        "git_blob_sha1": "b354d06b742fe48402513792253f1a5c29366b20"
+      },
+      {
+        "path": "kaggle_environments/envs/kaggriculture/kaggriculture.py",
+        "git_blob_sha1": "3c202c7ee921da239356789e266b694635103fc4"
+      },
+      {
+        "path": "kaggle_environments/envs/kaggriculture/visualizer",
+        "git_tree_sha1": "25ec9fd5d25aea4b5442bb1546f7a15fb4a6653e"
+      }
+    ],
+    "default_configuration": {
+      "episodeSteps": 720,
+      "actTimeoutSeconds": 1,
+      "boardSize": 10,
+      "startingMoney": 3000,
+      "turnsPerDay": 24,
+      "shedCapacity": 100,
+      "maxMarketOrdersPerTurn": 10
+    }
+  },
+  "development_lineage": {
+    "human_originator_operator": "Christopher D. Pang",
+    "framework": "PAL-informed Hearthline",
+    "authorized_ai_development_tool": "GPT-5.6 Sol",
+    "astra_status": "EXCLUDED_UNTIL_FIRST_SEALED_RESULT"
+  },
+  "authority_ceiling": "This lock identifies public source bytes and the intended local-development lineage. It does not prove package installation parity, authorize Kaggle account use, create an official submission, or establish a competition result."
+}
