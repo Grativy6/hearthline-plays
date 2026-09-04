@@ -52,6 +52,11 @@ Hearthline synthetic Core, and Hearthline plus deterministic task-local Gloss
 synthetic Core. It permits at most four model calls, no retries, and no
 publication. See [the calibration protocol](docs/ROSETTA_CAL_001.md).
 
+Current state: two private Kaggle task versions failed at the pre-data actor
+guard during build, with zero model calls. A zero-call build-actor path is
+locally verified, but pushing it requires one new authorization. See
+[`status/rosetta-cal-001-status.v1.json`](status/rosetta-cal-001-status.v1.json).
+
 ## Frozen formal design target
 
 `ROSETTA-001` is a three-system by two-task-form design:

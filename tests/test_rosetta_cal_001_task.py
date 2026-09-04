@@ -3,16 +3,15 @@ from __future__ import annotations
 import ast
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import types
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from calibration import rosetta_cal_001_task as calibration
-
 
 TEST_SALT = bytes(range(32))
 FIXTURE_CASES = [
@@ -476,7 +475,7 @@ class HostedSdkBoundaryTests(unittest.TestCase):
         self.assertEqual(receipt["call_policy"]["model"], "gpt-5.6-terra")  # type: ignore[index]
         self.assertEqual(receipt["runtime"]["actor_model"], "gpt-5.6-terra")  # type: ignore[index]
 
-    def test_hosted_task_rejects_wrong_actor_before_loading_data(self) -> None:
+    def test_hosted_task_returns_zero_call_receipt_for_wrong_actor_before_data(self) -> None:
         loaded = False
 
         class WrongLlm:
@@ -497,52 +496,40 @@ class HostedSdkBoundaryTests(unittest.TestCase):
             patch.object(calibration, "load_attached_calibration_data", side_effect=load_data),
         ):
             task_function = calibration.build_kaggle_task()
-            with self.assertRaisesRegex(calibration.CalibrationError, "frozen gpt-5.6-terra"):
-                task_function(WrongLlm())
+            receipt = task_function(WrongLlm())
 
         self.assertFalse(loaded)
+        self.assertEqual(receipt["result_label"], "NO_MODEL_BUILD_OR_WRONG_ACTOR")
+        self.assertEqual(receipt["model_calls"], 0)
+        self.assertFalse(receipt["dataset_loaded"])
 
-    def test_task_creation_placeholder_is_allowed_without_a_model_call(self) -> None:
-        task_view, test_view, binding = fixture_material()
-        loaded = calibration.LoadedCalibrationData(task_view, test_view, binding)
-
-        class FakeChat:
-            usage = types.SimpleNamespace()
-
-            def __enter__(self) -> FakeChat:
-                return self
-
-            def __exit__(self, *_args: object) -> None:
-                return None
-
-        class FakeChats:
-            def new(self, _name: str) -> FakeChat:
-                return FakeChat()
-
+    def test_task_creation_placeholder_returns_before_data_or_prompt(self) -> None:
         class BuildPlaceholder:
             name = "llm"
 
             def prompt(self, _message: str, **_kwargs: object) -> str:
-                raise RuntimeError("model proxy is intentionally absent during task creation")
+                raise AssertionError("build placeholder must never be prompted")
 
         def task_decorator(*, name: str):
             del name
             return lambda function: function
 
-        fake_sdk = types.SimpleNamespace(task=task_decorator, chats=FakeChats())
+        fake_sdk = types.SimpleNamespace(task=task_decorator)
         with (
             patch.dict(sys.modules, {"kaggle_benchmarks": fake_sdk}),
             patch.object(calibration, "require_kaggle_kernel"),
-            patch.object(calibration, "load_attached_calibration_data", return_value=loaded),
+            patch.object(
+                calibration,
+                "load_attached_calibration_data",
+                side_effect=AssertionError("build placeholder must not load data"),
+            ),
         ):
             receipt = calibration.build_kaggle_task()(BuildPlaceholder())
 
-        self.assertIsNone(receipt["call_policy"]["model"])  # type: ignore[index]
-        self.assertEqual(receipt["call_policy"]["actual_calls"], 1)  # type: ignore[index]
-        self.assertEqual(
-            receipt["cells"][0]["disposition"],  # type: ignore[index]
-            calibration.Disposition.INFRASTRUCTURE_FAILURE,
-        )
+        self.assertEqual(receipt["disposition"], "NOT_A_CALIBRATION_RUN")
+        self.assertEqual(receipt["model_calls"], 0)
+        self.assertEqual(receipt["evaluator_runs"], 0)
+        self.assertFalse(receipt["dataset_loaded"])
 
 
 class ImportBoundaryTests(unittest.TestCase):

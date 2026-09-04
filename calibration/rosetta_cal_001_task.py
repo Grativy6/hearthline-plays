@@ -1395,6 +1395,24 @@ def _flatten_messages(messages: Sequence[Mapping[str, str]]) -> str:
     )
 
 
+def _non_calibration_actor_receipt(actor_model: str | None) -> dict[str, object]:
+    """Return a zero-call receipt for Kaggle's build actor or a wrong run actor."""
+
+    actor_label = actor_model if actor_model is not None else "MODEL_IDENTIFIER_UNAVAILABLE"
+    return {
+        "schema_version": "rosetta-cal-build-probe.v1",
+        "experiment_id": EXPERIMENT_ID,
+        "result_label": "NO_MODEL_BUILD_OR_WRONG_ACTOR",
+        "disposition": "NOT_A_CALIBRATION_RUN",
+        "actor_model_present": actor_model is not None,
+        "actor_model_sha256": hashlib.sha256(actor_label.encode("utf-8")).hexdigest(),
+        "model_calls": 0,
+        "dataset_loaded": False,
+        "evaluator_runs": 0,
+        "publication": False,
+    }
+
+
 def build_kaggle_task() -> Any:
     """Build the private SDK task lazily; importing this module has no SDK effect."""
 
@@ -1407,13 +1425,12 @@ def build_kaggle_task() -> Any:
         require_kaggle_kernel()
         actor_model_raw = getattr(llm, "model", None)
         actor_model = str(actor_model_raw)[:256] if actor_model_raw is not None else None
-        # Task creation supplies Kaggle's model-less ``kbench.llm`` placeholder.
-        # A hosted run supplies a concrete model identifier, which remains
-        # fail-closed to Terra.
-        if actor_model is not None and actor_model not in EXPECTED_MODEL_SLUGS:
-            raise CalibrationError(
-                "hosted actor must be the frozen gpt-5.6-terra calibration model"
-            )
+        # Task creation supplies a non-Terra build actor. It must be able to
+        # serialize this task without loading data or touching a model. Any
+        # accidentally dispatched non-Terra run follows the same zero-call
+        # path. Only the frozen Terra identifiers may cross into calibration.
+        if actor_model not in EXPECTED_MODEL_SLUGS:
+            return _non_calibration_actor_receipt(actor_model)
         loaded = load_attached_calibration_data()
         try:
             sdk_version = importlib_metadata.version("kaggle_benchmarks")

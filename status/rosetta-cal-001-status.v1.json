@@ -1,11 +1,13 @@
 {
   "schema_version": "rosetta-cal-status.v1",
   "experiment_id": "ROSETTA-CAL-001",
-  "status": "AUTHORIZED_BUILD_REPAIR_PENDING",
-  "recorded_at_utc": "2026-09-04T22:29:58Z",
+  "status": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+  "recorded_at_utc": "2026-09-04T22:35:13Z",
   "authorization": {
     "private_task_pushes_authorized": 1,
     "same_task_build_repair_pushes_authorized": 1,
+    "same_task_build_repair_pushes_remaining": 0,
+    "additional_task_versions_authorized": false,
     "hosted_runs_authorized": 1,
     "model_calls_authorized_maximum": 4,
     "automatic_retries_authorized": false,
@@ -41,23 +43,23 @@
   },
   "source_binding": {
     "path": "calibration/rosetta_cal_001_task.py",
-    "sha256": "270445c7746e4639158456eecc8f48915103afc3d61a80bed733a6f503e3d668"
+    "sha256": "8269a221c9c49b4d7d758e20b1ec28715a6288b1b98508cb5906ec1363a1e242"
   },
   "dispatch": {
     "task_slug": "hearthline-rosetta-cal-001-abc357b",
     "private": true,
-    "client_side_creation_rejections": 1,
-    "client_side_last_error": "NO_LITERAL_TASK_DECORATOR_CORRECTED_BEFORE_EXTERNAL_WRITE",
-    "server_side_creation_failures": 1,
-    "server_side_last_error": "BUILD_PLACEHOLDER_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
-    "task_pushes": 1,
-    "task_versions_created": 1,
+    "client_side_creation_rejections": 2,
+    "client_side_last_error": "OWNER_QUALIFIED_SLUG_REJECTED_BEFORE_EXTERNAL_WRITE",
+    "server_side_creation_failures": 2,
+    "server_side_last_error": "BUILD_ACTOR_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
+    "task_pushes": 2,
+    "task_versions_created": 2,
     "hosted_run_requests_rejected_pre_dispatch": 1,
     "hosted_runs": 0,
     "model_calls": 0,
     "evaluator_runs": 0,
     "publications": 0,
-    "task_reference": "PRIVATE_TASK_VERSION_1_WITHHELD",
+    "task_reference": "PRIVATE_TASK_VERSION_2_WITHHELD",
     "run_reference": null,
     "uncertain_external_effect": false
   },
@@ -69,5 +71,11 @@
     "model_calls": 0,
     "evaluator_runs": 0
   },
-  "claim_ceiling": "Private one-task build repair only; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+  "blocker": {
+    "code": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+    "prepared_source_is_pushed": false,
+    "new_authority_required": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+    "model_calls_so_far": 0
+  },
+  "claim_ceiling": "Private setup is locally repaired but not runnable on Kaggle; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
 }

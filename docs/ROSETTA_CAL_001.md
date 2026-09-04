@@ -104,13 +104,18 @@ The authorized external target is one private task with slug
 current server does not support deletion. A duplicate-name check must return
 no task before the one-time push.
 
-Task version 1 failed during Kaggle's model-less build probe: its strict actor
-guard rejected the placeholder before the dataset was loaded or any model was
-called. The first run request was then rejected locally because only a
-completed task can run. These failures are preserved in the calibration status.
-One corrective push to the same private task is permitted; concrete hosted
-actors remain fail-closed to Terra, while the model-less creation placeholder
-may complete the build. No second repair is permitted.
+Task version 1 failed during Kaggle's build probe: its strict actor guard
+rejected the build actor before the dataset was loaded or any model was called.
+The first run request was then rejected locally because only a completed task
+can run. Version 2 established that the build actor exposes a concrete
+non-Terra identifier; it stopped at the same pre-data, pre-model guard. These
+failures are preserved in the calibration status.
+
+The locally frozen next version now returns a zero-call, zero-data receipt for
+every non-Terra actor. Only an exact Terra actor can cross into calibration.
+Both authorized task-version writes have been consumed, so this source is not
+pushed without a new user instruction authorizing one more update to the same
+private task.
 
 Exactly one hosted run may be dispatched against `gpt-5.6-terra`. The task
 itself makes at most four calls. A failed or uncertain model dispatch is

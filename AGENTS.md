@@ -15,7 +15,7 @@ Before acting, read `README.md`, `source-lock.v1.json`,
 - Branch: `kaggle/titles/rosetta`
 - Experiment ID: `ROSETTA-001`
 - Formal experiment state: `ROSETTA-001 / PREPARED_NOT_RUN`
-- Development calibration: `ROSETTA-CAL-001 / AUTHORIZED_NOT_DISPATCHED`
+- Development calibration: `ROSETTA-CAL-001 / BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED`
 
 On the E: filesystem, invoke Git with the exact worktree supplied to
 `safe.directory`. Do not alter another Hearthline checkout or title branch.
@@ -29,9 +29,13 @@ the fixed C: drive, Kaggle OAuth, one duplicate-checked private task creation,
 attachment of dataset version 1, and one hosted Terra run whose task makes at
 most four calls. Task version 1 failed during Kaggle's model-less build probe,
 before data or model access. One recorded corrective push to the same private
-task is permitted to finish that creation; it is not a model retry. It does
-not authorize any further task version, model retry, publication, or
-formal-pilot consumption.
+task was permitted to finish that creation; it was not a model retry. Version
+2 showed that Kaggle's build actor has a concrete non-Terra identifier, and it
+also stopped before data or model access. The local source now returns a
+zero-call receipt for every non-Terra actor, but no further task version is
+authorized. Do not push it until the user directly authorizes one more update
+to this same private task. No model retry, publication, or formal-pilot
+consumption is authorized.
 
 Outside that one-shot calibration grant, do not:
 

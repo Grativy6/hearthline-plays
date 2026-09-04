@@ -22,7 +22,7 @@ class VerifyCalibrationTests(unittest.TestCase):
 
     def test_current_package_passes_static_pre_dispatch_verification(self) -> None:
         report = verifier.verify_calibration(REPO_ROOT)
-        self.assertEqual(report["verdict"], "PASS_STATIC_REPAIR_PRE_DISPATCH")
+        self.assertEqual(report["verdict"], "PASS_STATIC_BLOCKED_REPAIR_READY")
         self.assertEqual(report["task_source_sha256"], self.task_sha256)
         self.assertEqual(report["maximum_model_calls"], 4)
         self.assertFalse(report["publication_enabled"])

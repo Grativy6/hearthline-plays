@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Statically verify the bounded ROSETTA-CAL-001 repair package.
+"""Statically verify the blocked-but-repaired ROSETTA-CAL-001 package.
 
 This verifier imports neither the calibration task nor Kaggle Benchmarks. It
 performs no authentication, network, data, model, evaluator, or dispatch work.
@@ -64,8 +64,9 @@ EXPECTED_SOURCE_CELLS = [
 LOWER_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 UTC_TIMESTAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\Z")
 CLAIM_CEILING = (
-    "Private one-task build repair only; no model call, evaluator run, score, learning tax, "
-    "Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+    "Private setup is locally repaired but not runnable on Kaggle; no model call, evaluator "
+    "run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim "
+    "exists."
 )
 
 
@@ -136,8 +137,8 @@ def validate_config(document: object, *, task_sha256: str) -> dict[str, object]:
     )
     _require(calibration["experiment_id"] == EXPERIMENT_ID, "calibration experiment mismatch")
     _require(
-        calibration["status"] == "AUTHORIZED_BUILD_REPAIR_PENDING",
-        "calibration is not at the frozen repair boundary",
+        calibration["status"] == "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+        "calibration is not at the blocked repair-ready boundary",
     )
     _require(
         calibration["classification"] == "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION",
@@ -571,6 +572,7 @@ def validate_status(document: object, *, task_sha256: str) -> None:
             "source_binding",
             "dispatch",
             "formal_experiment",
+            "blocker",
             "claim_ceiling",
         },
         "calibration status",
@@ -581,8 +583,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
     )
     _require(root["experiment_id"] == EXPERIMENT_ID, "calibration status experiment mismatch")
     _require(
-        root["status"] == "AUTHORIZED_BUILD_REPAIR_PENDING",
-        "calibration status is not at the frozen repair boundary",
+        root["status"] == "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+        "calibration status is not at the blocked repair-ready boundary",
     )
     _require(
         isinstance(root["recorded_at_utc"], str)
@@ -594,6 +596,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         {
             "private_task_pushes_authorized",
             "same_task_build_repair_pushes_authorized",
+            "same_task_build_repair_pushes_remaining",
+            "additional_task_versions_authorized",
             "hosted_runs_authorized",
             "model_calls_authorized_maximum",
             "automatic_retries_authorized",
@@ -607,6 +611,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         == {
             "private_task_pushes_authorized": 1,
             "same_task_build_repair_pushes_authorized": 1,
+            "same_task_build_repair_pushes_remaining": 0,
+            "additional_task_versions_authorized": False,
             "hosted_runs_authorized": 1,
             "model_calls_authorized_maximum": MAX_MODEL_CALLS,
             "automatic_retries_authorized": False,
@@ -723,21 +729,21 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         "dispatch target mismatch",
     )
     _require(
-        dispatch["client_side_creation_rejections"] == 1
+        dispatch["client_side_creation_rejections"] == 2
         and dispatch["client_side_last_error"]
-        == "NO_LITERAL_TASK_DECORATOR_CORRECTED_BEFORE_EXTERNAL_WRITE",
+        == "OWNER_QUALIFIED_SLUG_REJECTED_BEFORE_EXTERNAL_WRITE",
         "client-side creation rejection record mismatch",
     )
     _require(
-        dispatch["server_side_creation_failures"] == 1
+        dispatch["server_side_creation_failures"] == 2
         and dispatch["server_side_last_error"]
-        == "BUILD_PLACEHOLDER_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
+        == "BUILD_ACTOR_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
         "server-side creation failure record mismatch",
     )
-    _require(dispatch["task_pushes"] == 1, "exactly one initial task push must be recorded")
+    _require(dispatch["task_pushes"] == 2, "two exhausted task pushes must be recorded")
     _require(
-        dispatch["task_versions_created"] == 1,
-        "exactly one errored task version must be recorded",
+        dispatch["task_versions_created"] == 2,
+        "exactly two errored task versions must be recorded",
     )
     _require(
         dispatch["hosted_run_requests_rejected_pre_dispatch"] == 1,
@@ -749,11 +755,27 @@ def validate_status(document: object, *, task_sha256: str) -> None:
             f"repair-boundary {key} must be zero",
         )
     _require(
-        dispatch["task_reference"] == "PRIVATE_TASK_VERSION_1_WITHHELD"
+        dispatch["task_reference"] == "PRIVATE_TASK_VERSION_2_WITHHELD"
         and dispatch["run_reference"] is None,
         "repair-boundary references mismatch",
     )
     _require(dispatch["uncertain_external_effect"] is False, "uncertain external effect recorded")
+
+    blocker = _exact_object(
+        root["blocker"],
+        {"code", "prepared_source_is_pushed", "new_authority_required", "model_calls_so_far"},
+        "calibration blocker",
+    )
+    _require(
+        blocker
+        == {
+            "code": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+            "prepared_source_is_pushed": False,
+            "new_authority_required": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+            "model_calls_so_far": 0,
+        },
+        "calibration blocker mismatch",
+    )
 
     formal = _exact_object(
         root["formal_experiment"],
@@ -797,7 +819,7 @@ def verify_calibration(repo_root: Path = REPO_ROOT) -> dict[str, object]:
         task_sha256=task_sha256,
     )
     return {
-        "verdict": "PASS_STATIC_REPAIR_PRE_DISPATCH",
+        "verdict": "PASS_STATIC_BLOCKED_REPAIR_READY",
         "experiment_id": EXPERIMENT_ID,
         "task_id": TASK_ID,
         "task_source_sha256": task_sha256,
@@ -821,8 +843,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument(
         "--mode",
-        choices=("repair-pre-dispatch",),
-        default="repair-pre-dispatch",
+        choices=("blocked-repair-ready",),
+        default="blocked-repair-ready",
     )
     return parser
 
