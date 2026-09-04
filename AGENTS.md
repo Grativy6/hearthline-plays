@@ -15,7 +15,7 @@ Before acting, read `README.md`, `source-lock.v1.json`,
 - Branch: `kaggle/titles/rosetta`
 - Experiment ID: `ROSETTA-001`
 - Formal experiment state: `ROSETTA-001 / PREPARED_NOT_RUN`
-- Development calibration: `ROSETTA-CAL-001 / BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED`
+- Development calibration: `ROSETTA-CAL-001 / AUTHORIZED_FINAL_REPAIR_PENDING`
 
 On the E: filesystem, invoke Git with the exact worktree supplied to
 `safe.directory`. Do not alter another Hearthline checkout or title branch.
@@ -32,10 +32,12 @@ before data or model access. One recorded corrective push to the same private
 task was permitted to finish that creation; it was not a model retry. Version
 2 showed that Kaggle's build actor has a concrete non-Terra identifier, and it
 also stopped before data or model access. The local source now returns a
-zero-call receipt for every non-Terra actor, but no further task version is
-authorized. Do not push it until the user directly authorizes one more update
-to this same private task. No model retry, publication, or formal-pilot
-consumption is authorized.
+zero-call receipt for every non-Terra actor. On 2026-09-04 the user directly
+authorized exactly one further update to this same private task, followed only
+after a completed build by exactly one hosted `gpt-5.6-terra` run whose task
+makes at most four calls. There is no authority for a second update, a second
+run, an automatic retry, publication, or formal-pilot consumption. An
+uncertain external effect must be reconciled, never retried.
 
 Outside that one-shot calibration grant, do not:
 

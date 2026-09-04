@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Statically verify the blocked-but-repaired ROSETTA-CAL-001 package.
+"""Statically verify the authorized pre-dispatch ROSETTA-CAL-001 package.
 
 This verifier imports neither the calibration task nor Kaggle Benchmarks. It
 performs no authentication, network, data, model, evaluator, or dispatch work.
@@ -64,9 +64,9 @@ EXPECTED_SOURCE_CELLS = [
 LOWER_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 UTC_TIMESTAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\Z")
 CLAIM_CEILING = (
-    "Private setup is locally repaired but not runnable on Kaggle; no model call, evaluator "
-    "run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim "
-    "exists."
+    "One final same-private-task repair update and one four-call Terra run are authorized but "
+    "not yet dispatched; no model call, evaluator run, score, learning tax, Gloss benefit, "
+    "ARC-AGI-3 result, or public leaderboard claim exists."
 )
 
 
@@ -137,8 +137,8 @@ def validate_config(document: object, *, task_sha256: str) -> dict[str, object]:
     )
     _require(calibration["experiment_id"] == EXPERIMENT_ID, "calibration experiment mismatch")
     _require(
-        calibration["status"] == "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
-        "calibration is not at the blocked repair-ready boundary",
+        calibration["status"] == "AUTHORIZED_FINAL_REPAIR_PENDING",
+        "calibration is not at the authorized final-repair boundary",
     )
     _require(
         calibration["classification"] == "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION",
@@ -572,7 +572,7 @@ def validate_status(document: object, *, task_sha256: str) -> None:
             "source_binding",
             "dispatch",
             "formal_experiment",
-            "blocker",
+            "pending_action",
             "claim_ceiling",
         },
         "calibration status",
@@ -583,8 +583,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
     )
     _require(root["experiment_id"] == EXPERIMENT_ID, "calibration status experiment mismatch")
     _require(
-        root["status"] == "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
-        "calibration status is not at the blocked repair-ready boundary",
+        root["status"] == "AUTHORIZED_FINAL_REPAIR_PENDING",
+        "calibration status is not at the authorized final-repair boundary",
     )
     _require(
         isinstance(root["recorded_at_utc"], str)
@@ -610,9 +610,9 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         authorization
         == {
             "private_task_pushes_authorized": 1,
-            "same_task_build_repair_pushes_authorized": 1,
-            "same_task_build_repair_pushes_remaining": 0,
-            "additional_task_versions_authorized": False,
+            "same_task_build_repair_pushes_authorized": 2,
+            "same_task_build_repair_pushes_remaining": 1,
+            "additional_task_versions_authorized": True,
             "hosted_runs_authorized": 1,
             "model_calls_authorized_maximum": MAX_MODEL_CALLS,
             "automatic_retries_authorized": False,
@@ -761,20 +761,27 @@ def validate_status(document: object, *, task_sha256: str) -> None:
     )
     _require(dispatch["uncertain_external_effect"] is False, "uncertain external effect recorded")
 
-    blocker = _exact_object(
-        root["blocker"],
-        {"code", "prepared_source_is_pushed", "new_authority_required", "model_calls_so_far"},
-        "calibration blocker",
+    pending_action = _exact_object(
+        root["pending_action"],
+        {
+            "code",
+            "prepared_source_is_pushed",
+            "next_external_action",
+            "hosted_runs_remaining",
+            "model_calls_so_far",
+        },
+        "calibration pending action",
     )
     _require(
-        blocker
+        pending_action
         == {
-            "code": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+            "code": "FINAL_SAME_PRIVATE_TASK_UPDATE_AND_SINGLE_TERRA_RUN_AUTHORIZED",
             "prepared_source_is_pushed": False,
-            "new_authority_required": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+            "next_external_action": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+            "hosted_runs_remaining": 1,
             "model_calls_so_far": 0,
         },
-        "calibration blocker mismatch",
+        "calibration pending action mismatch",
     )
 
     formal = _exact_object(
@@ -819,7 +826,7 @@ def verify_calibration(repo_root: Path = REPO_ROOT) -> dict[str, object]:
         task_sha256=task_sha256,
     )
     return {
-        "verdict": "PASS_STATIC_BLOCKED_REPAIR_READY",
+        "verdict": "PASS_STATIC_FINAL_REPAIR_AUTHORIZED",
         "experiment_id": EXPERIMENT_ID,
         "task_id": TASK_ID,
         "task_source_sha256": task_sha256,
@@ -843,8 +850,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument(
         "--mode",
-        choices=("blocked-repair-ready",),
-        default="blocked-repair-ready",
+        choices=("pre-dispatch",),
+        default="pre-dispatch",
     )
     return parser
 

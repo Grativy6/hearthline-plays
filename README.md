@@ -54,7 +54,9 @@ publication. See [the calibration protocol](docs/ROSETTA_CAL_001.md).
 
 Current state: two private Kaggle task versions failed at the pre-data actor
 guard during build, with zero model calls. A zero-call build-actor path is
-locally verified, but pushing it requires one new authorization. See
+locally verified, and the user has authorized exactly one final update to the
+same private task followed, only after a completed build, by one four-call
+Terra run. No retry, publication, or formal-pilot consumption is authorized. See
 [`status/rosetta-cal-001-status.v1.json`](status/rosetta-cal-001-status.v1.json).
 
 ## Frozen formal design target

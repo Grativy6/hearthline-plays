@@ -99,10 +99,11 @@ exclusion, private-task policy, and zeroed pre-dispatch status in
 `status/rosetta-cal-001-status.v1.json`. It does not authenticate, open data,
 call a model, execute the evaluator, or create an external task.
 
-The authorized external target is one private task with slug
+The authorized external target is the existing private task with slug
 `hearthline-rosetta-cal-001-abc357b`. Task creation is persistent because the
-current server does not support deletion. A duplicate-name check must return
-no task before the one-time push.
+current server does not support deletion. Immediately before the final update,
+a duplicate-name check must resolve exactly that one private task and its two
+preserved errored versions; a different or ambiguous target closes the gate.
 
 Task version 1 failed during Kaggle's build probe: its strict actor guard
 rejected the build actor before the dataset was loaded or any model was called.
@@ -113,14 +114,14 @@ failures are preserved in the calibration status.
 
 The locally frozen next version now returns a zero-call, zero-data receipt for
 every non-Terra actor. Only an exact Terra actor can cross into calibration.
-Both authorized task-version writes have been consumed, so this source is not
-pushed without a new user instruction authorizing one more update to the same
-private task.
+On 2026-09-04 the user authorized exactly one final update to the same private
+task. This pre-dispatch checkpoint records one update remaining. A failed or
+uncertain update is reconciled and is never retried.
 
-Exactly one hosted run may be dispatched against `gpt-5.6-terra`. The task
-itself makes at most four calls. A failed or uncertain model dispatch is
-recorded and is not retried automatically. `kaggle benchmarks tasks publish`
-is forbidden.
+Only if that build completes, exactly one hosted run may be dispatched against
+`gpt-5.6-terra`. The task itself makes at most four calls. A failed or
+uncertain model dispatch is recorded and is not retried. `kaggle benchmarks
+tasks publish` is forbidden.
 
 ## Evaluator and security boundary
 

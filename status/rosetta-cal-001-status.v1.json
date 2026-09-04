@@ -1,13 +1,13 @@
 {
   "schema_version": "rosetta-cal-status.v1",
   "experiment_id": "ROSETTA-CAL-001",
-  "status": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
-  "recorded_at_utc": "2026-09-04T22:35:13Z",
+  "status": "AUTHORIZED_FINAL_REPAIR_PENDING",
+  "recorded_at_utc": "2026-09-04T22:42:54Z",
   "authorization": {
     "private_task_pushes_authorized": 1,
-    "same_task_build_repair_pushes_authorized": 1,
-    "same_task_build_repair_pushes_remaining": 0,
-    "additional_task_versions_authorized": false,
+    "same_task_build_repair_pushes_authorized": 2,
+    "same_task_build_repair_pushes_remaining": 1,
+    "additional_task_versions_authorized": true,
     "hosted_runs_authorized": 1,
     "model_calls_authorized_maximum": 4,
     "automatic_retries_authorized": false,
@@ -71,11 +71,12 @@
     "model_calls": 0,
     "evaluator_runs": 0
   },
-  "blocker": {
-    "code": "BLOCKED_EXTERNAL_REPAIR_AUTH_REQUIRED",
+  "pending_action": {
+    "code": "FINAL_SAME_PRIVATE_TASK_UPDATE_AND_SINGLE_TERRA_RUN_AUTHORIZED",
     "prepared_source_is_pushed": false,
-    "new_authority_required": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+    "next_external_action": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
+    "hosted_runs_remaining": 1,
     "model_calls_so_far": 0
   },
-  "claim_ceiling": "Private setup is locally repaired but not runnable on Kaggle; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+  "claim_ceiling": "One final same-private-task repair update and one four-call Terra run are authorized but not yet dispatched; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
 }
