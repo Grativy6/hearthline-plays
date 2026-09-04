@@ -1,0 +1,246 @@
+{
+  "certificate_core_sha256": "0a1490f8968e23bb35fa0e3637ed9f0d5996e31d7a5d344c79b763c3df3db8d9",
+  "claim": "For each Boolean function of two inputs, the listed number is the exact minimum number of two-input NAND gates in the declared circuit model.",
+  "claim_state": "certified_finite",
+  "enumeration": {
+    "complete_for_model": true,
+    "first_gate_count_reaching_all_16_functions": 5,
+    "method": "Enumerate every topologically ordered gate sequence. For each gate, enumerate every unordered pair with repetition from the primary inputs and earlier gates.",
+    "minimality_basis": "A function is absent from every complete sequence enumeration at smaller gate counts and has the supplied witness at its listed count.",
+    "sequences_by_exact_gate_count": {
+      "0": 1,
+      "1": 3,
+      "2": 18,
+      "3": 180,
+      "4": 2700,
+      "5": 56700
+    }
+  },
+  "game_id": "PNP-CIRCUIT-GARDEN-N2-NAND-001",
+  "model": {
+    "assignment_order": ["00", "01", "10", "11"],
+    "constants_free": false,
+    "fan_out": "unbounded",
+    "gate": "NAND(left, right) = NOT(left AND right)",
+    "gate_cost": 1,
+    "gate_fan_in": 2,
+    "inputs": ["x0", "x1"],
+    "negated_inputs_free": false,
+    "output": "either a primary input for size zero or the final gate",
+    "repeated_operand_allowed": true,
+    "truth_table_encoding": "bit i of mask is the output for assignment_order[i]"
+  },
+  "not_claimed": [
+    "P equals NP",
+    "P differs from NP",
+    "an asymptotic circuit lower bound",
+    "a lower bound in any circuit model other than the one declared here"
+  ],
+  "results": [
+    {
+      "mask_hex": "0",
+      "minimum_nand_gates": 3,
+      "name": "false",
+      "outputs_for_00_01_10_11": "0000",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x0", "out": "g1", "right": "g0"},
+          {"left": "g1", "out": "g2", "right": "g1"}
+        ],
+        "output": "g2"
+      }
+    },
+    {
+      "mask_hex": "1",
+      "minimum_nand_gates": 4,
+      "name": "nor",
+      "outputs_for_00_01_10_11": "1000",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x1", "out": "g1", "right": "x1"},
+          {"left": "g0", "out": "g2", "right": "g1"},
+          {"left": "g2", "out": "g3", "right": "g2"}
+        ],
+        "output": "g3"
+      }
+    },
+    {
+      "mask_hex": "2",
+      "minimum_nand_gates": 3,
+      "name": "not_x0_and_x1",
+      "outputs_for_00_01_10_11": "0100",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x1", "out": "g1", "right": "g0"},
+          {"left": "g1", "out": "g2", "right": "g1"}
+        ],
+        "output": "g2"
+      }
+    },
+    {
+      "mask_hex": "3",
+      "minimum_nand_gates": 1,
+      "name": "not_x0",
+      "outputs_for_00_01_10_11": "1100",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"}
+        ],
+        "output": "g0"
+      }
+    },
+    {
+      "mask_hex": "4",
+      "minimum_nand_gates": 3,
+      "name": "x0_and_not_x1",
+      "outputs_for_00_01_10_11": "0010",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x1"},
+          {"left": "x0", "out": "g1", "right": "g0"},
+          {"left": "g1", "out": "g2", "right": "g1"}
+        ],
+        "output": "g2"
+      }
+    },
+    {
+      "mask_hex": "5",
+      "minimum_nand_gates": 1,
+      "name": "not_x1",
+      "outputs_for_00_01_10_11": "1010",
+      "witness": {
+        "gates": [
+          {"left": "x1", "out": "g0", "right": "x1"}
+        ],
+        "output": "g0"
+      }
+    },
+    {
+      "mask_hex": "6",
+      "minimum_nand_gates": 4,
+      "name": "xor",
+      "outputs_for_00_01_10_11": "0110",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x1"},
+          {"left": "x0", "out": "g1", "right": "g0"},
+          {"left": "x1", "out": "g2", "right": "g0"},
+          {"left": "g1", "out": "g3", "right": "g2"}
+        ],
+        "output": "g3"
+      }
+    },
+    {
+      "mask_hex": "7",
+      "minimum_nand_gates": 1,
+      "name": "nand",
+      "outputs_for_00_01_10_11": "1110",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x1"}
+        ],
+        "output": "g0"
+      }
+    },
+    {
+      "mask_hex": "8",
+      "minimum_nand_gates": 2,
+      "name": "and",
+      "outputs_for_00_01_10_11": "0001",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x1"},
+          {"left": "g0", "out": "g1", "right": "g0"}
+        ],
+        "output": "g1"
+      }
+    },
+    {
+      "mask_hex": "9",
+      "minimum_nand_gates": 5,
+      "name": "xnor",
+      "outputs_for_00_01_10_11": "1001",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x0", "out": "g1", "right": "x1"},
+          {"left": "x1", "out": "g2", "right": "x1"},
+          {"left": "g0", "out": "g3", "right": "g2"},
+          {"left": "g1", "out": "g4", "right": "g3"}
+        ],
+        "output": "g4"
+      }
+    },
+    {
+      "mask_hex": "a",
+      "minimum_nand_gates": 0,
+      "name": "x1",
+      "outputs_for_00_01_10_11": "0101",
+      "witness": {"gates": [], "output": "x1"}
+    },
+    {
+      "mask_hex": "b",
+      "minimum_nand_gates": 2,
+      "name": "x0_implies_x1",
+      "outputs_for_00_01_10_11": "1101",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x1"},
+          {"left": "x0", "out": "g1", "right": "g0"}
+        ],
+        "output": "g1"
+      }
+    },
+    {
+      "mask_hex": "c",
+      "minimum_nand_gates": 0,
+      "name": "x0",
+      "outputs_for_00_01_10_11": "0011",
+      "witness": {"gates": [], "output": "x0"}
+    },
+    {
+      "mask_hex": "d",
+      "minimum_nand_gates": 2,
+      "name": "x1_implies_x0",
+      "outputs_for_00_01_10_11": "1011",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x1", "out": "g1", "right": "g0"}
+        ],
+        "output": "g1"
+      }
+    },
+    {
+      "mask_hex": "e",
+      "minimum_nand_gates": 3,
+      "name": "or",
+      "outputs_for_00_01_10_11": "0111",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x1", "out": "g1", "right": "x1"},
+          {"left": "g0", "out": "g2", "right": "g1"}
+        ],
+        "output": "g2"
+      }
+    },
+    {
+      "mask_hex": "f",
+      "minimum_nand_gates": 2,
+      "name": "true",
+      "outputs_for_00_01_10_11": "1111",
+      "witness": {
+        "gates": [
+          {"left": "x0", "out": "g0", "right": "x0"},
+          {"left": "x0", "out": "g1", "right": "g0"}
+        ],
+        "output": "g1"
+      }
+    }
+  ],
+  "schema": "hearthline-plays.circuit-garden-certificate.v1"
+}

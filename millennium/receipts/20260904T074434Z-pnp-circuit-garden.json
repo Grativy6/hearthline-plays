@@ -1,0 +1,105 @@
+{
+  "schema": "hearthline-plays.millennium-run.v1",
+  "event_id": "sha256:e60b99b12376553da5cac1616fc01c87ff76a09bfde4a7b83be6f9f5d1056b7f",
+  "event_id_scheme": "sha256(UTF8(HEARTHLINE-MILLENNIUM-EVENT-V1\\0) || RFC8785_JCS(payload_without_event_id)); no floating-point values and ASCII object-member names",
+  "event_origin": "model_drafted_pending_steward_review",
+  "receipt_id": "MILLENNIUM-RUN-20260904T074434Z-PNP-NAND-N2",
+  "kind": "run",
+  "arena": "p-vs-np",
+  "parents": ["sha256:3396295ad65337e09331fff058c903afbd93eb864eab5811e0ebdc5563b67110"],
+  "claimed_times": {
+    "started_at_utc": "2026-09-04T07:44:34Z",
+    "ended_at_utc": "2026-09-04T07:44:34Z"
+  },
+  "steward": "Christopher D. Pang",
+  "target": {
+    "statement": "Determine the exact minimum NAND-gate count of every Boolean function on two inputs in the declared circuit model.",
+    "scope": "Finite two-input, two-input-NAND-only circuits; unbounded fan-out; no free constants or negated inputs.",
+    "quantifiers": "For each of the 16 Boolean functions, over every finite acyclic circuit in the declared model.",
+    "promotion_ceiling": "certified_finite"
+  },
+  "board": {
+    "objects": "Topologically ordered NAND-gate sequences with each gate's operand pair canonicalized, plus four-bit truth-table masks.",
+    "legal_moves": "Append one NAND gate whose unordered operand pair, with repetition, is drawn from the primary inputs and earlier gates.",
+    "adversary": "Every smaller circuit sequence and every one of the four input assignments.",
+    "verifier": "Deterministic exhaustive enumeration plus exact four-bit truth-table evaluation."
+  },
+  "sources": [
+    {
+      "id": "clay:p-vs-np:official-description:2022-bytes",
+      "sha256": "018f3d473d16c35e807e8cdfbd0bed3ccf7a56452e3e10c6b1d84b56eaf2cf59"
+    }
+  ],
+  "runtime": {
+    "surface": "Codex in ChatGPT Work Mode",
+    "model_identifier": "NOT_EXPOSED_AS_A_STABLE_PUBLIC_SNAPSHOT_IDENTIFIER",
+    "identity_evidence": "unknown",
+    "environment": {
+      "implementation": "CPython",
+      "python_version": "3.12.13",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+      "byteorder": "little",
+      "algorithm": "deterministic exhaustive enumeration using Python standard library"
+    },
+    "environment_sha256": "c0780d4fa67c57ebdd0209816e2e81e09fcc8a013a9e89b58a64e1c07800caef"
+  },
+  "artifacts": [
+    {
+      "visibility": "public",
+      "path": "millennium/games/p-vs-np/circuit_garden.py",
+      "bytes": 6067,
+      "sha256": "7df7810c00d3dac11e1b184998a3d8bd02030b0565b7faa6fa1bba543ac0c51a",
+      "origin": "model_drafted_pending_steward_review"
+    },
+    {
+      "visibility": "public",
+      "path": "millennium/games/p-vs-np/certificate-n2-nand.json",
+      "bytes": 6920,
+      "sha256": "4b8c6c350d3590fd990f7a905e135f9905569c0d9ef9dbb4ee3ccc26bd880c6c",
+      "origin": "mechanically_generated"
+    },
+    {
+      "visibility": "public",
+      "path": "millennium/receipts/20260904T074434Z-pnp-circuit-garden.md",
+      "bytes": 1370,
+      "sha256": "d884962484fb7674854299251ee3542fa609e31da3f7c9d338886445dacd6369",
+      "origin": "model_drafted_pending_steward_review"
+    }
+  ],
+  "claim_delta": {
+    "before": "observation",
+    "after": "certified_finite",
+    "basis": "Complete enumeration of all circuit sequences of sizes zero through five and an exact witness for every two-input Boolean function."
+  },
+  "claim_boundary": {
+    "official_problem_solution_claimed": false,
+    "external_acceptance_claimed": false,
+    "cmi_prize_awarded_claimed": false,
+    "external_evidence": []
+  },
+  "known_gaps": [],
+  "assistance": {
+    "hearthline_used": true,
+    "pal_used": true,
+    "no_astra_state": "session_declared_absent",
+    "incorporated_contribution_states": ["session_declared_absent"],
+    "limitations": [
+      "session declaration is not provider attestation",
+      "hidden routing and training ancestry are not excluded"
+    ]
+  },
+  "disclosure_scope": {
+    "deterministic_replay_inputs_complete": true,
+    "research_provenance_complete": false,
+    "known_omissions": [
+      "full assistant session transcript",
+      "hidden model reasoning",
+      "provider-signed request and runtime identity receipts"
+    ],
+    "private_items": []
+  },
+  "attestation_status_at_creation": {
+    "human_cryptographic_signature_ref": null,
+    "trusted_external_timestamp_ref": null
+  }
+}

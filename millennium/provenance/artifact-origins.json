@@ -1,0 +1,33 @@
+{
+  "schema": "hearthline-plays.artifact-origins.v1",
+  "event": "MILLENNIUM-GENESIS-20260904T073424Z",
+  "human_author_and_steward": "Christopher D. Pang",
+  "review_state": "PENDING_STEWARD_REVIEW",
+  "authorship_policy": "Production origin and project authorship are separate fields. AI assistance is disclosed per artifact and does not create mathematical authority.",
+  "origin_definitions": {
+    "model_drafted_pending_steward_review": "Drafted by the disclosed assistant under the steward's direction; not yet represented as line-by-line human-reviewed.",
+    "model_assembled_from_verified_sources_pending_steward_review": "Assembled by the disclosed assistant from the identified sources and mechanically checked; stewardship review remains pending.",
+    "mechanically_generated": "Deterministic output of an identified program or hash operation."
+  },
+  "artifacts": [
+    {"path": ".gitattributes", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 172, "sha256": "953acd957541c7ff55c83ebf403750b864d7c51dc3771059f3bda30fddde0036"},
+    {"path": "README.md", "change": "modified", "origin": "model_drafted_pending_steward_review", "bytes": 6681, "sha256": "4c3cf0988d21592440d2c8500507c806fe85df5df80c86608a9252f4d3111b6d"},
+    {"path": ".github/workflows/millennium-verify.yml", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 1758, "sha256": "2451e08e635d53f87c271644c0c2b942292a2db5d130d3516c562a705dc53ccf"},
+    {"path": "tests/test_millennium_genesis.py", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2995, "sha256": "933edc9fc04691a255adbd4d16e499cdeb7d03e87202c101ac666e4004484d14"},
+    {"path": "millennium/.gitignore", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 22, "sha256": "f04ee3fab7372cd63efd2f41dff66957bf17ac0b20b0f72c29effecb4aa85f2d"},
+    {"path": "millennium/README.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2138, "sha256": "8036c10224510f02fe03551a1a44da527eb065af07726f7d25d43def429309e2"},
+    {"path": "millennium/FOUNDING_BOUNDARY.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2841, "sha256": "78fbb132ad4e78f88c82469bfe27e546b8adeaf24f41133adb9e1276a1d8e040"},
+    {"path": "millennium/arenas/geometry/ARENA.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2291, "sha256": "969ebdc1082cce6d9776adcc807c86b44f5618a4075aa8909c9880a83dfccd88"},
+    {"path": "millennium/arenas/p-vs-np/ARENA.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2271, "sha256": "d4d0a1001aed2c2a3df9b05239d238c7d96c0735d18789f7234f0819673f3fef"},
+    {"path": "millennium/arenas/riemann/ARENA.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2251, "sha256": "b108386025c964bd8f6945277382d2b9d801ebb79ca9528e3c9110918f89f2a9"},
+    {"path": "millennium/attestations/README.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 560, "sha256": "46408e4dc316f1be569bf8c441351bbdc4f35e55f28dd4fa8a358bec46c591d9"},
+    {"path": "millennium/protocol/CLAIM_STATES.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2609, "sha256": "0dfb1dadc81afb14762324232ae2a74317122cf1b88425013c4e984683ccaea0"},
+    {"path": "millennium/protocol/PLAY_PROTOCOL.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 4775, "sha256": "0ff87110d9963b7da7d57d7be94f8dd338e877399cf215ec4406197048833574"},
+    {"path": "millennium/receipts/README.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 829, "sha256": "67876c29e886cff11b74852b940ff53f2a67406e8d29b6c37e00c32526d99250"},
+    {"path": "millennium/receipts/20260904T073424Z-genesis.md", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 2331, "sha256": "17e31165c1ae06f6050b7188bc4a6f8a67934a1ad6bb4a3689da8ae8baf33f74"},
+    {"path": "millennium/research/clay-official-sources.lock.json", "change": "added", "origin": "model_assembled_from_verified_sources_pending_steward_review", "bytes": 4312, "sha256": "94ffd76e537aadf44f54b17a623de6f3009a4484317e830308b3897a77c00896"},
+    {"path": "millennium/schemas/genesis-receipt.v1.schema.json", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 1593, "sha256": "9b7dc6a2b143ff8a25ed8ca58e4b97f17ed5f778b12710b8e989fe6b09bffb12"},
+    {"path": "millennium/schemas/run-receipt.v1.schema.json", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 8181, "sha256": "a43447f2c74c8239750712e06a5889020dcf21f5c1f5658f2248914aa73cce63"},
+    {"path": "millennium/tools/verify_genesis.py", "change": "added", "origin": "model_drafted_pending_steward_review", "bytes": 50938, "sha256": "d2a5dbbd6bc06f5a541a256ea9c7a13deece7d4b6f0b23f547e391800a1691e4"}
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schema": "hearthline-plays.millennium-genesis.v1",
+  "event_id": "sha256:3396295ad65337e09331fff058c903afbd93eb864eab5811e0ebdc5563b67110",
+  "event_id_scheme": "sha256(UTF8(HEARTHLINE-MILLENNIUM-EVENT-V1\\0) || RFC8785_JCS(payload_without_event_id)); no floating-point values and ASCII object-member names",
+  "event_origin": "model_drafted_pending_steward_review",
+  "receipt_id": "MILLENNIUM-GENESIS-20260904T073424Z",
+  "status": "GENESIS_SEALED_PLAY_NOT_PROOF",
+  "claimed_created_at_utc": "2026-09-04T07:34:24Z",
+  "steward": "Christopher D. Pang",
+  "lineage": {
+    "relationship": "append-only-successor",
+    "parent_seal_id": "PRE-ASTRA-20260904T001827Z",
+    "parent_commit": "ef18554b2ca828b270dfb78512550b9b401ab6e4",
+    "parent_tree": "d62bb6615ce651af6498294a73c7de6a73de1758",
+    "parent_public_branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+    "genesis_public_branch": "millennium/playground-genesis-20260904",
+    "self_commit_rule": "The canonical genesis commit is the first commit on the genesis branch that adds this JSON receipt and its paired Markdown receipt."
+  },
+  "credit": {
+    "human_author_and_steward": "Christopher D. Pang",
+    "hearthline_role": "disclosed AI-assisted research tool and workflow",
+    "pal_role": "controlling provenance and authority protocol",
+    "ai_authorship": false,
+    "ai_mathematical_authority": false,
+    "artifact_level_provenance_controls": true,
+    "artifact_origin_manifest_path": "millennium/provenance/artifact-origins.json",
+    "artifact_origin_manifest_origin": "model_drafted_pending_steward_review",
+    "artifact_origin_manifest_bytes": 4957,
+    "artifact_origin_manifest_sha256": "8e2265bc61b574419e13100bedbf498b69b5061f8ca28a77e6101a8d39c4fde2",
+    "steward_review_state": "PENDING_STEWARD_REVIEW"
+  },
+  "scope": {
+    "active_arenas": [
+      "riemann",
+      "p-vs-np",
+      "geometry"
+    ],
+    "geometry_resolution": {
+      "control_lane": "poincare-solved",
+      "open_frontier": "hodge-rational",
+      "hodge_frontier_opened_by_genesis": false
+    },
+    "other_clay_problems": "source-locked but not opened as active arenas"
+  },
+  "claim_boundary": {
+    "steward_conceptual_satisfaction_is_proof_claim": false,
+    "millennium_problem_solution_claimed": false,
+    "proof_candidate_claimed": false,
+    "external_acceptance_claimed": false,
+    "cmi_prize_awarded_claimed": false,
+    "initial_claim_state": "observation"
+  },
+  "official_sources": {
+    "lock_path": "millennium/research/clay-official-sources.lock.json",
+    "lock_sha256": "94ffd76e537aadf44f54b17a623de6f3009a4484317e830308b3897a77c00896",
+    "retrieved_at_utc": "2026-09-04T07:30:01Z",
+    "source_bytes_committed_to_git": false
+  },
+  "private_checkpoint_commitment": {
+    "public_label": "private Riemann structural checkpoint supplied at founding",
+    "scheme": "sha256(domain_separator || nonce_bytes || artifact_sha256_bytes)",
+    "domain_separator_utf8_with_terminal_nul": "HEARTHLINE-MILLENNIUM-PRIVATE-COMMITMENT-V1",
+    "commitment_sha256": "214786e8bb14c72dce9cc2e17c98a0b3271037b9472b1b33091259954eab644f",
+    "nonce_disclosed_in_git": false,
+    "artifact_digest_disclosed_in_git": false,
+    "artifact_bytes_committed_to_git": false,
+    "private_reveal_receipt_committed_to_git": false,
+    "historical_astra_provenance": "NOT_ATTESTED",
+    "security_semantics": "Computational binding to a digest; byte-identity inference assumes SHA-256 collision resistance."
+  },
+  "assistance_provenance": {
+    "surface": "Codex in ChatGPT Work Mode",
+    "workflow_labels": [
+      "Hearthline",
+      "PAL"
+    ],
+    "runtime_model_identifier": "NOT_EXPOSED_AS_A_STABLE_PUBLIC_SNAPSHOT_IDENTIFIER",
+    "runtime_identity_evidence": "session-interface and assistant declaration only",
+    "no_astra_output_knowingly_admitted": true,
+    "no_astra_assurance": "SESSION_RECORD_DECLARED_NOT_PROVIDER_ATTESTED",
+    "no_astra_scope": "public genesis construction only",
+    "no_astra_limitations": [
+      "hidden provider routing is not excluded",
+      "training or distillation ancestry is not excluded",
+      "unrecorded outside interactions are not excluded",
+      "the name Astra is not bound here to a provider-signed canonical identifier"
+    ],
+    "provenance_partitions": [
+      {
+        "partition": "public_genesis_construction",
+        "materially_incorporated": true,
+        "astra_state": "session_declared_absent"
+      },
+      {
+        "partition": "private_checkpoint_history",
+        "materially_incorporated": false,
+        "reference_type": "opaque_commitment_only",
+        "astra_state": "unknown"
+      }
+    ],
+    "aggregate_astra_state_for_public_genesis_bytes": "session_declared_absent"
+  },
+  "attestation_status_at_creation": {
+    "human_cryptographic_signature_ref": null,
+    "trusted_external_timestamp_ref": null,
+    "later_attestations_are_append_only_sidecars": true
+  },
+  "verifier_notice": "This seal verifies integrity and disclosed lineage of the public record. It does not establish mathematical correctness, originality, exclusive authorship, complete disclosure, absence of undisclosed assistance, prize eligibility, or CMI recognition."
+}

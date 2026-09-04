@@ -1,0 +1,100 @@
+{
+  "schema": "hearthline-plays.clay-source-lock.v1",
+  "collection": {
+    "publisher": "Clay Mathematics Institute",
+    "overview_url": "https://www.claymath.org/millennium-problems/",
+    "retrieved_at_utc": "2026-09-04T07:30:01Z",
+    "method": "HTTPS response bytes hashed locally with SHA-256",
+    "source_bytes_committed_to_git": false
+  },
+  "sources": [
+    {
+      "id": "clay:birch-swinnerton-dyer:official-description:2022-bytes",
+      "problem": "Birch and Swinnerton-Dyer Conjecture",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/05/birchswin.pdf",
+      "media_type": "application/pdf",
+      "bytes": 142908,
+      "sha256": "c25dc966dd0051a60ac04593aef344d8aa89a51abedccbedadc5dc42099ddc6a",
+      "local_verification_filename": "birch-swinnerton-dyer.pdf"
+    },
+    {
+      "id": "clay:hodge:official-description:2022-bytes",
+      "problem": "Hodge Conjecture",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/06/hodge.pdf",
+      "media_type": "application/pdf",
+      "bytes": 146894,
+      "sha256": "e308d945ea3cf5dad8b187a06509013712c467b589039eb41b365cc4c988f0c8",
+      "local_verification_filename": "hodge.pdf"
+    },
+    {
+      "id": "clay:navier-stokes:official-description:2022-bytes",
+      "problem": "Navier-Stokes Equation",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/06/navierstokes.pdf",
+      "media_type": "application/pdf",
+      "bytes": 203736,
+      "sha256": "c1b5f27b1a64705cfaf1afceea513db5deedca8a18ca56ab32e7f86445a06d0c",
+      "local_verification_filename": "navier-stokes.pdf"
+    },
+    {
+      "id": "clay:p-vs-np:official-description:2022-bytes",
+      "problem": "P versus NP Problem",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf",
+      "media_type": "application/pdf",
+      "bytes": 176204,
+      "sha256": "018f3d473d16c35e807e8cdfbd0bed3ccf7a56452e3e10c6b1d84b56eaf2cf59",
+      "local_verification_filename": "p-vs-np.pdf"
+    },
+    {
+      "id": "clay:poincare:official-description:2022-bytes",
+      "problem": "Poincare Conjecture",
+      "clay_status_at_retrieval": "solved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/06/poincare.pdf",
+      "media_type": "application/pdf",
+      "bytes": 974610,
+      "sha256": "909f35c9020280d8b5a2301231bb203613b7e7868f9312fd7824c0a521b6229c",
+      "local_verification_filename": "poincare.pdf"
+    },
+    {
+      "id": "clay:riemann:official-description:2022-bytes",
+      "problem": "Riemann Hypothesis",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/05/riemann.pdf",
+      "media_type": "application/pdf",
+      "bytes": 159267,
+      "sha256": "1454b2909f99271726ffb68b056aef45b7d3e6893a66282cad596339d69bafa9",
+      "local_verification_filename": "riemann.pdf"
+    },
+    {
+      "id": "clay:yang-mills:official-description:2022-bytes",
+      "problem": "Yang-Mills and Mass Gap",
+      "clay_status_at_retrieval": "unsolved",
+      "role": "official_problem_description",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/06/yangmills.pdf",
+      "media_type": "application/pdf",
+      "bytes": 195976,
+      "sha256": "3558403ca14c11e382f73a09e548222708540bfdf478cf96aa11c52d43e23e09",
+      "local_verification_filename": "yang-mills.pdf"
+    },
+    {
+      "id": "clay:millennium-prize-rules:2018-revision-bytes",
+      "problem": null,
+      "clay_status_at_retrieval": "operative_rules_linked_by_clay",
+      "role": "revised_prize_rules",
+      "url": "https://www.claymath.org/wp-content/uploads/2022/03/millennium_prize_rules_0.pdf",
+      "media_type": "application/pdf",
+      "bytes": 43263,
+      "sha256": "9b5003745c0ae7268dc7769f83e1c61eaca674f28631f1df2cd8400976640b2a",
+      "local_verification_filename": "rules-2018.pdf"
+    }
+  ]
+}

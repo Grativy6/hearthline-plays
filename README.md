@@ -119,6 +119,16 @@ evaluator's namespace; handoffs such as `OBJECTIVE:BLOCKED` or
 interrupt/checkpoint receipt within that protocol; it is neither the scheduler
 nor a keepalive.
 
+## Millennium Playground successor
+
+The [`millennium/`](millennium/) subtree is an append-only successor to this
+branch's pre-Astra lineage anchor. It opens three bounded research games:
+Riemann Hypothesis, P versus NP, and a geometry track that keeps the solved
+Poincare conjecture control separate from the open Hodge conjecture frontier.
+
+Its genesis receipt seals provenance, source identities, and claim ceilings.
+It does not claim a Millennium problem solution.
+
 ## License
 
 Except where a file says otherwise, original material on this branch is

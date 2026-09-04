@@ -1,0 +1,5 @@
+.gitattributes text eol=lf
+README.md text eol=lf
+.github/workflows/millennium-verify.yml text eol=lf
+tests/test_millennium_genesis.py text eol=lf
+millennium/** text eol=lf

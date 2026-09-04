@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hearthline.example/schemas/millennium-run-receipt.v1.schema.json",
+  "title": "Hearthline Millennium Playground run receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "event_id",
+    "event_id_scheme",
+    "event_origin",
+    "receipt_id",
+    "kind",
+    "arena",
+    "parents",
+    "claimed_times",
+    "steward",
+    "target",
+    "board",
+    "sources",
+    "runtime",
+    "artifacts",
+    "claim_delta",
+    "claim_boundary",
+    "known_gaps",
+    "assistance",
+    "disclosure_scope",
+    "attestation_status_at_creation"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline-plays.millennium-run.v1"},
+    "event_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "event_id_scheme": {"type": "string", "minLength": 1},
+    "event_origin": {"const": "model_drafted_pending_steward_review"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "kind": {"enum": ["run", "protocol_upgrade", "correction", "merge", "release"]},
+    "arena": {"enum": ["riemann", "p-vs-np", "geometry", "protocol", "project"]},
+    "parents": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "claimed_times": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started_at_utc", "ended_at_utc"],
+      "properties": {
+        "started_at_utc": {"type": "string", "format": "date-time"},
+        "ended_at_utc": {"type": "string", "format": "date-time"}
+      }
+    },
+    "steward": {"const": "Christopher D. Pang"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "scope", "quantifiers", "promotion_ceiling"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1},
+        "quantifiers": {"type": "string", "minLength": 1},
+        "promotion_ceiling": {"$ref": "#/$defs/claimState"}
+      }
+    },
+    "board": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objects", "legal_moves", "adversary", "verifier"],
+      "properties": {
+        "objects": {"type": "string", "minLength": 1},
+        "legal_moves": {"type": "string", "minLength": 1},
+        "adversary": {"type": "string", "minLength": 1},
+        "verifier": {"type": "string", "minLength": 1}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sha256"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "model_identifier", "identity_evidence", "environment", "environment_sha256"],
+      "properties": {
+        "surface": {"type": "string", "minLength": 1},
+        "model_identifier": {"type": "string", "minLength": 1},
+        "identity_evidence": {
+          "enum": ["provider_attested", "interface_observed", "self_reported", "unknown"]
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["implementation", "python_version", "platform", "byteorder", "algorithm"],
+          "properties": {
+            "implementation": {"type": "string"},
+            "python_version": {"type": "string"},
+            "platform": {"type": "string"},
+            "byteorder": {"type": "string"},
+            "algorithm": {"type": "string"}
+          }
+        },
+        "environment_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "claim_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before", "after", "basis"],
+      "properties": {
+        "before": {"$ref": "#/$defs/claimState"},
+        "after": {"$ref": "#/$defs/claimState"},
+        "basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["official_problem_solution_claimed", "external_acceptance_claimed", "cmi_prize_awarded_claimed", "external_evidence"],
+      "properties": {
+        "official_problem_solution_claimed": {"type": "boolean"},
+        "external_acceptance_claimed": {"type": "boolean"},
+        "cmi_prize_awarded_claimed": {"type": "boolean"},
+        "external_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "known_gaps": {"type": "array", "items": {"type": "string"}},
+    "assistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hearthline_used", "pal_used", "no_astra_state", "incorporated_contribution_states", "limitations"],
+      "properties": {
+        "hearthline_used": {"type": "boolean"},
+        "pal_used": {"type": "boolean"},
+        "no_astra_state": {
+          "enum": ["session_declared_absent", "unknown", "present"]
+        },
+        "incorporated_contribution_states": {
+          "type": "array",
+          "items": {"enum": ["session_declared_absent", "unknown", "present"]}
+        },
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "disclosure_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deterministic_replay_inputs_complete", "research_provenance_complete", "known_omissions", "private_items"],
+      "properties": {
+        "deterministic_replay_inputs_complete": {"type": "boolean"},
+        "research_provenance_complete": {"type": "boolean"},
+        "known_omissions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "private_items": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "attestation_status_at_creation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_cryptographic_signature_ref", "trusted_external_timestamp_ref"],
+      "properties": {
+        "human_cryptographic_signature_ref": {"type": ["string", "null"]},
+        "trusted_external_timestamp_ref": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "origin": {
+      "enum": [
+        "human_written",
+        "model_drafted_pending_steward_review",
+        "model_proposed_human_adopted",
+        "human_model_coedited",
+        "model_assembled_from_verified_sources_pending_steward_review",
+        "mechanically_generated"
+      ]
+    },
+    "artifact": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["visibility", "path", "bytes", "sha256", "origin"],
+          "properties": {
+            "visibility": {"const": "public"},
+            "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+            "bytes": {"type": "integer", "minimum": 0},
+            "sha256": {"$ref": "#/$defs/sha256"},
+            "origin": {"$ref": "#/$defs/origin"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["visibility", "nonidentifying_label", "commitment_sha256", "commitment_scheme", "origin"],
+          "properties": {
+            "visibility": {"const": "private"},
+            "nonidentifying_label": {"type": "string", "minLength": 1},
+            "commitment_sha256": {"$ref": "#/$defs/sha256"},
+            "commitment_scheme": {"type": "string", "minLength": 1},
+            "origin": {"$ref": "#/$defs/origin"}
+          }
+        }
+      ]
+    },
+    "claimState": {
+      "enum": [
+        "observation",
+        "reproduced",
+        "certified_finite",
+        "conjectured",
+        "proved_restricted",
+        "proof_candidate",
+        "externally_established"
+      ]
+    }
+  }
+}

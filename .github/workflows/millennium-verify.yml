@@ -1,0 +1,58 @@
+name: Verify Millennium Playground
+
+on:
+  push:
+    paths:
+      - ".gitattributes"
+      - "README.md"
+      - "millennium/**"
+      - "tests/test_millennium_*.py"
+      - ".github/workflows/millennium-verify.yml"
+  pull_request:
+    paths:
+      - ".gitattributes"
+      - "README.md"
+      - "millennium/**"
+      - "tests/test_millennium_*.py"
+      - ".github/workflows/millennium-verify.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Check frozen verifier hash before execution
+        run: |
+          sha256sum --check --strict <<'EOF'
+          d2a5dbbd6bc06f5a541a256ea9c7a13deece7d4b6f0b23f547e391800a1691e4  millennium/tools/verify_genesis.py
+          EOF
+      - run: python3 -I millennium/tools/verify_genesis.py
+      - name: Run append-only protocol-upgrade verifiers
+        run: |
+          python3 -I - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          for verifier in sorted(Path("millennium/tools").glob("verify_upgrade_*.py")):
+              subprocess.run([sys.executable, "-I", str(verifier)], check=True)
+          PY
+      - name: Run isolated Millennium tests
+        run: |
+          python3 -I - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          for test in sorted(Path("tests").glob("test_millennium_*.py")):
+              subprocess.run([sys.executable, "-I", str(test)], check=True)
+          PY
