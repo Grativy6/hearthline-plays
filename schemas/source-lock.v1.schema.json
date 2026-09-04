@@ -1,0 +1,540 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:source-lock:v1",
+  "title": "Hearthline ARC-AGI-2 official source lock v1",
+  "description": "Pins immutable Git identities, independently reproduced public challenge commitments, and a separately frozen Kaggle hidden artifact commitment while distinguishing mutable official web surfaces. Duplicate identities, cross-field provenance, revalidation time, exact expected pins, and license allow-list semantics are checked again by the runtime validator.",
+  "type": "object",
+  "required": [
+    "schema",
+    "recorded_at",
+    "competition_slug",
+    "parent",
+    "git_sources",
+    "challenge_commitments",
+    "mutable_surfaces",
+    "rules",
+    "status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.arc2-source-lock.v1"
+    },
+    "recorded_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "competition_slug": {
+      "const": "arc-prize-2026-arc-agi-2"
+    },
+    "parent": {
+      "$ref": "#/$defs/parent"
+    },
+    "git_sources": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/git_source"
+      }
+    },
+    "challenge_commitments": {
+      "type": "object",
+      "required": [
+        "TRAINING",
+        "PUBLIC_EVALUATION",
+        "KAGGLE_HIDDEN"
+      ],
+      "properties": {
+        "TRAINING": {
+          "$ref": "#/$defs/training_commitment"
+        },
+        "PUBLIC_EVALUATION": {
+          "$ref": "#/$defs/public_evaluation_commitment"
+        },
+        "KAGGLE_HIDDEN": {
+          "$ref": "#/$defs/kaggle_hidden_commitment"
+        }
+      },
+      "additionalProperties": false
+    },
+    "mutable_surfaces": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/mutable_surface"
+      }
+    },
+    "rules": {
+      "type": "object",
+      "required": [
+        "official_data_vendored",
+        "public_eval_is_development_data",
+        "hidden_holdout_persisted",
+        "internet_during_evaluation",
+        "predictions_per_test_input",
+        "publication_is_run_authorization"
+      ],
+      "properties": {
+        "official_data_vendored": {
+          "const": false
+        },
+        "public_eval_is_development_data": {
+          "const": false
+        },
+        "hidden_holdout_persisted": {
+          "const": false
+        },
+        "internet_during_evaluation": {
+          "const": false
+        },
+        "predictions_per_test_input": {
+          "const": 2
+        },
+        "publication_is_run_authorization": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "const": "PREPARED_NOT_RUN"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "git_object": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "parent": {
+      "type": "object",
+      "required": [
+        "repository",
+        "branch",
+        "commit",
+        "tree"
+      ],
+      "properties": {
+        "repository": {
+          "const": "Grativy6/hearthline-plays"
+        },
+        "branch": {
+          "const": "arc-agi/main"
+        },
+        "commit": {
+          "$ref": "#/$defs/git_object"
+        },
+        "tree": {
+          "$ref": "#/$defs/git_object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "git_source": {
+      "type": "object",
+      "required": [
+        "repository",
+        "branch",
+        "commit",
+        "tree",
+        "license_spdx",
+        "role",
+        "relationship",
+        "claim_ceiling"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "$ref": "#/$defs/git_object"
+        },
+        "tree": {
+          "$ref": "#/$defs/git_object"
+        },
+        "license_spdx": {
+          "enum": [
+            "Apache-2.0",
+            "MIT"
+          ]
+        },
+        "role": {
+          "enum": [
+            "public_dataset",
+            "official_benchmarking_reference",
+            "notebook_metadata_reference",
+            "ci_checkout",
+            "ci_python_setup"
+          ]
+        },
+        "relationship": {
+          "enum": [
+            "PINNED_EXTERNAL_MOUNT_NOT_VENDORED",
+            "INSPECTED_NOT_COPIED_NOT_SCORING_AUTHORITY",
+            "INSPECTED_NOT_VENDORED",
+            "EXECUTED_IN_READ_ONLY_CI"
+          ]
+        },
+        "claim_ceiling": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "training_commitment": {
+      "type": "object",
+      "required": [
+        "status",
+        "origin",
+        "repository_path",
+        "source_tree",
+        "challenge_semantic_sha256",
+        "solution_semantic_sha256",
+        "task_count",
+        "test_input_count"
+      ],
+      "properties": {
+        "status": {
+          "const": "PINNED_GIT_TREE"
+        },
+        "origin": {
+          "const": "PINNED_ARC2_PUBLIC_REPOSITORY"
+        },
+        "repository_path": {
+          "const": "data/training"
+        },
+        "source_tree": {
+          "const": "dac7259367cc5099ef6a7b604a50a93affbbee33"
+        },
+        "challenge_semantic_sha256": {
+          "const": "0cae8c51dcec8b25ecfbdefc2907c1e51983bccaf1a8d621f169cbe81fc001fe"
+        },
+        "solution_semantic_sha256": {
+          "const": "6d668c1911653f40610bb237769e144919768b8dbeecd233516891d34d4c6503"
+        },
+        "task_count": {
+          "const": 1000
+        },
+        "test_input_count": {
+          "const": 1076
+        }
+      },
+      "additionalProperties": false
+    },
+    "public_evaluation_commitment": {
+      "type": "object",
+      "required": [
+        "status",
+        "origin",
+        "repository_path",
+        "source_tree",
+        "challenge_semantic_sha256",
+        "solution_semantic_sha256",
+        "task_count",
+        "test_input_count"
+      ],
+      "properties": {
+        "status": {
+          "const": "PINNED_GIT_TREE"
+        },
+        "origin": {
+          "const": "PINNED_ARC2_PUBLIC_REPOSITORY"
+        },
+        "repository_path": {
+          "const": "data/evaluation"
+        },
+        "source_tree": {
+          "const": "8d04288aac3146b7c47d0b799c18bc9c0217d838"
+        },
+        "challenge_semantic_sha256": {
+          "const": "8cade36130fdf1fa8fbab00cfcdfb5be8e74acbf04140f6fe18c5f502f0639be"
+        },
+        "solution_semantic_sha256": {
+          "const": "e623ea77ee8993928c50c4a5a51d3ed8c75c30e9bb65dcd480140d89f6fa5f9f"
+        },
+        "task_count": {
+          "const": 120
+        },
+        "test_input_count": {
+          "const": 167
+        }
+      },
+      "additionalProperties": false
+    },
+    "kaggle_hidden_commitment": {
+      "type": "object",
+      "required": [
+        "status",
+        "origin",
+        "challenge_filename",
+        "challenge_raw_sha256",
+        "challenge_semantic_sha256",
+        "task_count",
+        "test_input_count"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT",
+            "FROZEN_HUMAN_REVIEWED"
+          ]
+        },
+        "origin": {
+          "const": "KAGGLE_COMPETITION_MOUNT"
+        },
+        "challenge_filename": {
+          "const": "arc-agi_test_challenges.json"
+        },
+        "challenge_raw_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "challenge_semantic_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "task_count": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "test_input_count": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retrieval_utc": {
+          "$ref": "#/$defs/utc"
+        },
+        "human_reviewer": {
+          "const": "Christopher D. Pang"
+        },
+        "revalidate_before": {
+          "$ref": "#/$defs/utc"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "challenge_raw_sha256": {
+                "type": "null"
+              },
+              "challenge_semantic_sha256": {
+                "type": "null"
+              },
+              "task_count": {
+                "type": "null"
+              },
+              "test_input_count": {
+                "type": "null"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "retrieval_utc"
+                  ]
+                },
+                {
+                  "required": [
+                    "human_reviewer"
+                  ]
+                },
+                {
+                  "required": [
+                    "revalidate_before"
+                  ]
+                }
+              ]
+            }
+          },
+          "else": {
+            "required": [
+              "retrieval_utc",
+              "human_reviewer",
+              "revalidate_before"
+            ],
+            "properties": {
+              "challenge_raw_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "challenge_semantic_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "task_count": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "test_input_count": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "mutable_surface": {
+      "type": "object",
+      "required": [
+        "title",
+        "url",
+        "observed_on",
+        "content_sha256",
+        "status"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "observed_on": {
+          "$ref": "#/$defs/date"
+        },
+        "content_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT",
+            "FROZEN_HUMAN_REVIEWED"
+          ]
+        },
+        "retrieval_utc": {
+          "$ref": "#/$defs/utc"
+        },
+        "human_reviewer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revalidate_before": {
+          "$ref": "#/$defs/utc"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "content_sha256": {
+                "type": "null"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "retrieval_utc"
+                  ]
+                },
+                {
+                  "required": [
+                    "human_reviewer"
+                  ]
+                },
+                {
+                  "required": [
+                    "revalidate_before"
+                  ]
+                }
+              ]
+            }
+          },
+          "else": {
+            "required": [
+              "retrieval_utc",
+              "human_reviewer",
+              "revalidate_before"
+            ],
+            "properties": {
+              "content_sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

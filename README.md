@@ -1,42 +1,176 @@
-# ARC-AGI Playground
+# Hearthline ARC-AGI-2 Readiness
 
-**Series anchor:** `arc-agi/main`  
-[Return to the Hearthline Plays front door](https://github.com/Grativy6/hearthline-plays)
+**Status:** `PREPARED_NOT_RUN`
 
-This is the public development and play branch for ARC-AGI games and environments. ARC-AGI-3 can be built here as its own title branch before any separately authorized move to a competition or Kaggle environment.
+**Intended title branch:** `arc-agi/titles/arc-agi-2-readiness-20260904`
 
-## Branchline
+**Series anchor:** [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
 
-| Branch | Role |
+**Exact parent anchor commit:** `228d80f0559277c55031f4a80f6179320e10364c`
+
+**Exact parent anchor tree:** `532e178ecd41410e5e9038c647141f2cbe32f01d`
+
+This title is an offline, public-development readiness layer for static
+ARC-AGI-2 tasks. It supplies a label-free solver contract, deterministic
+format-only baseline, exact two-output submission builder, competition-aligned
+local scorer, closed schemas, provenance, a quiet Kaggle notebook template,
+and synthetic-only verification.
+
+It contains no official task bytes, model weights, credentials, public
+evaluation result, private or semi-private holdout, Kaggle run, submission,
+score, or claim of competition standing.
+
+## Current boundary
+
+| Surface | State |
 | --- | --- |
-| `arc-agi/main` | Public series anchor, shared rules, and common scaffold |
-| `arc-agi/titles/<slug>` | One title, environment, or bounded experiment created from an exact anchor commit |
+| Official public data vendored | `false` |
+| Public evaluation opened by this title | `false` |
+| Kaggle competition joined by this title | `false` |
+| Kaggle API or notebook contacted | `false` |
+| Credentials requested or used | `false` |
+| Notebook run attempted | `false` |
+| Submission attempted | `false` |
+| Official score observed | `false` |
+| Bound competitive solver/model | `UNBOUND` |
 
-Create each title branch from `arc-agi/main`. Keep implementation, run data, and title-specific notes on the title branch rather than at the repository front door.
+The included baseline only proves the plumbing. It copies each test input for
+`attempt_1` and emits a same-sized zero grid for `attempt_2`. It has no claimed
+ARC capability and is not authorized for public evaluation or Kaggle.
 
-A title branch README should record:
+## Contract
 
-- its parent anchor commit;
-- the official public source, rules, and environment version it inherits;
-- its permitted inputs and excluded inputs;
-- how to run it locally;
-- its declared evaluator or scoring rule, if any;
-- what state or evidence is carried forward.
+For every test input, a solver returns exactly two complete grids before any
+label or correctness feedback. A grid is rectangular, 1–30 cells on each axis,
+and contains only integer symbols 0–9. The submission shape is:
 
-## Public-play boundary
+```json
+{
+  "0123abcd": [
+    {
+      "attempt_1": [[0]],
+      "attempt_2": [[0]]
+    }
+  ]
+}
+```
 
-- Use public, authorized, source-pinned material.
-- Keep credentials, secrets, private or sealed holdouts, and non-redistributable challenge data out of the repository.
-- Keep runs reproducible enough to identify the code, configuration, and public inputs used.
-- A trace, observation, score payload, or return bundle is data brought forward. It becomes a result only when a declared evaluation rule assigns that status.
-- This series anchor does not upload submissions or claim external validation, endorsement, or competition standing.
+Local competition scoring is exact pass@2 per test output:
 
-## Current state
+`sum(any attempt exactly matches each solution grid) / number of test outputs`
 
-This is the series scaffold only. No ARC title or game implementation has been installed yet.
+There is no pixel credit or task-level reweighting. The public evaluation set
+is a sealed, one-shot audit lane; development and tuning use only deterministic
+folds of public training data outside this repository.
 
-ARC-AGI and related names, rules, datasets, and trademarks remain with their respective owners. This repository is an independent playground and is not affiliated with or endorsed by ARC Prize.
+## Map
 
-## License
+- [`provenance/official-sources.lock.json`](provenance/official-sources.lock.json)
+  pins the exact ARC-AGI-2, official benchmarking, Kaggle API, CI action, and
+  parent identities. Mutable rules remain visibly unfrozen until a human
+  reviews and snapshots them for an external grant.
+- [`docs/CONTEXT_MAP.md`](docs/CONTEXT_MAP.md) distinguishes normative,
+  inspected, and excluded context.
+- [`docs/ARC2_METHOD_MAP.md`](docs/ARC2_METHOD_MAP.md) gives a compact,
+  source-linked static-task translation of the requested Hearthline methods.
+  Every method remains documentation-only and off by default.
+- [`schemas/`](schemas/) contains nine closed JSON contracts, including strict
+  solver configuration, external input manifest, and Kaggle metadata shapes.
+- [`src/hearthline_arc2/`](src/hearthline_arc2/) contains the standard-library
+  contract, validator, runner, baseline, and local scorer.
+- [`tests/fixtures/synthetic/`](tests/fixtures/synthetic/) contains only small
+  tasks authored for these tests.
+- [`docs/PREFLIGHT.md`](docs/PREFLIGHT.md) and
+  [`tools/preflight.py`](tools/preflight.py) define the fail-closed gates.
+- [`ignition/README.md`](ignition/README.md) preserves human authority for a
+  one-run grant and a separate one-submission grant.
+- [`notebook/`](notebook/) is a cleared, internet-off packaging template, not
+  evidence of a Kaggle version or run.
 
-Except where a file says otherwise, original material on this branch is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Third-party material retains its own terms.
+## Offline verification
+
+From the repository root:
+
+```bash
+python -B -m unittest discover -s tests -p 'test_*.py' -v
+python -B tools/preflight.py --mode dev
+```
+
+Build and score the synthetic fixture only:
+
+```bash
+python -B tools/build_submission.py \
+  --challenges tests/fixtures/synthetic/challenges.json \
+  --output-dir /tmp/hearthline-arc2-synthetic \
+  --mode SYNTHETIC \
+  --run-id synthetic-contract-check
+
+python -B tools/score_local.py \
+  --mode synthetic \
+  --challenges tests/fixtures/synthetic/challenges.json \
+  --solutions tests/fixtures/synthetic/solutions.json \
+  --submission /tmp/hearthline-arc2-synthetic/submission.json
+```
+
+These commands require only Python 3.12's standard library. The tools contain
+no Kaggle push, run, or submission path.
+
+## Source and evaluation rules
+
+- Public ARC-AGI-2 data stays in an external, source-pinned mount.
+- Every external input manifest is checked against the actual label-free
+  challenge's exact filename/split, raw and canonical-semantic SHA-256, byte
+  count, and discovered task/test-input counts. Public splits must match the
+  independently recorded repository path/tree commitment; the Kaggle hidden
+  split must instead match a fresh human-frozen competition-mount commitment.
+  An arbitrary-file hash or unrelated public Git pin is insufficient.
+- Committed tests and CI remain synthetic-only.
+- The unrestricted synthetic CLIs accept only bytes named in the committed
+  authored-fixture lock; relabeling an official file as synthetic cannot enter
+  that lane.
+- The solver sees demonstrations and test inputs, never test outputs.
+- External deployment must place scoring in a separate process over an already
+  closed and hashed prediction; this repository does not provide that process
+  supervisor.
+- Public scoring has no default mode: it requires a preflight-completed
+  `PUBLIC_EVAL_ONCE` grant bound to the exact config, run manifest, submission,
+  and independently locked solution identity. Preflight first spends its
+  coupled grant-ID/nonce pair, then writes a separate completion proof only
+  after the challenge snapshot matches the manifest. The scorer requires both
+  records and exclusively claims the completed grant before opening the scored
+  artifacts. Reuse fails, and public validation failures are redacted.
+- The 120-task public evaluation set is not used for iteration, prompt design,
+  selection, ablation, or per-task error analysis.
+- Hidden Kaggle challenges and predictions are not logged or persisted beyond
+  the required platform output.
+- Kaggle metadata must be private and internet-off, use the reviewed hardware
+  shape, explicitly disable TPU in v1, set `competition_sources` to exactly
+  `["arc-prize-2026-arc-agi-2"]`, keep dataset/kernel/model source arrays empty
+  in v1, and match the exact hash in its run grant. Nonempty sources require a
+  reviewed successor contract.
+- `sample_submission.json` is mandatory in the notebook and must exactly match
+  discovered task and test-input coverage before output is written.
+- Current web rules and Kaggle runtime limits are mutable. Re-read, snapshot,
+  hash, and acknowledge them before any external action.
+- A passing test, source lock, notebook, publication, or AI suggestion cannot
+  authorize a run or submission.
+
+## ARC-AGI-3 boundary
+
+This sibling title reuses ARC-AGI-3's useful provenance ideas—exact lineage,
+claim ceilings, fail-closed validation, synthetic fixtures, read-only pinned
+CI, and explicit grants. Its method map translates paired-Spark and custody
+concepts into off-by-default static-task vocabulary only. It does not copy
+interactive frames, actions, scorecards, private records, Creatures, code, or
+environment tools. ARC-AGI-2 remains a static batch prediction surface.
+
+## Stewardship and license
+
+Christopher D. Pang is the project steward and author. AI systems are tools
+used under human direction; they are not authors, owners, approvers, or sources
+of run authority.
+
+Except where a file says otherwise, original material on this branch is
+licensed under the [Creative Commons Attribution 4.0 International
+License](https://creativecommons.org/licenses/by/4.0/). Referenced datasets,
+software, competition pages, names, and trademarks retain their own terms.

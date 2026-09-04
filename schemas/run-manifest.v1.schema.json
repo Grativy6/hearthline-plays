@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:run-manifest:v1",
+  "title": "Hearthline ARC-AGI-2 run manifest v1",
+  "description": "A closed provenance record for one bounded local or platform run. Hash equality, time ordering, and mode-specific filesystem boundaries are enforced by the runtime semantic validator.",
+  "type": "object",
+  "required": [
+    "schema",
+    "run_id",
+    "mode",
+    "source_lock_sha256",
+    "branch_commit",
+    "branch_tree",
+    "solver_id",
+    "solver_code_sha256",
+    "config_sha256",
+    "seed_policy",
+    "input_manifest_sha256",
+    "fold_id",
+    "started_at",
+    "finished_at",
+    "wall_budget_seconds",
+    "cpu_budget_seconds",
+    "runtime_identity",
+    "dependency_identities",
+    "model_identities",
+    "submission_sha256",
+    "discovered_task_count",
+    "discovered_test_input_count",
+    "ground_truth_exposed_to_solver",
+    "attempts_generated_before_scoring",
+    "max_attempts_per_test_input",
+    "network_required"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.arc2-run-manifest.v1"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "mode": {
+      "enum": [
+        "SYNTHETIC",
+        "TRAIN_CV",
+        "PUBLIC_EVAL",
+        "KAGGLE_HIDDEN"
+      ]
+    },
+    "source_lock_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "branch_commit": {
+      "$ref": "#/$defs/git_object"
+    },
+    "branch_tree": {
+      "$ref": "#/$defs/git_object"
+    },
+    "solver_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "solver_code_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "config_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "seed_policy": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "input_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "fold_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "started_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "finished_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "wall_budget_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "cpu_budget_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "runtime_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "dependency_identities": {
+      "$ref": "#/$defs/identity_list"
+    },
+    "model_identities": {
+      "$ref": "#/$defs/identity_list"
+    },
+    "submission_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "discovered_task_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "discovered_test_input_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "ground_truth_exposed_to_solver": {
+      "const": false
+    },
+    "attempts_generated_before_scoring": {
+      "const": true
+    },
+    "max_attempts_per_test_input": {
+      "const": 2
+    },
+    "network_required": {
+      "const": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "TRAIN_CV"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "fold_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "enum": [
+              "SYNTHETIC",
+              "PUBLIC_EVAL",
+              "KAGGLE_HIDDEN"
+            ]
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "fold_id": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "git_object": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "identity_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512
+      }
+    }
+  }
+}

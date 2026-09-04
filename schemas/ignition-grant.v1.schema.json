@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:ignition-grant:v1",
+  "title": "Hearthline ARC-AGI-2 single-use ignition grant v1",
+  "description": "A narrow, expiring human authorization bound to exact immutable artifacts. It contains no credentials and cannot authorize more than one named action.",
+  "type": "object",
+  "required": [
+    "schema",
+    "grant_id",
+    "scope",
+    "competition_slug",
+    "branch_commit",
+    "branch_tree",
+    "source_lock_sha256",
+    "notebook_sha256",
+    "solver_code_sha256",
+    "config_sha256",
+    "input_manifest_sha256",
+    "hardware_class",
+    "max_runtime_seconds",
+    "issued_at",
+    "expires_at",
+    "nonce",
+    "human_approver",
+    "acknowledgement"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.arc2-ignition-grant.v1"
+    },
+    "grant_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "scope": {
+      "enum": [
+        "PUBLIC_EVAL_ONCE",
+        "KAGGLE_NOTEBOOK_RUN_ONCE",
+        "KAGGLE_SUBMIT_ONCE"
+      ]
+    },
+    "competition_slug": {
+      "const": "arc-prize-2026-arc-agi-2"
+    },
+    "branch_commit": {
+      "$ref": "#/$defs/git_object"
+    },
+    "branch_tree": {
+      "$ref": "#/$defs/git_object"
+    },
+    "source_lock_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "notebook_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "notebook_metadata_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "solver_code_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "config_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "input_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "hardware_class": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "max_runtime_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 43200
+    },
+    "issued_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "expires_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "nonce": {
+      "$ref": "#/$defs/sha256"
+    },
+    "human_approver": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "acknowledgement": {
+      "type": "string"
+    },
+    "rules_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "kaggle_notebook_version_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._/:-]{0,255}$"
+    },
+    "output_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "run_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "submission_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "solution_semantic_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "scope": {
+            "const": "PUBLIC_EVAL_ONCE"
+          }
+        },
+        "required": [
+          "scope"
+        ]
+      },
+      "then": {
+        "required": [
+          "run_manifest_sha256",
+          "submission_sha256",
+          "solution_semantic_sha256"
+        ],
+        "properties": {
+          "acknowledgement": {
+            "const": "I authorize exactly one sealed public-evaluation audit; its aggregate result will not be used for tuning."
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "rules_sha256"
+              ]
+            },
+            {
+              "required": [
+                "kaggle_notebook_version_id"
+              ]
+            },
+            {
+              "required": [
+                "output_sha256"
+              ]
+            },
+            {
+              "required": [
+                "notebook_metadata_sha256"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scope": {
+            "const": "KAGGLE_NOTEBOOK_RUN_ONCE"
+          }
+        },
+        "required": [
+          "scope"
+        ]
+      },
+      "then": {
+        "required": [
+          "rules_sha256",
+          "notebook_metadata_sha256"
+        ],
+        "properties": {
+          "acknowledgement": {
+            "const": "I reviewed the current rules and authorize exactly one bound Kaggle notebook run; this is not submission authorization."
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "run_manifest_sha256"
+              ]
+            },
+            {
+              "required": [
+                "submission_sha256"
+              ]
+            },
+            {
+              "required": [
+                "solution_semantic_sha256"
+              ]
+            },
+            {
+              "required": [
+                "kaggle_notebook_version_id"
+              ]
+            },
+            {
+              "required": [
+                "output_sha256"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scope": {
+            "const": "KAGGLE_SUBMIT_ONCE"
+          }
+        },
+        "required": [
+          "scope"
+        ]
+      },
+      "then": {
+        "required": [
+          "rules_sha256",
+          "notebook_metadata_sha256",
+          "kaggle_notebook_version_id",
+          "output_sha256"
+        ],
+        "properties": {
+          "acknowledgement": {
+            "const": "I authorize exactly one submission of this notebook version and output; no later version or retry is covered."
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "run_manifest_sha256"
+              ]
+            },
+            {
+              "required": [
+                "submission_sha256"
+              ]
+            },
+            {
+              "required": [
+                "solution_semantic_sha256"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "git_object": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    }
+  }
+}

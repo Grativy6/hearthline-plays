@@ -1,0 +1,154 @@
+{
+  "schema": "hearthline-plays.arc2-source-lock.v1",
+  "recorded_at": "2026-09-04T06:45:40Z",
+  "competition_slug": "arc-prize-2026-arc-agi-2",
+  "parent": {
+    "repository": "Grativy6/hearthline-plays",
+    "branch": "arc-agi/main",
+    "commit": "228d80f0559277c55031f4a80f6179320e10364c",
+    "tree": "532e178ecd41410e5e9038c647141f2cbe32f01d"
+  },
+  "git_sources": [
+    {
+      "repository": "arcprize/ARC-AGI-2",
+      "branch": "main",
+      "commit": "f3283f727488ad98fe575ea6a5ac981e4a188e49",
+      "tree": "afab62b97f29dd2341f401d4af70491e14da35c2",
+      "license_spdx": "Apache-2.0",
+      "role": "public_dataset",
+      "relationship": "PINNED_EXTERNAL_MOUNT_NOT_VENDORED",
+      "claim_ceiling": "Identifies public source bytes only; it is not the Kaggle hidden set or permission to tune on public evaluation."
+    },
+    {
+      "repository": "arcprize/arc-agi-benchmarking",
+      "branch": "main",
+      "commit": "28e67d54b05df5be10281892243c509a42a874f1",
+      "tree": "fa89cb240ddf434f9d4d143d2411772f79809acc",
+      "license_spdx": "MIT",
+      "role": "official_benchmarking_reference",
+      "relationship": "INSPECTED_NOT_COPIED_NOT_SCORING_AUTHORITY",
+      "claim_ceiling": "Its task-weighted scorer is not asserted to equal the 2026 Kaggle output-weighted metric."
+    },
+    {
+      "repository": "Kaggle/kaggle-api",
+      "branch": "main",
+      "commit": "659469c4185cfca0fb3be01edad6f50277528d9d",
+      "tree": "71ae8e6abf6dc780907416316b68f5315f96b856",
+      "license_spdx": "Apache-2.0",
+      "role": "notebook_metadata_reference",
+      "relationship": "INSPECTED_NOT_VENDORED",
+      "claim_ceiling": "Metadata syntax does not establish account access, rule acceptance, or a successful notebook run."
+    },
+    {
+      "repository": "actions/checkout",
+      "branch": "PINNED_ACTION",
+      "commit": "11d5960a326750d5838078e36cf38b85af677262",
+      "tree": "f8a7b72dc00648d050099727d25ca92a43ad1162",
+      "license_spdx": "MIT",
+      "role": "ci_checkout",
+      "relationship": "EXECUTED_IN_READ_ONLY_CI",
+      "claim_ceiling": "A passing checkout step proves only that the pinned action completed under the declared workflow permissions."
+    },
+    {
+      "repository": "actions/setup-python",
+      "branch": "PINNED_ACTION",
+      "commit": "a26af69be951a213d495a4c3e4e4022e16d87065",
+      "tree": "568c6310706725a8b725497dbe6b3b909cbcf6cd",
+      "license_spdx": "MIT",
+      "role": "ci_python_setup",
+      "relationship": "EXECUTED_IN_READ_ONLY_CI",
+      "claim_ceiling": "A configured interpreter proves neither Kaggle runtime identity nor solver correctness."
+    }
+  ],
+  "challenge_commitments": {
+    "TRAINING": {
+      "status": "PINNED_GIT_TREE",
+      "origin": "PINNED_ARC2_PUBLIC_REPOSITORY",
+      "repository_path": "data/training",
+      "source_tree": "dac7259367cc5099ef6a7b604a50a93affbbee33",
+      "challenge_semantic_sha256": "0cae8c51dcec8b25ecfbdefc2907c1e51983bccaf1a8d621f169cbe81fc001fe",
+      "solution_semantic_sha256": "6d668c1911653f40610bb237769e144919768b8dbeecd233516891d34d4c6503",
+      "task_count": 1000,
+      "test_input_count": 1076
+    },
+    "PUBLIC_EVALUATION": {
+      "status": "PINNED_GIT_TREE",
+      "origin": "PINNED_ARC2_PUBLIC_REPOSITORY",
+      "repository_path": "data/evaluation",
+      "source_tree": "8d04288aac3146b7c47d0b799c18bc9c0217d838",
+      "challenge_semantic_sha256": "8cade36130fdf1fa8fbab00cfcdfb5be8e74acbf04140f6fe18c5f502f0639be",
+      "solution_semantic_sha256": "e623ea77ee8993928c50c4a5a51d3ed8c75c30e9bb65dcd480140d89f6fa5f9f",
+      "task_count": 120,
+      "test_input_count": 167
+    },
+    "KAGGLE_HIDDEN": {
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT",
+      "origin": "KAGGLE_COMPETITION_MOUNT",
+      "challenge_filename": "arc-agi_test_challenges.json",
+      "challenge_raw_sha256": null,
+      "challenge_semantic_sha256": null,
+      "task_count": null,
+      "test_input_count": null
+    }
+  },
+  "mutable_surfaces": [
+    {
+      "title": "ARC Prize 2026 ARC-AGI-2 track",
+      "url": "https://arcprize.org/competitions/2026/arc-agi-2",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "Kaggle ARC Prize 2026 ARC-AGI-2 competition",
+      "url": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "Kaggle competition rules",
+      "url": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2/rules",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "Kaggle competition data",
+      "url": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2/data",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "Kaggle overview and evaluation",
+      "url": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2/overview/abstract",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "ARC-AGI-1 and ARC-AGI-2 guide",
+      "url": "https://arcprize.org/guide/1",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    },
+    {
+      "title": "ARC Prize verified testing policy",
+      "url": "https://arcprize.org/policy",
+      "observed_on": "2026-09-04",
+      "content_sha256": null,
+      "status": "UNFROZEN_REVALIDATE_BEFORE_EXTERNAL_GRANT"
+    }
+  ],
+  "rules": {
+    "official_data_vendored": false,
+    "public_eval_is_development_data": false,
+    "hidden_holdout_persisted": false,
+    "internet_during_evaluation": false,
+    "predictions_per_test_input": 2,
+    "publication_is_run_authorization": false
+  },
+  "status": "PREPARED_NOT_RUN"
+}

@@ -1,0 +1,36 @@
+name: Verify ARC-AGI-2 readiness
+
+on:
+  push:
+    branches:
+      - arc-agi/titles/arc-agi-2-readiness-20260904
+      - codex/arc-agi-2-readiness-20260904
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Compile without bytecode artifacts
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+
+          for path in sorted([*Path("src").rglob("*.py"), *Path("tools").glob("*.py"), *Path("tests").glob("*.py")]):
+              compile(path.read_text(encoding="utf-8"), str(path), "exec")
+              print(f"compiled {path}")
+          PY
+      - name: Run synthetic-only unit tests
+        run: python -B -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Run offline development preflight
+        run: python -B tools/preflight.py --mode dev

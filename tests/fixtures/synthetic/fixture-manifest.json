@@ -1,0 +1,24 @@
+{
+  "schema": "hearthline-plays.arc2-synthetic-fixture-manifest.v1",
+  "origin": "SYNTHETIC_AUTHORED_FOR_CONTRACT_TESTS",
+  "authored_by": "Christopher D. Pang",
+  "tooling_note": "AI was used as a tool under the author's direction.",
+  "created_on": "2026-09-04",
+  "official_task_bytes_copied": false,
+  "official_task_transform_used": false,
+  "purpose": "Exercise structure, exact pass-at-two, output weighting, and failure boundaries only.",
+  "files": [
+    {
+      "path": "challenges.json",
+      "sha256": "cb1daa47a07a3aee7cad56aa42c1d6ea8b88890fc1a8d7d760521af2a577b095"
+    },
+    {
+      "path": "solutions.json",
+      "sha256": "34dd018d8b4467ba44ac7959a93248c80e7ec5563c3a3a595ac21f25210c8146"
+    },
+    {
+      "path": "submission.json",
+      "sha256": "2540c214aff51fa52aa8371fbd5a03f60a736dab81a2779b364969791165a18d"
+    }
+  ]
+}
