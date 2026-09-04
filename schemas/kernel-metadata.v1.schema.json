@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:kernel-metadata:v1",
+  "title": "Hearthline ARC-AGI-2 Kaggle kernel metadata v1",
+  "description": "The exact private, network-off Kaggle notebook descriptor. Accelerator consistency and placeholder rejection are enforced again by the runtime semantic validator.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "code_file",
+    "language",
+    "kernel_type",
+    "is_private",
+    "enable_gpu",
+    "enable_tpu",
+    "enable_internet",
+    "machine_shape",
+    "dataset_sources",
+    "competition_sources",
+    "kernel_sources",
+    "model_sources"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(?:<kaggle-username>|[A-Za-z0-9][A-Za-z0-9_-]{0,63})/hearthline-arc-agi-2-2026$"
+    },
+    "title": {
+      "const": "Hearthline ARC-AGI-2 2026"
+    },
+    "code_file": {
+      "const": "arc2_submission.ipynb"
+    },
+    "language": {
+      "const": "python"
+    },
+    "kernel_type": {
+      "const": "notebook"
+    },
+    "is_private": {
+      "const": true
+    },
+    "enable_gpu": {
+      "type": "boolean"
+    },
+    "enable_tpu": {
+      "const": false
+    },
+    "enable_internet": {
+      "const": false
+    },
+    "machine_shape": {
+      "type": "string"
+    },
+    "dataset_sources": {
+      "const": []
+    },
+    "competition_sources": {
+      "const": [
+        "arc-prize-2026-arc-agi-2"
+      ]
+    },
+    "kernel_sources": {
+      "const": []
+    },
+    "model_sources": {
+      "const": []
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "enable_gpu": {
+            "const": true
+          }
+        },
+        "required": [
+          "enable_gpu"
+        ]
+      },
+      "then": {
+        "properties": {
+          "machine_shape": {
+            "enum": [
+              "NvidiaTeslaP100",
+              "NvidiaTeslaT4"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "machine_shape": {
+            "const": ""
+          }
+        }
+      }
+    }
+  ]
+}

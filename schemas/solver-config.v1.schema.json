@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:solver-config:v1",
+  "title": "Hearthline ARC-AGI-2 frozen solver configuration v1",
+  "description": "A closed deterministic solver and budget configuration for one external package. Hardware and runtime equality with the ignition grant are enforced by the runtime semantic validator.",
+  "type": "object",
+  "required": [
+    "schema",
+    "competition_slug",
+    "solver_id",
+    "seed",
+    "seed_policy",
+    "deterministic",
+    "wall_budget_seconds",
+    "cpu_budget_seconds",
+    "max_work_units",
+    "hardware_class",
+    "dependency_identities",
+    "model_identities",
+    "max_attempts_per_test_input",
+    "network_required"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.arc2-solver-config.v1"
+    },
+    "competition_slug": {
+      "const": "arc-prize-2026-arc-agi-2"
+    },
+    "solver_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "seed_policy": {
+      "const": "FIXED_INTEGER_PER_TASK"
+    },
+    "deterministic": {
+      "const": true
+    },
+    "wall_budget_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 43200
+    },
+    "cpu_budget_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 43200
+    },
+    "max_work_units": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "hardware_class": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "dependency_identities": {
+      "$ref": "#/$defs/identity_list"
+    },
+    "model_identities": {
+      "$ref": "#/$defs/identity_list"
+    },
+    "max_attempts_per_test_input": {
+      "const": 2
+    },
+    "network_required": {
+      "const": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512
+      }
+    }
+  }
+}

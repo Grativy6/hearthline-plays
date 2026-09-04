@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hearthline-plays:schema:arc2:input-manifest:v1",
+  "title": "Hearthline ARC-AGI-2 external challenge input manifest v1",
+  "description": "A label-free external challenge descriptor bound to raw bytes, canonical semantic content, discovered counts, and the exact source-lock bytes. Public splits additionally bind the pinned ARC-AGI-2 Git identity; Kaggle hidden inputs instead bind an independently human-frozen platform artifact commitment.",
+  "type": "object",
+  "required": [
+    "schema",
+    "competition_slug",
+    "split",
+    "challenge_origin",
+    "challenge_filename",
+    "challenge_raw_sha256",
+    "challenge_semantic_sha256",
+    "challenge_byte_count",
+    "task_count",
+    "test_input_count",
+    "source_lock_sha256",
+    "labels_included",
+    "official_data_vendored"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hearthline-plays.arc2-input-manifest.v1"
+    },
+    "competition_slug": {
+      "const": "arc-prize-2026-arc-agi-2"
+    },
+    "split": {
+      "enum": [
+        "TRAINING",
+        "PUBLIC_EVALUATION",
+        "KAGGLE_HIDDEN"
+      ]
+    },
+    "challenge_origin": {
+      "enum": [
+        "PINNED_ARC2_PUBLIC_REPOSITORY",
+        "KAGGLE_COMPETITION_MOUNT"
+      ]
+    },
+    "challenge_filename": {
+      "enum": [
+        "arc-agi_training_challenges.json",
+        "arc-agi_evaluation_challenges.json",
+        "arc-agi_test_challenges.json"
+      ]
+    },
+    "challenge_raw_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "challenge_semantic_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "challenge_byte_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "task_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "test_input_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source_lock_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "arc2_public_repository": {
+      "const": "arcprize/ARC-AGI-2"
+    },
+    "arc2_public_commit": {
+      "const": "f3283f727488ad98fe575ea6a5ac981e4a188e49"
+    },
+    "arc2_public_tree": {
+      "const": "afab62b97f29dd2341f401d4af70491e14da35c2"
+    },
+    "labels_included": {
+      "const": false
+    },
+    "official_data_vendored": {
+      "const": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "split": {
+            "enum": [
+              "TRAINING",
+              "PUBLIC_EVALUATION"
+            ]
+          }
+        },
+        "required": [
+          "split"
+        ]
+      },
+      "then": {
+        "required": [
+          "arc2_public_repository",
+          "arc2_public_commit",
+          "arc2_public_tree"
+        ],
+        "properties": {
+          "challenge_origin": {
+            "const": "PINNED_ARC2_PUBLIC_REPOSITORY"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "challenge_origin": {
+            "const": "KAGGLE_COMPETITION_MOUNT"
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "arc2_public_repository"
+              ]
+            },
+            {
+              "required": [
+                "arc2_public_commit"
+              ]
+            },
+            {
+              "required": [
+                "arc2_public_tree"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "split": {
+            "const": "TRAINING"
+          }
+        },
+        "required": [
+          "split"
+        ]
+      },
+      "then": {
+        "properties": {
+          "challenge_filename": {
+            "const": "arc-agi_training_challenges.json"
+          },
+          "challenge_semantic_sha256": {
+            "const": "0cae8c51dcec8b25ecfbdefc2907c1e51983bccaf1a8d621f169cbe81fc001fe"
+          },
+          "task_count": {
+            "const": 1000
+          },
+          "test_input_count": {
+            "const": 1076
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "split": {
+            "const": "PUBLIC_EVALUATION"
+          }
+        },
+        "required": [
+          "split"
+        ]
+      },
+      "then": {
+        "properties": {
+          "challenge_filename": {
+            "const": "arc-agi_evaluation_challenges.json"
+          },
+          "challenge_semantic_sha256": {
+            "const": "8cade36130fdf1fa8fbab00cfcdfb5be8e74acbf04140f6fe18c5f502f0639be"
+          },
+          "task_count": {
+            "const": 120
+          },
+          "test_input_count": {
+            "const": 167
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "split": {
+            "const": "KAGGLE_HIDDEN"
+          }
+        },
+        "required": [
+          "split"
+        ]
+      },
+      "then": {
+        "properties": {
+          "challenge_filename": {
+            "const": "arc-agi_test_challenges.json"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
