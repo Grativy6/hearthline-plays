@@ -13,6 +13,7 @@ kaggle/titles/<slug>
 - Kaggriculture: `kaggle/titles/kaggriculture-hearthline-farm`
 - Biohub — Cell Tracking During Development:
   `kaggle/titles/biohub-cell-tracking-during-development`
+- RosettaBench: `kaggle/titles/rosetta`
 
 ## Boundary
 
