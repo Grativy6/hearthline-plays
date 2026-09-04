@@ -696,6 +696,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         {
             "task_slug",
             "private",
+            "client_side_creation_rejections",
+            "client_side_last_error",
             "task_pushes",
             "hosted_runs",
             "model_calls",
@@ -710,6 +712,12 @@ def validate_status(document: object, *, task_sha256: str) -> None:
     _require(
         dispatch["task_slug"] == TASK_SLUG and dispatch["private"] is True,
         "dispatch target mismatch",
+    )
+    _require(
+        dispatch["client_side_creation_rejections"] == 1
+        and dispatch["client_side_last_error"]
+        == "NO_LITERAL_TASK_DECORATOR_CORRECTED_BEFORE_EXTERNAL_WRITE",
+        "client-side creation rejection record mismatch",
     )
     for key in ("task_pushes", "hosted_runs", "model_calls", "evaluator_runs", "publications"):
         _require(

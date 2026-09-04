@@ -34,7 +34,16 @@ from enum import StrEnum
 from importlib import metadata as importlib_metadata
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    # The Kaggle CLI discovers task names with a static AST scan for a literal
+    # ``@*.task`` decorator. Runtime registration remains lazy below so an
+    # ordinary import cannot load the SDK or contact a configured model proxy.
+    import kaggle_benchmarks as kbench
+
+    @kbench.task(name="Hearthline Rosetta CAL 001 abc357b")
+    def _kaggle_cli_discovery_marker() -> dict[str, object]: ...
 
 EXPERIMENT_ID = "ROSETTA-CAL-001"
 RESULT_LABEL = "ROSETTA_DERIVED_FRESH_SALT"
