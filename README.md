@@ -8,9 +8,11 @@ It inherits the shared playground from `main` at commit `986288008f5fa21aec8ebb0
 kaggle/titles/<slug>
 ```
 
-## Current title
+## Current titles
 
 - Kaggriculture: `kaggle/titles/kaggriculture-hearthline-farm`
+- Biohub — Cell Tracking During Development:
+  `kaggle/titles/biohub-cell-tracking-during-development`
 
 ## Boundary
 
