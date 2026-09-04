@@ -20,11 +20,13 @@ class VerifyCalibrationTests(unittest.TestCase):
         cls.status = json.loads((REPO_ROOT / verifier.STATUS_PATH).read_text(encoding="utf-8"))
         cls.task_sha256 = verifier._sha256_bytes(REPO_ROOT / verifier.TASK_PATH)
 
-    def test_current_package_passes_static_pre_dispatch_verification(self) -> None:
+    def test_current_package_passes_static_terminal_verification(self) -> None:
         report = verifier.verify_calibration(REPO_ROOT)
-        self.assertEqual(report["verdict"], "PASS_STATIC_FINAL_REPAIR_AUTHORIZED")
+        self.assertEqual(report["verdict"], "PASS_STATIC_TERMINAL_BLOCKED")
         self.assertEqual(report["task_source_sha256"], self.task_sha256)
         self.assertEqual(report["maximum_model_calls"], 4)
+        self.assertEqual(report["hosted_runs_dispatched"], 1)
+        self.assertEqual(report["model_calls_observed"], 0)
         self.assertFalse(report["publication_enabled"])
         self.assertEqual(
             report["verification_side_effects"],
@@ -54,11 +56,24 @@ class VerifyCalibrationTests(unittest.TestCase):
                 with self.assertRaises(verifier.CalibrationVerificationError):
                     verifier.validate_config(document, task_sha256=self.task_sha256)
 
-    def test_status_rejects_dispatch_or_formal_pilot_activity(self) -> None:
+    def test_status_rejects_unrecorded_calls_publication_or_formal_activity(self) -> None:
         for section, key, value in (
             ("dispatch", "model_calls", 1),
             ("dispatch", "publications", 1),
             ("formal_experiment", "pilot_identifiers_selected", 1),
+        ):
+            with self.subTest(section=section, key=key):
+                document = copy.deepcopy(self.status)
+                document[section][key] = value
+                with self.assertRaises(verifier.CalibrationVerificationError):
+                    verifier.validate_status(document, task_sha256=self.task_sha256)
+
+    def test_status_rejects_terminal_evidence_or_authority_drift(self) -> None:
+        for section, key, value in (
+            ("authorization", "hosted_runs_remaining", 1),
+            ("build_probe", "dataset_loaded", True),
+            ("calibration_run", "prompt_calls", 1),
+            ("terminal_blocker", "task_updates_remaining", 1),
         ):
             with self.subTest(section=section, key=key):
                 document = copy.deepcopy(self.status)

@@ -15,29 +15,32 @@ Before acting, read `README.md`, `source-lock.v1.json`,
 - Branch: `kaggle/titles/rosetta`
 - Experiment ID: `ROSETTA-001`
 - Formal experiment state: `ROSETTA-001 / PREPARED_NOT_RUN`
-- Development calibration: `ROSETTA-CAL-001 / AUTHORIZED_FINAL_REPAIR_PENDING`
+- Development calibration: `ROSETTA-CAL-001 / BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING`
 
 On the E: filesystem, invoke Git with the exact worktree supplied to
 `safe.directory`. Do not alter another Hearthline checkout or title branch.
 
 ## Current authority
 
-The user's 2026-09-04 instruction expands authority for exactly the bounded
+The user's 2026-09-04 instructions supplied authority for exactly the bounded
 `ROSETTA-CAL-001` setup and orientation run described in
-`docs/ROSETTA_CAL_001.md`. It permits a clean environment and source cache on
+`docs/ROSETTA_CAL_001.md`. They permitted a clean environment and source cache on
 the fixed C: drive, Kaggle OAuth, one duplicate-checked private task creation,
 attachment of dataset version 1, and one hosted Terra run whose task makes at
 most four calls. Task version 1 failed during Kaggle's model-less build probe,
 before data or model access. One recorded corrective push to the same private
 task was permitted to finish that creation; it was not a model retry. Version
 2 showed that Kaggle's build actor has a concrete non-Terra identifier, and it
-also stopped before data or model access. The local source now returns a
-zero-call receipt for every non-Terra actor. On 2026-09-04 the user directly
-authorized exactly one further update to this same private task, followed only
-after a completed build by exactly one hosted `gpt-5.6-terra` run whose task
-makes at most four calls. There is no authority for a second update, a second
-run, an automatic retry, publication, or formal-pilot consumption. An
-uncertain external effect must be reconciled, never retried.
+also stopped before data or model access. Task version 3 completed its Gemini
+build probe through the frozen zero-call path; its private receipt records
+`dataset_loaded=false`, zero model calls, and zero evaluator runs. The one
+authorized `gpt-5.6-terra` run, Kaggle run 1233792, was then dispatched and
+errored while loading the attached parquet because the hosted image provides
+neither `pyarrow` nor `fastparquet`. This occurred before any prompt, model
+call, or evaluator run. All authorized task updates and hosted runs are now
+consumed. No further update, run, retry, download, publication, or formal-pilot
+consumption is authorized; any further external action requires a new user
+instruction.
 
 Outside that one-shot calibration grant, do not:
 
@@ -49,9 +52,9 @@ Outside that one-shot calibration grant, do not:
 - download, preview, enumerate, or otherwise consume benchmark task rows;
 - select the 15 pilot problems;
 - reveal or inspect evaluator-only tests, language seeds, or full maps;
-- invoke GPT-5.6 Sol, Astra, or another model as an experimental subject or
-  task solver, or invoke the Rosetta evaluator, except for the exact capped
-  `gpt-5.6-terra` calibration dispatch;
+- invoke GPT-5.6 Sol, Astra, Terra, or another model as an experimental subject
+  or task solver, or invoke the Rosetta evaluator; the single authorized Terra
+  dispatch is exhausted;
 - compile or execute generated candidate programs;
 - claim a score, failure profile, learning tax, cost, latency, or scientific
   conclusion;

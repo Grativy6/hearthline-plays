@@ -85,25 +85,25 @@ the latest published version rather than a numbered version, version 1 and its
 metadata must be rechecked immediately before task creation. The task filters
 to exactly `abc357_b` before constructing any prompt or test object.
 
-## Dispatch boundary
+## Terminal dispatch record
 
-Before task creation, run the side-effect-free static gate:
+The current side-effect-free static verifier is:
 
 ```text
-py tools/verify_calibration.py --mode pre-dispatch
+py tools/verify_calibration.py --mode terminal-blocked
 ```
 
-It must report `PASS_STATIC_PRE_DISPATCH`. The gate binds the exact task-source
-digest, model allowlist, dataset metadata, cell order, call budget, development
-exclusion, private-task policy, and zeroed pre-dispatch status in
-`status/rosetta-cal-001-status.v1.json`. It does not authenticate, open data,
-call a model, execute the evaluator, or create an external task.
+It must report `PASS_STATIC_TERMINAL_BLOCKED`. The verifier binds the exact
+task-source digest, model allowlist, dataset metadata, cell order, call budget,
+development exclusion, private-task policy, exhausted authority, and terminal
+zero-call evidence in `status/rosetta-cal-001-status.v1.json`. It performs no
+authentication, data access, model call, evaluator run, or external write.
 
-The authorized external target is the existing private task with slug
+The authorized external target was the existing private task with slug
 `hearthline-rosetta-cal-001-abc357b`. Task creation is persistent because the
 current server does not support deletion. Immediately before the final update,
-a duplicate-name check must resolve exactly that one private task and its two
-preserved errored versions; a different or ambiguous target closes the gate.
+the duplicate-name check resolved exactly that one private task and its two
+preserved errored versions.
 
 Task version 1 failed during Kaggle's build probe: its strict actor guard
 rejected the build actor before the dataset was loaded or any model was called.
@@ -112,16 +112,19 @@ can run. Version 2 established that the build actor exposes a concrete
 non-Terra identifier; it stopped at the same pre-data, pre-model guard. These
 failures are preserved in the calibration status.
 
-The locally frozen next version now returns a zero-call, zero-data receipt for
-every non-Terra actor. Only an exact Terra actor can cross into calibration.
-On 2026-09-04 the user authorized exactly one final update to the same private
-task. This pre-dispatch checkpoint records one update remaining. A failed or
-uncertain update is reconciled and is never retried.
+The frozen version 3 source returned a zero-call receipt to Kaggle's Gemini
+build probe and the private task reached `Completed`. That receipt records
+`dataset_loaded=false`, `model_calls=0`, and `evaluator_runs=0`.
 
-Only if that build completes, exactly one hosted run may be dispatched against
-`gpt-5.6-terra`. The task itself makes at most four calls. A failed or
-uncertain model dispatch is recorded and is not retried. `kaggle benchmarks
-tasks publish` is forbidden.
+Exactly one `gpt-5.6-terra` run was then dispatched: private Kaggle run
+1233792. It reached the task but errored while loading the attached parquet
+because the hosted image lacks both supported parquet engines, `pyarrow` and
+`fastparquet`. The failure preceded every prompt, model call, and evaluator
+run, so none of the four cells produced a calibration outcome.
+
+The task-update and run grants are exhausted. No repair version, retry,
+download, publication, or formal-pilot consumption is authorized. Private
+receipts and URLs remain outside this public branch.
 
 ## Evaluator and security boundary
 
@@ -138,9 +141,10 @@ that residual in every receipt.
 
 ## Claim ceiling
 
-The calibration may report exact per-cell outcomes, observed leakage,
-unsupported method use, demonstrated mappings, reformulation markers, token
-telemetry when exposed, task/runtime errors, and artifact hashes.
+This attempt may report the terminal infrastructure error and zero-call
+evidence. There are no per-cell outcomes, leakage observations, mapping
+records, reformulations, token telemetry, scores, or evaluator artifacts from
+run 1233792.
 
 It does not estimate a Rosetta score or learning tax, establish a causal Gloss
 benefit, generalize beyond one pre-exposed task, measure durable learning,

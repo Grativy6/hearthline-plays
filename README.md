@@ -52,11 +52,12 @@ Hearthline synthetic Core, and Hearthline plus deterministic task-local Gloss
 synthetic Core. It permits at most four model calls, no retries, and no
 publication. See [the calibration protocol](docs/ROSETTA_CAL_001.md).
 
-Current state: two private Kaggle task versions failed at the pre-data actor
-guard during build, with zero model calls. A zero-call build-actor path is
-locally verified, and the user has authorized exactly one final update to the
-same private task followed, only after a completed build, by one four-call
-Terra run. No retry, publication, or formal-pilot consumption is authorized. See
+Current state: private task version 3 completed its zero-call Gemini build
+probe without loading data. The single authorized Terra run, Kaggle run
+1233792, then errored while loading the attached parquet because the hosted
+image lacks `pyarrow` and `fastparquet`; no prompt, model call, or evaluator ran.
+No update, retry, publication, or formal-pilot consumption remains authorized.
+See
 [`status/rosetta-cal-001-status.v1.json`](status/rosetta-cal-001-status.v1.json).
 
 ## Frozen formal design target

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Statically verify the authorized pre-dispatch ROSETTA-CAL-001 package.
+"""Statically verify the terminal blocked ROSETTA-CAL-001 package.
 
 This verifier imports neither the calibration task nor Kaggle Benchmarks. It
 performs no authentication, network, data, model, evaluator, or dispatch work.
@@ -64,9 +64,9 @@ EXPECTED_SOURCE_CELLS = [
 LOWER_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 UTC_TIMESTAMP = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\Z")
 CLAIM_CEILING = (
-    "One final same-private-task repair update and one four-call Terra run are authorized but "
-    "not yet dispatched; no model call, evaluator run, score, learning tax, Gloss benefit, "
-    "ARC-AGI-3 result, or public leaderboard claim exists."
+    "Private task version 3 built, but the single Terra run errored while loading the attached "
+    "parquet with zero prompt, model, or evaluator calls; no per-cell calibration outcome, "
+    "score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
 )
 
 
@@ -137,8 +137,8 @@ def validate_config(document: object, *, task_sha256: str) -> dict[str, object]:
     )
     _require(calibration["experiment_id"] == EXPERIMENT_ID, "calibration experiment mismatch")
     _require(
-        calibration["status"] == "AUTHORIZED_FINAL_REPAIR_PENDING",
-        "calibration is not at the authorized final-repair boundary",
+        calibration["status"] == "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING",
+        "calibration is not at the terminal parquet-engine blocker",
     )
     _require(
         calibration["classification"] == "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION",
@@ -571,8 +571,10 @@ def validate_status(document: object, *, task_sha256: str) -> None:
             "platform_preflight",
             "source_binding",
             "dispatch",
+            "build_probe",
+            "calibration_run",
             "formal_experiment",
-            "pending_action",
+            "terminal_blocker",
             "claim_ceiling",
         },
         "calibration status",
@@ -583,8 +585,8 @@ def validate_status(document: object, *, task_sha256: str) -> None:
     )
     _require(root["experiment_id"] == EXPERIMENT_ID, "calibration status experiment mismatch")
     _require(
-        root["status"] == "AUTHORIZED_FINAL_REPAIR_PENDING",
-        "calibration status is not at the authorized final-repair boundary",
+        root["status"] == "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING",
+        "calibration status is not at the terminal parquet-engine blocker",
     )
     _require(
         isinstance(root["recorded_at_utc"], str)
@@ -599,7 +601,9 @@ def validate_status(document: object, *, task_sha256: str) -> None:
             "same_task_build_repair_pushes_remaining",
             "additional_task_versions_authorized",
             "hosted_runs_authorized",
+            "hosted_runs_remaining",
             "model_calls_authorized_maximum",
+            "model_calls_remaining_authorized",
             "automatic_retries_authorized",
             "publication_authorized",
             "formal_pilot_consumption_authorized",
@@ -611,10 +615,12 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         == {
             "private_task_pushes_authorized": 1,
             "same_task_build_repair_pushes_authorized": 2,
-            "same_task_build_repair_pushes_remaining": 1,
-            "additional_task_versions_authorized": True,
+            "same_task_build_repair_pushes_remaining": 0,
+            "additional_task_versions_authorized": False,
             "hosted_runs_authorized": 1,
+            "hosted_runs_remaining": 0,
             "model_calls_authorized_maximum": MAX_MODEL_CALLS,
+            "model_calls_remaining_authorized": 0,
             "automatic_retries_authorized": False,
             "publication_authorized": False,
             "formal_pilot_consumption_authorized": False,
@@ -740,48 +746,115 @@ def validate_status(document: object, *, task_sha256: str) -> None:
         == "BUILD_ACTOR_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
         "server-side creation failure record mismatch",
     )
-    _require(dispatch["task_pushes"] == 2, "two exhausted task pushes must be recorded")
+    _require(dispatch["task_pushes"] == 3, "three exhausted task pushes must be recorded")
     _require(
-        dispatch["task_versions_created"] == 2,
-        "exactly two errored task versions must be recorded",
+        dispatch["task_versions_created"] == 3,
+        "exactly three task versions must be recorded",
     )
     _require(
         dispatch["hosted_run_requests_rejected_pre_dispatch"] == 1,
         "rejected pre-dispatch run request mismatch",
     )
-    for key in ("hosted_runs", "model_calls", "evaluator_runs", "publications"):
+    _require(dispatch["hosted_runs"] == 1, "single hosted run dispatch mismatch")
+    for key in ("model_calls", "evaluator_runs", "publications"):
         _require(
             type(dispatch[key]) is int and dispatch[key] == 0,
-            f"repair-boundary {key} must be zero",
+            f"terminal-boundary {key} must be zero",
         )
     _require(
-        dispatch["task_reference"] == "PRIVATE_TASK_VERSION_2_WITHHELD"
-        and dispatch["run_reference"] is None,
-        "repair-boundary references mismatch",
+        dispatch["task_reference"] == "PRIVATE_TASK_VERSION_3_WITHHELD"
+        and dispatch["run_reference"] == "KAGGLE_RUN_1233792_PRIVATE_WITHHELD",
+        "terminal-boundary references mismatch",
     )
     _require(dispatch["uncertain_external_effect"] is False, "uncertain external effect recorded")
 
-    pending_action = _exact_object(
-        root["pending_action"],
+    build_probe = _exact_object(
+        root["build_probe"],
         {
-            "code",
-            "prepared_source_is_pushed",
-            "next_external_action",
-            "hosted_runs_remaining",
-            "model_calls_so_far",
+            "task_version",
+            "task_status",
+            "actor_family",
+            "receipt_visibility",
+            "dataset_loaded",
+            "model_calls",
+            "evaluator_runs",
         },
-        "calibration pending action",
+        "build probe",
     )
     _require(
-        pending_action
+        build_probe
         == {
-            "code": "FINAL_SAME_PRIVATE_TASK_UPDATE_AND_SINGLE_TERRA_RUN_AUTHORIZED",
-            "prepared_source_is_pushed": False,
-            "next_external_action": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
-            "hosted_runs_remaining": 1,
-            "model_calls_so_far": 0,
+            "task_version": 3,
+            "task_status": "COMPLETED",
+            "actor_family": "GEMINI_BUILD_PROBE",
+            "receipt_visibility": "PRIVATE_WITHHELD",
+            "dataset_loaded": False,
+            "model_calls": 0,
+            "evaluator_runs": 0,
         },
-        "calibration pending action mismatch",
+        "build probe mismatch",
+    )
+
+    calibration_run = _exact_object(
+        root["calibration_run"],
+        {
+            "task_version",
+            "run_id",
+            "model",
+            "status",
+            "failure_stage",
+            "error_code",
+            "missing_optional_dependencies",
+            "prompt_calls",
+            "model_calls",
+            "evaluator_runs",
+            "result_visibility",
+        },
+        "calibration run",
+    )
+    _require(
+        calibration_run
+        == {
+            "task_version": 3,
+            "run_id": 1233792,
+            "model": CALIBRATION_MODEL,
+            "status": "ERRORED",
+            "failure_stage": "ATTACHED_PARQUET_LOAD",
+            "error_code": "MISSING_PARQUET_ENGINE",
+            "missing_optional_dependencies": ["pyarrow", "fastparquet"],
+            "prompt_calls": 0,
+            "model_calls": 0,
+            "evaluator_runs": 0,
+            "result_visibility": "PRIVATE_WITHHELD",
+        },
+        "calibration run mismatch",
+    )
+
+    terminal_blocker = _exact_object(
+        root["terminal_blocker"],
+        {
+            "code",
+            "task_updates_remaining",
+            "hosted_runs_remaining",
+            "automatic_retries_authorized",
+            "publication_authorized",
+            "formal_pilot_consumption_authorized",
+            "further_external_action_requires_new_user_authority",
+        },
+        "terminal blocker",
+    )
+    _require(
+        terminal_blocker
+        == {
+            "code": "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING",
+            "task_updates_remaining": 0,
+            "hosted_runs_remaining": 0,
+            "automatic_retries_authorized": False,
+            "publication_authorized": False,
+            "formal_pilot_consumption_authorized": False,
+            "further_external_action_requires_new_user_authority": True,
+        },
+        "terminal blocker mismatch",
     )
 
     formal = _exact_object(
@@ -826,7 +899,7 @@ def verify_calibration(repo_root: Path = REPO_ROOT) -> dict[str, object]:
         task_sha256=task_sha256,
     )
     return {
-        "verdict": "PASS_STATIC_FINAL_REPAIR_AUTHORIZED",
+        "verdict": "PASS_STATIC_TERMINAL_BLOCKED",
         "experiment_id": EXPERIMENT_ID,
         "task_id": TASK_ID,
         "task_source_sha256": task_sha256,
@@ -835,6 +908,8 @@ def verify_calibration(repo_root: Path = REPO_ROOT) -> dict[str, object]:
         "model": CALIBRATION_MODEL,
         "publication_enabled": False,
         "formal_pilot_consumed": False,
+        "hosted_runs_dispatched": 1,
+        "model_calls_observed": 0,
         "verification_side_effects": {
             "network_calls": 0,
             "model_calls": 0,
@@ -850,8 +925,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     parser.add_argument(
         "--mode",
-        choices=("pre-dispatch",),
-        default="pre-dispatch",
+        choices=("terminal-blocked",),
+        default="terminal-blocked",
     )
     return parser
 

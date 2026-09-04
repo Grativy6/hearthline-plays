@@ -1,6 +1,6 @@
 [calibration]
 experiment_id = "ROSETTA-CAL-001"
-status = "AUTHORIZED_FINAL_REPAIR_PENDING"
+status = "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING"
 classification = "ROSETTA_DERIVED_FRESH_SALT_ORIENTATION"
 question_ids = ["abc357_b"]
 formal_pilot_exclusion_sha256 = "da455a01dd2c8efc40734e7ded03efe5a8e1ebb45a2fed4cec3777b52e68d389"

@@ -1,15 +1,17 @@
 {
   "schema_version": "rosetta-cal-status.v1",
   "experiment_id": "ROSETTA-CAL-001",
-  "status": "AUTHORIZED_FINAL_REPAIR_PENDING",
-  "recorded_at_utc": "2026-09-04T22:42:54Z",
+  "status": "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING",
+  "recorded_at_utc": "2026-09-04T22:53:48Z",
   "authorization": {
     "private_task_pushes_authorized": 1,
     "same_task_build_repair_pushes_authorized": 2,
-    "same_task_build_repair_pushes_remaining": 1,
-    "additional_task_versions_authorized": true,
+    "same_task_build_repair_pushes_remaining": 0,
+    "additional_task_versions_authorized": false,
     "hosted_runs_authorized": 1,
+    "hosted_runs_remaining": 0,
     "model_calls_authorized_maximum": 4,
+    "model_calls_remaining_authorized": 0,
     "automatic_retries_authorized": false,
     "publication_authorized": false,
     "formal_pilot_consumption_authorized": false
@@ -52,16 +54,41 @@
     "client_side_last_error": "OWNER_QUALIFIED_SLUG_REJECTED_BEFORE_EXTERNAL_WRITE",
     "server_side_creation_failures": 2,
     "server_side_last_error": "BUILD_ACTOR_REJECTED_BEFORE_DATA_OR_MODEL_ACCESS",
-    "task_pushes": 2,
-    "task_versions_created": 2,
+    "task_pushes": 3,
+    "task_versions_created": 3,
     "hosted_run_requests_rejected_pre_dispatch": 1,
-    "hosted_runs": 0,
+    "hosted_runs": 1,
     "model_calls": 0,
     "evaluator_runs": 0,
     "publications": 0,
-    "task_reference": "PRIVATE_TASK_VERSION_2_WITHHELD",
-    "run_reference": null,
+    "task_reference": "PRIVATE_TASK_VERSION_3_WITHHELD",
+    "run_reference": "KAGGLE_RUN_1233792_PRIVATE_WITHHELD",
     "uncertain_external_effect": false
+  },
+  "build_probe": {
+    "task_version": 3,
+    "task_status": "COMPLETED",
+    "actor_family": "GEMINI_BUILD_PROBE",
+    "receipt_visibility": "PRIVATE_WITHHELD",
+    "dataset_loaded": false,
+    "model_calls": 0,
+    "evaluator_runs": 0
+  },
+  "calibration_run": {
+    "task_version": 3,
+    "run_id": 1233792,
+    "model": "gpt-5.6-terra",
+    "status": "ERRORED",
+    "failure_stage": "ATTACHED_PARQUET_LOAD",
+    "error_code": "MISSING_PARQUET_ENGINE",
+    "missing_optional_dependencies": [
+      "pyarrow",
+      "fastparquet"
+    ],
+    "prompt_calls": 0,
+    "model_calls": 0,
+    "evaluator_runs": 0,
+    "result_visibility": "PRIVATE_WITHHELD"
   },
   "formal_experiment": {
     "experiment_id": "ROSETTA-001",
@@ -71,12 +98,14 @@
     "model_calls": 0,
     "evaluator_runs": 0
   },
-  "pending_action": {
-    "code": "FINAL_SAME_PRIVATE_TASK_UPDATE_AND_SINGLE_TERRA_RUN_AUTHORIZED",
-    "prepared_source_is_pushed": false,
-    "next_external_action": "ONE_SAME_PRIVATE_TASK_VERSION_UPDATE",
-    "hosted_runs_remaining": 1,
-    "model_calls_so_far": 0
+  "terminal_blocker": {
+    "code": "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING",
+    "task_updates_remaining": 0,
+    "hosted_runs_remaining": 0,
+    "automatic_retries_authorized": false,
+    "publication_authorized": false,
+    "formal_pilot_consumption_authorized": false,
+    "further_external_action_requires_new_user_authority": true
   },
-  "claim_ceiling": "One final same-private-task repair update and one four-call Terra run are authorized but not yet dispatched; no model call, evaluator run, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
+  "claim_ceiling": "Private task version 3 built, but the single Terra run errored while loading the attached parquet with zero prompt, model, or evaluator calls; no per-cell calibration outcome, score, learning tax, Gloss benefit, ARC-AGI-3 result, or public leaderboard claim exists."
 }
