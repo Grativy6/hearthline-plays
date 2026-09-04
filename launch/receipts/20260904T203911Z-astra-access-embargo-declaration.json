@@ -1,0 +1,96 @@
+{
+  "schema": "hearthline-plays.astra-access-embargo-declaration.v1",
+  "receipt_id": "ASTRA-ACCESS-EMBARGO-20260904T203911Z",
+  "status": "ASTRA_ACCESS_OBSERVED_EMBARGO_DECLARED",
+  "recorded_at_utc": "2026-09-04T20:39:11Z",
+  "recorded_at_local": "2026-09-04T16:39:11-04:00",
+  "steward": {
+    "name": "Christopher D. Pang",
+    "role": "human author and lineage steward"
+  },
+  "repository": {
+    "name": "Grativy6/hearthline-plays",
+    "working_branch_at_recording": "arc-agi/astra-access-boundary-20260904",
+    "lineage_branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+    "record_base_commit": "d4716557587302910b0002757b8e9e65c90b9fd7",
+    "record_base_tree": "08bba4c343d87cfff5fa7e17a740da787730bd90"
+  },
+  "lineage": {
+    "relationship": "append-only-successor-declaration",
+    "parent_seal_id": "PRE-ASTRA-20260904T001827Z",
+    "parent_seal_commit": "ef18554b2ca828b270dfb78512550b9b401ab6e4",
+    "parent_markdown_path": "launch/receipts/20260904T001827Z-pre-astra-lineage-seal.md",
+    "parent_markdown_sha256": "6951e2b75460927ea3fec5f53eddcd32847e75bd7b3728ec8f7db4dc99ce45d1",
+    "parent_json_path": "launch/receipts/20260904T001827Z-pre-astra-lineage-seal.json",
+    "parent_json_sha256": "375aa8b834a5b17fb1dc5e74883160b1266a441df86aa6c385a076a8434cec8f",
+    "original_seal_mutated": false,
+    "access_alone_crosses_seal": false,
+    "crossing_rule": "The first admitted Astra use or output is the lineage crossing; availability alone is not."
+  },
+  "access_observation": {
+    "availability_reported": true,
+    "reported_time_local_approx": "2026-09-04T16:25:00-04:00",
+    "reported_time_utc_approx": "2026-09-04T20:25:00Z",
+    "timezone": "America/New_York",
+    "precision": "APPROXIMATE",
+    "source": "DIRECT_STEWARD_DECLARATION",
+    "provider_attested": false,
+    "canonical_provider_model_identifier_verified": false,
+    "note": "The reported time marks approximate observed access availability, not verified provider enablement."
+  },
+  "current_admission": {
+    "astra_invocation_evidenced_by_this_receipt": false,
+    "astra_output_admitted_by_this_receipt": false,
+    "assurance": "STEWARD_DECLARATION_NOT_PROVIDER_ATTESTED",
+    "access_alone_requires_astra_provenance_unresolved": false,
+    "outside_scope": "No claim is made about unrelated Astra use outside the named Hearthline scope."
+  },
+  "recording_assistance": {
+    "surface": "ChatGPT Work / Codex",
+    "exact_provider_model_identifier": null,
+    "identifier_status": "NOT_EXPOSED_TO_REPOSITORY_RECORD",
+    "presented_as_astra": false,
+    "astra_output_admitted": false,
+    "assistant_authorship_or_authority_claimed": false
+  },
+  "embargo": {
+    "state": "ACTIVE",
+    "kind": "PROSPECTIVE_STEWARD_CONSTRAINT",
+    "scopes": [
+      "Work touching Grativy6/hearthline",
+      "Building, reviewing, or collaborating on Hearthline work",
+      "Code, strategy, evaluation, or other contributions to the Hearthline ARC-AGI-3 Kaggle preparation and send-out lineage in Grativy6/hearthline-plays"
+    ],
+    "condition_phrase": "until the ARC-AGI-3 Kaggle work is sent out",
+    "condition_owner": "Christopher D. Pang",
+    "condition_status": "UNRESOLVED_NOT_RECORDED",
+    "condition_satisfaction_rule": "Only a later append-only steward declaration may record the milestone as satisfied.",
+    "condition_is_self_executing": false,
+    "condition_satisfaction_is_automatic_astra_authorization": false
+  },
+  "authority_and_claim_ceiling": {
+    "astra_use_authorized": false,
+    "kaggle_access_authorized": false,
+    "kaggle_submission_authorized": false,
+    "credentials_authorized": false,
+    "repository_change_authorized_beyond_this_receipt": false,
+    "kaggle_contact_or_result_claimed": false,
+    "technical_enforcement_claimed": false,
+    "global_astra_nonuse_claimed": false,
+    "exact_provider_enablement_time_claimed": false,
+    "uninterrupted_post_seal_provenance_certified": false,
+    "note": "This receipt records an access observation and a restraint. It creates no permission, external standing, or result."
+  },
+  "first_astra_use_rule": {
+    "separate_explicit_grant_required": true,
+    "successor_receipt_required": true,
+    "required_fields": [
+      "first affected commit",
+      "displayed or provider model identifier",
+      "provider surface",
+      "touched artifacts",
+      "exact contribution scope"
+    ]
+  },
+  "reopening": "Append a successor receipt when the steward declares the ARC-AGI-3 Kaggle work sent out, or before any first admitted Astra contribution. Never rewrite this declaration or the parent seal."
+}
