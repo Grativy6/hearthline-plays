@@ -1,0 +1,272 @@
+{
+  "schema": "hearthline-plays.pre-astra-lineage-seal.v1",
+  "seal_id": "PRE-ASTRA-20260904T001827Z",
+  "status": "PRE_ASTRA_LINEAGE_ANCHOR",
+  "sealed_at_utc": "2026-09-04T00:18:27Z",
+  "sealed_at_local": "2026-09-03T20:18:27-04:00",
+  "steward": "Christopher D. Pang",
+  "repository": {
+    "full_name": "Grativy6/hearthline-plays",
+    "branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+    "parent_commit": "86cecd122705f1b82306405f535b7720c04e74ff",
+    "parent_tree": "f6661ed6a05dd854ad5eafb3756149ea8b900065",
+    "self_commit_rule": "The canonical seal commit is the first commit that adds this manifest and its paired Markdown receipt."
+  },
+  "claim_at_cut": {
+    "astra_model_execution_admitted": false,
+    "astra_api_calls_admitted": false,
+    "astra_generated_code_or_strategy_admitted": false,
+    "astra_hidden_reasoning_or_private_evaluation_output_admitted": false,
+    "public_astra_reporting_inspected": true,
+    "public_astra_analysis_is_model_use": false,
+    "scope": "This is a named lineage anchor, not a claim that every future descendant remains pre-Astra.",
+    "continuation_rule": "A descendant remains in the pre-Astra lineage only while every contributing model/tool invocation is recorded and no GPT-6 Astra output is admitted.",
+    "limitation": "The seal binds the inspected repository state and the steward's declaration. It cannot prove absence of unrecorded activity outside those sources."
+  },
+  "model_provenance": {
+    "sealing_assistant": {
+      "product_surface": "ChatGPT chat mode",
+      "model": "GPT-5.6 Pro",
+      "role": "Prepared and committed the seal through the connected GitHub tool.",
+      "is_astra": false
+    },
+    "intended_pre_astra_development_model": {
+      "model": "GPT-5.6 Sol",
+      "status": "prospective",
+      "rule": "Each actual development or evaluation run must record its exact displayed/provider model identifier; this seal does not relabel the sealing assistant as Sol."
+    }
+  },
+  "source_cutoff": {
+    "cutoff_utc": "2026-09-04T00:18:27Z",
+    "cutoff_local": "2026-09-03T20:18:27-04:00",
+    "source_lock_path": "launch/source-lock.v2.json",
+    "source_lock_blob": "7e79156fc73ef1cf71bbf4ba43f6bf32c5da943d",
+    "public_astra_analysis_path": "launch/ASTRA_PUBLIC_BLUEPRINT.md",
+    "public_astra_analysis_blob": "9ceb996ddf2f4f15f5520303062925d069adaaaf",
+    "repo_views": [
+      {
+        "repository": "Grativy6/hearthline",
+        "branch": "main",
+        "commit": "16eab7f3d584a8215a6e1e0b2a93b157c02f787a"
+      },
+      {
+        "repository": "Grativy6/hearthline-workshop",
+        "branch": "main",
+        "commit": "b5798da16bbd58b61453e42ba3a9e0b07727cb6e"
+      },
+      {
+        "repository": "Grativy6/hearthline-plays",
+        "branch": "arc-agi/titles/arc-agi-3-research-station",
+        "commit": "74728f8c4ec9409bd0e6c8064a0b6b356da776f6"
+      },
+      {
+        "repository": "Grativy6/strongwiz",
+        "branch": "main",
+        "commit": "edc88b80f872f766c22b3a050a7f6837d6e652d8"
+      },
+      {
+        "repository": "Grativy6/ARC3",
+        "branch": "main",
+        "commit": "a1b54f77fc73cc50641cbe6952a1b683c6b5d1fb"
+      }
+    ],
+    "official_arc_surfaces": [
+      {
+        "repository": "arcprize/ARC-AGI",
+        "version": "0.9.9",
+        "commit": "f12822c4d550121c35a275008d964afbbed47d2f"
+      },
+      {
+        "repository": "ARCAGI-Labs/arc-agi-3-benchmarking",
+        "commit": "d7e9a68a001bb95123013384eea287e95e8567e2"
+      }
+    ]
+  },
+  "harness_configuration": {
+    "branch_tree": "f6661ed6a05dd854ad5eafb3756149ea8b900065",
+    "critical_blobs": [
+      {
+        "path": "launch/strategy/HEARTHLINE_ARC_PROTOCOL.md",
+        "blob": "216f5d96e4a8c5bd44379a7c8577f4886c0efbbb"
+      },
+      {
+        "path": "design/PAIR_STATIC.md",
+        "blob": "5125bb6179fe99504e5323a5647ac008445f28a0"
+      },
+      {
+        "path": "launch/schemas/orientation-receipt.v1.schema.json",
+        "blob": "c5f4e22d07db49db77ffac1c252fef7f6c4095ff"
+      },
+      {
+        "path": "launch/schemas/pair-static.v1.schema.json",
+        "blob": "f399f2a7350f7ee3a733e214e8aed2a28b0340b9"
+      },
+      {
+        "path": "launch/schemas/spark-static.v1.schema.json",
+        "blob": "6a31928c34d2a70b9047a83a9e9b4affb59537ca"
+      },
+      {
+        "path": ".github/workflows/arc3-orientation-probe.yml",
+        "blob": "29a396188be6e5f8a396aead8ea1fd27b511b653"
+      },
+      {
+        "path": ".github/workflows/launch-verify.yml",
+        "blob": "f86d76ec0abba22b54f78476a9c297b87d08ad24"
+      },
+      {
+        "path": ".github/workflows/verify-launchpad.yml",
+        "blob": "3c52738df1cec1303832e29e1c4369ad2347a670"
+      },
+      {
+        "path": ".github/workflows/verify.yml",
+        "blob": "615a746ff44e5ae0da53e029fe5439d94207b9db"
+      },
+      {
+        "path": "practice/ls20/action-plan.json",
+        "blob": "4bdc87771d8f3165375eb2192f17f448e80a4cf9"
+      },
+      {
+        "path": "practice/ls20/world-model.json",
+        "blob": "266219beb5d391e4c3e714ce2a8c8f2f5de029da"
+      },
+      {
+        "path": "launch/status.json",
+        "blob": "9ccb259b5bde78dd190e8847fdeed5ecf97df931"
+      }
+    ]
+  },
+  "current_launch_status": {
+    "phase": "PUBLIC_ORIENTATION_AUTHORIZED",
+    "competition_mode": false,
+    "environment_action_count": 0,
+    "public_arc_contact_count": 0,
+    "kaggle_contact_count": 0,
+    "private_holdout_access": false,
+    "paid_provider_calls": 0
+  },
+  "public_game_lineage": [
+    {
+      "name": "ARC3 Build 003 / Campaign 37",
+      "classification": "historical public development",
+      "outcome": "NOT_FINISHED",
+      "levels_completed": "4/6",
+      "official_submissions": 259,
+      "non_reset_environment_actions": 256,
+      "holdout_exposure_events": 0,
+      "frozen_candidate_commit_prefix": "0173ab4",
+      "evidence_status": "Recorded in the prior development journal and archived ARC3 lineage; not re-executed by this seal."
+    },
+    {
+      "name": "Model Scientist",
+      "classification": "historical online-public",
+      "outcome": "WIN reported in previously audited receipt",
+      "winning_session_actions": 1327,
+      "total_recorded_environment_actions": 2315,
+      "receipt_elapsed_seconds": 71244.6,
+      "evidence_status": "Prior local receipt comparison; artifact bytes are not copied into this seal."
+    },
+    {
+      "name": "Wise Scientist v2",
+      "classification": "historical online-public clean-room",
+      "game": "ls20-9607627b",
+      "outcome": "WIN",
+      "levels_completed": "7/7",
+      "environment_actions": 917,
+      "aggregate_reset_events": 11,
+      "receipt_elapsed_seconds": 9748.8,
+      "final_receipt_sha256": "34c9af3709d77218d501fb261656702e2aaadac3eacb849dcdec86c5a0587953",
+      "evidence_status": "Previously verified receipt; not a Kaggle MyAgent, private-set, RHAE, or prize claim."
+    },
+    {
+      "name": "Strongwiz Calibration 001, attempt 002",
+      "classification": "historical public calibration",
+      "outcome": "NOT_FINISHED",
+      "levels_completed": "4/7",
+      "non_reset_actions": 754,
+      "resets": 4,
+      "environment_calls": 758,
+      "commit": "9ea900c361dceb176562487893798c536cc1669e",
+      "evidence_status": "PARTIAL; no credentials, competition entry, or submission."
+    }
+  ],
+  "private_candidate_freeze_requirements": [
+    "Exact candidate commit and tree",
+    "Exact evaluated runtime, model/weights/tokenizer, and model identity",
+    "Dependency and container/image locks",
+    "Seed or seed schedule",
+    "Action, compute, wall-clock, and memory budgets",
+    "Network-disabled and closed-stdin verification",
+    "Submission artifact digest",
+    "Explicit no-Astra receipt covering every contributing development and evaluation invocation"
+  ],
+  "prospective_ablation_registry": [
+    {
+      "id": "A0_FULL",
+      "change": "None; full frozen pre-Astra system.",
+      "purpose": "Reference condition."
+    },
+    {
+      "id": "A1_NO_PAIR_STATIC",
+      "change": "Replace paired differentiated Sparks and Pair Static with one investigator trace.",
+      "purpose": "Test whether paired comparison contributes beyond duplicated work."
+    },
+    {
+      "id": "A2_NO_PERSISTENT_TRACE",
+      "change": "Retain only the current state; remove recoverable cross-step trace and source handles.",
+      "purpose": "Test the contribution of trace custody."
+    },
+    {
+      "id": "A3_NO_RESIDUAL_REOPEN",
+      "change": "Remove explicit residuals and reopening handles; force ordinary overwrite/closure behavior.",
+      "purpose": "Test whether preserving unresolved burdens improves recovery and transfer."
+    },
+    {
+      "id": "A4_NO_OPERATOR_MEMORY",
+      "change": "Remove retained mechanic/operator hypotheses while keeping the perception and action interface.",
+      "purpose": "Test learned causal/world-model carryover."
+    },
+    {
+      "id": "A5_NO_EXPLICIT_PLAN_CENTER",
+      "change": "Remove the ordered goal/subgoal plan and choose one step from present state only.",
+      "purpose": "Test task-center and multi-step planning contribution."
+    }
+  ],
+  "ablation_controls": {
+    "hold_constant": [
+      "Model weights and inference runtime",
+      "Perception and environment adapter except the named ablation",
+      "Environment/version set",
+      "Seed schedule where supported",
+      "Action and compute budgets",
+      "Evaluator and terminal-state rule"
+    ],
+    "metrics": [
+      "score and levels completed",
+      "environment actions and resets",
+      "wall-clock and compute/token use",
+      "invalid actions",
+      "prediction error",
+      "recovery after surprise or failure"
+    ],
+    "private_holdout_rule": "Do not repeatedly probe or tune on the competition private holdout. Run ablations on frozen public, synthetic, or separately authorized validation surfaces unless competition rules expressly permit otherwise.",
+    "interpretation_ceiling": "A full-system advantage would support the named operational mechanisms under the tested aperture. It would not prove PAL as a complete theory or isolate every component without further experiments."
+  },
+  "contamination_and_fork_rule": {
+    "first_astra_use": "Record the first commit, model identifier, provider surface, artifacts touched, and exact scope of any Astra contribution.",
+    "recommended_forks": [
+      "pre-astra-sol: descendants that preserve the no-Astra chain",
+      "astra-comparison: descendants that admit Astra and name the first crossing"
+    ],
+    "uncertain_provenance": "If Astra contribution cannot be ruled out, mark ASTRA_PROVENANCE_UNRESOLVED rather than claiming no-Astra.",
+    "public_reporting_exception": "Reading or citing public reporting about Astra is not Astra model execution, but remains source context and must stay labeled as such."
+  },
+  "authority_and_claim_ceiling": {
+    "private_kaggle_run_authorized_by_this_seal": false,
+    "credentials_authorized_by_this_seal": false,
+    "competition_result_claimed": false,
+    "prize_claimed": false,
+    "architecture_causality_claimed": false,
+    "note": "This receipt preserves a comparison baseline. It creates no Kaggle permission, submission authority, external standing, or result."
+  },
+  "reopening": "Append successor receipts. Never rewrite this seal to absorb later model use, results, or ablations."
+}
