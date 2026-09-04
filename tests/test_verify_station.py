@@ -42,6 +42,10 @@ class StationVerifierTests(unittest.TestCase):
                 '{"status":"PREPARED_NOT_RUN","status":"RUN"}'
             )
 
+    def test_exponent_overflow_json_is_rejected(self) -> None:
+        with self.assertRaisesRegex(verify_station.VerificationError, "non-finite JSON number"):
+            verify_station.loads_strict_json('{"overflow":1e999}')
+
     def test_source_contact_boundary_is_immutable(self) -> None:
         document = copy.deepcopy(self.sources)
         document["rules"]["arc_or_kaggle_contacted"] = True

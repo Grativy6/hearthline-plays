@@ -1,0 +1,20 @@
+{
+  "schema": "hearthline.pair-static.v1",
+  "pair_static_id": "UNBOUND",
+  "predecessor_pair_static_id": null,
+  "pair_id": "UNBOUND",
+  "task_id": "UNBOUND",
+  "source_statics": ["UNBOUND-A", "UNBOUND-B"],
+  "comparison_class": "INSUFFICIENT_FOR_COMPARISON",
+  "agreements": [],
+  "differences": [],
+  "shared_dependencies": [],
+  "estimates": {
+    "spark_a": null,
+    "spark_b": null,
+    "pooling_rule": "NONE"
+  },
+  "recommended_discriminating_action": null,
+  "unresolved": [],
+  "claim_ceiling": "This Pair Static compares two source records without merging them. It does not make the sources independent, average their estimates, choose an action, or authorize an effect."
+}

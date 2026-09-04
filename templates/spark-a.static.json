@@ -1,0 +1,16 @@
+{
+  "claims": [],
+  "dependencies": [],
+  "lens": "objects-coordinates-transitions-controls",
+  "observations": [],
+  "proposed_tests": [],
+  "residuals": [
+    "No task snapshot supplied."
+  ],
+  "schema": "hearthline.spark-static.v1",
+  "source_snapshot": [],
+  "spark_id": "SPARK-A",
+  "static_id": "STATIC-A-TEMPLATE",
+  "status": "OPEN",
+  "task_id": "TASK-UNBOUND"
+}

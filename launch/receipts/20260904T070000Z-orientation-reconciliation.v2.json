@@ -1,0 +1,70 @@
+{
+  "schema": "hearthline.arc3.orientation-reconciliation-index.v2",
+  "reconciliation_id": "ARC3-ORIENTATION-RECONCILIATION-20260904",
+  "recorded_at": "2026-09-04T07:00:00Z",
+  "predecessors": {
+    "legacy_status": {
+      "path": "launch/status.json",
+      "sha256": "21e907e181d24fda6e392a2d6ed5209f033d2b2383396d3c5edb8944e6963adb",
+      "treatment": "preserved historical projection; superseded for current status"
+    },
+    "pre_astra_lineage_seal": {
+      "path": "launch/receipts/20260904T001827Z-pre-astra-lineage-seal.json",
+      "sha256": "375aa8b834a5b17fb1dc5e74883160b1266a441df86aa6c385a076a8434cec8f",
+      "treatment": "sealed bytes remain authoritative for their exact parent tree and are not edited"
+    }
+  },
+  "admitted_receipts": [
+    {
+      "path": "launch/receipts/orientation/ORIENT-0001.reconciled.v2.json",
+      "sha256": "ee64e2956f73f51bb783b032afa4aa8610c2c8a3e0c15d04a212b28240165bd1"
+    },
+    {
+      "path": "launch/receipts/orientation/ORIENT-0002.reconciled.v2.json",
+      "sha256": "051a70d16917cac8d397c113b708e0800dd04ff95ee48aa2ff81239b8879da42"
+    },
+    {
+      "path": "launch/receipts/orientation/ORIENT-0003.reconciled.v2.json",
+      "sha256": "b924d0a90278ee8f5c2c388d57cabae752dc8c787c8286332de7d6cba86cb127"
+    },
+    {
+      "path": "launch/receipts/orientation/ORIENT-0004.reconciled.v2.json",
+      "sha256": "ed747e248f030de4bfccd8380787063c571867335bbf88c809e32e83913699e0"
+    },
+    {
+      "path": "launch/receipts/orientation/ORIENT-0005.reconciled.v2.json",
+      "sha256": "adf3db1c92ec8b621f6fa44a2a8bcdffb695fdc553551f66c2ea515f5f2c4edf"
+    }
+  ],
+  "verified_totals": {
+    "workflow_runs": 5,
+    "artifacts": 5,
+    "public_arc_contacts": 5,
+    "requested_action_ceiling": 27,
+    "observed_environment_actions": 27,
+    "captured_frame_records": 36,
+    "scorecards_opened": 5,
+    "scorecard_close_calls_returning_records": 5,
+    "kaggle_contacts": 0,
+    "paid_provider_calls": 0,
+    "private_holdout_accesses": 0,
+    "maximum_levels_completed_in_one_run": 1,
+    "maximum_score_in_one_run": 3.571428571428571
+  },
+  "disposition": {
+    "run_grant_2026_09_03": "EXPIRED_AND_SPENT",
+    "orientation_requests_0001_through_0005": "IMMUTABLE_EXECUTED_HISTORY",
+    "automatic_replay_authority": false,
+    "competition_or_kaggle_authority": false,
+    "new_contact_requires_fresh_exact_human_grant": true
+  },
+  "admission_method": {
+    "archive_sha256_verified": true,
+    "source_receipt_sha256_verified": true,
+    "artifact_and_tracked_request_semantic_equality_verified": true,
+    "raw_artifacts_committed": false,
+    "derived_fields_only": true
+  },
+  "correction": "The legacy zero-count status and pre-Astra sealed projection were accurate records of the bytes they bind but did not include five earlier same-branch public orientation runs. This append-only successor reconciles those runs without rewriting either predecessor.",
+  "claim_ceiling": "The totals are a reconciliation of five verified anonymous public practice receipts. They are not five competition submissions, not proof of a complete ls20 solution, and not permission to contact ARC or Kaggle again."
+}

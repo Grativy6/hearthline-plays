@@ -1,0 +1,20 @@
+{
+  "schema": "hearthline.arc3-orientation-request.v1",
+  "request_id": "ORIENT-0002",
+  "game_id": "ls20",
+  "seed": 0,
+  "mode": "PUBLIC_ORIENTATION",
+  "source_world_model": "practice/ls20/world-model.json",
+  "actions": [
+    {
+      "action": "ACTION1",
+      "data": {},
+      "hypothesis": "The small white asymmetric cross near (21,32) is the controlled player state, and ACTION1 is the public interface's semantically up-mapped action.",
+      "expected_observable": "The white cross should translate upward while the room, blue structures, orange cap, and UI remain fixed; level completion should remain zero."
+    }
+  ],
+  "max_actions": 1,
+  "close_scorecard": true,
+  "grant_ref": "launch/RUN_GRANT_2026-09-03.md",
+  "status": "AUTHORIZED"
+}

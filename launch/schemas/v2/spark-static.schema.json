@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/launch/schemas/v2/spark-static.schema.json",
+  "title": "Hearthline ARC Spark Static v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "static_id", "predecessor_static_id", "task_id", "role_id",
+    "lens", "observation_refs", "dependencies", "claims",
+    "candidate_world_model", "recommendation", "residuals", "status",
+    "claim_ceiling", "migration"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline.arc3.spark-static.v2"},
+    "static_id": {"type": "string", "minLength": 1},
+    "predecessor_static_id": {"type": ["string", "null"]},
+    "task_id": {"type": "string", "minLength": 1},
+    "role_id": {"type": "string", "minLength": 1},
+    "lens": {"type": "string", "minLength": 1},
+    "observation_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "epistemic_status", "proposition", "value", "evidence_refs", "assumptions", "confidence"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "epistemic_status": {"enum": ["DIRECT_OBSERVATION", "DERIVED", "HYPOTHESIS", "ESTIMATE", "UNRESOLVED"]},
+          "proposition": {"type": "string", "minLength": 1},
+          "value": {},
+          "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "assumptions": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "candidate_world_model": {"type": "object"},
+    "recommendation": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action", "data", "rationale", "expected_observable", "authorization"],
+          "properties": {
+            "action": {"type": "string", "minLength": 1},
+            "data": {"type": "object"},
+            "rationale": {"type": "string", "minLength": 1},
+            "expected_observable": {"type": "string", "minLength": 1},
+            "authorization": {"const": "NOT_AUTHORIZED"}
+          }
+        }
+      ]
+    },
+    "residuals": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "status": {"enum": ["OPEN", "RETURNED", "BLOCKED", "UNRESOLVED"]},
+    "claim_ceiling": {"type": "string", "minLength": 1},
+    "migration": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_schema", "source_dialect", "source_sha256", "direction"],
+          "properties": {
+            "source_schema": {"const": "hearthline.spark-static.v1"},
+            "source_dialect": {"enum": ["root-v1", "launch-v1"]},
+            "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "direction": {"const": "ONE_WAY_V1_TO_V2"}
+          }
+        }
+      ]
+    }
+  }
+}

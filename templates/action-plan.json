@@ -1,0 +1,13 @@
+{
+  "actions": [],
+  "game_id": "ls20",
+  "plan_id": "LS20-PLAN-0000",
+  "schema": "hearthline.arc3-action-plan.v1",
+  "status": "PROPOSED",
+  "stop_rules": [
+    "Stop on WIN or GAME_OVER.",
+    "Stop if action outcome is unknown.",
+    "Stop before any non-public surface."
+  ],
+  "world_model_ref": "practice/ls20/world-model.json"
+}

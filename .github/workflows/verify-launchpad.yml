@@ -1,24 +1,24 @@
-name: Verify research station
+name: Verify ARC launchpad
 
 on:
   push:
+    branches:
+      - arc-agi/titles/arc-agi-3-hearthline-launch-20260903
   pull_request:
 
 permissions:
   contents: read
 
 jobs:
-  guard-repository:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Check out complete ancestry
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
       - name: Materialize and run the exact staged repository guard
@@ -35,7 +35,8 @@ jobs:
           environment.update({
               "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull,
               "GIT_NO_LAZY_FETCH": "1", "GIT_NO_REPLACE_OBJECTS": "1",
-              "GIT_OPTIONAL_LOCKS": "0", "GIT_TERMINAL_PROMPT": "0",
+              "GIT_OPTIONAL_LOCKS": "0",
+              "GIT_TERMINAL_PROMPT": "0",
           })
           git = ["git", "-c", "core.fsmonitor=false", "-c", f"core.hooksPath={os.devnull}"]
           entry = subprocess.check_output(
@@ -71,40 +72,9 @@ jobs:
               raise SystemExit("materialized repository guard has unsafe identity")
           PY
           python -I -B "$RUNNER_TEMP/hearthline-repository-guard.py" --root "$GITHUB_WORKSPACE"
-
-  verify:
-    needs: guard-repository
-    name: Python 3.12 on ubuntu-latest
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out complete ancestry
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: "3.12"
-      - name: Assert Linux/POSIX no-follow directory-descriptor support
-        run: |
-          python -I -B - <<'PY'
-          import os
-
-          required = (os.open, os.mkdir, os.rename, os.stat, os.unlink, os.rmdir)
-          supported = (
-              os.name == "posix"
-              and hasattr(os, "O_DIRECTORY")
-              and hasattr(os, "O_NOFOLLOW")
-              and all(function in os.supports_dir_fd for function in required)
-          )
-          if not supported:
-              raise SystemExit(
-                  "research-station verification requires Linux/POSIX "
-                  "no-follow directory-descriptor support"
-              )
-          PY
-      - name: Verify station offline
-        run: python -I -B tools/verify_station.py
-      - name: Run unit tests
-        run: python -I -B -m unittest discover -s tests -v
+      - name: Compile
+        run: python -I -B -m py_compile tools/validate_launchpad.py tools/pair_static.py tools/orientation_archive_guard.py tests/test_launchpad.py
+      - name: Validate structure
+        run: python -I -B tools/validate_launchpad.py
+      - name: Run inherited station and launchpad tests
+        run: python -I -B -m unittest discover -s tests -p "test_*.py" -v

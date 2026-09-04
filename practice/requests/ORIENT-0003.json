@@ -1,0 +1,21 @@
+{
+  "schema": "hearthline.arc3-orientation-request.v1",
+  "request_id": "ORIENT-0003",
+  "game_id": "ls20",
+  "seed": 0,
+  "mode": "PUBLIC_ORIENTATION",
+  "source_world_model": "practice/ls20/world-model.json",
+  "actions": [
+    {"action": "ACTION1", "data": {}, "hypothesis": "The orange-blue 5x5 piece is the controlled object and translates one five-pixel cell upward.", "expected_observable": "The piece moves from rows 45-49 to 40-44."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The right side of the central obstruction is traversable upward.", "expected_observable": "The piece advances to rows 35-39 without changing shape."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The piece can continue along the right edge of the central obstruction.", "expected_observable": "The piece advances to rows 30-34."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The upper crossbar is traversable at x=34..38.", "expected_observable": "The piece advances to rows 25-29."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The narrow upper neck admits the piece.", "expected_observable": "The piece advances into rows 20-24."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The neck connects to the upper chamber.", "expected_observable": "The piece advances into rows 15-19."},
+    {"action": "ACTION1", "data": {}, "hypothesis": "The blue marker in the upper chamber is an exit, target, or interaction surface.", "expected_observable": "Contact either completes the level or yields a diagnostic state change."}
+  ],
+  "max_actions": 7,
+  "close_scorecard": true,
+  "grant_ref": "launch/RUN_GRANT_2026-09-03.md",
+  "status": "AUTHORIZED"
+}

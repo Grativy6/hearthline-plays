@@ -1,0 +1,70 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/orientation-receipt.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "action_results": {
+      "type": "array"
+    },
+    "contact_attempted": {
+      "type": "boolean"
+    },
+    "contact_status": {
+      "enum": [
+        "CONTACTED",
+        "UNKNOWN"
+      ]
+    },
+    "finished_at": {
+      "type": "string"
+    },
+    "frame_records": {
+      "type": "array"
+    },
+    "game_id": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "residuals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "const": "hearthline.arc3-orientation-receipt.v1"
+    },
+    "scorecard": {},
+    "started_at": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ORIENTATION_COMPLETE",
+        "WIN",
+        "GAME_OVER",
+        "BLOCKED",
+        "ERROR",
+        "UNKNOWN_OUTCOME"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "request_id",
+    "game_id",
+    "started_at",
+    "finished_at",
+    "contact_status",
+    "action_results",
+    "frame_records",
+    "scorecard",
+    "status",
+    "residuals",
+    "contact_attempted"
+  ],
+  "title": "Hearthline public ARC-AGI-3 orientation receipt v1",
+  "type": "object"
+}

@@ -1,0 +1,112 @@
+{
+  "schema": "hearthline.arc3.compact-context.v2",
+  "context_id": "ARC3-CONTEXT-0001",
+  "source_lock": "launch/source-lock.v3.json",
+  "common_safety_shell": {
+    "ablatable": false,
+    "invariants": [
+      "environment observation remains canonical for environment state",
+      "direct observation, derived state, hypothesis, plan, action, and outcome remain distinct",
+      "no role can authorize its own external effect",
+      "Kaggle staging and competition ignition remain separate human gates",
+      "a disabled mechanism cannot silently fall back to a broader mechanism"
+    ]
+  },
+  "roles": [
+    {
+      "role_id": "A0BK_ADVISORY_GATE",
+      "default_enabled": false,
+      "inputs": ["candidate identity", "human grant", "scope", "resource budget", "prior disposition"],
+      "output": "advisory pass/block reasons",
+      "forbidden_outputs": ["credential", "action", "self-authorization"],
+      "ablation": "Remove advisory account/witness checks while retaining the common two-gate hard shell."
+    },
+    {
+      "role_id": "FBT_CONTINUATION_SPLIT",
+      "default_enabled": false,
+      "inputs": ["working state", "typed trace", "version and epoch"],
+      "output": "continue/reopen proposal with divergence residual",
+      "forbidden_outputs": ["authority renewal", "trace overwrite", "hidden cached state as evidence"],
+      "ablation": "Reconstruct only from the typed trace; discard mutable continuation state."
+    },
+    {
+      "role_id": "GOLD_1_PLUS_5_LENS",
+      "default_enabled": false,
+      "inputs": ["one common observation projection", "five declared comparison views"],
+      "output": "six separately labeled proposals and route residuals",
+      "forbidden_outputs": ["pooled confidence", "privileged geometry claim", "action authority"],
+      "ablation": "Use the common projection and baseline geometry only."
+    },
+    {
+      "role_id": "PAL_ROLE_LEDGER",
+      "default_enabled": false,
+      "inputs": ["role-typed events", "grant epoch", "residuals"],
+      "output": "partitioned custody and reopening projection",
+      "forbidden_outputs": ["authority backflow", "merged role identity", "truth certification"],
+      "ablation": "Keep the common event schema without PAL-derived role annotations."
+    },
+    {
+      "role_id": "SINGLE_CUT_CHECKPOINT",
+      "default_enabled": false,
+      "inputs": ["action-bit trace", "schedule cursor", "declared work projection"],
+      "output": "exact checkpoint capsule and typed re-entry comparison",
+      "forbidden_outputs": ["progress claim from heartbeat", "new budget", "unbounded correctness claim"],
+      "ablation": "Restart from the ordinary immutable event prefix without a transport capsule."
+    },
+    {
+      "role_id": "DISTINCTION_GROUPER",
+      "default_enabled": false,
+      "inputs": ["candidate statements and evidence handles"],
+      "output": "groups: direct, derived, hypothesis, unresolved, plan-only",
+      "forbidden_outputs": ["cross-group promotion", "evidence fabrication", "confidence averaging"],
+      "ablation": "Retain the fixed common-shell field types without higher-order grouping."
+    },
+    {
+      "role_id": "ADVANCE_ATOMIC_PROMOTION",
+      "default_enabled": false,
+      "inputs": ["one named candidate field", "frozen promotion rule", "complete supporting evidence set"],
+      "output": "either one complete successor field or no promotion plus residual",
+      "forbidden_outputs": ["partial in-place mutation", "promotion from a plan", "retroactive source edit"],
+      "ablation": "Disable promotion entirely; keep every candidate in hypotheses."
+    },
+    {
+      "role_id": "GAME_EMBODIMENT_BOUNDARY",
+      "default_enabled": false,
+      "inputs": ["canonical FrameData heartbeat", "bounded intention", "available GameAction set"],
+      "output": "one controller action proposal or stop",
+      "forbidden_outputs": ["world-state overwrite", "new objective", "computer-wide control", "personhood claim"],
+      "ablation": "Use the deterministic starter baseline under the same action/reset ceiling."
+    }
+  ],
+  "frozen_profiles": {
+    "A0_FULL": [
+      "A0BK_ADVISORY_GATE", "FBT_CONTINUATION_SPLIT", "GOLD_1_PLUS_5_LENS",
+      "PAL_ROLE_LEDGER", "SINGLE_CUT_CHECKPOINT", "DISTINCTION_GROUPER",
+      "ADVANCE_ATOMIC_PROMOTION", "GAME_EMBODIMENT_BOUNDARY"
+    ],
+    "A0_NO_A0BK": [
+      "FBT_CONTINUATION_SPLIT", "GOLD_1_PLUS_5_LENS", "PAL_ROLE_LEDGER",
+      "SINGLE_CUT_CHECKPOINT", "DISTINCTION_GROUPER", "ADVANCE_ATOMIC_PROMOTION",
+      "GAME_EMBODIMENT_BOUNDARY"
+    ],
+    "A0_NO_FBT_CONTINUATION": [
+      "A0BK_ADVISORY_GATE", "GOLD_1_PLUS_5_LENS", "PAL_ROLE_LEDGER",
+      "SINGLE_CUT_CHECKPOINT", "DISTINCTION_GROUPER", "ADVANCE_ATOMIC_PROMOTION",
+      "GAME_EMBODIMENT_BOUNDARY"
+    ],
+    "A0_NO_GOLD": [
+      "A0BK_ADVISORY_GATE", "FBT_CONTINUATION_SPLIT", "PAL_ROLE_LEDGER",
+      "SINGLE_CUT_CHECKPOINT", "DISTINCTION_GROUPER", "ADVANCE_ATOMIC_PROMOTION",
+      "GAME_EMBODIMENT_BOUNDARY"
+    ],
+    "A0_MINIMAL": []
+  },
+  "measurement_policy": {
+    "profile_must_be_frozen_before_observation": true,
+    "separate_roots_and_ledgers": true,
+    "same_public_or_synthetic_fixture_set": true,
+    "no_private_holdout_tuning": true,
+    "no_mechanism_credit_without_isolating_comparison": true
+  },
+  "claim_ceiling": "This is a preregistered role/ablation map, not an implementation result, ARC score, source-conformance claim, or authorization."
+}

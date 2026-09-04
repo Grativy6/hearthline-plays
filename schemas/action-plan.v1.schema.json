@@ -1,0 +1,80 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/action-plan.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "ACTION1",
+              "ACTION2",
+              "ACTION3",
+              "ACTION4",
+              "ACTION5",
+              "ACTION6",
+              "ACTION7"
+            ]
+          },
+          "data": {
+            "type": "object"
+          },
+          "expected_observable": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "hypothesis",
+          "expected_observable"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "game_id": {
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "hearthline.arc3-action-plan.v1"
+    },
+    "status": {
+      "enum": [
+        "PROPOSED",
+        "AUTHORIZED",
+        "EXECUTED",
+        "SUPERSEDED",
+        "BLOCKED"
+      ]
+    },
+    "stop_rules": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "world_model_ref": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "plan_id",
+    "game_id",
+    "world_model_ref",
+    "actions",
+    "stop_rules",
+    "status"
+  ],
+  "title": "Hearthline explicit ARC action plan v1",
+  "type": "object"
+}

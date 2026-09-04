@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import datetime as _datetime
 import json
+import os
 import re
 import subprocess
 import sys
@@ -178,11 +179,24 @@ def _reject_duplicate_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
+def _reject_nonfinite(value: str) -> None:
+    raise VerificationError(f"non-finite JSON number is forbidden: {value}")
+
+
+def _parse_finite_float(value: str) -> float:
+    parsed = float(value)
+    if parsed == float("inf") or parsed == float("-inf"):
+        _reject_nonfinite(value)
+    return parsed
+
+
 def loads_strict_json(text: str, label: str = "<memory>") -> Any:
     try:
         return json.loads(
             text,
             object_pairs_hook=_reject_duplicate_pairs,
+            parse_constant=_reject_nonfinite,
+            parse_float=_parse_finite_float,
         )
     except VerificationError:
         raise
@@ -919,15 +933,38 @@ def validate_repository_hygiene(root: Path) -> None:
 
 
 def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    environment = {
+        key: value for key, value in os.environ.items()
+        if not key.startswith("GIT_")
+    }
+    environment.update({
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_GLOBAL": os.devnull,
+        "GIT_NO_LAZY_FETCH": "1",
+        "GIT_NO_REPLACE_OBJECTS": "1",
+        "GIT_OPTIONAL_LOCKS": "0",
+        "GIT_TERMINAL_PROMPT": "0",
+    })
     command = [
         "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        f"core.hooksPath={os.devnull}",
         "-c",
         f"safe.directory={root.resolve().as_posix()}",
         "-C",
         str(root.resolve()),
         *args,
     ]
-    return subprocess.run(command, capture_output=True, text=True, encoding="utf-8", check=False)
+    return subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+        env=environment,
+    )
 
 
 def validate_git_anchor(root: Path) -> None:

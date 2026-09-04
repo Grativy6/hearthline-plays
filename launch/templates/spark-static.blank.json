@@ -1,0 +1,15 @@
+{
+  "schema": "hearthline.spark-static.v1",
+  "static_id": "UNBOUND",
+  "predecessor_static_id": null,
+  "task_id": "UNBOUND",
+  "spark_id": "UNBOUND",
+  "lens": "UNBOUND",
+  "observation_refs": [],
+  "claims": [],
+  "candidate_world_model": {},
+  "proposed_action": null,
+  "predicted_consequence": null,
+  "residuals": [],
+  "claim_ceiling": "This Static is compact source-linked representation only. It is not hidden reasoning, independent corroboration, environment authority, or permission to act."
+}

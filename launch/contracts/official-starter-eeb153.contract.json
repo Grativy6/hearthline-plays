@@ -1,0 +1,53 @@
+{
+  "schema": "hearthline.arc3.official-starter-contract.v1",
+  "source": {
+    "repository": "arcprize/ARC-AGI-3-Kaggle-Starter",
+    "commit": "eeb1535404f321d280a8f9194bbc1d7aca5f05fc",
+    "tree": "332ff438d9b092c95e58a07eace6194379de06b4",
+    "build_script_path": "scripts/build_notebook.py",
+    "build_script_sha256": "8c9961bc3a9006c0f187392426fc9a659176362b54592c4aad5b6b1a3f3da318",
+    "relationship": "ordered public interoperability projection; implementation is independently structured and no upstream file is vendored",
+    "license_observation": "No LICENSE or NOTICE file was observed in the pinned starter tree; no license grant is inferred. See THIRD_PARTY_NOTICES.md."
+  },
+  "projection": {
+    "nbformat": [4, 4],
+    "cell_roles": ["markdown", "install", "write_agent", "competition_rerun", "dummy_output"],
+    "kaggle": {
+      "internet_enabled": false,
+      "language": "python",
+      "source_type": "notebook",
+      "accelerator_gpu_coherent": true
+    },
+    "install": {
+      "installer": "pip",
+      "no_index": true,
+      "wheelhouse": "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels",
+      "packages": ["arc-agi", "python-dotenv"]
+    },
+    "agent_temp_path": "/tmp/my_agent.py",
+    "rerun_signal": "KAGGLE_IS_COMPETITION_RERUN",
+    "gateway": "http://gateway:8001/api/games",
+    "framework_source": "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/ARC-AGI-3-Agents",
+    "framework_target": "/kaggle/working/ARC-AGI-3-Agents",
+    "registered_agent": {"key": "myagent", "class": "MyAgent"},
+    "runtime_env": {
+      "SCHEME": "http",
+      "HOST": "gateway",
+      "PORT": "8001",
+      "ARC_API_KEY": "test-key-123",
+      "ARC_BASE_URL": "http://gateway:8001/",
+      "OPERATION_MODE": "online",
+      "ENVIRONMENTS_DIR": "",
+      "RECORDINGS_DIR": "/kaggle/working/server_recording"
+    },
+    "launch_argv": ["python", "main.py", "--agent", "myagent"],
+    "run_urls": ["http://gateway:8001/", "http://gateway:8001/api/games"],
+    "dummy": {
+      "rerun_signal": "KAGGLE_IS_COMPETITION_RERUN",
+      "data": [["1_0", "1", true, 1]],
+      "columns": ["row_id", "game_id", "end_of_game", "score"],
+      "output": "/kaggle/working/submission.parquet"
+    }
+  },
+  "claim_ceiling": "Compatibility with the pinned public starter structure only; no Kaggle runtime, private gateway, scorer, or submission result."
+}

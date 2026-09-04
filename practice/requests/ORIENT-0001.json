@@ -1,0 +1,13 @@
+{
+  "schema": "hearthline.arc3-orientation-request.v1",
+  "request_id": "ORIENT-0001",
+  "game_id": "ls20",
+  "seed": 0,
+  "mode": "PUBLIC_ORIENTATION",
+  "source_world_model": "practice/ls20/world-model.json",
+  "actions": [],
+  "max_actions": 0,
+  "close_scorecard": true,
+  "grant_ref": "launch/RUN_GRANT_2026-09-03.md",
+  "status": "AUTHORIZED"
+}

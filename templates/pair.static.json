@@ -1,0 +1,21 @@
+{
+  "agreements": [],
+  "disagreements": [],
+  "estimates": [],
+  "load_bearing_seam": null,
+  "pair_static_id": "PAIR-STATIC-TEMPLATE",
+  "pooling_rule": "NONE",
+  "proposed_discriminating_test": null,
+  "residuals": [
+    "Source Statics are empty templates."
+  ],
+  "schema": "hearthline.pair-static.v1",
+  "shared_dependencies": [],
+  "source_statics": [
+    "STATIC-A-TEMPLATE",
+    "STATIC-B-TEMPLATE"
+  ],
+  "status": "UNRESOLVED",
+  "task_id": "TASK-UNBOUND",
+  "unique_claims": []
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/launch/schemas/pair-static.v1.schema.json",
+  "title": "Hearthline Pair Static v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "pair_static_id",
+    "pair_id",
+    "task_id",
+    "source_statics",
+    "comparison_class",
+    "agreements",
+    "differences",
+    "shared_dependencies",
+    "estimates",
+    "recommended_discriminating_action",
+    "unresolved",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline.pair-static.v1"},
+    "pair_static_id": {"type": "string", "minLength": 1},
+    "predecessor_pair_static_id": {"type": ["string", "null"]},
+    "pair_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "source_statics": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "comparison_class": {
+      "enum": [
+        "AGREEMENT_WITH_SHARED_SUPPORT",
+        "AGREEMENT_WITH_DEPENDENT_SUPPORT",
+        "COMPATIBLE_DIFFERENT_RESOLUTIONS",
+        "CONFLICTING_CONDITIONAL_ESTIMATES",
+        "CONFLICTING_WORLD_MODELS",
+        "SAME_ACTION_DIFFERENT_REASONS",
+        "INSUFFICIENT_FOR_COMPARISON"
+      ]
+    },
+    "agreements": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "differences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "spark_a", "spark_b"],
+        "properties": {
+          "key": {"type": "string", "minLength": 1},
+          "spark_a": {},
+          "spark_b": {}
+        }
+      }
+    },
+    "shared_dependencies": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "estimates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spark_a", "spark_b", "pooling_rule"],
+      "properties": {
+        "spark_a": {},
+        "spark_b": {},
+        "pooling_rule": {"const": "NONE"}
+      }
+    },
+    "recommended_discriminating_action": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action", "reason", "expected_information_gain"],
+          "properties": {
+            "action": {"type": "string", "minLength": 1},
+            "data": {"type": "object"},
+            "reason": {"type": "string", "minLength": 1},
+            "expected_information_gain": {
+              "enum": ["qualitative-low", "qualitative-medium", "qualitative-high"]
+            }
+          }
+        },
+        {"type": "null"}
+      ]
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "claim_ceiling": {"type": "string", "minLength": 1}
+  }
+}

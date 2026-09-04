@@ -1,0 +1,113 @@
+{
+  "$id": "https://github.com/Grativy6/hearthline-plays/schemas/pair-static.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agreements": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "disagreements": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "estimates": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "load_bearing_seam": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pair_static_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "pooling_rule": {
+      "const": "NONE"
+    },
+    "proposed_discriminating_test": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "residuals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema": {
+      "const": "hearthline.pair-static.v1"
+    },
+    "shared_dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "source_statics": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "RETURNED",
+        "UNRESOLVED",
+        "BLOCKED"
+      ]
+    },
+    "task_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unique_claims": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "pair_static_id",
+    "task_id",
+    "source_statics",
+    "agreements",
+    "disagreements",
+    "unique_claims",
+    "shared_dependencies",
+    "estimates",
+    "pooling_rule",
+    "load_bearing_seam",
+    "proposed_discriminating_test",
+    "residuals",
+    "status"
+  ],
+  "title": "Hearthline Pair Static v1",
+  "type": "object"
+}
