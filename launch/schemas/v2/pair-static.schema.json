@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/launch/schemas/v2/pair-static.schema.json",
+  "title": "Hearthline ARC Pair Static v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "pair_static_id", "predecessor_pair_static_id", "pair_id",
+    "task_id", "source_statics", "comparison_class", "agreements",
+    "differences", "unique_claims", "shared_dependencies",
+    "conditional_estimates", "pooling_rule", "recommended_discriminating_action",
+    "unresolved", "status", "claim_ceiling"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline.arc3.pair-static.v2"},
+    "pair_static_id": {"type": "string", "minLength": 1},
+    "predecessor_pair_static_id": {"type": ["string", "null"]},
+    "pair_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "source_statics": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "comparison_class": {"enum": ["AGREEMENT_WITH_DEPENDENCE_UNRESOLVED", "CONFLICTING_CONDITIONAL_ACCOUNTS", "INSUFFICIENT_FOR_COMPARISON"]},
+    "agreements": {"type": "array", "items": {"type": "object"}},
+    "differences": {"type": "array", "items": {"type": "object"}},
+    "unique_claims": {"type": "array", "items": {"type": "object"}},
+    "shared_dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "conditional_estimates": {"type": "array", "items": {"type": "object"}},
+    "pooling_rule": {"const": "NONE"},
+    "recommended_discriminating_action": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action", "data", "rationale", "expected_information_gain", "authorization"],
+          "properties": {
+            "action": {"type": "string", "minLength": 1},
+            "data": {"type": "object"},
+            "rationale": {"type": "string", "minLength": 1},
+            "expected_information_gain": {"enum": ["QUALITATIVE_LOW", "QUALITATIVE_MEDIUM", "QUALITATIVE_HIGH"]},
+            "authorization": {"const": "NOT_AUTHORIZED"}
+          }
+        }
+      ]
+    },
+    "unresolved": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["RETURNED", "UNRESOLVED", "BLOCKED"]},
+    "claim_ceiling": {"type": "string", "minLength": 1}
+  }
+}

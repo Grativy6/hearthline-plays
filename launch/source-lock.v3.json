@@ -1,0 +1,244 @@
+{
+  "schema": "hearthline-plays.arc3-launch-source-lock.v3",
+  "recorded_at": "2026-09-04T07:30:00Z",
+  "status": "OFFLINE_CANDIDATE_PREPARATION_NO_EFFECT_AUTHORITY",
+  "steward": "Christopher D. Pang",
+  "predecessor": {
+    "path": "launch/source-lock.v2.json",
+    "sha256": "3747d76566df1415547ede25b541141063e10120e00076e8961a4debaaa5922a",
+    "treatment": "historical public-orientation lock; preserved"
+  },
+  "candidate_base": {
+    "repository": "Grativy6/hearthline-plays",
+    "branch": "codex/arc-agi-3-readiness-20260904",
+    "commit": "90c23339dd745411e343105678a1cbdd18d3cb54",
+    "tree": "03c72d51edd2ee14989439bc8191059edba809c8",
+    "note": "A packaged candidate must bind its own later commit, tree, agent, notebook, metadata, and verification receipt hashes."
+  },
+  "official_software": [
+    {
+      "repository": "arcprize/ARC-AGI-3-Kaggle-Starter",
+      "role": "official ARC Prize 2026 Kaggle starter contract",
+      "commit": "eeb1535404f321d280a8f9194bbc1d7aca5f05fc",
+      "tree": "332ff438d9b092c95e58a07eace6194379de06b4",
+      "inspected_file_bindings": {
+        "README.md": {"git_blob": "73e58bc5d45ad3623a2edea6931bf68ab6ceb393", "sha256": "547bacff77fb7eb95293a7217b82ea9be375d0524fed6a3ebdd1d6d853a7dd77"},
+        "agent/my_agent.py": {"git_blob": "ae583247bd1bf7f238097ba07b67fa84fe3f8d13", "sha256": "31f86feecd0d6f91d0e465cb8881f893e41681c792b1e13e3685cf56984e0115"},
+        "scripts/build_notebook.py": {"git_blob": "e5c13e87fac5f6a3acfe2d9a32bf621a16407e16", "sha256": "8c9961bc3a9006c0f187392426fc9a659176362b54592c4aad5b6b1a3f3da318"},
+        "Makefile": {"git_blob": "00ffc2524e01d74066dbfa6479bc67c747ba6011", "sha256": "e56cf39d107b3131c25bbc4c99868be097235e0cd5f18d27bcd6efc656f38caf"},
+        "notebooks/kernel-metadata.json": {"git_blob": "58c7ecc70b47f06461feed860f78aab87bb1ea48", "sha256": "0a6e53d06ac725888bb0b8190c875dadd6bbb7d1ced062cee5d9b4a27326f368"}
+      },
+      "contract": {
+        "python_minor": "3.12",
+        "agent_base": "agents.agent.Agent",
+        "agent_class": "MyAgent",
+        "required_methods": ["is_done(frames, latest_frame)", "choose_action(frames, latest_frame)"],
+        "competition_rerun_signal": "KAGGLE_IS_COMPETITION_RERUN",
+        "output": "/kaggle/working/submission.parquet",
+        "internet_enabled": false
+      },
+      "upstream_file_vendored": false,
+      "interoperability_literals_reexpressed": true,
+      "license_or_notice_file_observed_at_pin": false,
+      "licensing_disposition": "No LICENSE or NOTICE file was present in the inspected pinned tree. This repository does not infer a license grant. It independently re-expresses the minimal public notebook interface, fixed paths, registry names, and gateway settings needed for compatibility; see THIRD_PARTY_NOTICES.md.",
+      "relationship": "pinned contract inspiration and independently structured compatible implementation"
+    },
+    {
+      "repository": "arcprize/ARC-AGI",
+      "role": "official ARC-AGI toolkit",
+      "commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+      "tree": "9ee140e4183df0df109cec50b7cd0d2531c47168",
+      "version": "0.9.9",
+      "bytes_copied": false,
+      "relationship": "runtime identity only; no current environment contact authorized"
+    },
+    {
+      "repository": "arcprize/ARC-AGI-3-Agents",
+      "role": "official submission agent framework",
+      "commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+      "tree": "6878fdfdd0156059323b541fc229b6329ad4fd28",
+      "inspected_file_bindings": {
+        "agents/agent.py": {"git_blob": "50e3a03652226d2775779bfba90bc745256a44c5", "sha256": "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073"},
+        "agents/recorder.py": {"git_blob": "0d06dc6c346f24311d4be995397555c8e3ab94d0", "sha256": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8"},
+        "agents/swarm.py": {"git_blob": "bb3a376220f636099dd910653db3e1918935f30f", "sha256": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39"},
+        "agents/tracing.py": {"git_blob": "60d13f489ad1a3fa04dc9ff7c8ee6f0f35a175f7", "sha256": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f"},
+        "main.py": {"git_blob": "4a071bc3a4ce1dab94f754a617e5c1e70d9f907b", "sha256": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"}
+      },
+      "license_file_binding": {
+        "path": "LICENSE",
+        "git_blob": "d8e1cd42ac40338c6c76a8a6ac18eea0eaf95fbe",
+        "sha256": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04",
+        "spdx": "MIT",
+        "copyright_notice": "Copyright (c) 2025 ARC Prize"
+      },
+      "runtime_license_preservation": "Kaggle supplies the pinned tree as a platform input; the candidate admits only the five sealed executable files and this exact LICENSE into a fresh, closed writable runtime, then generates its registry, candidate-agent package, and inert environment files.",
+      "repository_fixture": {
+        "path": "tests/fixtures/agents-main-4743e7d0.blob",
+        "sha256": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b",
+        "upstream_git_blob": "4a071bc3a4ce1dab94f754a617e5c1e70d9f907b",
+        "purpose": "non-executable exact-byte fixture for offline Git-blob/SHA-256 pairing regression only",
+        "license_copy": "tests/fixtures/ARC-AGI-3-Agents-LICENSE.txt",
+        "license_copy_sha256": "cd95f6fb04cbe8f172890cf3746bb57295d131eb110bb78c1a0a528ea8acf87d",
+        "license_copy_note": "MIT license text with one terminal POSIX newline"
+      },
+      "bytes_copied": true,
+      "relationship": "frozen candidate framework identity; replaces starter's moving-main ambiguity"
+    },
+    {
+      "repository": "arcprize/arc-agi-3-benchmarking",
+      "role": "current official public developer benchmarking harness",
+      "commit": "1aa78da7e3058e0ead572ede7cd97065d1e5befc",
+      "tree": "8710bf0aaa52396c987fedb9f9340baabfdce034",
+      "bytes_copied": false,
+      "relationship": "design inspection only"
+    },
+    {
+      "repository": "ARCAGI-Labs/arc-agi-3-benchmarking",
+      "role": "historical harness identity retained from v2",
+      "commit": "d7e9a68a001bb95123013384eea287e95e8567e2",
+      "tree": "edc4d813ff11ceff5729527b111f324d5a165849",
+      "bytes_copied": false,
+      "relationship": "historical inspection only; not the current official-org head"
+    },
+    {
+      "repository": "Kaggle/kaggle-api",
+      "role": "current modern Kaggle CLI source identity",
+      "commit": "659469c4185cfca0fb3be01edad6f50277528d9d",
+      "tree": "71ae8e6abf6dc780907416316b68f5315f96b856",
+      "python_floor": "3.11",
+      "bytes_copied": false,
+      "relationship": "identity only; no CLI invocation or credential use in candidate preparation"
+    }
+  ],
+  "competition_contract": {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "live_rules_locator": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3/rules",
+    "inspected_at": "2026-09-04",
+    "authoritative_safe_assumption": {
+      "submissions_per_day": 1,
+      "final_submissions": 2
+    },
+    "known_contradiction": {
+      "starter_and_mirrored_docs_statement": "5 submissions per day",
+      "disposition": "stale for operations; never use the larger number"
+    },
+    "recheck": "A human must re-read the live Kaggle rules immediately before Phase A staging and again before Phase B competition ignition.",
+    "authority_ceiling": "This snapshot is planning evidence, not permission to authenticate, stage, submit, accept terms, or consume an allowance."
+  },
+  "credential_contract": {
+    "token_path": ".kaggle/access_token",
+    "token_environment_name": "KAGGLE_API_TOKEN",
+    "expected_modern_prefix": "KGAT_",
+    "legacy_home_or_ambient_fallback": false,
+    "minimum_posix_mode": "0600",
+    "token_value_may_enter_git_or_ci": false,
+    "credential_use_authorized": false
+  },
+  "dependency_resolution": {
+    "starter_ranges_observed": ["arc-agi>=0.9.6", "kaggle>=2.2", "ARC-AGI-3-Agents moving main"],
+    "required_runtime_versions": {
+      "arc-agi": "0.9.9",
+      "arcengine": "0.9.3"
+    },
+    "runtime_closure_status": "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
+    "candidate_policy": "Source commits above are frozen. Any installed wheel and transitive version must be enumerated in the Gate A stage receipt, then a successor candidate must bind the complete imported distribution and sealed framework-file closure.",
+    "successor_requirement": "Gate B remains unavailable until a post-Stage-A successor source lock records FROZEN_POST_STAGE_SUCCESSOR with the reviewed imported dependency versions and file bindings.",
+    "current_blocker": "RUNTIME_CLOSURE_UNFROZEN: no authenticated Kaggle wheel inventory or staged-runtime receipt exists."
+  },
+  "bounded_context_sources": [
+    {
+      "source_id": "a0bk-v0.10.0",
+      "title": "A0 Software Boundary-Layer Kernel",
+      "doi": "10.5281/zenodo.22168887",
+      "artifact_sha256": "f3b57da98db3b105e6a67b2c76471123365041ce86e53977be5aa7002b84c46a",
+      "license": "CC-BY-4.0",
+      "role": "advisory proposal/control, identity, witness, scope, authority, consequence, resource, and re-entry checks",
+      "default_enabled": false,
+      "residual": "Zenodo metadata reports 0.10 while the source ID and filename report 0.10.0.",
+      "ceiling": "Conceptual advisory context only; no A0BK code or authority crosses."
+    },
+    {
+      "source_id": "strongwiz-v3-clean-boundary-modules",
+      "repository": "Grativy6/strongwiz",
+      "commit": "edc88b80f872f766c22b3a050a7f6837d6e652d8",
+      "tree": "18dd76355decdf8b1e98fff7dffeac222c0b3aa2",
+      "git_blobs": {
+        "src/strongwiz/routing.py": "52fe342094f5d450d3458d24b8a982280c3439ff",
+        "src/strongwiz/accounts.py": "5cc6e8280b0edc362996b44ca5913b7f4bfc3689",
+        "src/strongwiz/feedback.py": "775223ac31fe2e6c27ca312bbb3b8390e5477f15"
+      },
+      "relationship": "design inspection only; no code imported"
+    },
+    {
+      "source_id": "fbt-synthesis-v0.1",
+      "title": "Full Bandwidth Is Not Full Trace: A PAL-FBT Synthesis",
+      "doi": "10.5281/zenodo.22228162",
+      "registry_commit": "f78e95a02fea16a7bd23ac01acbff4040a01bcd6",
+      "registry_tree": "68042cf2a978e55472579058d4aaf57da72a7ed0",
+      "registry_blob": "bd6fa84302d53ea5ae54e5e7ac4bdc3ed8162ed9",
+      "artifact_bytes_admitted": false,
+      "role": "optional working-state versus typed-trace continuation split",
+      "default_enabled": false,
+      "ceiling": "No FBT code, weights, causal trace-fidelity credit, ARC credit, or safety result."
+    },
+    {
+      "source_id": "gold-v0.1",
+      "title": "GOLD: Golden-Oriented Lens Diagram",
+      "doi": "10.5281/zenodo.22236848",
+      "registry_commit": "f78e95a02fea16a7bd23ac01acbff4040a01bcd6",
+      "registry_tree": "68042cf2a978e55472579058d4aaf57da72a7ed0",
+      "registry_blob": "bd6fa84302d53ea5ae54e5e7ac4bdc3ed8162ed9",
+      "artifact_bytes_admitted": false,
+      "role": "optional 1+5 common/comparison geometry lens and residual ledger",
+      "default_enabled": false,
+      "ceiling": "No privileged geometry, universal optimizer, physics, consciousness, PAL-canon change, or authority."
+    },
+    {
+      "source_id": "pal-v2.3",
+      "doi": "10.5281/zenodo.22240134",
+      "artifact_sha256": "5b133741d43ece584caffab1285af8804bfac6699894e92e2e08436b3b337bf1",
+      "license": "CC-BY-4.0",
+      "role": "typed roles, trace conservation, authority ceilings, residuals, local closure, and reopening",
+      "ceiling": "No full-package conformance, truth, independence, or external authority."
+    },
+    {
+      "source_id": "single-cut-transport-v0.2",
+      "doi": "10.5281/zenodo.22239108",
+      "artifact_sha256": "e4b038d4a5e0f638d400af8610fb91373be2a22ec7bebbdb41a4061f85574b57",
+      "verification_bundle_sha256": "dbd4c1f9b916842522b842e3bc57084b02a95a923d68db562a996cd61adda4c8",
+      "license": "CC-BY-4.0",
+      "role": "optional exact checkpoint capsule and typed re-entry",
+      "ceiling": "Finite fixtures are not unbounded proof; heartbeat is not progress; recoverability is not authority."
+    },
+    {
+      "source_id": "hearthline-game-embodiment-blueprint-v0.1",
+      "repository": "Grativy6/hearthline-plays",
+      "commit": "37010b5c775d7e137b957e386fb5b79e7ce96be2",
+      "tree": "83d1dbb911e3ba05fdf5fe7e7e3fdf1e4ca96872",
+      "path": "docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md",
+      "git_blob": "77343fe3de0f73bf1aae28a70b59096e1d78aaee",
+      "sha256": "6987bf9ea516daeb1594e12b99edbfc3798d86b6caacae658c29a4dc5feee863",
+      "license": "CC-BY-4.0",
+      "role": "environment/referee, controller/body, heartbeat/sensory-return, and bounded player-intention separation",
+      "ceiling": "Architecture vocabulary only; no consciousness, permission, optimality, or live-game result."
+    }
+  ],
+  "run_rules": {
+    "offline_by_default": true,
+    "arc_contact_authorized": false,
+    "kaggle_contact_authorized": false,
+    "credential_use_authorized": false,
+    "competition_mode_authorized": false,
+    "paid_provider_calls_authorized": false,
+    "private_holdout_access_authorized": false,
+    "automatic_push_or_submit_permitted": false,
+    "human_gate_a_required_for_private_kernel_staging": true,
+    "human_gate_b_manual_ui_only_for_competition_ignition": true
+  },
+  "residuals": [
+    "FBT and GOLD publication artifact bytes are not admitted locally; their roles remain off-by-default conceptual context through an exact registry identity.",
+    "The official starter uses dependency ranges and a moving Agents main; a later package receipt must bind resolved wheels and the frozen Agents identity.",
+    "Live competition rules are mutable and must be rechecked at both human gates.",
+    "No Kaggle staging, competition rerun, private holdout, or current environment result is represented by this lock."
+  ]
+}

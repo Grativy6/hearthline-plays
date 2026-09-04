@@ -1,29 +1,38 @@
-# Public orientation practice
+# Public orientation practice — historical archive
 
-This directory contains only explicit, replayable public-game requests and admitted summaries.
+**Status: EXPIRED, SPENT, AND NON-EXECUTABLE.** This directory preserves the
+five explicit public-game requests and their admitted summaries as historical
+receipts. They are not replayable instructions. The networked broker was
+deleted, its workflow was retired, and the offline archive guard rejects every
+archived request before any contact could occur.
 
-## Request lifecycle
+## Historical request lifecycle
 
-1. Update the compact world model from a verified prior receipt.
-2. Draft an action plan with a hypothesis and expected observable for each action.
-3. Create one new immutable file under `requests/`.
-4. The networked workflow installs the official ARC-AGI toolkit from exact commit `f12822c4d550121c35a275008d964afbbed47d2f`, uses anonymous public access, replays exactly that request, closes the scorecard, and uploads an artifact.
-5. Inspect the workflow result and artifact.
-6. Admit a concise receipt under `receipts/`; do not rewrite the request.
-7. Create a successor world model and plan.
+The completed 3–4 September 2026 orientation used this lifecycle:
 
-The workflow never invents or selects an action. It refuses actions not available in the returned state. It makes no provider-model call.
+1. Hearthline updated a compact world model from a verified prior receipt.
+2. It drafted an action plan with a hypothesis and expected observable for each action.
+3. It created one immutable request under `requests/`.
+4. The then-authorized networked workflow installed the pinned public toolkit,
+   used anonymous public access, replayed exactly that request, closed the
+   scorecard, and uploaded an artifact.
+5. The returned workflow result and artifact were inspected.
+6. A concise receipt was admitted under `receipts/`; the request remained unchanged.
+7. A successor world model and plan were created.
+
+That lifecycle cannot be restarted by editing a status field or invoking an
+archived file. No current workflow in this repository performs it.
 
 ## First pulse
 
-`ORIENT-0001` should contain zero actions. Its purpose is to establish that the public route is reachable and capture the initial frame without pretending any game rule is known.
+`ORIENT-0001` contained zero actions. Its purpose was to establish that the public route was reachable and capture the initial frame without pretending any game rule was known.
 
 ## Status namespaces
 
-- `request status` records authorization to send an exact sequence.
-- `workflow status` records broker execution.
-- `environment state` is returned by ARC.
-- `world-model status` is Hearthline's current representation.
-- `scorecard status` belongs to the ARC service.
+- `request status` recorded the former authorization to send an exact sequence.
+- `workflow status` recorded historical broker execution.
+- `environment state` was returned by ARC.
+- `world-model status` was Hearthline's representation at that time.
+- `scorecard status` belonged to the ARC service.
 
-No namespace substitutes for another.
+No historical namespace supplies current authority.

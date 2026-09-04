@@ -23,6 +23,7 @@ def load_module(name: str, path: Path):
 
 frame_probe = load_module("frame_probe", TOOLS / "frame_probe.py")
 static_pair = load_module("static_pair", TOOLS / "static_pair.py")
+static_pair_v2 = load_module("static_pair_v2", TOOLS / "static_pair_v2.py")
 orientation_console = load_module(
     "orientation_console", TOOLS / "orientation_console.py"
 )
@@ -69,6 +70,10 @@ class FrameProbeTests(unittest.TestCase):
                 {"from": 1, "to": 0, "count": 1},
             ],
         )
+
+    def test_explicit_background_is_labeled_explicit(self) -> None:
+        summary = frame_probe.summarize_grid([[0, 0], [0, 1]], background=1)
+        self.assertEqual(summary["background_candidate"], {"value": 1, "basis": "explicit"})
 
     def test_rejects_ragged_grid(self) -> None:
         with self.assertRaises(frame_probe.GridError):
@@ -130,6 +135,58 @@ class PairStaticTests(unittest.TestCase):
             static_pair.compile_pair(a, b, "pair-1", "pair-static-1")
 
 
+class PairStaticV2Tests(unittest.TestCase):
+    def make_static(self, static_id: str, role_id: str, value: str) -> dict:
+        return {
+            "schema": "hearthline.arc3.spark-static.v2",
+            "static_id": static_id,
+            "predecessor_static_id": None,
+            "task_id": "task-v2",
+            "role_id": role_id,
+            "lens": "bounded-test",
+            "observation_refs": ["sha256:frame-1"],
+            "dependencies": ["shared-segmentation"],
+            "claims": [{
+                "claim_id": "claim-1",
+                "epistemic_status": "HYPOTHESIS",
+                "proposition": "candidate object identity",
+                "value": value,
+                "evidence_refs": ["sha256:frame-1"],
+                "assumptions": ["palette stable"],
+                "confidence": 0.5,
+            }],
+            "candidate_world_model": {"object": value},
+            "recommendation": None,
+            "residuals": ["identity unresolved"],
+            "status": "UNRESOLVED",
+            "claim_ceiling": "fixture only",
+            "migration": None,
+        }
+
+    def test_v2_pair_retains_conditional_estimates(self) -> None:
+        a = self.make_static("v2-a", "role-a", "red")
+        b = self.make_static("v2-b", "role-b", "blue")
+        pair = static_pair_v2.compile_pair(a, b, "pair-v2", "pair-static-v2")
+        self.assertEqual(pair["schema"], "hearthline.arc3.pair-static.v2")
+        self.assertEqual(pair["pooling_rule"], "NONE")
+        self.assertEqual(len(pair["conditional_estimates"]), 2)
+        self.assertEqual(pair["comparison_class"], "CONFLICTING_CONDITIONAL_ACCOUNTS")
+
+    def test_both_v1_dialects_migrate_to_explicit_v2(self) -> None:
+        paths = [
+            ROOT / "templates" / "spark-a.static.json",
+            ROOT / "launch" / "templates" / "spark-static.blank.json",
+        ]
+        dialects = []
+        for path in paths:
+            raw = path.read_bytes()
+            value = json.loads(raw)
+            migrated = static_pair_v2.migrate_v1_static(value, "0" * 64)
+            static_pair_v2.validate_spark(migrated)
+            dialects.append(migrated["migration"]["source_dialect"])
+        self.assertEqual(dialects, ["root-v1", "launch-v1"])
+
+
 class OrientationPolicyTests(unittest.TestCase):
     def test_calibration_uses_declared_order(self) -> None:
         policy = orientation_console.StateNoveltyPolicy(seed=3)
@@ -177,6 +234,12 @@ class RepositorySurfaceTests(unittest.TestCase):
             "f12822c4d550121c35a275008d964afbbed47d2f",
         )
         self.assertEqual(orientation_console.POLICY_ID, "hearthline-state-novelty-v0.1")
+
+    def test_orientation_console_has_no_effect_adapter(self) -> None:
+        source = (TOOLS / "orientation_console.py").read_text(encoding="utf-8")
+        self.assertEqual(orientation_console.EXECUTION_STATUS, "RETIRED_OFFLINE_ONLY")
+        for forbidden in ("import arc_agi", "OperationMode", "allow-public-contact"):
+            self.assertNotIn(forbidden, source)
 
 
 if __name__ == "__main__":

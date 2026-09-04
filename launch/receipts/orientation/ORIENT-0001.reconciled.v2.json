@@ -1,0 +1,63 @@
+{
+  "schema": "hearthline.arc3.orientation-reconciliation.v2",
+  "reconciliation_id": "ORIENT-0001-RECONCILED-20260904",
+  "admitted_at": "2026-09-04T07:00:00Z",
+  "request": {
+    "request_id": "ORIENT-0001",
+    "path": "practice/requests/ORIENT-0001.json",
+    "commit": "b6fd3036e9fb5733a577d62dcfe556e3175b8333",
+    "git_blob": "779fdadba0e6e0ab036388ab7e1d66e6c2d39a5d",
+    "tracked_sha256": "dc55e78118eda8ca96a9c6842afd9b5f7d4db134ab03a6ae89057ab9f05c2eee",
+    "artifact_copy_sha256": "9f4259a27305f076da9e01d629464e0880018de035a98f841e0b71b3e0b5016b",
+    "semantic_match_verified": true,
+    "requested_action_ceiling": 0
+  },
+  "github_actions": {
+    "workflow_run_id": 33810996581,
+    "workflow_run_url": "https://github.com/Grativy6/hearthline-plays/actions/runs/33810996581",
+    "replay_step_conclusion": "success",
+    "artifact_upload_step_conclusion": "success",
+    "artifact_id": 9914788184,
+    "artifact_size_bytes": 3266,
+    "artifact_archive_sha256": "8dc2a1f6b3ae7ce662ec2eef5c0c91d16715163ef64b94ce874bd0ff389038db"
+  },
+  "source_receipt": {
+    "sha256": "2cc7748a648f525564a184cb8afff7a9b926ff0d0b3d8171ebdc20db30ca23df",
+    "status": "ORIENTATION_COMPLETE",
+    "contact_status": "CONTACTED",
+    "started_at": "2026-09-03T22:01:43.549139+00:00",
+    "finished_at": "2026-09-03T22:01:46.974275+00:00"
+  },
+  "admitted_execution": {
+    "game_id": "ls20",
+    "game_version_id": "ls20-9607627b",
+    "competition_mode": false,
+    "observed_environment_actions": 0,
+    "observed_action_sequence": [],
+    "captured_frame_records": 1,
+    "first_frame_sha256": "f530cf6adb4a6d0fe87baa072ecf62be621169f9ef3b0baf09539904c5f4220f",
+    "last_frame_sha256": "f530cf6adb4a6d0fe87baa072ecf62be621169f9ef3b0baf09539904c5f4220f",
+    "scorecard_close_returned_record": true,
+    "scorecard_total_actions": 0,
+    "scorecard_total_levels_completed": 0,
+    "scorecard_score": 0.0,
+    "resets": 0
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "arc_agi": "0.9.9",
+    "arcengine": "0.9.3",
+    "toolkit_commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+    "toolkit_tree": "9ee140e4183df0df109cec50b7cd0d2531c47168"
+  },
+  "sanitization": {
+    "raw_artifact_copied_into_repository": false,
+    "omitted": [
+      "frame grids and PNG bytes",
+      "symbolic component inventories",
+      "scorecard, run, and environment GUID fields",
+      "service-issued scorecard identifier"
+    ]
+  },
+  "claim_ceiling": "This derived record proves one anonymous public ls20 contact, zero dispatched actions, one captured frame record, and a returned non-competition scorecard under the bound hashes. It is not a Kaggle run, competition result, or authority for another contact."
+}

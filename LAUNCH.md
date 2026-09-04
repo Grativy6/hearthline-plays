@@ -2,10 +2,22 @@
 
 The movable launch kit for this title branch lives in [`launch/`](launch/README.md).
 
-**Current state:** `PUBLIC_ORIENTATION_AUTHORIZED_NOT_YET_RECORDED`
+**Current state:** `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED`
 
-This branch descends from the prepared ARC-AGI-3 research station. It binds current public tool surfaces, preserves Christopher D. Pang's founding sendoff, adds a compact-world-model and paired-Spark practice protocol, and provides provider-independent public-orientation tools.
+This branch descends from the prepared ARC-AGI-3 research station. Five
+completed public-orientation workflow artifacts are reconciled into sanitized
+successor receipts. Their legacy status and sealed/founding bytes remain
+unchanged. The branch now also contains an offline-default `MyAgent`, a
+deterministic ignored notebook package, and two closed human gates.
 
-It does **not** contain credentials, private holdout material, a Kaggle submission, a competition run, or a standing authorization to spend money or use an account. The current grant is limited to repository preparation and a bounded practice session against the public ARC-AGI-3 surface. Exact run state belongs in the receipts created by that session.
+It does **not** contain credentials, private holdout material, a tracked Kaggle
+submission, a competition run, or standing account authority. The historical
+orientation grant is expired and spent; no new ARC contact is authorized.
+Offline compatibility is bounded by `launch/source-lock.v3.json` and the exact
+starter contract. Gate A may authorize one private kernel stage only; Gate B is
+a later, separate, manual competition decision.
 
-Everything added for this pass is kept beneath `launch/` except this pointer and the path-filtered verification workflow, so it can be reviewed, moved, split, or removed later without disturbing the existing research station.
+See `launch/status/current.json` for the mutable current projection and
+`launch/gates/README.md` for the fail-closed handoff. Generated artifacts stay
+ignored under `build/`; only exact committed regeneration produces the
+content-addressed snapshot named by a gate.

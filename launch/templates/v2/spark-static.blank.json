@@ -1,0 +1,17 @@
+{
+  "schema": "hearthline.arc3.spark-static.v2",
+  "static_id": "UNBOUND",
+  "predecessor_static_id": null,
+  "task_id": "UNBOUND",
+  "role_id": "UNBOUND",
+  "lens": "UNBOUND",
+  "observation_refs": [],
+  "dependencies": [],
+  "claims": [],
+  "candidate_world_model": {},
+  "recommendation": null,
+  "residuals": ["No task snapshot supplied."],
+  "status": "OPEN",
+  "claim_ceiling": "Compact representation only; not independent corroboration, environment authority, or permission to act.",
+  "migration": null
+}

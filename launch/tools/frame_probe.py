@@ -168,6 +168,7 @@ def summarize_grid(
     height = len(grid)
     width = len(grid[0])
     palette = Counter(cell for row in grid for cell in row)
+    background_was_explicit = background is not None
     if background is None:
         max_count = max(palette.values())
         background = min(color for color, count in palette.items() if count == max_count)
@@ -182,7 +183,7 @@ def summarize_grid(
         ],
         "background_candidate": {
             "value": background,
-            "basis": "explicit" if background is not None else "most_frequent_then_lowest",
+            "basis": "explicit" if background_was_explicit else "most_frequent_then_lowest",
         },
         "non_background_bbox": _bbox(
             [

@@ -2,76 +2,146 @@ name: Verify Hearthline ARC launch kit
 
 on:
   push:
-    paths:
-      - "LAUNCH.md"
-      - "launch/**"
-      - ".github/workflows/launch-verify.yml"
   pull_request:
-    paths:
-      - "LAUNCH.md"
-      - "launch/**"
-      - ".github/workflows/launch-verify.yml"
 
 permissions:
   contents: read
 
 jobs:
-  verify-launch:
+  guard-repository:
+    # This in-repository guard is a regression check. Protected branch policy
+    # and independent review must anchor trust outside the mutable tree.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
-      - name: Compile launch tools
-        run: python -B -m py_compile launch/tools/*.py
-      - name: Parse launch JSON
+      - name: Materialize and run the exact staged repository guard
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          paths = [Path("launch/research/official-surfaces.lock.json")]
-          paths += sorted(Path("launch/schemas").glob("*.json"))
-          paths += sorted(Path("launch/templates").glob("*.json"))
-          if len(paths) < 6:
-              raise SystemExit("expected launch JSON surfaces are missing")
-          for path in paths:
-              json.loads(path.read_text(encoding="utf-8"))
-              print(f"parsed {path}")
-          PY
-      - name: Run launch unit tests
-        run: python -B -m unittest discover -s launch/tests -p 'test_*.py'
-      - name: Guard committed secrets and local runs
-        run: |
-          python - <<'PY'
-          from pathlib import Path
+          python -I -B - <<'PY'
+          import hashlib
+          import os
+          import re
+          import stat
           import subprocess
+          from pathlib import Path
 
-          tracked = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
-          forbidden_paths = [
-              path for path in tracked
-              if path.startswith("launch/runs/")
-              or path.startswith("launch/.runtime/")
-              or Path(path).name.startswith(".env")
-              or Path(path).suffix.lower() in {".pem", ".key"}
+          environment = {
+              key: value for key, value in os.environ.items()
+              if not key.startswith("GIT_")
+          }
+          environment.update({
+              "GIT_CONFIG_NOSYSTEM": "1",
+              "GIT_CONFIG_GLOBAL": os.devnull,
+              "GIT_NO_LAZY_FETCH": "1",
+              "GIT_NO_REPLACE_OBJECTS": "1",
+              "GIT_OPTIONAL_LOCKS": "0",
+              "GIT_TERMINAL_PROMPT": "0",
+          })
+          git = [
+              "git", "-c", "core.fsmonitor=false",
+              "-c", f"core.hooksPath={os.devnull}",
           ]
-          if forbidden_paths:
-              raise SystemExit("forbidden tracked launch paths: " + ", ".join(forbidden_paths))
-
-          suspicious = ("sk-", "ARC_API_KEY=", "OPENAI_API_KEY=", "Authorization: Bearer")
-          violations = []
-          for raw in tracked:
-              path = Path(raw)
-              try:
-                  text = path.read_text(encoding="utf-8")
-              except (UnicodeDecodeError, OSError):
-                  continue
-              for needle in suspicious:
-                  if needle in text:
-                      violations.append(f"{raw}: contains {needle!r}")
-          if violations:
-              raise SystemExit("\n".join(violations))
-          print("secret/path guard passed")
+          entry = subprocess.check_output(
+              [*git, "ls-files", "--stage", "-z", "--", "tools/repository_guard.py"],
+              env=environment,
+          )
+          match = re.fullmatch(
+              rb"100644 ([0-9a-f]{40,64}) 0\ttools/repository_guard\.py\x00",
+              entry,
+          )
+          if match is None:
+              raise SystemExit("repository guard is not one stage-0 regular index blob")
+          blob = subprocess.check_output(
+              [*git, "cat-file", "blob", match.group(1).decode("ascii")],
+              env=environment,
+          )
+          framed = b"blob " + str(len(blob)).encode("ascii") + b"\0" + blob
+          object_hash = "sha1" if len(match.group(1)) == 40 else "sha256"
+          if hashlib.new(object_hash, framed).hexdigest().encode("ascii") != match.group(1):
+              raise SystemExit("repository guard Git object identity mismatch")
+          expected_guard_sha256 = "5002287b256654ebbce564faf48670bcde0461060a4d5b602265f2defba63feb"
+          if hashlib.sha256(blob).hexdigest() != expected_guard_sha256:
+              raise SystemExit("repository guard blob does not match the externally reviewed pin")
+          target = Path(os.environ["RUNNER_TEMP"]) / "hearthline-repository-guard.py"
+          flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW
+          descriptor = os.open(target, flags, 0o600)
+          try:
+              offset = 0
+              while offset < len(blob):
+                  written = os.write(descriptor, blob[offset:])
+                  if written <= 0:
+                      raise SystemExit("short write materializing repository guard")
+                  offset += written
+              os.fsync(descriptor)
+          finally:
+              os.close(descriptor)
+          info = target.lstat()
+          if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size != len(blob):
+              raise SystemExit("materialized repository guard has unsafe identity")
           PY
+          python -I -B "$RUNNER_TEMP/hearthline-repository-guard.py" --root "$GITHUB_WORKSPACE"
+
+  verify-launch:
+    needs: guard-repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python surfaces
+        run: python -I -B -m compileall -q agent launch/tools scripts tests tools
+      - name: Parse all tracked JSON
+        run: |
+          python -I -B - <<'PY'
+          from pathlib import Path
+          import json
+
+          def reject_duplicates(pairs):
+              result = {}
+              for key, value in pairs:
+                  if key in result:
+                      raise ValueError(f"duplicate JSON key: {key}")
+                  result[key] = value
+              return result
+
+          def reject_nonfinite(value):
+              raise ValueError(f"non-finite JSON number: {value}")
+
+          def parse_finite_float(value):
+              parsed = float(value)
+              if parsed == float("inf") or parsed == float("-inf"):
+                  reject_nonfinite(value)
+              return parsed
+
+          paths = sorted(
+              path for path in Path(".").rglob("*.json")
+              if ".git" not in path.parts
+          )
+          if len(paths) < 20:
+              raise SystemExit("expected tracked JSON surfaces are missing")
+          for path in paths:
+              json.loads(
+                  path.read_text(encoding="utf-8"),
+                  object_pairs_hook=reject_duplicates,
+                  parse_constant=reject_nonfinite,
+                  parse_float=parse_finite_float,
+              )
+          print(f"parsed {len(paths)} tracked JSON documents")
+          PY
+      - name: Validate launchpad
+        run: python -I -B tools/validate_launchpad.py
+      - name: Run all offline unit tests
+        run: |
+          python -I -B -m unittest discover -s tests -p 'test_*.py' -v
+          python -I -B -m unittest discover -s launch/tests -p 'test_*.py' -v

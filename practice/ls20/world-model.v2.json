@@ -1,0 +1,114 @@
+{
+  "schema": "hearthline.arc3.world-model.v2",
+  "world_model_id": "LS20-WM-0001",
+  "predecessor": {
+    "path": "practice/ls20/world-model.json",
+    "status": "EMPTY_HISTORICAL_BASELINE"
+  },
+  "game_id": "ls20",
+  "observed_game_version_id": "ls20-9607627b",
+  "status": "GROUNDED_PUBLIC_ORIENTATION_ONLY",
+  "source_receipts": [
+    "launch/receipts/orientation/ORIENT-0001.reconciled.v2.json",
+    "launch/receipts/orientation/ORIENT-0002.reconciled.v2.json",
+    "launch/receipts/orientation/ORIENT-0003.reconciled.v2.json",
+    "launch/receipts/orientation/ORIENT-0004.reconciled.v2.json",
+    "launch/receipts/orientation/ORIENT-0005.reconciled.v2.json"
+  ],
+  "observation_aperture": {
+    "runs": 5,
+    "actions": 27,
+    "frame_records": 36,
+    "frame_shape": [64, 64],
+    "available_actions_observed": ["ACTION1", "ACTION2", "ACTION3", "ACTION4"],
+    "resets": 0
+  },
+  "promoted_facts": [
+    {
+      "fact_id": "LS20-F-001",
+      "kind": "ACTION_EFFECT",
+      "claim": "In the observed initial level, ACTION1 repeatedly translated the same 5-by-5 bicolor component upward by five rows while a traversable route remained.",
+      "evidence": [
+        "ORIENT-0002 frames f530cf6adb4a6d0fe87baa072ecf62be621169f9ef3b0baf09539904c5f4220f -> c11a377268d286ce93111a2c209a160b71cb67a8537d5adb0d5f98304c7b62db",
+        "ORIENT-0003 action results 1-6 and source receipt sha256 e6742725727fa2515197a0f3d8a39a545cd347efe9c7ab14499601275c95c5cc"
+      ],
+      "scope": "ls20-9607627b, observed initial level and positions only"
+    },
+    {
+      "fact_id": "LS20-F-002",
+      "kind": "ACTION_EFFECT",
+      "claim": "ACTION3 translated that component left by five columns in each of the first three observed actions of ORIENT-0004 and ORIENT-0005.",
+      "evidence": [
+        "ORIENT-0004 source receipt sha256 b191dda229aec9a16f84c84bbfa356e5ecb915d3c8071827f3cbd6529e557b25",
+        "ORIENT-0005 source receipt sha256 785b655a8723274e339cf2549edc564dc2d3f397bf56ed9836f1ac5b17481570"
+      ],
+      "scope": "ls20-9607627b, observed initial level and positions only"
+    },
+    {
+      "fact_id": "LS20-F-003",
+      "kind": "ACTION_EFFECT",
+      "claim": "ACTION4 translated that component right by five columns in ORIENT-0005 actions 8 through 10.",
+      "evidence": ["ORIENT-0005 source receipt sha256 785b655a8723274e339cf2549edc564dc2d3f397bf56ed9836f1ac5b17481570"],
+      "scope": "ls20-9607627b, observed initial level and positions only"
+    },
+    {
+      "fact_id": "LS20-F-004",
+      "kind": "ROUTE_OUTCOME",
+      "claim": "The exact action sequence ACTION3 x3, ACTION1 x4, ACTION4 x3, ACTION1 x3 advanced levels_completed from 0 to 1 without reset in one run.",
+      "evidence": [
+        "ORIENT-0005 final pre-transition frame 8bdf532a899342aa5cb017687487ba91eabda8b5565e8e8616c20d309f067a5a",
+        "ORIENT-0005 successor-level frame fa0ea3dd51f09af254feba8e330296e987e51745e40019481228de0bf014ca8b",
+        "ORIENT-0005 scorecard total_levels_completed=1 score=3.571428571428571"
+      ],
+      "scope": "one anonymous public run, seed 0, game version ls20-9607627b"
+    },
+    {
+      "fact_id": "LS20-F-005",
+      "kind": "CONTRAST",
+      "claim": "Seven consecutive ACTION1 observations from the initial state did not complete a level; the final durable controlled-component position matched the sixth-action position after a transient frame change.",
+      "evidence": [
+        "ORIENT-0003 frame hashes 667d2b24e97be55856c7215c88514e31139b10e1dcac41d59e81f237eccef5c7 -> 20652d9de9dfb95a3f5f4e0a0987ac1bf97c864ba61780854b68772e2f8c2b33 -> 667d2b24e97be55856c7215c88514e31139b10e1dcac41d59e81f237eccef5c7",
+        "ORIENT-0003 scorecard total_levels_completed=0"
+      ],
+      "scope": "one anonymous public run, seed 0, game version ls20-9607627b"
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "LS20-H-001",
+      "claim": "The bicolor 5-by-5 component is the controlled player object.",
+      "status": "SUPPORTED_NOT_IDENTIFIED_BY_OFFICIAL_LABEL",
+      "support": ["It alone exhibits repeatable action-correlated translations in the admitted frames."],
+      "falsifier": "A later action-correlated observation shows another component is controlled or this component moves independently."
+    },
+    {
+      "hypothesis_id": "LS20-H-002",
+      "claim": "Contact with the small left marker changes a prerequisite needed for the upper target.",
+      "status": "SUPPORTED_ROUTE_HYPOTHESIS_NOT_ATOMICALLY_PROMOTED",
+      "support": ["The completing route visits the left marker before the upper region; the direct-up contrast does not complete."],
+      "falsifier": "A controlled public or synthetic ablation completes by an equivalent route without the marker contact.",
+      "promotion_blocker": "No randomized or replay-controlled intervention isolates marker contact."
+    },
+    {
+      "hypothesis_id": "LS20-H-003",
+      "claim": "The upper marked region is the level exit or goal.",
+      "status": "SUPPORTED_ROUTE_HYPOTHESIS_NOT_ATOMICALLY_PROMOTED",
+      "support": ["Level completion occurs after the completing route reaches that region."],
+      "falsifier": "A later observation reaches the region after satisfying the same visible conditions without completion."
+    }
+  ],
+  "action_model": {
+    "ACTION1": {"candidate_effect": "translate controlled component up by 5 rows", "status": "REPEATED_CONTEXT_BOUND"},
+    "ACTION2": {"candidate_effect": "unknown", "status": "NOT_OBSERVED"},
+    "ACTION3": {"candidate_effect": "translate controlled component left by 5 columns", "status": "REPEATED_CONTEXT_BOUND"},
+    "ACTION4": {"candidate_effect": "translate controlled component right by 5 columns", "status": "REPEATED_CONTEXT_BOUND"}
+  },
+  "residuals": [
+    "ACTION2 was available but never dispatched.",
+    "No reset, death, full-game win, or later-level mechanics were observed.",
+    "Marker identity and prerequisite causality remain hypotheses.",
+    "The five runs share one seed, game version, toolkit commit, request lineage, and likely public service implementation; they are not independent evidence for generalization.",
+    "Raw artifacts remain external to the repository and reopen by exact archive/source-receipt hashes."
+  ],
+  "claim_ceiling": "This model predicts only the admitted ls20 public-orientation aperture. It does not claim a complete ls20 solution, transfer to another version or seed, competition performance, or authority to run another game."
+}

@@ -1,6 +1,6 @@
-# ARC-AGI-3 Research Station
+# ARC-AGI-3 Hearthline launch successor
 
-**Status:** `PREPARED_NOT_RUN`
+**Status:** `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED`
 
 **Series anchor:** [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
 
@@ -8,34 +8,47 @@
 
 **Exact parent anchor tree:** `532e178ecd41410e5e9038c647141f2cbe32f01d`
 
-This title branch is a public research station for organizing source context,
-tool inspiration, provenance, and an auditable Creature design before any
-separately authorized ARC-AGI-3 or Kaggle attempt. It contains no game
-implementation, gameplay state, private holdout, credentials, submission
-payload, score, or claim that a run has begun.
+This title branch began as a public research station and now includes a
+sanitized successor layer. Five historical public-orientation workflow runs
+are reconciled without rewriting sealed history. A deterministic
+starter-compatible agent and notebook builder are ready for offline review and
+a human-gated private calibration stage; generated packages remain ignored.
+Competition ignition is deliberately blocked as `RUNTIME_CLOSURE_UNFROZEN`
+until the stage's exact dependency inventory is bound into a reviewed
+successor candidate. No current environment contact, private holdout,
+credential use, Kaggle stage, competition ignition, or score is authorized or
+claimed.
+
+The predecessor station's recorded state was `PREPARED_NOT_RUN`. That literal
+describes the preserved station boundary, not the successor status above. Its
+historical counter remains: Environment calls | `0`. The successor's five
+public contacts are reported separately below and in the reconciled receipts.
 
 ## Current boundary
 
 | Surface | State |
 | --- | --- |
 | Kaggle contacted | `false` |
-| ARC environment contacted | `false` |
+| Reconciled public ARC contacts | `5` |
 | Private or sealed holdout accessed | `false` |
 | Submission attempted | `false` |
-| Environment calls | `0` |
+| Reconciled observed environment actions | `27` |
 | Holdout consumption | `0` |
-| Current official ARC framework | `UNBOUND` |
-| Current official package and game | `UNBOUND` |
-| Current official evaluator | `UNBOUND` |
+| Current public starter contract | `eeb1535404f321d280a8f9194bbc1d7aca5f05fc` |
+| Current official Agents source identity | `4743e7d0aaae0ded0d98a89a7e282e63564cd58b` |
+| Private Kaggle runtime/evaluator | `UNOBSERVED` |
 | Operator and scribe models | `UNBOUND` |
 | Run budgets | `UNBOUND` |
 
-`UNBOUND` is deliberate. Historical package versions or earlier public-game
-calibrations do not silently become the environment for a future attempt. A
-later run needs a new authorization, a fresh official-surface review, an exact
-freeze, and a preregistration bound to that freeze.
+The exact public locks do not establish what a future private Kaggle runtime
+will resolve. A later stage needs a fresh rules review, a clean hash-bound
+candidate, Gate A, and a recorded runtime inventory. Competition ignition then
+needs a separately reviewed stage result and Gate B.
 
 ## Station map
+
+- [`launch/README.md`](launch/README.md) — current successor map, reconciled
+  evidence, source lock, offline candidate, and closed human gates.
 
 - [`research/sources.lock.json`](research/sources.lock.json) — strict,
   machine-readable source and artifact identities.
@@ -62,6 +75,11 @@ freeze, and a preregistration bound to that freeze.
   standard-library-only offline validation.
 
 ## Research and provenance rule
+
+Third-party compatibility inputs and the conservative license observation for
+the pinned official starter are recorded in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). No upstream starter file is
+vendored; necessary public interface names and values are acknowledged.
 
 The station records PAL v2.3, BRRRT v2.0, the Single Cut Transport Lemma
 v0.2, Compactification Costs v0.2, and the pinned Strongwiz v3 prototype.

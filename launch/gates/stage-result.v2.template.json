@@ -1,0 +1,57 @@
+{
+  "schema": "hearthline.arc3.kaggle-stage-result.v3",
+  "status": "REPLACE_WITH_COMPLETE_OR_FAILED",
+  "candidate": {
+    "commit": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "tree": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "account_slug": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "kernel_id": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "accelerator": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "agent_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "builder_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "notebook_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "kernel_metadata_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "source_lock_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "candidate_manifest_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "verified_snapshot_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT"
+  },
+  "kernel_id": "REPLACE_WITH_KAGGLE_ACCOUNT/hearthline-arc3-readiness",
+  "kernel_run_id": "REPLACE_WITH_KAGGLE_RUN_ID",
+  "kernel_visibility": "PRIVATE",
+  "internet_enabled": false,
+  "output_reviewed": false,
+  "submission": {"name": "submission.parquet", "sha256": "REPLACE_WITH_OUTPUT_SHA256"},
+  "recorded_by_human": false,
+  "credential_material_recorded": false,
+  "external_effect_performed_by_gate_tool": false,
+  "gate_a": {
+    "grant_id": "REPLACE_WITH_CONSUMED_GATE_A_GRANT_ID",
+    "nonce": "REPLACE_WITH_CONSUMED_GATE_A_NONCE",
+    "grant_sha256": "REPLACE_WITH_CONSUMED_GATE_A_GRANT_SHA256",
+    "consumption_receipt_path": ".hearthline/receipts/gate-consumption/REPLACE_WITH_GRANT_ID_SHA256.json",
+    "consumption_receipt_sha256": "REPLACE_WITH_GATE_A_CONSUMPTION_RECEIPT_SHA256",
+    "account_slug": "REPLACE_WITH_CONSUMED_GATE_A_ACCOUNT",
+    "kernel_id": "REPLACE_WITH_CONSUMED_GATE_A_KERNEL_ID"
+  },
+  "runtime_inventory": {
+    "captured_from": "HEARTHLINE_STAGE_INVENTORY",
+    "complete": false,
+    "python_version": "REPLACE_WITH_EXACT_3.12_PATCH_VERSION",
+    "distributions": [],
+    "agents_repository": "arcprize/ARC-AGI-3-Agents",
+    "agents_expected_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+    "agents_files": {
+      "agents/agent.py": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256",
+      "agents/recorder.py": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256",
+      "agents/swarm.py": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256",
+      "agents/tracing.py": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256",
+      "main.py": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256"
+    },
+    "agents_license_file": {
+      "LICENSE": "REPLACE_WITH_PHASE_A_OBSERVED_SHA256"
+    },
+    "reviewed_by_human": false
+  },
+  "recorded_at": "REPLACE_WITH_UTC_TIMESTAMP",
+  "claim_ceiling": "A private kernel stage result is not a competition rerun or score."
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "hearthline-plays.arc3-launch-status.v2",
+  "updated_at": "2026-09-04T10:30:00Z",
+  "phase": "OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED",
+  "readiness": "NOT_KAGGLE_AUTHORIZED",
+  "predecessor": {
+    "path": "launch/status.json",
+    "sha256": "21e907e181d24fda6e392a2d6ed5209f033d2b2383396d3c5edb8944e6963adb",
+    "preserved": true
+  },
+  "last_reconciliation": "launch/receipts/20260904T070000Z-orientation-reconciliation.v2.json",
+  "world_model": "practice/ls20/world-model.v2.json",
+  "public_orientation": {
+    "workflow_runs": 5,
+    "public_arc_contact_count": 5,
+    "requested_action_ceiling": 27,
+    "observed_environment_action_count": 27,
+    "captured_frame_record_count": 36,
+    "scorecards_opened": 5,
+    "scorecard_close_calls_returning_records": 5,
+    "grant_disposition": "EXPIRED_AND_SPENT",
+    "automatic_trigger_enabled": false,
+    "new_contact_authorized": false
+  },
+  "competition": {
+    "kaggle_contact_count": 0,
+    "kaggle_stage_authorized": false,
+    "competition_ignition_authorized": false,
+    "private_holdout_access": false,
+    "paid_provider_calls": 0,
+    "daily_submission_limit_safe_assumption": 1,
+    "limit_must_be_rechecked_at_human_gate": true
+  },
+  "candidate": {
+    "repo_prepared": true,
+    "agent_source": "agent/my_agent.py",
+    "context_profile": "A0_MINIMAL",
+    "official_starter_contract": "PASS_EEB153_ORDERED_STRUCTURAL_PROJECTION",
+    "offline_verification": "PASS_STRUCTURE_AND_HASH_AGREEMENT_ONLY",
+    "notebook_built_offline": true,
+    "generated_artifacts_tracked": false,
+    "clean_commit_manifest_required_at_handoff": true,
+    "human_gate_a": "CLOSED",
+    "human_gate_b": "CLOSED",
+    "claim_ceiling": "No private runtime, Kaggle run, competition score, or generalization claim."
+  },
+  "open_residuals": [
+    "A human must rebuild with the intended Kaggle account slug from the exact final clean commit and review its ignored manifest and verification receipt.",
+    "The private Kaggle wheel inventory, bundled Agents runtime identity, gateway, and scorer remain unobserved; a staged-runtime receipt must reconcile them to the source lock.",
+    "No Kaggle staging grant or competition ignition grant exists; both gates are closed.",
+    "Competition rules must be rechecked by a human immediately before any staging grant and again before competition ignition."
+  ],
+  "reopening": "Append a new receipt and replace only this mutable current projection. Never edit the predecessor status or sealed receipts."
+}

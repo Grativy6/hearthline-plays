@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -18,7 +18,8 @@ def load_module(name: str, rel: str):
 
 
 PAIR = load_module("pair_static", "tools/pair_static.py")
-PROBE = load_module("arc3_replay_probe", "tools/arc3_replay_probe.py")
+ARCHIVE_GUARD = load_module("orientation_archive_guard", "tools/orientation_archive_guard.py")
+VALIDATE = load_module("validate_launchpad", "tools/validate_launchpad.py")
 
 
 class PairStaticTests(unittest.TestCase):
@@ -50,46 +51,57 @@ class PairStaticTests(unittest.TestCase):
             PAIR.build_pair(a, b, "P")
 
 
-class ProbePureFunctionTests(unittest.TestCase):
-    def test_components(self):
-        grid = [
-            [0,0,0,0],
-            [0,1,1,0],
-            [0,0,2,0],
-            [0,0,2,0],
-        ]
-        result = PROBE.connected_components(grid)
-        self.assertEqual(result["background"], 0)
-        sizes = sorted(c["size"] for c in result["components"])
-        self.assertEqual(sizes, [2,2])
+class OrientationArchiveClosureTests(unittest.TestCase):
+    def test_all_five_archived_requests_reject_before_adapter(self):
+        calls = []
 
-    def test_empty_orientation_request(self):
-        req = {
-            "schema":"hearthline.arc3-orientation-request.v1",
-            "request_id":"ORIENT-0001","game_id":"ls20","seed":0,
-            "mode":"PUBLIC_ORIENTATION","source_world_model":"practice/ls20/world-model.json",
-            "actions":[],"max_actions":0,"close_scorecard":True,
-            "grant_ref":"launch/RUN_GRANT_2026-09-03.md","status":"AUTHORIZED"
-        }
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td) / "req.json"
-            p.write_text(json.dumps(req))
-            loaded = PROBE.load_request(p)
-        self.assertEqual(loaded["request_id"], "ORIENT-0001")
+        def trap(_: dict) -> None:
+            calls.append("CONTACT")
+            raise AssertionError("effect adapter must never run")
 
-    def test_private_game_rejected(self):
-        req = {
-            "schema":"hearthline.arc3-orientation-request.v1",
-            "request_id":"ORIENT-0001","game_id":"secret","seed":0,
-            "mode":"PUBLIC_ORIENTATION","source_world_model":"x",
-            "actions":[],"max_actions":0,"close_scorecard":True,
-            "grant_ref":"launch/RUN_GRANT_2026-09-03.md","status":"AUTHORIZED"
-        }
-        with tempfile.TemporaryDirectory() as td:
-            p = Path(td) / "req.json"
-            p.write_text(json.dumps(req))
-            with self.assertRaises(ValueError):
-                PROBE.load_request(p)
+        for index in range(1, 6):
+            path = ROOT / f"practice/requests/ORIENT-{index:04d}.json"
+            with self.assertRaisesRegex(
+                ARCHIVE_GUARD.ClosedOrientationArchive,
+                "CLOSED_EXPIRED_AND_SPENT",
+            ):
+                ARCHIVE_GUARD.reject_archived_request(path, trap)
+        self.assertEqual(calls, [])
+
+    def test_active_replay_broker_is_absent(self):
+        self.assertFalse((ROOT / "tools/arc3_replay_probe.py").exists())
+        source = (ROOT / "tools/orientation_archive_guard.py").read_text(encoding="utf-8")
+        for forbidden in ("import arc_agi", "urllib", "requests", "socket", "subprocess"):
+            self.assertNotIn(forbidden, source)
+
+    def test_exponent_overflow_is_rejected_by_active_json_boundaries(self):
+        path = ROOT / "tests/.overflow-archive.json"
+        path.write_bytes(b'{"request_id":"ORIENT-0001","overflow":1e999}')
+        try:
+            with self.assertRaisesRegex(
+                ARCHIVE_GUARD.ClosedOrientationArchive,
+                "non-finite JSON number",
+            ):
+                ARCHIVE_GUARD.reject_archived_request(path)
+            with self.assertRaisesRegex(VALIDATE.ValidationError, "non-finite JSON number"):
+                VALIDATE.read_json(path)
+        finally:
+            path.unlink(missing_ok=True)
+
+    def test_historical_authority_is_bannered_and_body_is_preserved(self):
+        grant = (ROOT / "launch/RUN_GRANT_2026-09-03.md").read_bytes()
+        self.assertTrue(grant.startswith(
+            b"> **Present-day status (4 September 2026): EXPIRED, SPENT, ARCHIVE-ONLY.**"
+        ))
+        marker = "# Run grant — public ARC-AGI-3 orientation, 3 September 2026\n".encode()
+        body = grant[grant.index(marker):]
+        self.assertEqual(
+            hashlib.sha256(body).hexdigest(),
+            "4cbd09a55ecb18c6a3c571ed54ab94f8fee1c2c52ba57c99867e6930822e08d8",
+        )
+        practice = (ROOT / "practice/README.md").read_text(encoding="utf-8")
+        self.assertIn("EXPIRED, SPENT, AND NON-EXECUTABLE", practice)
+        self.assertIn("They are not replayable instructions", practice)
 
 
 if __name__ == "__main__":

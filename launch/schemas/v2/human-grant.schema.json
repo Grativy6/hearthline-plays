@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/launch/schemas/v2/human-grant.schema.json",
+  "title": "Hearthline ARC Human Grant v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "grant_id", "phase", "decision", "human_actor", "issued_at",
+    "expires_at", "nonce", "candidate", "rules", "acknowledgements",
+    "stage_evidence"
+  ],
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit", "tree", "account_slug", "kernel_id", "accelerator",
+        "agent_sha256", "builder_sha256", "notebook_sha256",
+        "kernel_metadata_sha256", "source_lock_sha256",
+        "candidate_manifest_sha256", "verified_snapshot_sha256"
+      ],
+      "properties": {
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "account_slug": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}$"},
+        "kernel_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"},
+        "accelerator": {"enum": ["cpu", "t4", "p100", "rtx6000"]},
+        "agent_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "builder_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "notebook_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "kernel_metadata_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_lock_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "candidate_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "verified_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "properties": {
+    "schema": {"const": "hearthline.arc3.human-grant.v3"},
+    "grant_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"},
+    "phase": {"enum": ["KAGGLE_STAGE", "COMPETITION_IGNITION"]},
+    "decision": {"const": "AUTHORIZE_ONCE"},
+    "human_actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "attested_by_human"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "attested_by_human": {"const": true}
+      }
+    },
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locator", "checked_at", "submissions_per_day", "final_submissions"],
+      "properties": {
+        "locator": {"const": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3/rules"},
+        "checked_at": {"type": "string", "format": "date"},
+        "submissions_per_day": {"type": "integer", "const": 1},
+        "final_submissions": {"type": "integer", "const": 2}
+      }
+    },
+    "acknowledgements": {"type": "object"},
+    "stage_evidence": {"type": ["object", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"required": ["phase"], "properties": {"phase": {"const": "KAGGLE_STAGE"}}},
+      "then": {
+        "properties": {
+          "acknowledgements": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "terms_and_eligibility_reviewed", "private_kernel_stage_only",
+              "stage_does_not_authorize_competition_ignition", "account_slug", "kernel_id"
+            ],
+            "properties": {
+              "terms_and_eligibility_reviewed": {"const": true},
+              "private_kernel_stage_only": {"const": true},
+              "stage_does_not_authorize_competition_ignition": {"const": true},
+              "account_slug": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}$"},
+              "kernel_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"}
+            }
+          },
+          "stage_evidence": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"required": ["phase"], "properties": {"phase": {"const": "COMPETITION_IGNITION"}}},
+      "then": {
+        "properties": {
+          "acknowledgements": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stage_run_complete", "stage_output_reviewed",
+              "remaining_daily_submission_confirmed", "manual_ui_only",
+              "selected_output", "account_slug", "kernel_id"
+            ],
+            "properties": {
+              "stage_run_complete": {"const": true},
+              "stage_output_reviewed": {"const": true},
+              "remaining_daily_submission_confirmed": {"const": true},
+              "manual_ui_only": {"const": true},
+              "selected_output": {"const": "submission.parquet"},
+              "account_slug": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}$"},
+              "kernel_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"}
+            }
+          },
+          "stage_evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["receipt_path", "receipt_sha256"],
+            "properties": {
+              "receipt_path": {"type": "string", "pattern": "^\\.hearthline/receipts/.+\\.json$"},
+              "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}
