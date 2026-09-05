@@ -15,9 +15,10 @@ This is a removable launch layer over the earlier research station. It keeps the
 
 This successor explicitly reconciles the canonical launch and hardened station
 siblings, retains the exact Astra embargo commit as an ancestor, and adds only
-documentary run-entry, publication-anchor, and send-off surfaces. The executable
-candidate and source-lock bytes remain unchanged from the canonical launch
-ancestor.
+the documentary run-entry, publication-anchor, and send-off surfaces; the exact
+model-facing Honesty PCP input; and the narrow guard/workflow updates needed to
+admit and verify that prompt. The executable candidate and source-lock bytes
+remain unchanged from the canonical launch ancestor.
 
 ## Fast map
 
