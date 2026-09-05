@@ -13,7 +13,7 @@
 
 This is a removable launch layer over the earlier research station. It keeps the founding prompt, exact public-source locks, practice requests, compact world models, Spark/Pair-Static records, retired-run records, and receipts in distinct directories so later cleanup can move or delete one layer without rewriting the others.
 
-This successor explicitly reconciles the canonical launch and hardened station
+This candidate successor explicitly reconciles the canonical launch and hardened station
 siblings, retains the exact Astra embargo commit as an ancestor, and adds only
 the documentary run-entry, publication-anchor, and send-off surfaces; the exact
 model-facing Honesty PCP input; and the narrow guard/workflow updates needed to
