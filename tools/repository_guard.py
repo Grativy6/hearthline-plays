@@ -177,15 +177,18 @@ ALLOWED_IMPORT_SHA256 = {
     "tests/test_candidate.py": "bb23848639bacc0c3417db12868a2ad4b943ebf0b286abf28c7480590c78186f",
     "tests/test_human_gates.py": "8b27e1e0d584b91a09b33f24c217e2bb78cac5e84e67397f6a6d78baec68f7a4",
     "tests/test_launchpad.py": "4c853dae076fafc796716f7596a5432c1eded75ebf3ba33e480411827e2f5304",
+    "tests/test_morrow_priority_mechanics.py": "53a0eef03140921bfd9c8978b9f36006d52cd4b57da52b18b0b370899d7a3e00",
+    "tests/test_morrow_queue.py": "049f4f403a76b7bd1de7f42375e7c5ee1a0b16844487099248eaf15bb832e89d",
     "tests/test_reconciliation.py": "762a61a15e782e7504cfeccc5b3834113d6d4d7b098c401bcfcbb5be08547c77",
     "tests/test_repository_guard.py": "ed9adf4d73be876677babb5b9712828c1c446bb1d5a57972e033b78b1e754924",
     "tests/test_source_context.py": "762a61a15e782e7504cfeccc5b3834113d6d4d7b098c401bcfcbb5be08547c77",
     "tests/test_verify_station.py": "149b75541ba1f4e1778e3be30c2eefe6d09a269040aea11cfcf6bab558c50b1b",
     "tools/orientation_archive_guard.py": "7c29818ccf04447c42e303255b6714f3e2dec8c42a2475f8ad982dcdb4de2587",
+    "tools/morrow_queue.py": "59a1ec75804f557689dcf00b1ea23ad7617a8f50cc7effba85dc63f5a08e2975",
     "tools/pair_static.py": "d71ac7c99e18ad72814e2cc06100e6be1eb54c11a2cd6528e5e404e31b3acb55",
     "tools/repository_guard.py": "4e65ac4cd3b11eb7e25989c0774fa9111d759dd7b7b1345cc74b92d37ef49bfa",
     "tools/validate_launchpad.py": "40a9161ed96e583476421fbd32dd6c85baff0da73eecbfe829e201eac4c40923",
-    "tools/verify_station.py": "4a958c8a339ddb3fc47c32829cdceacd41e74228ea6f3e65865ab7dc620ef3a1",
+    "tools/verify_station.py": "866237f4e7157e1c0c0ea6f2239f7820026d2eb5522a4a69d73118279aefc894",
 }
 
 # Full staged-blob commitments close the executable surface rather than trying
@@ -206,16 +209,19 @@ ALLOWED_PYTHON_SHA256 = {
     "tests/test_candidate.py": "91be63b48bc169e9e7d5ded6c0e77fef319e772ef261316a25d1bc57eaddd4f2",
     "tests/test_human_gates.py": "3053ffc520816044c5175063434e03a3647650c8e41b8801cc640fe6247b4073",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
+    "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
+    "tests/test_morrow_queue.py": "326c27b60c1d464554025dd0e4be7970e67c45ab2f2390049630ac108c9beda8",
     "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
     "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
     "tests/test_source_context.py": "35602b972270ed2029011a11fe5f92904e0fccdd18ced1d8be2453e17d6a01f9",
-    "tests/test_verify_station.py": "5cadfab6f70d28839a4042c1efd098e265aca1d0016efd934d78188e9bb22d89",
+    "tests/test_verify_station.py": "4e326dc4de022726149ffba6b1c9b64e20fc092307f6a8059ff90f0c1a5190c2",
+    "tools/morrow_queue.py": "f17834aec9d931f0ef97ff50235ce48a8a64d289352324fa980aebf297aa4498",
     "tools/orientation_archive_guard.py": "744b2bec891cf9e4369c1a2a2fe43dc6bf38b6f22302ad3065ad888e184a33d2",
     "tools/pair_static.py": "aa231b448d059fea8b0990f4c21a134cd63bc759ad9170c3e9b49cf2b1f467ac",
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
-    "tools/verify_station.py": "5cb72ad8973de27d6fc8810f3cf5e03ff1b61e170e36766301bffd73a0493908",
+    "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "1de8f9a6f188f39c4a406718871b0684cc48b9792a7425de02973ac06ac28853"
+SELF_AST_SHA256 = "c1990e466864fc845cc63580d9756791e11660ebffc9238f1c7870d0059ddcec"
 
 
 class GuardError(RuntimeError):

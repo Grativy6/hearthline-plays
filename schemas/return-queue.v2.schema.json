@@ -1,0 +1,495 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/schemas/return-queue.v2.schema.json",
+  "title": "Hearthline Plays synthetic priority-marked Homecoming return queue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "fixture_kind",
+    "status",
+    "claim_ceiling",
+    "queue",
+    "priority_authorizations",
+    "priority_receipts",
+    "priority_append_holds",
+    "retry_rotation_release_receipts",
+    "service_reconciliation_receipts",
+    "scheduling_attestations",
+    "returns",
+    "snapshots",
+    "accounting"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline-plays.return-queue.v2"},
+    "fixture_kind": {"const": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY"},
+    "status": {"const": "OFFLINE_REFERENCE_IMPLEMENTED_NOT_WIRED"},
+    "claim_ceiling": {"$ref": "#/$defs/nonempty"},
+    "queue": {"$ref": "#/$defs/queue"},
+    "priority_authorizations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/priorityAuthorization"}},
+    "priority_receipts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/priorityReceipt"}},
+    "priority_append_holds": {"type": "array", "items": {"$ref": "#/$defs/priorityAppendHold"}},
+    "retry_rotation_release_receipts": {"type": "array", "items": {"$ref": "#/$defs/retryRotationRelease"}},
+    "service_reconciliation_receipts": {"type": "array", "items": {"$ref": "#/$defs/serviceReconciliation"}},
+    "scheduling_attestations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/schedulingAttestation"}},
+    "returns": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/returnItem"}},
+    "snapshots": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/snapshot"}},
+    "accounting": {"$ref": "#/$defs/accounting"}
+  },
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1},
+    "opaqueToken": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[A-Za-z0-9_.:-]+$"},
+    "nullableString": {"type": ["string", "null"]},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "priorityClass": {"enum": ["P0_URGENT", "P1_EXPEDITE", "P2_ROUTINE", "P3_BACKGROUND"]},
+    "priorityRank": {"type": "integer", "minimum": 0, "maximum": 3},
+    "idArray": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+    "queue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queue_id", "destination_ref", "synchronization_point_ref", "profile_ref", "profile_epoch",
+        "service_epoch", "controller_ref", "effect_executor_ref", "queue_scope", "maximum_snapshot_items",
+        "external_effect_count", "priority_assigner_ref", "priority_register_ref",
+        "priority_authorization_register_ref", "priority_genesis_head_ref", "priority_genesis_head_sha256",
+        "dispatch_priority_assignment_basis_ref", "priority_revision_assignment_basis_ref", "unmarked_return_rule",
+        "invalid_revision_rule", "ambiguous_revision_rule", "queue_steward", "thulia_non_interference", "policy"
+      ],
+      "properties": {
+        "queue_id": {"$ref": "#/$defs/nonempty"},
+        "destination_ref": {"$ref": "#/$defs/nonempty"},
+        "synchronization_point_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "controller_ref": {"$ref": "#/$defs/nonempty"},
+        "effect_executor_ref": {"const": "UNBOUND"},
+        "queue_scope": {"const": "HOMECOMING_RETURN_BUNDLES_ONLY"},
+        "maximum_snapshot_items": {"type": "integer", "minimum": 1, "maximum": 256},
+        "external_effect_count": {"const": 0},
+        "priority_assigner_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_register_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_authorization_register_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_genesis_head_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_genesis_head_sha256": {"$ref": "#/$defs/sha256"},
+        "dispatch_priority_assignment_basis_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_revision_assignment_basis_ref": {"$ref": "#/$defs/nonempty"},
+        "unmarked_return_rule": {"const": "HOLD_FOR_EXPLICIT_MIGRATION_OR_DISPATCH_MARK"},
+        "invalid_revision_rule": {"const": "REJECT_WITHOUT_MUTATION_KEEP_LAST_VALID_MARK"},
+        "ambiguous_revision_rule": {"const": "HOLD_SUBJECT_UNTIL_PRIORITY_LEDGER_RECONCILIATION"},
+        "queue_steward": {"$ref": "#/$defs/queueSteward"},
+        "thulia_non_interference": {"$ref": "#/$defs/thuliaNonInterference"},
+        "policy": {"$ref": "#/$defs/policy"}
+      }
+    },
+    "queueSteward": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name", "identity_ref", "legacy_queue_steward_creature_ref", "legacy_compatibility_status",
+        "manifest_ref", "task_ref", "control_return_aperture_ref", "control_return_profile_ref",
+        "control_return_scope", "scheduling_view_field_allowlist", "implementation_mode", "persistent_state_ref",
+        "ledger_ref", "perch_ref", "bridge_gloss_ref", "direct_thulia_channel_ref", "liveness_contract_ref",
+        "role", "authority", "allowed_output", "can_emit_heartbeat", "can_read_selected_carry",
+        "can_read_homecoming_custody", "can_read_thulia_state", "can_write_thulia_state",
+        "can_invoke_thulia", "can_impersonate_thulia", "depends_on_thulia",
+        "operates_if_thulia_absent", "can_enter_data_queue_under_review", "can_admit", "can_mutate_return",
+        "can_select_carry", "can_grant_or_renew", "can_execute_effect"
+      ],
+      "properties": {
+        "name": {"const": "Morrow"},
+        "identity_ref": {"$ref": "#/$defs/nonempty"},
+        "legacy_queue_steward_creature_ref": {"$ref": "#/$defs/nonempty"},
+        "legacy_compatibility_status": {"const": "DESIGN_HISTORY_ONLY_NOT_RUNTIME_IDENTITY"},
+        "manifest_ref": {"$ref": "#/$defs/nonempty"},
+        "task_ref": {"$ref": "#/$defs/nonempty"},
+        "control_return_aperture_ref": {"$ref": "#/$defs/nonempty"},
+        "control_return_profile_ref": {"$ref": "#/$defs/nonempty"},
+        "control_return_scope": {"const": "QUEUE_ORDER_PROPOSAL_ONLY"},
+        "scheduling_view_field_allowlist": {"const": ["opaque_queue_item_binding", "ready_arrival_rank", "effective_priority_rank", "controller_approved_processing_cost", "overtake_count"]},
+        "implementation_mode": {"const": "DETERMINISTIC_STATELESS_FROZEN_INPUT_TO_PROPOSAL"},
+        "persistent_state_ref": {"type": "null"},
+        "ledger_ref": {"type": "null"},
+        "perch_ref": {"type": "null"},
+        "bridge_gloss_ref": {"type": "null"},
+        "direct_thulia_channel_ref": {"type": "null"},
+        "liveness_contract_ref": {"type": "null"},
+        "role": {"const": "TASK_SCOPED_METADATA_ONLY_PURE_PROPOSER"},
+        "authority": {"const": "NONE"},
+        "allowed_output": {"const": "QUEUE_ORDER_PROPOSAL_ONLY"},
+        "can_emit_heartbeat": {"const": false},
+        "can_read_selected_carry": {"const": false},
+        "can_read_homecoming_custody": {"const": false},
+        "can_read_thulia_state": {"const": false},
+        "can_write_thulia_state": {"const": false},
+        "can_invoke_thulia": {"const": false},
+        "can_impersonate_thulia": {"const": false},
+        "depends_on_thulia": {"const": false},
+        "operates_if_thulia_absent": {"const": true},
+        "can_enter_data_queue_under_review": {"const": false},
+        "can_admit": {"const": false},
+        "can_mutate_return": {"const": false},
+        "can_select_carry": {"const": false},
+        "can_grant_or_renew": {"const": false},
+        "can_execute_effect": {"const": false}
+      }
+    },
+    "thuliaNonInterference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "thulia_ref", "state_ref", "ledger_ref", "perch_ref", "bridge_gloss_ref", "direct_morrow_channel_ref",
+        "can_read_or_set_priority", "can_read_scheduling_view", "can_write_scheduling_view",
+        "can_read_proposal", "can_write_proposal", "can_read_final_order",
+        "can_read_admission_state", "can_set_controller_approved_processing_cost", "can_set_order",
+        "can_admit", "can_invoke_morrow", "can_impersonate_morrow",
+        "depends_on_morrow", "operates_if_morrow_absent"
+      ],
+      "properties": {
+        "thulia_ref": {"$ref": "#/$defs/nonempty"},
+        "state_ref": {"$ref": "#/$defs/nonempty"},
+        "ledger_ref": {"$ref": "#/$defs/nonempty"},
+        "perch_ref": {"$ref": "#/$defs/nonempty"},
+        "bridge_gloss_ref": {"$ref": "#/$defs/nonempty"},
+        "direct_morrow_channel_ref": {"type": "null"},
+        "can_read_or_set_priority": {"const": false},
+        "can_read_scheduling_view": {"const": false},
+        "can_write_scheduling_view": {"const": false},
+        "can_read_proposal": {"const": false},
+        "can_write_proposal": {"const": false},
+        "can_read_final_order": {"const": false},
+        "can_read_admission_state": {"const": false},
+        "can_set_controller_approved_processing_cost": {"const": false},
+        "can_set_order": {"const": false},
+        "can_admit": {"const": false},
+        "can_invoke_morrow": {"const": false},
+        "can_impersonate_morrow": {"const": false},
+        "depends_on_morrow": {"const": false},
+        "operates_if_morrow_absent": {"const": true}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_ref", "maximum_overtakes", "invalid_or_absent_proposal", "new_arrival_rule", "admission_width", "revalidate_head_before_admission", "failed_or_uncertain_head_rule", "maximum_controller_approved_processing_cost", "priority_classes"],
+      "properties": {
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "maximum_overtakes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "invalid_or_absent_proposal": {"const": "CONTROLLER_EFFECTIVE_PRIORITY_THEN_FIFO_BY_ARRIVAL"},
+        "new_arrival_rule": {"const": "NEXT_SNAPSHOT_ONLY"},
+        "admission_width": {"const": 1},
+        "revalidate_head_before_admission": {"const": true},
+        "failed_or_uncertain_head_rule": {"const": "ATOMIC_READY_TO_HELD_WITH_SERVICE_DISPOSITION_RETRY_RECEIPT_REQUIRED"},
+        "maximum_controller_approved_processing_cost": {"const": 1000000},
+        "priority_classes": {"const": ["P0_URGENT", "P1_EXPEDITE", "P2_ROUTINE", "P3_BACKGROUND"]}
+      }
+    },
+    "priorityAuthorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["priority_authorization_ref", "queue_id", "profile_ref", "profile_epoch", "policy_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "dispatch_ref", "authorized_assigner_ref", "recorded_by_controller_ref", "priority_ceiling_class", "priority_ceiling_rank", "maximum_priority_revisions", "grant_ref", "scope_ref", "deadline_ref", "budget_ref", "priority_is_sequencing_only", "external_effect_receipt_ref"],
+      "properties": {
+        "priority_authorization_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"}, "profile_epoch": {"type": "integer", "minimum": 1},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "task_ref": {"$ref": "#/$defs/nonempty"}, "tether_ref": {"$ref": "#/$defs/nonempty"},
+        "task_tether_core_sha256": {"$ref": "#/$defs/sha256"}, "dispatch_ref": {"$ref": "#/$defs/nonempty"},
+        "authorized_assigner_ref": {"$ref": "#/$defs/nonempty"}, "recorded_by_controller_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_ceiling_class": {"$ref": "#/$defs/priorityClass"}, "priority_ceiling_rank": {"$ref": "#/$defs/priorityRank"},
+        "maximum_priority_revisions": {"type": "integer", "minimum": 0, "maximum": 64}, "grant_ref": {"$ref": "#/$defs/nonempty"},
+        "scope_ref": {"$ref": "#/$defs/nonempty"}, "deadline_ref": {"$ref": "#/$defs/nonempty"},
+        "budget_ref": {"$ref": "#/$defs/nonempty"}, "priority_is_sequencing_only": {"const": true},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "priorityReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["priority_receipt_ref", "idempotency_key", "ledger_ordinal", "receipt_kind", "queue_id", "profile_ref", "profile_epoch", "policy_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "dispatch_ref", "priority_authorization_ref", "revision_ordinal", "supersedes_priority_receipt_ref", "assigned_by_ref", "recorded_by_controller_ref", "assignment_basis_ref", "priority_class", "priority_rank", "priority_ceiling_class", "priority_ceiling_rank", "maximum_priority_revisions", "scheduling_mark_binding", "observed_priority_ledger_head_ref", "observed_priority_ledger_head_sha256", "observed_snapshot_ordinal", "observed_snapshot_ref", "observed_snapshot_projection_sha256", "grant_ref", "scope_ref", "deadline_ref", "budget_ref", "grant_renewed", "scope_expanded", "deadline_extended", "budget_increased", "authority_mutated", "subject_state", "terminal_admission_ref", "external_effect_receipt_ref"],
+      "properties": {
+        "priority_receipt_ref": {"$ref": "#/$defs/nonempty"}, "idempotency_key": {"$ref": "#/$defs/nonempty"},
+        "ledger_ordinal": {"type": "integer", "minimum": 1}, "receipt_kind": {"enum": ["DISPATCH_PRIORITY_MARK", "PRIORITY_REVISION"]},
+        "queue_id": {"$ref": "#/$defs/nonempty"}, "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1}, "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "task_ref": {"$ref": "#/$defs/nonempty"}, "tether_ref": {"$ref": "#/$defs/nonempty"},
+        "task_tether_core_sha256": {"$ref": "#/$defs/sha256"}, "dispatch_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_authorization_ref": {"$ref": "#/$defs/nonempty"}, "revision_ordinal": {"type": "integer", "minimum": 0},
+        "supersedes_priority_receipt_ref": {"$ref": "#/$defs/nullableString"}, "assigned_by_ref": {"$ref": "#/$defs/nonempty"},
+        "recorded_by_controller_ref": {"$ref": "#/$defs/nonempty"}, "assignment_basis_ref": {"$ref": "#/$defs/nonempty"},
+        "priority_class": {"$ref": "#/$defs/priorityClass"}, "priority_rank": {"$ref": "#/$defs/priorityRank"},
+        "priority_ceiling_class": {"$ref": "#/$defs/priorityClass"}, "priority_ceiling_rank": {"$ref": "#/$defs/priorityRank"},
+        "maximum_priority_revisions": {"type": "integer", "minimum": 0, "maximum": 64}, "scheduling_mark_binding": {"$ref": "#/$defs/nonempty"},
+        "observed_priority_ledger_head_ref": {"$ref": "#/$defs/nonempty"}, "observed_priority_ledger_head_sha256": {"$ref": "#/$defs/sha256"},
+        "observed_snapshot_ordinal": {"type": "integer", "minimum": 0}, "observed_snapshot_ref": {"$ref": "#/$defs/nonempty"},
+        "observed_snapshot_projection_sha256": {"$ref": "#/$defs/sha256"}, "grant_ref": {"$ref": "#/$defs/nonempty"},
+        "scope_ref": {"$ref": "#/$defs/nonempty"}, "deadline_ref": {"$ref": "#/$defs/nonempty"}, "budget_ref": {"$ref": "#/$defs/nonempty"},
+        "grant_renewed": {"const": false}, "scope_expanded": {"const": false}, "deadline_extended": {"const": false},
+        "budget_increased": {"const": false}, "authority_mutated": {"const": false},
+        "subject_state": {"enum": ["TASK_COMMISSIONED_DISPATCH_PENDING", "TASK_OUT_OR_RETURN_PENDING_NOT_ADMITTED"]},
+        "terminal_admission_ref": {"type": "null"}, "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "priorityAppendHold": {
+      "type": "object", "additionalProperties": false,
+      "required": ["priority_append_hold_ref", "idempotency_key", "controller_ref", "queue_id", "profile_ref", "profile_epoch", "policy_ref", "priority_authorization_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "dispatch_ref", "attempted_priority_receipt_ref", "attempted_priority_receipt_sha256", "attempted_receipt_kind", "attempted_revision_ordinal", "attempted_supersedes_priority_receipt_ref", "observed_priority_ledger_head_ref", "observed_priority_ledger_head_sha256", "observed_snapshot_ordinal", "observed_snapshot_ref", "observed_snapshot_projection_sha256", "persistence_outcome", "hold_state", "reconciliation_handle", "reconciliation_receipt_ref", "can_enter_ready", "external_effect_receipt_ref"],
+      "properties": {
+        "priority_append_hold_ref": {"$ref": "#/$defs/nonempty"}, "idempotency_key": {"$ref": "#/$defs/nonempty"},
+        "controller_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"}, "profile_epoch": {"type": "integer", "minimum": 1},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "priority_authorization_ref": {"$ref": "#/$defs/nonempty"}, "task_ref": {"$ref": "#/$defs/nonempty"},
+        "tether_ref": {"$ref": "#/$defs/nonempty"}, "task_tether_core_sha256": {"$ref": "#/$defs/sha256"},
+        "dispatch_ref": {"$ref": "#/$defs/nonempty"}, "attempted_priority_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "attempted_priority_receipt_sha256": {"$ref": "#/$defs/sha256"}, "attempted_receipt_kind": {"const": "PRIORITY_REVISION"},
+        "attempted_revision_ordinal": {"type": "integer", "minimum": 1},
+        "attempted_supersedes_priority_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "observed_priority_ledger_head_ref": {"$ref": "#/$defs/nonempty"},
+        "observed_priority_ledger_head_sha256": {"$ref": "#/$defs/sha256"},
+        "observed_snapshot_ordinal": {"type": "integer", "minimum": 0},
+        "observed_snapshot_ref": {"$ref": "#/$defs/nonempty"},
+        "observed_snapshot_projection_sha256": {"$ref": "#/$defs/sha256"},
+        "persistence_outcome": {"const": "UNKNOWN"}, "hold_state": {"const": "PRIORITY_APPEND_UNKNOWN_HELD"},
+        "reconciliation_handle": {"$ref": "#/$defs/nonempty"}, "reconciliation_receipt_ref": {"type": "null"},
+        "can_enter_ready": {"const": false}, "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "retryRotationRelease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["retry_rotation_release_receipt_ref", "controller_ref", "queue_id", "profile_ref", "profile_epoch", "service_epoch", "source_service_disposition_receipt_ref", "source_reopen_handle", "queue_item_id", "release_mode", "intervening_service_record_ref", "intervening_queue_item_id", "intervening_service_ordinal", "pre_reopen_snapshot_id", "pre_reopen_snapshot_projection_sha256", "derived_other_ready_count", "preserved_overtake_count", "priority_mutated", "authority_mutated", "custody_mutated", "result_mutated", "deadline_mutated", "budget_mutated", "external_effect_receipt_ref"],
+      "properties": {
+        "retry_rotation_release_receipt_ref": {"$ref": "#/$defs/nonempty"}, "controller_ref": {"$ref": "#/$defs/nonempty"},
+        "queue_id": {"$ref": "#/$defs/nonempty"}, "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1}, "service_epoch": {"type": "integer", "minimum": 1},
+        "source_service_disposition_receipt_ref": {"$ref": "#/$defs/nonempty"}, "source_reopen_handle": {"$ref": "#/$defs/nonempty"},
+        "queue_item_id": {"$ref": "#/$defs/nonempty"},
+        "release_mode": {"enum": ["OTHER_ITEM_SERVICE_ATTEMPTED", "NO_OTHER_ELIGIBLE_READY"]},
+        "intervening_service_record_ref": {"$ref": "#/$defs/nullableString"},
+        "intervening_queue_item_id": {"$ref": "#/$defs/nullableString"},
+        "intervening_service_ordinal": {"type": ["integer", "null"], "minimum": 1},
+        "pre_reopen_snapshot_id": {"$ref": "#/$defs/nullableString"},
+        "pre_reopen_snapshot_projection_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "derived_other_ready_count": {"type": ["integer", "null"], "minimum": 0},
+        "preserved_overtake_count": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "priority_mutated": {"const": false}, "authority_mutated": {"const": false},
+        "custody_mutated": {"const": false}, "result_mutated": {"const": false},
+        "deadline_mutated": {"const": false}, "budget_mutated": {"const": false},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "serviceReconciliation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["service_reconciliation_receipt_ref", "controller_ref", "queue_id", "profile_ref", "profile_epoch", "service_epoch", "service_disposition_receipt_ref", "queue_item_id", "reopen_handle", "observed_outcome", "reconciled_outcome", "reconciliation_evidence_ref", "retry_permitted", "priority_mutated", "authority_mutated", "custody_mutated", "result_mutated", "deadline_mutated", "budget_mutated", "external_effect_receipt_ref"],
+      "properties": {
+        "service_reconciliation_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "controller_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"}, "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "service_disposition_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "queue_item_id": {"$ref": "#/$defs/nonempty"}, "reopen_handle": {"$ref": "#/$defs/nonempty"},
+        "observed_outcome": {"const": "UNKNOWN"},
+        "reconciled_outcome": {"const": "CONFIRMED_NOT_ADMITTED_SAFE_TO_RETRY"},
+        "reconciliation_evidence_ref": {"$ref": "#/$defs/nonempty"}, "retry_permitted": {"const": true},
+        "priority_mutated": {"const": false}, "authority_mutated": {"const": false},
+        "custody_mutated": {"const": false}, "result_mutated": {"const": false},
+        "deadline_mutated": {"const": false}, "budget_mutated": {"const": false},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "schedulingAttestation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scheduling_attestation_ref", "queue_id", "profile_ref", "profile_epoch", "policy_ref", "recorded_by_controller_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "opaque_scheduling_binding", "controller_approved_processing_cost", "external_effect_receipt_ref"],
+      "properties": {
+        "scheduling_attestation_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"}, "profile_epoch": {"type": "integer", "minimum": 1},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "recorded_by_controller_ref": {"$ref": "#/$defs/nonempty"}, "task_ref": {"$ref": "#/$defs/nonempty"},
+        "tether_ref": {"$ref": "#/$defs/nonempty"}, "task_tether_core_sha256": {"$ref": "#/$defs/sha256"},
+        "opaque_scheduling_binding": {"$ref": "#/$defs/nonempty"}, "controller_approved_processing_cost": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "returnItem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["queue_item_id", "return_id", "idempotency_key", "objective_id", "creature_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "task_dispatch_ref", "dispatch_priority_receipt_ref", "dispatch_binding_state", "scheduling_binding", "scheduling_metadata_provenance_ref", "scheduling_metadata_binding", "intake_receipt_ref", "enqueue_receipt_ref", "return_receipt_ref", "arrival_ordinal", "available_snapshot_ordinal", "controller_approved_processing_cost", "content_sha256", "evaluation_rule_ref", "objective_disposition", "homecoming_custody_state", "carry_state", "initial_queue_state", "hold_reason", "hold_reopen_ref", "external_effect_receipt_ref"],
+      "properties": {
+        "queue_item_id": {"$ref": "#/$defs/nonempty"}, "return_id": {"$ref": "#/$defs/nonempty"}, "idempotency_key": {"$ref": "#/$defs/nonempty"},
+        "objective_id": {"$ref": "#/$defs/nonempty"}, "creature_ref": {"$ref": "#/$defs/nonempty"}, "task_ref": {"$ref": "#/$defs/nonempty"},
+        "tether_ref": {"$ref": "#/$defs/nonempty"}, "task_tether_core_sha256": {"$ref": "#/$defs/sha256"},
+        "task_dispatch_ref": {"$ref": "#/$defs/nonempty"}, "dispatch_priority_receipt_ref": {"$ref": "#/$defs/nullableString"},
+        "dispatch_binding_state": {"enum": ["PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE", "LEGACY_UNMARKED_HELD_FOR_EXPLICIT_MIGRATION"]},
+        "scheduling_binding": {"$ref": "#/$defs/nonempty"}, "scheduling_metadata_provenance_ref": {"$ref": "#/$defs/nonempty"},
+        "scheduling_metadata_binding": {"$ref": "#/$defs/sha256"}, "intake_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "enqueue_receipt_ref": {"$ref": "#/$defs/nonempty"}, "return_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "arrival_ordinal": {"type": "integer", "minimum": 1}, "available_snapshot_ordinal": {"type": "integer", "minimum": 1},
+        "controller_approved_processing_cost": {"type": "integer", "minimum": 1, "maximum": 1000000}, "content_sha256": {"$ref": "#/$defs/sha256"},
+        "evaluation_rule_ref": {"$ref": "#/$defs/nonempty"}, "objective_disposition": {"$ref": "#/$defs/nonempty"},
+        "homecoming_custody_state": {"const": "HOMECOMING:RETURNED"}, "carry_state": {"const": "CARRY:UNSELECTED"},
+        "initial_queue_state": {"enum": ["READY", "HELD"]}, "hold_reason": {"$ref": "#/$defs/nullableString"},
+        "hold_reopen_ref": {"$ref": "#/$defs/nullableString"}, "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "overtakeCount": {
+      "type": "object", "additionalProperties": false, "required": ["queue_item_id", "count"],
+      "properties": {"queue_item_id": {"$ref": "#/$defs/nonempty"}, "count": {"type": "integer", "minimum": 0, "maximum": 1000000}}
+    },
+    "effectivePriorityMark": {
+      "type": "object", "additionalProperties": false,
+      "required": ["queue_item_id", "priority_receipt_ref", "priority_class", "priority_rank", "scheduling_mark_binding"],
+      "properties": {"queue_item_id": {"$ref": "#/$defs/nonempty"}, "priority_receipt_ref": {"$ref": "#/$defs/nonempty"}, "priority_class": {"$ref": "#/$defs/priorityClass"}, "priority_rank": {"$ref": "#/$defs/priorityRank"}, "scheduling_mark_binding": {"$ref": "#/$defs/nonempty"}}
+    },
+    "morrowReadyBinding": {
+      "type": "object", "additionalProperties": false, "required": ["queue_item_id", "opaque_queue_item_binding"],
+      "properties": {"queue_item_id": {"$ref": "#/$defs/nonempty"}, "opaque_queue_item_binding": {"$ref": "#/$defs/opaqueToken"}}
+    },
+    "morrowOutput": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema", "status", "invocation_cut_binding", "scheduling_view_sha256", "policy_ref", "ready_order", "reason_codes", "pure_metadata_only", "deterministic_stateless", "persistent_state_ref", "external_effect_count"],
+      "properties": {
+        "schema": {"const": "hearthline-plays.morrow-proposal.v1"},
+        "status": {"const": "PROPOSAL_ONLY_NO_ADMISSION"},
+        "invocation_cut_binding": {"$ref": "#/$defs/opaqueToken"},
+        "scheduling_view_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "ready_order": {"type": "array", "minItems": 1, "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/opaqueToken"}},
+        "reason_codes": {"const": ["MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST", "PRIORITY_RANK_ASCENDING_ZERO_FIRST", "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY", "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"]},
+        "pure_metadata_only": {"const": true}, "deterministic_stateless": {"const": true},
+        "persistent_state_ref": {"type": "null"}, "external_effect_count": {"const": 0}
+      }
+    },
+    "proposal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["proposal_ref", "morrow_output"],
+      "properties": {
+        "proposal_ref": {"$ref": "#/$defs/nonempty"},
+        "morrow_output": {
+          "anyOf": [
+            {"$ref": "#/$defs/morrowOutput"},
+            {"$ref": "#/$defs/invalidMorrowOutputCapture"}
+          ]
+        }
+      }
+    },
+    "invalidMorrowOutputCapture": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema", "status", "invocation_cut_binding", "scheduling_view_sha256", "policy_ref", "bounded_raw_output_sha256", "bounded_raw_output_byte_count", "failure_code", "raw_output_retained"],
+      "properties": {
+        "schema": {"const": "hearthline-plays.morrow-invalid-output-capture.v1"},
+        "status": {"const": "INVALID_UNTRUSTED_OUTPUT_CAPTURED_FOR_FALLBACK"},
+        "invocation_cut_binding": {"$ref": "#/$defs/opaqueToken"},
+        "scheduling_view_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+        "bounded_raw_output_sha256": {"$ref": "#/$defs/sha256"},
+        "bounded_raw_output_byte_count": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "failure_code": {"enum": ["MALFORMED", "STALE", "REPLAYED", "UNKNOWN_BINDING", "INCOMPLETE_OR_DUPLICATE_ORDER", "POLICY_MISMATCH"]},
+        "raw_output_retained": {"const": false}
+      }
+    },
+    "decision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["controller_ref", "queue_id", "profile_ref", "profile_epoch", "service_epoch", "snapshot_id", "proposal_validation", "controller_disposition", "schedule_basis", "schedule_order", "forced_head_queue_item_id", "order_receipt_ref", "service_head_queue_item_id"],
+      "properties": {
+        "controller_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"}, "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1}, "service_epoch": {"type": "integer", "minimum": 1}, "snapshot_id": {"$ref": "#/$defs/nonempty"},
+        "proposal_validation": {"enum": ["VALID_EXACT_READY_PERMUTATION_AND_POLICY", "INVALID_OR_ABSENT_USED_CONTROLLER_PRIORITY_FIFO_FALLBACK"]},
+        "controller_disposition": {"enum": ["USE_VALID_PROPOSAL", "USE_CONTROLLER_PRIORITY_FIFO_FALLBACK", "ENFORCE_HEAD_MAXIMUM_OVERTAKES"]},
+        "schedule_basis": {"enum": ["VALID_MORROW_PRIORITY_COST_PROPOSAL", "CONTROLLER_PRIORITY_THEN_FIFO_FALLBACK", "MAXIMUM_OVERTAKES_FIFO_FORCED"]},
+        "schedule_order": {"$ref": "#/$defs/idArray"}, "forced_head_queue_item_id": {"$ref": "#/$defs/nullableString"},
+        "order_receipt_ref": {"$ref": "#/$defs/nonempty"}, "service_head_queue_item_id": {"$ref": "#/$defs/nonempty"}
+      }
+    },
+    "admission": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admission_receipt_ref", "controller_ref", "queue_id", "profile_ref", "profile_epoch", "service_epoch", "snapshot_id", "order_receipt_ref", "service_ordinal", "queue_item_id", "return_id", "objective_id", "creature_ref", "task_ref", "tether_ref", "task_tether_core_sha256", "task_dispatch_ref", "dispatch_priority_receipt_ref", "intake_receipt_ref", "enqueue_receipt_ref", "return_receipt_ref", "content_sha256", "evaluation_rule_ref", "objective_disposition", "homecoming_custody_state", "carry_state", "effective_priority_receipt_ref", "effective_priority_class", "effective_priority_rank", "scheduling_mark_binding", "overtake_counts_before", "overtake_counts_after", "revalidation", "custody_reconciliation_performed", "authority_or_grant_mutated", "validity_or_status_mutated", "carry_mutated", "external_effect_receipt_ref"],
+      "properties": {
+        "admission_receipt_ref": {"$ref": "#/$defs/nonempty"}, "controller_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "profile_ref": {"$ref": "#/$defs/nonempty"}, "profile_epoch": {"type": "integer", "minimum": 1}, "service_epoch": {"type": "integer", "minimum": 1},
+        "snapshot_id": {"$ref": "#/$defs/nonempty"}, "order_receipt_ref": {"$ref": "#/$defs/nonempty"}, "service_ordinal": {"type": "integer", "minimum": 1},
+        "queue_item_id": {"$ref": "#/$defs/nonempty"}, "return_id": {"$ref": "#/$defs/nonempty"}, "objective_id": {"$ref": "#/$defs/nonempty"},
+        "creature_ref": {"$ref": "#/$defs/nonempty"}, "task_ref": {"$ref": "#/$defs/nonempty"}, "tether_ref": {"$ref": "#/$defs/nonempty"},
+        "task_tether_core_sha256": {"$ref": "#/$defs/sha256"}, "task_dispatch_ref": {"$ref": "#/$defs/nonempty"},
+        "dispatch_priority_receipt_ref": {"$ref": "#/$defs/nonempty"}, "intake_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "enqueue_receipt_ref": {"$ref": "#/$defs/nonempty"}, "return_receipt_ref": {"$ref": "#/$defs/nonempty"}, "content_sha256": {"$ref": "#/$defs/sha256"},
+        "evaluation_rule_ref": {"$ref": "#/$defs/nonempty"}, "objective_disposition": {"$ref": "#/$defs/nonempty"},
+        "homecoming_custody_state": {"const": "HOMECOMING:RETURNED"}, "carry_state": {"const": "CARRY:UNSELECTED"},
+        "effective_priority_receipt_ref": {"$ref": "#/$defs/nonempty"}, "effective_priority_class": {"$ref": "#/$defs/priorityClass"},
+        "effective_priority_rank": {"$ref": "#/$defs/priorityRank"}, "scheduling_mark_binding": {"$ref": "#/$defs/nonempty"},
+        "overtake_counts_before": {"type": "array", "items": {"$ref": "#/$defs/overtakeCount"}},
+        "overtake_counts_after": {"type": "array", "items": {"$ref": "#/$defs/overtakeCount"}},
+        "revalidation": {"const": "INTAKE_PROJECTION_MATCH_PASS"}, "custody_reconciliation_performed": {"const": false},
+        "authority_or_grant_mutated": {"const": false}, "validity_or_status_mutated": {"const": false}, "carry_mutated": {"const": false},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "serviceDisposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["service_disposition_receipt_ref", "controller_ref", "queue_id", "profile_ref", "profile_epoch", "service_epoch", "snapshot_id", "order_receipt_ref", "service_ordinal", "queue_item_id", "outcome", "next_state", "blocker_ref", "required_remedy_ref", "reopen_handle", "overtake_counts_before", "overtake_counts_after", "reopen_requires_retry_receipt", "reconciliation_required", "retry_receipt_ref", "external_effect_receipt_ref"],
+      "properties": {
+        "service_disposition_receipt_ref": {"$ref": "#/$defs/nonempty"}, "controller_ref": {"$ref": "#/$defs/nonempty"},
+        "queue_id": {"$ref": "#/$defs/nonempty"}, "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1}, "service_epoch": {"type": "integer", "minimum": 1},
+        "snapshot_id": {"$ref": "#/$defs/nonempty"}, "order_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "service_ordinal": {"type": "integer", "minimum": 1}, "queue_item_id": {"$ref": "#/$defs/nonempty"},
+        "outcome": {"enum": ["FAILED", "UNKNOWN"]},
+        "next_state": {"enum": ["HELD_SERVICE_REMEDY_REQUIRED", "SERVICE_OUTCOME_UNKNOWN_RECONCILIATION_REQUIRED"]},
+        "blocker_ref": {"$ref": "#/$defs/nonempty"}, "required_remedy_ref": {"$ref": "#/$defs/nonempty"},
+        "reopen_handle": {"$ref": "#/$defs/nonempty"},
+        "overtake_counts_before": {"type": "array", "items": {"$ref": "#/$defs/overtakeCount"}},
+        "overtake_counts_after": {"type": "array", "items": {"$ref": "#/$defs/overtakeCount"}},
+        "reopen_requires_retry_receipt": {"const": true}, "reconciliation_required": {"type": "boolean"},
+        "retry_receipt_ref": {"type": "null"}, "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "serviceReopenReceipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["readiness_receipt_ref", "service_disposition_receipt_ref", "controller_ref", "queue_id", "snapshot_id", "queue_item_id", "reopen_handle", "remedy_ref", "reconciliation_receipt_ref", "retry_rotation_release_receipt_ref", "revalidation_inputs_ref", "revalidation_result", "status", "external_effect_receipt_ref"],
+      "properties": {
+        "readiness_receipt_ref": {"$ref": "#/$defs/nonempty"}, "service_disposition_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "controller_ref": {"$ref": "#/$defs/nonempty"}, "queue_id": {"$ref": "#/$defs/nonempty"},
+        "snapshot_id": {"$ref": "#/$defs/nonempty"}, "queue_item_id": {"$ref": "#/$defs/nonempty"},
+        "reopen_handle": {"$ref": "#/$defs/nonempty"}, "remedy_ref": {"$ref": "#/$defs/nonempty"},
+        "reconciliation_receipt_ref": {"anyOf": [{"$ref": "#/$defs/nonempty"}, {"type": "null"}]},
+        "retry_rotation_release_receipt_ref": {"$ref": "#/$defs/nonempty"},
+        "revalidation_inputs_ref": {"$ref": "#/$defs/nonempty"}, "revalidation_result": {"const": "PASS"},
+        "status": {"enum": ["READY_REOPENED_AFTER_CONTROLLER_REMEDY", "READY_REOPENED_AFTER_DURABLE_RECONCILIATION"]},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "snapshot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["queue_id", "destination_ref", "synchronization_point_ref", "snapshot_id", "snapshot_ordinal", "profile_ref", "profile_epoch", "service_epoch", "policy_ref", "maximum_overtakes", "maximum_snapshot_items", "priority_ledger_cut_ordinal", "morrow_invocation_cut_binding", "cut_arrival_ordinal", "visible_ids", "ready_ids", "held_ids", "previously_admitted_ids", "overtake_counts_before", "effective_priority_marks", "morrow_ready_bindings", "snapshot_projection_sha256", "proposal", "decision", "admission", "service_disposition", "service_reopen_receipts"],
+      "oneOf": [
+        {"properties": {"admission": {"$ref": "#/$defs/admission"}, "service_disposition": {"type": "null"}}},
+        {"properties": {"admission": {"type": "null"}, "service_disposition": {"$ref": "#/$defs/serviceDisposition"}}}
+      ],
+      "properties": {
+        "queue_id": {"$ref": "#/$defs/nonempty"}, "destination_ref": {"$ref": "#/$defs/nonempty"}, "synchronization_point_ref": {"$ref": "#/$defs/nonempty"},
+        "snapshot_id": {"$ref": "#/$defs/nonempty"}, "snapshot_ordinal": {"type": "integer", "minimum": 1}, "profile_ref": {"$ref": "#/$defs/nonempty"},
+        "profile_epoch": {"type": "integer", "minimum": 1}, "service_epoch": {"type": "integer", "minimum": 1},
+        "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"}, "maximum_overtakes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "maximum_snapshot_items": {"type": "integer", "minimum": 1, "maximum": 256}, "priority_ledger_cut_ordinal": {"type": "integer", "minimum": 0},
+        "morrow_invocation_cut_binding": {"$ref": "#/$defs/opaqueToken"}, "cut_arrival_ordinal": {"type": "integer", "minimum": 1},
+        "visible_ids": {"$ref": "#/$defs/idArray"}, "ready_ids": {"$ref": "#/$defs/idArray"}, "held_ids": {"$ref": "#/$defs/idArray"},
+        "previously_admitted_ids": {"$ref": "#/$defs/idArray"}, "overtake_counts_before": {"type": "array", "items": {"$ref": "#/$defs/overtakeCount"}},
+        "effective_priority_marks": {"type": "array", "items": {"$ref": "#/$defs/effectivePriorityMark"}},
+        "morrow_ready_bindings": {"type": "array", "items": {"$ref": "#/$defs/morrowReadyBinding"}},
+        "snapshot_projection_sha256": {"$ref": "#/$defs/sha256"},
+        "proposal": {"anyOf": [{"$ref": "#/$defs/proposal"}, {"type": "null"}]},
+        "decision": {"$ref": "#/$defs/decision"},
+        "admission": {"anyOf": [{"$ref": "#/$defs/admission"}, {"type": "null"}]},
+        "service_disposition": {"anyOf": [{"$ref": "#/$defs/serviceDisposition"}, {"type": "null"}]},
+        "service_reopen_receipts": {"type": "array", "items": {"$ref": "#/$defs/serviceReopenReceipt"}}
+      }
+    },
+    "accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["intake_order", "admission_order", "ready_residual_ids", "held_residual_ids", "unreconciled_admitted_ids", "dropped_ids", "merged_ids", "distinct_same_content_pair", "all_intakes_accounted", "carry_selection_performed", "custody_reconciliation_performed", "external_effect_count"],
+      "properties": {
+        "intake_order": {"$ref": "#/$defs/idArray"}, "admission_order": {"$ref": "#/$defs/idArray"},
+        "ready_residual_ids": {"$ref": "#/$defs/idArray"}, "held_residual_ids": {"$ref": "#/$defs/idArray"},
+        "unreconciled_admitted_ids": {"$ref": "#/$defs/idArray"}, "dropped_ids": {"$ref": "#/$defs/idArray"},
+        "merged_ids": {"$ref": "#/$defs/idArray"},
+        "distinct_same_content_pair": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}},
+        "all_intakes_accounted": {"const": true}, "carry_selection_performed": {"const": false},
+        "custody_reconciliation_performed": {"const": false}, "external_effect_count": {"const": 0}
+      }
+    }
+  }
+}
