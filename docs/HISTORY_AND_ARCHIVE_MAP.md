@@ -19,12 +19,23 @@ or redirect is proposed here.
 - Merge `bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
   `7ff81534a7bc093224b29a5916b69d618e1cd27c`, is the preserved PR #4
   predecessor that joined the launch and hardened-station histories.
-- The canonical ARC-AGI-3 title now points to
+- Homecoming merge `a3f99acedd1fa91417510f66eba35c444533f335`, tree
+  `c7eac0a173c1b50ac62447785734f96a986bf4fb`, was merged through PR #6. It
+  descends from `bb6327e…` and first adds the offline return-queue reference
+  without changing the executable candidate, source lock, human-gate state, or
+  activity classification.
+- The canonical ARC-AGI-3 title now points to Morrow merge
+  `25e154d539b1c85e28c5334b9b940ab6880ca600`, tree
+  `d249cec7b81d942b84a6f728a421e3cd18ddaf31`, merged through PR #8. Its first
+  parent is
   `a3f99acedd1fa91417510f66eba35c444533f335`, tree
-  `c7eac0a173c1b50ac62447785734f96a986bf4fb`, merged through PR #6. It
-  descends from `bb6327e…` and adds the offline Homecoming return-queue
-  reference without changing the executable candidate, source lock,
-  human-gate state, or activity classification.
+  `c7eac0a173c1b50ac62447785734f96a986bf4fb`; its second parent is reviewed
+  source head `2f22c90bf2de57e5cb6b2d21b05c4b5c5cdc964b`. The source head and merge
+  commit share the exact current tree. This successor adds dispatch priority,
+  retry rotation, strict schemas, examples, verification, a stateless Morrow
+  sorter, and their story. It strictly separates Morrow's fresh scheduling
+  projection from Thulia's durable chronicle and still changes no executable
+  candidate, source lock, human-gate state, or activity classification.
 - Millennium `3449bd282309aa291a98d1e08819232b1849832e` is an
   append-only successor from `ef18554b2ca828b270dfb78512550b9b401ab6e4`, not
   a current ARC launch.
