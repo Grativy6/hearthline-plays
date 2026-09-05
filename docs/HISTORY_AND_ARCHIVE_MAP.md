@@ -16,10 +16,15 @@ or redirect is proposed here.
   `d4716557587302910b0002757b8e9e65c90b9fd7`, with one unique commit each.
 - The launch-only tree delta adds the Astra embargo JSON and Markdown receipts
   and updates the receipt index. It does not replace ARC machinery.
-- The canonical ARC-AGI-3 title now points to merge
-  `bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
-  `7ff81534a7bc093224b29a5916b69d618e1cd27c`. It joins the launch and hardened
-  station histories while retaining their earlier divergence as provenance.
+- Merge `bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
+  `7ff81534a7bc093224b29a5916b69d618e1cd27c`, is the preserved PR #4
+  predecessor that joined the launch and hardened-station histories.
+- The canonical ARC-AGI-3 title now points to
+  `a3f99acedd1fa91417510f66eba35c444533f335`, tree
+  `c7eac0a173c1b50ac62447785734f96a986bf4fb`, merged through PR #6. It
+  descends from `bb6327e…` and adds the offline Homecoming return-queue
+  reference without changing the executable candidate, source lock,
+  human-gate state, or activity classification.
 - Millennium `3449bd282309aa291a98d1e08819232b1849832e` is an
   append-only successor from `ef18554b2ca828b270dfb78512550b9b401ab6e4`, not
   a current ARC launch.
