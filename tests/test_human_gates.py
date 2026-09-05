@@ -661,7 +661,7 @@ class HumanGateTests(unittest.TestCase):
         with self.assertRaisesRegex(GATE.GateError, "duplicate Gate B UTC"):
             GATE.load_consumption_ledger()
 
-    def test_concurrent_consumption_allows_exactly_one(self) -> None:
+    def test_overlapping_consumption_allows_exactly_one(self) -> None:
         self.require_secure_consumption()
         first_grant = self.stage_grant(grant_id="stage-grant-001", nonce="d" * 32)
         second_grant = self.stage_grant(grant_id="stage-grant-002", nonce="e" * 32)
@@ -679,11 +679,57 @@ class HumanGateTests(unittest.TestCase):
                 return "blocked"
             return "written"
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-            outcomes = list(pool.map(attempt, (first, second)))
+        # A pool alone does not prove overlap: a fast first transaction may
+        # release the directory lock before the second worker is scheduled. Hold
+        # the first transaction immediately after lock acquisition so this test
+        # measures mutual exclusion rather than scheduler timing.
+        lock_acquired = concurrent.futures.Future()
+        release_lock = concurrent.futures.Future()
+        real_load = GATE.load_consumption_ledger
+
+        def hold_first_locked_load(*args, **kwargs):
+            if kwargs.get("lock_owned") and not lock_acquired.done():
+                lock_acquired.set_result(None)
+                release_lock.result(timeout=5)
+            return real_load(*args, **kwargs)
+
+        with mock.patch.object(
+            GATE,
+            "load_consumption_ledger",
+            side_effect=hold_first_locked_load,
+        ):
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+                first_future = pool.submit(attempt, first)
+                try:
+                    lock_acquired.result(timeout=5)
+                    second_future = pool.submit(attempt, second)
+                    second_outcome = second_future.result(timeout=5)
+                finally:
+                    if not release_lock.done():
+                        release_lock.set_result(None)
+                first_outcome = first_future.result(timeout=5)
+
+        outcomes = [first_outcome, second_outcome]
         self.assertEqual(sorted(outcomes), ["blocked", "written"])
         records = GATE.consumption_records()
         self.assertEqual(len(records), 1)
+
+    def test_distinct_valid_grants_can_serialize_sequentially(self) -> None:
+        self.require_secure_consumption()
+        first_grant = self.stage_grant(grant_id="stage-grant-001", nonce="d" * 32)
+        second_grant = self.stage_grant(grant_id="stage-grant-002", nonce="e" * 32)
+        first = GATE.validate_stage(first_grant, self.verification, self.NOW)
+        second = GATE.validate_stage(second_grant, self.verification, self.NOW)
+
+        GATE.consume(first, self.encoded(first_grant))
+        GATE.consume(second, self.encoded(second_grant))
+
+        records = GATE.consumption_records()
+        self.assertEqual([record["grant_id"] for record in records], [
+            "stage-grant-001",
+            "stage-grant-002",
+        ])
+        self.assertEqual([record["sequence"] for record in records], [1, 2])
 
     def test_unsupported_gate_host_fails_closed_before_consumption(self) -> None:
         grant = self.stage_grant()
