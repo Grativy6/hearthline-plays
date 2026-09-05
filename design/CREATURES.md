@@ -166,16 +166,32 @@ live concurrency, scheduling, or task-success result.
 
 The separately documented [`Homecoming return queue`](RETURN_QUEUE.md) is an
 offline reference for the point where multiple receipt-bound returns reach one
-controller. Intake fixes each queue-item identity and arrival ordinal. A
-manifest-bound Queue Steward Creature may propose a pure metadata order over an
-exact frozen snapshot, but only the controller records the final order and
-admits one revalidated head.
+controller. Intake fixes each queue-item identity and arrival ordinal.
+Hearthline assigns a bounded sequencing priority before dispatch. The
+controller later freezes a ready-only scheduling view and may ask **Morrow**, a
+deterministic stateless function rather than a Creature, to propose an order.
+Morrow receives fresh invocation-local bindings, effective priority rank,
+approved cost, ready-arrival rank, and the controller-owned overtake count; only
+the controller records the final order and admits one revalidated head.
 
 The queue does not reconcile Homecoming custody, select carry, change a
 rule-owned result, consume or renew a grant, or execute an external effect.
 Held returns stay visible, later arrivals wait for the next snapshot, and a
-persisted `maximum_overtakes` limit prevents a cost proposal from bypassing an
-older ready return indefinitely within terminating controller steps.
+persisted `maximum_overtakes` limit creates a stable fairness-due prefix before
+ordinary priority and cost ordering. Invalid or absent Morrow output falls back
+to the same fairness prefix, then controller priority and arrival order.
+
+Morrow has no ledger, persistent state, Perch, Bridge Gloss, custody or carry
+view, direct channel to Thulia, or admission authority. Thulia has no priority,
+scheduling-view, proposal, final-order, or admission view. Neither invokes,
+impersonates, depends on, or shares an identity/state surface with the other,
+and each remains operable while the other is absent. The old Queue Steward
+Creature wording is retained only as design history; it is not the runnable v2
+identity or execution model.
+
+Morrow cannot read or write Thulia state. Thulia cannot read or write Morrow's
+view or proposal and cannot set controller-approved cost or another scheduling
+input.
 
 ## Matched evaluation design
 

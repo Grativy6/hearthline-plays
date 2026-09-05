@@ -56,7 +56,7 @@ jobs:
           object_hash = "sha1" if len(match.group(1)) == 40 else "sha256"
           if hashlib.new(object_hash, framed).hexdigest().encode("ascii") != match.group(1):
               raise SystemExit("repository guard Git object identity mismatch")
-          expected_guard_sha256 = "e8135f6bf1373408ae3dcb4378a506b64c6ae6c65c85777cf516276ab8b178f4"
+          expected_guard_sha256 = "94253c81ea282222ceb18d956973b8aac03ee9cd06303f1ded0d06d270a149d2"
           if hashlib.sha256(blob).hexdigest() != expected_guard_sha256:
               raise SystemExit("repository guard blob does not match the externally reviewed pin")
           target = Path(os.environ["RUNNER_TEMP"]) / "hearthline-repository-guard.py"

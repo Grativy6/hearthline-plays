@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/schemas/morrow-proposal.v1.schema.json",
+  "title": "Morrow non-authoritative queue-order proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "invocation_cut_binding",
+    "scheduling_view_sha256",
+    "policy_ref",
+    "ready_order",
+    "reason_codes",
+    "pure_metadata_only",
+    "deterministic_stateless",
+    "persistent_state_ref",
+    "external_effect_count"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline-plays.morrow-proposal.v1"},
+    "status": {"const": "PROPOSAL_ONLY_NO_ADMISSION"},
+    "invocation_cut_binding": {"$ref": "#/$defs/opaqueToken"},
+    "scheduling_view_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "policy_ref": {"const": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2"},
+    "ready_order": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/opaqueToken"}
+    },
+    "reason_codes": {
+      "const": [
+        "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+        "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+        "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+        "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+      ]
+    },
+    "pure_metadata_only": {"const": true},
+    "deterministic_stateless": {"const": true},
+    "persistent_state_ref": {"type": "null"},
+    "external_effect_count": {"const": 0}
+  },
+  "$defs": {
+    "opaqueToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    }
+  }
+}

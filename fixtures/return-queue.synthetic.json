@@ -1,5 +1,5 @@
 {
-  "schema": "hearthline-plays.return-queue.v1",
+  "schema": "hearthline-plays.return-queue.v2",
   "fixture_kind": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY",
   "status": "OFFLINE_REFERENCE_IMPLEMENTED_NOT_WIRED",
   "claim_ceiling": "This fabricated Homecoming queue validates deterministic data transitions only. It is not a hosted scheduler, concurrency or latency result, Creature run, ARC interaction, task result, custody reconciliation, carry decision, authority receipt, or external effect.",
@@ -15,8 +15,21 @@
     "queue_scope": "HOMECOMING_RETURN_BUNDLES_ONLY",
     "maximum_snapshot_items": 16,
     "external_effect_count": 0,
+    "priority_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+    "priority_register_ref": "SYNTHETIC_CONTROLLER_PRIORITY_REGISTER_0001",
+    "priority_authorization_register_ref": "SYNTHETIC_CONTROLLER_PRIORITY_AUTHORIZATIONS_0001",
+    "priority_genesis_head_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+    "priority_genesis_head_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "dispatch_priority_assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+    "priority_revision_assignment_basis_ref": "SYNTHETIC_PRIORITY_REVISION_ASSIGNMENT_BASIS_0001",
+    "unmarked_return_rule": "HOLD_FOR_EXPLICIT_MIGRATION_OR_DISPATCH_MARK",
+    "invalid_revision_rule": "REJECT_WITHOUT_MUTATION_KEEP_LAST_VALID_MARK",
+    "ambiguous_revision_rule": "HOLD_SUBJECT_UNTIL_PRIORITY_LEDGER_RECONCILIATION",
     "queue_steward": {
-      "creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+      "name": "Morrow",
+      "identity_ref": "SYNTHETIC_MORROW_FUNCTION_0001",
+      "legacy_queue_steward_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+      "legacy_compatibility_status": "DESIGN_HISTORY_ONLY_NOT_RUNTIME_IDENTITY",
       "manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
       "task_ref": "SYNTHETIC_QUEUE_SORT_TASK_0001",
       "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
@@ -24,13 +37,30 @@
       "control_return_scope": "QUEUE_ORDER_PROPOSAL_ONLY",
       "scheduling_view_field_allowlist": [
         "opaque_queue_item_binding",
-        "arrival_ordinal",
+        "ready_arrival_rank",
+        "effective_priority_rank",
         "controller_approved_processing_cost",
-        "scheduling_metadata_provenance_ref",
         "overtake_count"
       ],
+      "implementation_mode": "DETERMINISTIC_STATELESS_FROZEN_INPUT_TO_PROPOSAL",
+      "persistent_state_ref": null,
+      "ledger_ref": null,
+      "perch_ref": null,
+      "bridge_gloss_ref": null,
+      "direct_thulia_channel_ref": null,
+      "liveness_contract_ref": null,
       "role": "TASK_SCOPED_METADATA_ONLY_PURE_PROPOSER",
-      "authority": "PROPOSE_READY_ORDER_ONLY",
+      "authority": "NONE",
+      "allowed_output": "QUEUE_ORDER_PROPOSAL_ONLY",
+      "can_emit_heartbeat": false,
+      "can_read_selected_carry": false,
+      "can_read_homecoming_custody": false,
+      "can_read_thulia_state": false,
+      "can_write_thulia_state": false,
+      "can_invoke_thulia": false,
+      "can_impersonate_thulia": false,
+      "depends_on_thulia": false,
+      "operates_if_thulia_absent": true,
       "can_enter_data_queue_under_review": false,
       "can_admit": false,
       "can_mutate_return": false,
@@ -38,15 +68,521 @@
       "can_grant_or_renew": false,
       "can_execute_effect": false
     },
+    "thulia_non_interference": {
+      "thulia_ref": "SYNTHETIC_THULIA_0001",
+      "state_ref": "SYNTHETIC_THULIA_STATE_0001",
+      "ledger_ref": "SYNTHETIC_THULIA_LEDGER_0001",
+      "perch_ref": "SYNTHETIC_THULIA_PERCH_0001",
+      "bridge_gloss_ref": "SYNTHETIC_THULIA_BRIDGE_GLOSS_0001",
+      "direct_morrow_channel_ref": null,
+      "can_read_or_set_priority": false,
+      "can_read_scheduling_view": false,
+      "can_write_scheduling_view": false,
+      "can_read_proposal": false,
+      "can_write_proposal": false,
+      "can_read_final_order": false,
+      "can_read_admission_state": false,
+      "can_set_controller_approved_processing_cost": false,
+      "can_set_order": false,
+      "can_admit": false,
+      "can_invoke_morrow": false,
+      "can_impersonate_morrow": false,
+      "depends_on_morrow": false,
+      "operates_if_morrow_absent": true
+    },
     "policy": {
-      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
       "maximum_overtakes": 2,
-      "invalid_or_absent_proposal": "FIFO_READY_BY_ARRIVAL",
+      "invalid_or_absent_proposal": "CONTROLLER_EFFECTIVE_PRIORITY_THEN_FIFO_BY_ARRIVAL",
       "new_arrival_rule": "NEXT_SNAPSHOT_ONLY",
       "admission_width": 1,
-      "revalidate_head_before_admission": true
+      "revalidate_head_before_admission": true,
+      "failed_or_uncertain_head_rule": "ATOMIC_READY_TO_HELD_WITH_SERVICE_DISPOSITION_RETRY_RECEIPT_REQUIRED",
+      "maximum_controller_approved_processing_cost": 1000000,
+      "priority_classes": [
+        "P0_URGENT",
+        "P1_EXPEDITE",
+        "P2_ROUTINE",
+        "P3_BACKGROUND"
+      ]
     }
   },
+  "priority_authorizations": [
+    {
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_OLD_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_OLD",
+      "tether_ref": "SYNTHETIC_TETHER_OLD",
+      "task_tether_core_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_OLD_0001",
+      "authorized_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 1,
+      "grant_ref": "SYNTHETIC_GRANT_OLD",
+      "scope_ref": "SYNTHETIC_SCOPE_OLD",
+      "deadline_ref": "SYNTHETIC_DEADLINE_OLD",
+      "budget_ref": "SYNTHETIC_BUDGET_OLD",
+      "priority_is_sequencing_only": true,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_SHORT_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_SHORT",
+      "tether_ref": "SYNTHETIC_TETHER_SHORT",
+      "task_tether_core_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_SHORT_0001",
+      "authorized_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 0,
+      "grant_ref": "SYNTHETIC_GRANT_SHORT",
+      "scope_ref": "SYNTHETIC_SCOPE_SHORT",
+      "deadline_ref": "SYNTHETIC_DEADLINE_SHORT",
+      "budget_ref": "SYNTHETIC_BUDGET_SHORT",
+      "priority_is_sequencing_only": true,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_MEDIUM_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_MEDIUM",
+      "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+      "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_MEDIUM_0001",
+      "authorized_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 1,
+      "grant_ref": "SYNTHETIC_GRANT_MEDIUM",
+      "scope_ref": "SYNTHETIC_SCOPE_MEDIUM",
+      "deadline_ref": "SYNTHETIC_DEADLINE_MEDIUM",
+      "budget_ref": "SYNTHETIC_BUDGET_MEDIUM",
+      "priority_is_sequencing_only": true,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_HELD_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_HELD",
+      "tether_ref": "SYNTHETIC_TETHER_HELD",
+      "task_tether_core_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_HELD_0001",
+      "authorized_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "priority_ceiling_class": "P0_URGENT",
+      "priority_ceiling_rank": 0,
+      "maximum_priority_revisions": 1,
+      "grant_ref": "SYNTHETIC_GRANT_HELD",
+      "scope_ref": "SYNTHETIC_SCOPE_HELD",
+      "deadline_ref": "SYNTHETIC_DEADLINE_HELD",
+      "budget_ref": "SYNTHETIC_BUDGET_HELD",
+      "priority_is_sequencing_only": true,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_LATE_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_LATE",
+      "tether_ref": "SYNTHETIC_TETHER_LATE",
+      "task_tether_core_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_LATE_0001",
+      "authorized_assigner_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 0,
+      "grant_ref": "SYNTHETIC_GRANT_LATE",
+      "scope_ref": "SYNTHETIC_SCOPE_LATE",
+      "deadline_ref": "SYNTHETIC_DEADLINE_LATE",
+      "budget_ref": "SYNTHETIC_BUDGET_LATE",
+      "priority_is_sequencing_only": true,
+      "external_effect_receipt_ref": null
+    }
+  ],
+  "priority_receipts": [
+    {
+      "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_IDEMPOTENCY_OLD_0001",
+      "ledger_ordinal": 1,
+      "receipt_kind": "DISPATCH_PRIORITY_MARK",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_OLD",
+      "tether_ref": "SYNTHETIC_TETHER_OLD",
+      "task_tether_core_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_OLD_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_OLD_0001",
+      "revision_ordinal": 0,
+      "supersedes_priority_receipt_ref": null,
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P2_ROUTINE",
+      "priority_rank": 2,
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 1,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_priority_ledger_head_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "observed_snapshot_ordinal": 0,
+      "observed_snapshot_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_snapshot_projection_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "grant_ref": "SYNTHETIC_GRANT_OLD",
+      "scope_ref": "SYNTHETIC_SCOPE_OLD",
+      "deadline_ref": "SYNTHETIC_DEADLINE_OLD",
+      "budget_ref": "SYNTHETIC_BUDGET_OLD",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_COMMISSIONED_DISPATCH_PENDING",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_IDEMPOTENCY_SHORT_0001",
+      "ledger_ordinal": 2,
+      "receipt_kind": "DISPATCH_PRIORITY_MARK",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_SHORT",
+      "tether_ref": "SYNTHETIC_TETHER_SHORT",
+      "task_tether_core_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_SHORT_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_SHORT_0001",
+      "revision_ordinal": 0,
+      "supersedes_priority_receipt_ref": null,
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P1_EXPEDITE",
+      "priority_rank": 1,
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 0,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0002",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+      "observed_priority_ledger_head_sha256": "80050d7827b1b8f5071877f02de9e060d2ee860cd85e3d03fcb2af4a4e469c86",
+      "observed_snapshot_ordinal": 0,
+      "observed_snapshot_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_snapshot_projection_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "grant_ref": "SYNTHETIC_GRANT_SHORT",
+      "scope_ref": "SYNTHETIC_SCOPE_SHORT",
+      "deadline_ref": "SYNTHETIC_DEADLINE_SHORT",
+      "budget_ref": "SYNTHETIC_BUDGET_SHORT",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_COMMISSIONED_DISPATCH_PENDING",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_IDEMPOTENCY_MEDIUM_0001",
+      "ledger_ordinal": 3,
+      "receipt_kind": "DISPATCH_PRIORITY_MARK",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_MEDIUM",
+      "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+      "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_MEDIUM_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_MEDIUM_0001",
+      "revision_ordinal": 0,
+      "supersedes_priority_receipt_ref": null,
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P3_BACKGROUND",
+      "priority_rank": 3,
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 1,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0003",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
+      "observed_priority_ledger_head_sha256": "4747b221085f035adb789a6a9f33204a534b524a6fb614aee33982c79d619e1d",
+      "observed_snapshot_ordinal": 0,
+      "observed_snapshot_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_snapshot_projection_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "grant_ref": "SYNTHETIC_GRANT_MEDIUM",
+      "scope_ref": "SYNTHETIC_SCOPE_MEDIUM",
+      "deadline_ref": "SYNTHETIC_DEADLINE_MEDIUM",
+      "budget_ref": "SYNTHETIC_BUDGET_MEDIUM",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_COMMISSIONED_DISPATCH_PENDING",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_IDEMPOTENCY_HELD_0001",
+      "ledger_ordinal": 4,
+      "receipt_kind": "DISPATCH_PRIORITY_MARK",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_HELD",
+      "tether_ref": "SYNTHETIC_TETHER_HELD",
+      "task_tether_core_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_HELD_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_HELD_0001",
+      "revision_ordinal": 0,
+      "supersedes_priority_receipt_ref": null,
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P0_URGENT",
+      "priority_rank": 0,
+      "priority_ceiling_class": "P0_URGENT",
+      "priority_ceiling_rank": 0,
+      "maximum_priority_revisions": 1,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
+      "observed_priority_ledger_head_sha256": "09c4e8d8d6ff03b08582650e448b904c37eaf202d8e255614ffd36630d831130",
+      "observed_snapshot_ordinal": 0,
+      "observed_snapshot_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_snapshot_projection_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "grant_ref": "SYNTHETIC_GRANT_HELD",
+      "scope_ref": "SYNTHETIC_SCOPE_HELD",
+      "deadline_ref": "SYNTHETIC_DEADLINE_HELD",
+      "budget_ref": "SYNTHETIC_BUDGET_HELD",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_COMMISSIONED_DISPATCH_PENDING",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_IDEMPOTENCY_LATE_0001",
+      "ledger_ordinal": 5,
+      "receipt_kind": "DISPATCH_PRIORITY_MARK",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_LATE",
+      "tether_ref": "SYNTHETIC_TETHER_LATE",
+      "task_tether_core_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_LATE_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_LATE_0001",
+      "revision_ordinal": 0,
+      "supersedes_priority_receipt_ref": null,
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_DISPATCH_PRIORITY_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P1_EXPEDITE",
+      "priority_rank": 1,
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 0,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0005",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+      "observed_priority_ledger_head_sha256": "701fcbfe3e9668affac4b6d0fdda799b2d220432cbd39d9847e7d662328bad93",
+      "observed_snapshot_ordinal": 1,
+      "observed_snapshot_ref": "synthetic-queue-snapshot-0001",
+      "observed_snapshot_projection_sha256": "6d3f6be94a0f721e65273723e455f3007cb1bc7bd740afe382389a36f7633435",
+      "grant_ref": "SYNTHETIC_GRANT_LATE",
+      "scope_ref": "SYNTHETIC_SCOPE_LATE",
+      "deadline_ref": "SYNTHETIC_DEADLINE_LATE",
+      "budget_ref": "SYNTHETIC_BUDGET_LATE",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_COMMISSIONED_DISPATCH_PENDING",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "priority_receipt_ref": "SYNTHETIC_PRIORITY_REVISION_MEDIUM_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_REVISION_IDEMPOTENCY_MEDIUM_0001",
+      "ledger_ordinal": 6,
+      "receipt_kind": "PRIORITY_REVISION",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "task_ref": "SYNTHETIC_TASK_MEDIUM",
+      "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+      "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_MEDIUM_0001",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_MEDIUM_0001",
+      "revision_ordinal": 1,
+      "supersedes_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
+      "assigned_by_ref": "SYNTHETIC_HEARTHLINE_0001",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "assignment_basis_ref": "SYNTHETIC_PRIORITY_REVISION_ASSIGNMENT_BASIS_0001",
+      "priority_class": "P1_EXPEDITE",
+      "priority_rank": 1,
+      "priority_ceiling_class": "P1_EXPEDITE",
+      "priority_ceiling_rank": 1,
+      "maximum_priority_revisions": 1,
+      "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0006",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+      "observed_priority_ledger_head_sha256": "f40f161f11cfd743eae8668c89dbd4b19a02b10103da22bf3e927944e4f74f65",
+      "observed_snapshot_ordinal": 1,
+      "observed_snapshot_ref": "synthetic-queue-snapshot-0001",
+      "observed_snapshot_projection_sha256": "6d3f6be94a0f721e65273723e455f3007cb1bc7bd740afe382389a36f7633435",
+      "grant_ref": "SYNTHETIC_GRANT_MEDIUM",
+      "scope_ref": "SYNTHETIC_SCOPE_MEDIUM",
+      "deadline_ref": "SYNTHETIC_DEADLINE_MEDIUM",
+      "budget_ref": "SYNTHETIC_BUDGET_MEDIUM",
+      "grant_renewed": false,
+      "scope_expanded": false,
+      "deadline_extended": false,
+      "budget_increased": false,
+      "authority_mutated": false,
+      "subject_state": "TASK_OUT_OR_RETURN_PENDING_NOT_ADMITTED",
+      "terminal_admission_ref": null,
+      "external_effect_receipt_ref": null
+    }
+  ],
+  "priority_append_holds": [
+    {
+      "priority_append_hold_ref": "SYNTHETIC_PRIORITY_APPEND_HOLD_HELD_0001",
+      "idempotency_key": "SYNTHETIC_PRIORITY_REVISION_IDEMPOTENCY_HELD_UNKNOWN_0001",
+      "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "priority_authorization_ref": "SYNTHETIC_PRIORITY_AUTHORIZATION_HELD_0001",
+      "task_ref": "SYNTHETIC_TASK_HELD",
+      "tether_ref": "SYNTHETIC_TETHER_HELD",
+      "task_tether_core_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "dispatch_ref": "SYNTHETIC_DISPATCH_HELD_0001",
+      "attempted_priority_receipt_ref": "SYNTHETIC_PRIORITY_REVISION_HELD_UNKNOWN_0001",
+      "attempted_priority_receipt_sha256": "40f1a1b8b901abc3f221d7007ab0ac2108f2e99230d9e7c14e7b6341962e17dd",
+      "attempted_receipt_kind": "PRIORITY_REVISION",
+      "attempted_revision_ordinal": 1,
+      "attempted_supersedes_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+      "observed_priority_ledger_head_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+      "observed_priority_ledger_head_sha256": "701fcbfe3e9668affac4b6d0fdda799b2d220432cbd39d9847e7d662328bad93",
+      "observed_snapshot_ordinal": 0,
+      "observed_snapshot_ref": "SYNTHETIC_PRIORITY_GENESIS_HEAD_0001",
+      "observed_snapshot_projection_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "persistence_outcome": "UNKNOWN",
+      "hold_state": "PRIORITY_APPEND_UNKNOWN_HELD",
+      "reconciliation_handle": "SYNTHETIC_PRIORITY_APPEND_RECONCILIATION_HANDLE_HELD_0001",
+      "reconciliation_receipt_ref": null,
+      "can_enter_ready": false,
+      "external_effect_receipt_ref": null
+    }
+  ],
+  "scheduling_attestations": [
+    {
+      "scheduling_attestation_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "task_ref": "SYNTHETIC_TASK_OLD",
+      "tether_ref": "SYNTHETIC_TETHER_OLD",
+      "task_tether_core_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "opaque_scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
+      "controller_approved_processing_cost": 10,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "scheduling_attestation_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0002",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "task_ref": "SYNTHETIC_TASK_SHORT",
+      "tether_ref": "SYNTHETIC_TETHER_SHORT",
+      "task_tether_core_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "opaque_scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0002",
+      "controller_approved_processing_cost": 1,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "scheduling_attestation_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "task_ref": "SYNTHETIC_TASK_MEDIUM",
+      "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+      "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "opaque_scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
+      "controller_approved_processing_cost": 2,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "scheduling_attestation_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0004",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "task_ref": "SYNTHETIC_TASK_HELD",
+      "tether_ref": "SYNTHETIC_TETHER_HELD",
+      "task_tether_core_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "opaque_scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0004",
+      "controller_approved_processing_cost": 1,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "scheduling_attestation_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "recorded_by_controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "task_ref": "SYNTHETIC_TASK_LATE",
+      "tether_ref": "SYNTHETIC_TETHER_LATE",
+      "task_tether_core_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "opaque_scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
+      "controller_approved_processing_cost": 3,
+      "external_effect_receipt_ref": null
+    }
+  ],
   "returns": [
     {
       "queue_item_id": "synthetic-queue-item-old",
@@ -54,8 +590,15 @@
       "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_OLD_0001",
       "objective_id": "synthetic-objective-old",
       "creature_ref": "SYNTHETIC_CREATURE_OLD",
+      "task_ref": "SYNTHETIC_TASK_OLD",
+      "tether_ref": "SYNTHETIC_TETHER_OLD",
+      "task_tether_core_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "task_dispatch_ref": "SYNTHETIC_DISPATCH_OLD_0001",
+      "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+      "dispatch_binding_state": "PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE",
       "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
       "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001",
+      "scheduling_metadata_binding": "b33d69a04b55113ed69ad9d4b22cf8b00633922d1498eacb30b4fb2eebd0af24",
       "intake_receipt_ref": "SYNTHETIC_INTAKE_0001",
       "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0001",
       "return_receipt_ref": "SYNTHETIC_HOMECOMING_OLD_0001",
@@ -78,8 +621,15 @@
       "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_SHORT_0001",
       "objective_id": "synthetic-objective-short",
       "creature_ref": "SYNTHETIC_CREATURE_SHORT",
+      "task_ref": "SYNTHETIC_TASK_SHORT",
+      "tether_ref": "SYNTHETIC_TETHER_SHORT",
+      "task_tether_core_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "task_dispatch_ref": "SYNTHETIC_DISPATCH_SHORT_0001",
+      "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
+      "dispatch_binding_state": "PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE",
       "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0002",
       "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0002",
+      "scheduling_metadata_binding": "81d0743344b11adeea8da8236ea0b1a375694072d8344db7c7de0830bec1d932",
       "intake_receipt_ref": "SYNTHETIC_INTAKE_0002",
       "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0002",
       "return_receipt_ref": "SYNTHETIC_HOMECOMING_SHORT_0001",
@@ -102,8 +652,15 @@
       "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_MEDIUM_0001",
       "objective_id": "synthetic-objective-medium",
       "creature_ref": "SYNTHETIC_CREATURE_MEDIUM",
+      "task_ref": "SYNTHETIC_TASK_MEDIUM",
+      "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+      "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "task_dispatch_ref": "SYNTHETIC_DISPATCH_MEDIUM_0001",
+      "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
+      "dispatch_binding_state": "PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE",
       "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
       "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003",
+      "scheduling_metadata_binding": "bca888dedded2fca4cbaac05464d9b3835734974dbbba37f017f6a71117be277",
       "intake_receipt_ref": "SYNTHETIC_INTAKE_0003",
       "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0003",
       "return_receipt_ref": "SYNTHETIC_HOMECOMING_MEDIUM_0001",
@@ -126,8 +683,15 @@
       "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_HELD_0001",
       "objective_id": "synthetic-objective-held",
       "creature_ref": "SYNTHETIC_CREATURE_HELD",
+      "task_ref": "SYNTHETIC_TASK_HELD",
+      "tether_ref": "SYNTHETIC_TETHER_HELD",
+      "task_tether_core_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "task_dispatch_ref": "SYNTHETIC_DISPATCH_HELD_0001",
+      "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+      "dispatch_binding_state": "PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE",
       "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0004",
       "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0004",
+      "scheduling_metadata_binding": "e7f38e68685f547ac986b216f8c850924d5f7e43cf85783b7bcd5c2884f57033",
       "intake_receipt_ref": "SYNTHETIC_INTAKE_0004",
       "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0004",
       "return_receipt_ref": "SYNTHETIC_HOMECOMING_HELD_0001",
@@ -140,8 +704,8 @@
       "homecoming_custody_state": "HOMECOMING:RETURNED",
       "carry_state": "CARRY:UNSELECTED",
       "initial_queue_state": "HELD",
-      "hold_reason": "SYNTHETIC_CONTROLLER_HOLD_PENDING_REVIEW",
-      "hold_reopen_ref": "SYNTHETIC_HOLD_REOPEN_0001",
+      "hold_reason": "PRIORITY_APPEND_OUTCOME_UNKNOWN",
+      "hold_reopen_ref": "SYNTHETIC_PRIORITY_APPEND_RECONCILIATION_HANDLE_HELD_0001",
       "external_effect_receipt_ref": null
     },
     {
@@ -150,8 +714,15 @@
       "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_LATE_0001",
       "objective_id": "synthetic-objective-late",
       "creature_ref": "SYNTHETIC_CREATURE_LATE",
+      "task_ref": "SYNTHETIC_TASK_LATE",
+      "tether_ref": "SYNTHETIC_TETHER_LATE",
+      "task_tether_core_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "task_dispatch_ref": "SYNTHETIC_DISPATCH_LATE_0001",
+      "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+      "dispatch_binding_state": "PRIORITY_MARK_BOUND_BEFORE_TASK_RELEASE",
       "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
       "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005",
+      "scheduling_metadata_binding": "18bf5efdd69429f8f4ab9e9846258bb0c193a29fc258c71e9bb3148e0212d52f",
       "intake_receipt_ref": "SYNTHETIC_INTAKE_0005",
       "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0005",
       "return_receipt_ref": "SYNTHETIC_HOMECOMING_LATE_0001",
@@ -179,8 +750,12 @@
       "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
       "profile_epoch": 1,
       "service_epoch": 1,
-      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-      "snapshot_projection_sha256": "169cebbad2bb8fc6416abe69a5132e6cf1b2dc950637de9c977c2f5684b237d3",
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "maximum_overtakes": 2,
+      "maximum_snapshot_items": 16,
+      "priority_ledger_cut_ordinal": 4,
+      "morrow_invocation_cut_binding": "mcut:7e1f3ac4b9d26f805da47c11e938a620",
+      "snapshot_projection_sha256": "6d3f6be94a0f721e65273723e455f3007cb1bc7bd740afe382389a36f7633435",
       "cut_arrival_ordinal": 4,
       "visible_ids": [
         "synthetic-queue-item-old",
@@ -211,42 +786,75 @@
           "count": 0
         }
       ],
+      "effective_priority_marks": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+          "priority_class": "P2_ROUTINE",
+          "priority_rank": 2,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-short",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0002"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
+          "priority_class": "P3_BACKGROUND",
+          "priority_rank": 3,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0003"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-held",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+          "priority_class": "P0_URGENT",
+          "priority_rank": 0,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004"
+        }
+      ],
+      "morrow_ready_bindings": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "opaque_queue_item_binding": "mitem:0fd7c31a8e2649b5a237dc6419fe8052"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-short",
+          "opaque_queue_item_binding": "mitem:b925e0f14c873a65d0827be431c9fa06"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "opaque_queue_item_binding": "mitem:54c8a61ed0937bf215cae7084d39f260"
+        }
+      ],
+      "service_reopen_receipts": [],
       "proposal": {
         "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0001",
-        "queue_id": "synthetic-return-queue-0001",
-        "snapshot_id": "synthetic-queue-snapshot-0001",
-        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
-        "profile_epoch": 1,
-        "service_epoch": 1,
-        "snapshot_projection_sha256": "169cebbad2bb8fc6416abe69a5132e6cf1b2dc950637de9c977c2f5684b237d3",
-        "scheduling_view_sha256": "369deecbb0d93fe6367818b8ced439020d046622267530365f81fe0a699529a2",
-        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
-        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
-        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
-        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-        "approved_cost_projection": [
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
-            "controller_approved_processing_cost": 10,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
-          },
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0002",
-            "controller_approved_processing_cost": 1,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0002"
-          },
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
-            "controller_approved_processing_cost": 2,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003"
-          }
-        ],
-        "ready_order": [
-          "SYNTHETIC_OPAQUE_BINDING_0002",
-          "SYNTHETIC_OPAQUE_BINDING_0003",
-          "SYNTHETIC_OPAQUE_BINDING_0001"
-        ],
-        "pure_metadata_only": true
+        "morrow_output": {
+          "schema": "hearthline-plays.morrow-proposal.v1",
+          "status": "PROPOSAL_ONLY_NO_ADMISSION",
+          "invocation_cut_binding": "mcut:7e1f3ac4b9d26f805da47c11e938a620",
+          "scheduling_view_sha256": "3d4c8baa815665cf319891f2feacf4edba886bcc4ed07a9cf87a6b8073d24022",
+          "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+          "ready_order": [
+            "mitem:b925e0f14c873a65d0827be431c9fa06",
+            "mitem:0fd7c31a8e2649b5a237dc6419fe8052",
+            "mitem:54c8a61ed0937bf215cae7084d39f260"
+          ],
+          "reason_codes": [
+            "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+            "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+            "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+            "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+          ],
+          "pure_metadata_only": true,
+          "deterministic_stateless": true,
+          "persistent_state_ref": null,
+          "external_effect_count": 0
+        }
       },
       "decision": {
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
@@ -257,16 +865,17 @@
         "snapshot_id": "synthetic-queue-snapshot-0001",
         "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
         "controller_disposition": "USE_VALID_PROPOSAL",
-        "schedule_basis": "VALID_COST_PROPOSAL",
+        "schedule_basis": "VALID_MORROW_PRIORITY_COST_PROPOSAL",
         "schedule_order": [
           "synthetic-queue-item-short",
-          "synthetic-queue-item-medium",
-          "synthetic-queue-item-old"
+          "synthetic-queue-item-old",
+          "synthetic-queue-item-medium"
         ],
         "forced_head_queue_item_id": null,
         "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0001",
         "service_head_queue_item_id": "synthetic-queue-item-short"
       },
+      "service_disposition": null,
       "admission": {
         "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0001",
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
@@ -281,6 +890,11 @@
         "return_id": "synthetic-return-short",
         "objective_id": "synthetic-objective-short",
         "creature_ref": "SYNTHETIC_CREATURE_SHORT",
+        "task_ref": "SYNTHETIC_TASK_SHORT",
+        "tether_ref": "SYNTHETIC_TETHER_SHORT",
+        "task_tether_core_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "task_dispatch_ref": "SYNTHETIC_DISPATCH_SHORT_0001",
+        "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
         "intake_receipt_ref": "SYNTHETIC_INTAKE_0002",
         "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0002",
         "return_receipt_ref": "SYNTHETIC_HOMECOMING_SHORT_0001",
@@ -289,6 +903,10 @@
         "objective_disposition": "SYNTHETIC_RULE_SHORT:SATISFIED",
         "homecoming_custody_state": "HOMECOMING:RETURNED",
         "carry_state": "CARRY:UNSELECTED",
+        "effective_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_SHORT_0001",
+        "effective_priority_class": "P1_EXPEDITE",
+        "effective_priority_rank": 1,
+        "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0002",
         "overtake_counts_before": [
           {
             "queue_item_id": "synthetic-queue-item-old",
@@ -330,8 +948,12 @@
       "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
       "profile_epoch": 1,
       "service_epoch": 1,
-      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-      "snapshot_projection_sha256": "ed50ed8d1043a25448553d07341dc7666f1f0a81b34f771b806ca1e1f1e8b5af",
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "maximum_overtakes": 2,
+      "maximum_snapshot_items": 16,
+      "priority_ledger_cut_ordinal": 6,
+      "morrow_invocation_cut_binding": "mcut:c4259ae173d84f0b6e12a9703bf5618d",
+      "snapshot_projection_sha256": "fa9549ebf816dc92e43b59f55eb425799ae88a11ac2500174469df2a2fd9c3e9",
       "cut_arrival_ordinal": 5,
       "visible_ids": [
         "synthetic-queue-item-old",
@@ -365,42 +987,64 @@
           "count": 0
         }
       ],
+      "effective_priority_marks": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+          "priority_class": "P2_ROUTINE",
+          "priority_rank": 2,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "priority_receipt_ref": "SYNTHETIC_PRIORITY_REVISION_MEDIUM_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0006"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-held",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+          "priority_class": "P0_URGENT",
+          "priority_rank": 0,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0005"
+        }
+      ],
+      "morrow_ready_bindings": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "opaque_queue_item_binding": "mitem:8ab4e1935d60c72f04e91a3dc6582bf7"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "opaque_queue_item_binding": "mitem:c3d106ae594f7280b6ec41d97a8352bf"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "opaque_queue_item_binding": "mitem:291ce8650abf43d78e0195c4ba7632df"
+        }
+      ],
+      "service_reopen_receipts": [],
       "proposal": {
         "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0002",
-        "queue_id": "synthetic-return-queue-0001",
-        "snapshot_id": "synthetic-queue-snapshot-0002",
-        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
-        "profile_epoch": 1,
-        "service_epoch": 1,
-        "snapshot_projection_sha256": "ed50ed8d1043a25448553d07341dc7666f1f0a81b34f771b806ca1e1f1e8b5af",
-        "scheduling_view_sha256": "09f468db5bf759638312be895ea985da0b9837908e78b5d61a7f42b50df99f7b",
-        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
-        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
-        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
-        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-        "approved_cost_projection": [
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
-            "controller_approved_processing_cost": 10,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
-          },
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
-            "controller_approved_processing_cost": 2,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003"
-          },
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
-            "controller_approved_processing_cost": 3,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005"
-          }
-        ],
-        "ready_order": [
-          "SYNTHETIC_OPAQUE_BINDING_0003",
-          "SYNTHETIC_OPAQUE_BINDING_0005",
-          "SYNTHETIC_OPAQUE_BINDING_0001"
-        ],
-        "pure_metadata_only": true
+        "morrow_output": {
+          "schema": "hearthline-plays.morrow-invalid-output-capture.v1",
+          "status": "INVALID_UNTRUSTED_OUTPUT_CAPTURED_FOR_FALLBACK",
+          "invocation_cut_binding": "mcut:c4259ae173d84f0b6e12a9703bf5618d",
+          "scheduling_view_sha256": "4c83e8483dbd3137806690554a82ba67e4e48b377e8c14861aa443ab319fdf96",
+          "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+          "bounded_raw_output_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "bounded_raw_output_byte_count": 17,
+          "failure_code": "MALFORMED",
+          "raw_output_retained": false
+        }
       },
       "decision": {
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
@@ -409,9 +1053,9 @@
         "profile_epoch": 1,
         "service_epoch": 1,
         "snapshot_id": "synthetic-queue-snapshot-0002",
-        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
-        "controller_disposition": "USE_VALID_PROPOSAL",
-        "schedule_basis": "VALID_COST_PROPOSAL",
+        "proposal_validation": "INVALID_OR_ABSENT_USED_CONTROLLER_PRIORITY_FIFO_FALLBACK",
+        "controller_disposition": "USE_CONTROLLER_PRIORITY_FIFO_FALLBACK",
+        "schedule_basis": "CONTROLLER_PRIORITY_THEN_FIFO_FALLBACK",
         "schedule_order": [
           "synthetic-queue-item-medium",
           "synthetic-queue-item-late",
@@ -421,6 +1065,7 @@
         "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0002",
         "service_head_queue_item_id": "synthetic-queue-item-medium"
       },
+      "service_disposition": null,
       "admission": {
         "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0002",
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
@@ -435,6 +1080,11 @@
         "return_id": "synthetic-return-medium",
         "objective_id": "synthetic-objective-medium",
         "creature_ref": "SYNTHETIC_CREATURE_MEDIUM",
+        "task_ref": "SYNTHETIC_TASK_MEDIUM",
+        "tether_ref": "SYNTHETIC_TETHER_MEDIUM",
+        "task_tether_core_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+        "task_dispatch_ref": "SYNTHETIC_DISPATCH_MEDIUM_0001",
+        "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_MEDIUM_0001",
         "intake_receipt_ref": "SYNTHETIC_INTAKE_0003",
         "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0003",
         "return_receipt_ref": "SYNTHETIC_HOMECOMING_MEDIUM_0001",
@@ -443,6 +1093,10 @@
         "objective_disposition": "SYNTHETIC_RULE_MEDIUM:SATISFIED",
         "homecoming_custody_state": "HOMECOMING:RETURNED",
         "carry_state": "CARRY:UNSELECTED",
+        "effective_priority_receipt_ref": "SYNTHETIC_PRIORITY_REVISION_MEDIUM_0001",
+        "effective_priority_class": "P1_EXPEDITE",
+        "effective_priority_rank": 1,
+        "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0006",
         "overtake_counts_before": [
           {
             "queue_item_id": "synthetic-queue-item-old",
@@ -484,8 +1138,12 @@
       "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
       "profile_epoch": 1,
       "service_epoch": 1,
-      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-      "snapshot_projection_sha256": "13c68c5add5eb28dbdc9db8c3659e9648342822428e8c8fb83905bddcc99f722",
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "maximum_overtakes": 2,
+      "maximum_snapshot_items": 16,
+      "priority_ledger_cut_ordinal": 6,
+      "morrow_invocation_cut_binding": "mcut:18b7d4f203c95ea6418fd073bc529a6e",
+      "snapshot_projection_sha256": "a2d794428852ce422d9f42e9bbbb3e1d578853b48b5e246b58b3be1888a91656",
       "cut_arrival_ordinal": 5,
       "visible_ids": [
         "synthetic-queue-item-old",
@@ -515,36 +1173,63 @@
           "count": 0
         }
       ],
+      "effective_priority_marks": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+          "priority_class": "P2_ROUTINE",
+          "priority_rank": 2,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-held",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+          "priority_class": "P0_URGENT",
+          "priority_rank": 0,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0005"
+        }
+      ],
+      "morrow_ready_bindings": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "opaque_queue_item_binding": "mitem:6e1b95c02f784da391c6e8057a4bf23d"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "opaque_queue_item_binding": "mitem:d08a46f31c952be7a640d1839fe725bc"
+        }
+      ],
+      "service_reopen_receipts": [],
       "proposal": {
         "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0003",
-        "queue_id": "synthetic-return-queue-0001",
-        "snapshot_id": "synthetic-queue-snapshot-0003",
-        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
-        "profile_epoch": 1,
-        "service_epoch": 1,
-        "snapshot_projection_sha256": "13c68c5add5eb28dbdc9db8c3659e9648342822428e8c8fb83905bddcc99f722",
-        "scheduling_view_sha256": "b3064c3d032cfcd6fe9903718513705420376bd5fde6305316dcae502969d390",
-        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
-        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
-        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
-        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
-        "approved_cost_projection": [
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
-            "controller_approved_processing_cost": 10,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
-          },
-          {
-            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
-            "controller_approved_processing_cost": 3,
-            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005"
-          }
-        ],
-        "ready_order": [
-          "SYNTHETIC_OPAQUE_BINDING_0005",
-          "SYNTHETIC_OPAQUE_BINDING_0001"
-        ],
-        "pure_metadata_only": true
+        "morrow_output": {
+          "schema": "hearthline-plays.morrow-proposal.v1",
+          "status": "PROPOSAL_ONLY_NO_ADMISSION",
+          "invocation_cut_binding": "mcut:18b7d4f203c95ea6418fd073bc529a6e",
+          "scheduling_view_sha256": "3f831779adf4b8cf08c8e3eaea8a15db42c54fb4ad2536386a434410a8fc2ab3",
+          "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+          "ready_order": [
+            "mitem:6e1b95c02f784da391c6e8057a4bf23d",
+            "mitem:d08a46f31c952be7a640d1839fe725bc"
+          ],
+          "reason_codes": [
+            "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+            "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+            "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+            "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+          ],
+          "pure_metadata_only": true,
+          "deterministic_stateless": true,
+          "persistent_state_ref": null,
+          "external_effect_count": 0
+        }
       },
       "decision": {
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
@@ -554,7 +1239,7 @@
         "service_epoch": 1,
         "snapshot_id": "synthetic-queue-snapshot-0003",
         "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
-        "controller_disposition": "REPLACE_HEAD_MAXIMUM_OVERTAKES",
+        "controller_disposition": "ENFORCE_HEAD_MAXIMUM_OVERTAKES",
         "schedule_basis": "MAXIMUM_OVERTAKES_FIFO_FORCED",
         "schedule_order": [
           "synthetic-queue-item-old",
@@ -564,8 +1249,8 @@
         "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0003",
         "service_head_queue_item_id": "synthetic-queue-item-old"
       },
-      "admission": {
-        "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0003",
+      "service_disposition": {
+        "service_disposition_receipt_ref": "SYNTHETIC_SERVICE_DISPOSITION_OLD_0001",
         "controller_ref": "SYNTHETIC_CONTROLLER_0001",
         "queue_id": "synthetic-return-queue-0001",
         "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
@@ -575,17 +1260,11 @@
         "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0003",
         "service_ordinal": 3,
         "queue_item_id": "synthetic-queue-item-old",
-        "return_id": "synthetic-return-old",
-        "objective_id": "synthetic-objective-old",
-        "creature_ref": "SYNTHETIC_CREATURE_OLD",
-        "intake_receipt_ref": "SYNTHETIC_INTAKE_0001",
-        "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0001",
-        "return_receipt_ref": "SYNTHETIC_HOMECOMING_OLD_0001",
-        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "evaluation_rule_ref": "SYNTHETIC_RULE_OLD",
-        "objective_disposition": "SYNTHETIC_RULE_OLD:SATISFIED",
-        "homecoming_custody_state": "HOMECOMING:RETURNED",
-        "carry_state": "CARRY:UNSELECTED",
+        "outcome": "UNKNOWN",
+        "next_state": "SERVICE_OUTCOME_UNKNOWN_RECONCILIATION_REQUIRED",
+        "blocker_ref": "SYNTHETIC_SERVICE_OUTCOME_UNKNOWN_BLOCKER_OLD_0001",
+        "required_remedy_ref": "SYNTHETIC_SERVICE_RECONCILIATION_REMEDY_OLD_0001",
+        "reopen_handle": "SYNTHETIC_SERVICE_REOPEN_HANDLE_OLD_0001",
         "overtake_counts_before": [
           {
             "queue_item_id": "synthetic-queue-item-old",
@@ -598,10 +1277,332 @@
         ],
         "overtake_counts_after": [
           {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 2
+          },
+          {
             "queue_item_id": "synthetic-queue-item-late",
             "count": 0
           }
         ],
+        "reopen_requires_retry_receipt": true,
+        "reconciliation_required": true,
+        "retry_receipt_ref": null,
+        "external_effect_receipt_ref": null
+      },
+      "admission": null
+    },
+    {
+      "queue_id": "synthetic-return-queue-0001",
+      "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+      "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+      "snapshot_id": "synthetic-queue-snapshot-0004",
+      "snapshot_ordinal": 4,
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "maximum_overtakes": 2,
+      "maximum_snapshot_items": 16,
+      "priority_ledger_cut_ordinal": 6,
+      "morrow_invocation_cut_binding": "mcut:f36a8c510e47b2d9936f105a7ce824bd",
+      "snapshot_projection_sha256": "5a7bd11e2f37fd08ed03d5c073c6ef88383a56656a96214296540eda4d33b8c3",
+      "cut_arrival_ordinal": 5,
+      "visible_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-held",
+        "synthetic-queue-item-late"
+      ],
+      "ready_ids": [
+        "synthetic-queue-item-late"
+      ],
+      "held_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-held"
+      ],
+      "previously_admitted_ids": [
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium"
+      ],
+      "overtake_counts_before": [
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "count": 0
+        }
+      ],
+      "effective_priority_marks": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+          "priority_class": "P2_ROUTINE",
+          "priority_rank": 2,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-held",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+          "priority_class": "P0_URGENT",
+          "priority_rank": 0,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0005"
+        }
+      ],
+      "morrow_ready_bindings": [
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "opaque_queue_item_binding": "mitem:34d9e0b721ca568f43e19d06ab8572cf"
+        }
+      ],
+      "service_reopen_receipts": [],
+      "proposal": {
+        "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0004",
+        "morrow_output": {
+          "schema": "hearthline-plays.morrow-proposal.v1",
+          "status": "PROPOSAL_ONLY_NO_ADMISSION",
+          "invocation_cut_binding": "mcut:f36a8c510e47b2d9936f105a7ce824bd",
+          "scheduling_view_sha256": "f75e87f108e902de5090c8433e0b4e72c0badc8a83556caa9319904802f30175",
+          "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+          "ready_order": [
+            "mitem:34d9e0b721ca568f43e19d06ab8572cf"
+          ],
+          "reason_codes": [
+            "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+            "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+            "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+            "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+          ],
+          "pure_metadata_only": true,
+          "deterministic_stateless": true,
+          "persistent_state_ref": null,
+          "external_effect_count": 0
+        }
+      },
+      "decision": {
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0004",
+        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+        "controller_disposition": "USE_VALID_PROPOSAL",
+        "schedule_basis": "VALID_MORROW_PRIORITY_COST_PROPOSAL",
+        "schedule_order": [
+          "synthetic-queue-item-late"
+        ],
+        "forced_head_queue_item_id": null,
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0004",
+        "service_head_queue_item_id": "synthetic-queue-item-late"
+      },
+      "service_disposition": {
+        "service_disposition_receipt_ref": "SYNTHETIC_SERVICE_DISPOSITION_LATE_0001",
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0004",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0004",
+        "service_ordinal": 4,
+        "queue_item_id": "synthetic-queue-item-late",
+        "outcome": "UNKNOWN",
+        "next_state": "SERVICE_OUTCOME_UNKNOWN_RECONCILIATION_REQUIRED",
+        "blocker_ref": "SYNTHETIC_SERVICE_OUTCOME_UNKNOWN_BLOCKER_LATE_0001",
+        "required_remedy_ref": "SYNTHETIC_SERVICE_RECONCILIATION_REMEDY_LATE_0001",
+        "reopen_handle": "SYNTHETIC_SERVICE_REOPEN_HANDLE_LATE_0001",
+        "overtake_counts_before": [
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "overtake_counts_after": [
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "reopen_requires_retry_receipt": true,
+        "reconciliation_required": true,
+        "retry_receipt_ref": null,
+        "external_effect_receipt_ref": null
+      },
+      "admission": null
+    },
+    {
+      "queue_id": "synthetic-return-queue-0001",
+      "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+      "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+      "snapshot_id": "synthetic-queue-snapshot-0005",
+      "snapshot_ordinal": 5,
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+      "maximum_overtakes": 2,
+      "maximum_snapshot_items": 16,
+      "priority_ledger_cut_ordinal": 6,
+      "morrow_invocation_cut_binding": "mcut:ad9207e65bc14f38c2a7910d56e843bf",
+      "snapshot_projection_sha256": "860657882218e09d68167cef2173ca384704c9fb94ac48817766ccfc2a18987a",
+      "cut_arrival_ordinal": 5,
+      "visible_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-held",
+        "synthetic-queue-item-late"
+      ],
+      "ready_ids": [
+        "synthetic-queue-item-old"
+      ],
+      "held_ids": [
+        "synthetic-queue-item-held",
+        "synthetic-queue-item-late"
+      ],
+      "previously_admitted_ids": [
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium"
+      ],
+      "overtake_counts_before": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "count": 2
+        }
+      ],
+      "effective_priority_marks": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+          "priority_class": "P2_ROUTINE",
+          "priority_rank": 2,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-held",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_HELD_0001",
+          "priority_class": "P0_URGENT",
+          "priority_rank": 0,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0004"
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_LATE_0001",
+          "priority_class": "P1_EXPEDITE",
+          "priority_rank": 1,
+          "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0005"
+        }
+      ],
+      "morrow_ready_bindings": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "opaque_queue_item_binding": "mitem:e6170c3d94a258bf760e41ca9d823f05"
+        }
+      ],
+      "service_reopen_receipts": [
+        {
+          "readiness_receipt_ref": "SYNTHETIC_QUEUE_READINESS_OLD_0001",
+          "service_disposition_receipt_ref": "SYNTHETIC_SERVICE_DISPOSITION_OLD_0001",
+          "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+          "queue_id": "synthetic-return-queue-0001",
+          "snapshot_id": "synthetic-queue-snapshot-0005",
+          "queue_item_id": "synthetic-queue-item-old",
+          "reopen_handle": "SYNTHETIC_SERVICE_REOPEN_HANDLE_OLD_0001",
+          "remedy_ref": "SYNTHETIC_SERVICE_RECONCILIATION_REMEDY_OLD_0001",
+          "reconciliation_receipt_ref": "SYNTHETIC_SERVICE_RECONCILIATION_RECEIPT_OLD_0001",
+          "revalidation_inputs_ref": "SYNTHETIC_CURRENT_REVALIDATION_INPUTS_OLD_0001",
+          "revalidation_result": "PASS",
+          "status": "READY_REOPENED_AFTER_DURABLE_RECONCILIATION",
+          "external_effect_receipt_ref": null,
+          "retry_rotation_release_receipt_ref": "SYNTHETIC_RETRY_ROTATION_RELEASE_OLD_0001"
+        }
+      ],
+      "proposal": {
+        "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0005",
+        "morrow_output": {
+          "schema": "hearthline-plays.morrow-proposal.v1",
+          "status": "PROPOSAL_ONLY_NO_ADMISSION",
+          "invocation_cut_binding": "mcut:ad9207e65bc14f38c2a7910d56e843bf",
+          "scheduling_view_sha256": "b0b4a6b3bcc296394b4f2c4c0cde099c424c5f7880c086320fb4828696a0b77d",
+          "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+          "ready_order": [
+            "mitem:e6170c3d94a258bf760e41ca9d823f05"
+          ],
+          "reason_codes": [
+            "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+            "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+            "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+            "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+          ],
+          "pure_metadata_only": true,
+          "deterministic_stateless": true,
+          "persistent_state_ref": null,
+          "external_effect_count": 0
+        }
+      },
+      "decision": {
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0005",
+        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+        "controller_disposition": "ENFORCE_HEAD_MAXIMUM_OVERTAKES",
+        "schedule_basis": "MAXIMUM_OVERTAKES_FIFO_FORCED",
+        "schedule_order": [
+          "synthetic-queue-item-old"
+        ],
+        "forced_head_queue_item_id": "synthetic-queue-item-old",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0005",
+        "service_head_queue_item_id": "synthetic-queue-item-old"
+      },
+      "service_disposition": null,
+      "admission": {
+        "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0003",
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0005",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0005",
+        "service_ordinal": 5,
+        "queue_item_id": "synthetic-queue-item-old",
+        "return_id": "synthetic-return-old",
+        "objective_id": "synthetic-objective-old",
+        "creature_ref": "SYNTHETIC_CREATURE_OLD",
+        "task_ref": "SYNTHETIC_TASK_OLD",
+        "tether_ref": "SYNTHETIC_TETHER_OLD",
+        "task_tether_core_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "task_dispatch_ref": "SYNTHETIC_DISPATCH_OLD_0001",
+        "dispatch_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+        "intake_receipt_ref": "SYNTHETIC_INTAKE_0001",
+        "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0001",
+        "return_receipt_ref": "SYNTHETIC_HOMECOMING_OLD_0001",
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evaluation_rule_ref": "SYNTHETIC_RULE_OLD",
+        "objective_disposition": "SYNTHETIC_RULE_OLD:SATISFIED",
+        "homecoming_custody_state": "HOMECOMING:RETURNED",
+        "carry_state": "CARRY:UNSELECTED",
+        "effective_priority_receipt_ref": "SYNTHETIC_DISPATCH_PRIORITY_OLD_0001",
+        "effective_priority_class": "P2_ROUTINE",
+        "effective_priority_rank": 2,
+        "scheduling_mark_binding": "SYNTHETIC_OPAQUE_PRIORITY_MARK_0001",
+        "overtake_counts_before": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 2
+          }
+        ],
+        "overtake_counts_after": [],
         "revalidation": "INTAKE_PROJECTION_MATCH_PASS",
         "custody_reconciliation_performed": false,
         "authority_or_grant_mutated": false,
@@ -624,11 +1625,10 @@
       "synthetic-queue-item-medium",
       "synthetic-queue-item-old"
     ],
-    "ready_residual_ids": [
-      "synthetic-queue-item-late"
-    ],
+    "ready_residual_ids": [],
     "held_residual_ids": [
-      "synthetic-queue-item-held"
+      "synthetic-queue-item-held",
+      "synthetic-queue-item-late"
     ],
     "unreconciled_admitted_ids": [
       "synthetic-queue-item-short",
@@ -645,5 +1645,57 @@
     "carry_selection_performed": false,
     "custody_reconciliation_performed": false,
     "external_effect_count": 0
-  }
+  },
+  "retry_rotation_release_receipts": [
+    {
+      "retry_rotation_release_receipt_ref": "SYNTHETIC_RETRY_ROTATION_RELEASE_OLD_0001",
+      "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "source_service_disposition_receipt_ref": "SYNTHETIC_SERVICE_DISPOSITION_OLD_0001",
+      "source_reopen_handle": "SYNTHETIC_SERVICE_REOPEN_HANDLE_OLD_0001",
+      "queue_item_id": "synthetic-queue-item-old",
+      "release_mode": "OTHER_ITEM_SERVICE_ATTEMPTED",
+      "intervening_service_record_ref": "SYNTHETIC_SERVICE_DISPOSITION_LATE_0001",
+      "intervening_queue_item_id": "synthetic-queue-item-late",
+      "intervening_service_ordinal": 4,
+      "pre_reopen_snapshot_id": null,
+      "pre_reopen_snapshot_projection_sha256": null,
+      "derived_other_ready_count": null,
+      "preserved_overtake_count": 2,
+      "priority_mutated": false,
+      "authority_mutated": false,
+      "custody_mutated": false,
+      "result_mutated": false,
+      "deadline_mutated": false,
+      "budget_mutated": false,
+      "external_effect_receipt_ref": null
+    }
+  ],
+  "service_reconciliation_receipts": [
+    {
+      "service_reconciliation_receipt_ref": "SYNTHETIC_SERVICE_RECONCILIATION_RECEIPT_OLD_0001",
+      "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+      "queue_id": "synthetic-return-queue-0001",
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "service_disposition_receipt_ref": "SYNTHETIC_SERVICE_DISPOSITION_OLD_0001",
+      "queue_item_id": "synthetic-queue-item-old",
+      "reopen_handle": "SYNTHETIC_SERVICE_REOPEN_HANDLE_OLD_0001",
+      "observed_outcome": "UNKNOWN",
+      "reconciled_outcome": "CONFIRMED_NOT_ADMITTED_SAFE_TO_RETRY",
+      "reconciliation_evidence_ref": "SYNTHETIC_SERVICE_RECONCILIATION_EVIDENCE_OLD_0001",
+      "retry_permitted": true,
+      "priority_mutated": false,
+      "authority_mutated": false,
+      "custody_mutated": false,
+      "result_mutated": false,
+      "deadline_mutated": false,
+      "budget_mutated": false,
+      "external_effect_receipt_ref": null
+    }
+  ]
 }

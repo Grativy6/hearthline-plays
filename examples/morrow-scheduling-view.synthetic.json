@@ -1,0 +1,37 @@
+{
+  "schema": "hearthline-plays.morrow-scheduling-view.v1",
+  "status": "CONTROLLER_FROZEN_READY_ONLY_VIEW",
+  "invocation_cut_binding": "SYNTHETIC_EXAMPLE_MORROW_CUT_0001",
+  "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+  "maximum_overtakes": 2,
+  "ready_scheduling_view": [
+    {
+      "opaque_queue_item_binding": "SYNTHETIC_EXAMPLE_MORROW_ITEM_0001",
+      "ready_arrival_rank": 1,
+      "effective_priority_rank": 2,
+      "controller_approved_processing_cost": 9,
+      "overtake_count": 2
+    },
+    {
+      "opaque_queue_item_binding": "SYNTHETIC_EXAMPLE_MORROW_ITEM_0002",
+      "ready_arrival_rank": 2,
+      "effective_priority_rank": 1,
+      "controller_approved_processing_cost": 4,
+      "overtake_count": 0
+    },
+    {
+      "opaque_queue_item_binding": "SYNTHETIC_EXAMPLE_MORROW_ITEM_0003",
+      "ready_arrival_rank": 3,
+      "effective_priority_rank": 1,
+      "controller_approved_processing_cost": 2,
+      "overtake_count": 0
+    },
+    {
+      "opaque_queue_item_binding": "SYNTHETIC_EXAMPLE_MORROW_ITEM_0004",
+      "ready_arrival_rank": 4,
+      "effective_priority_rank": 0,
+      "controller_approved_processing_cost": 8,
+      "overtake_count": 0
+    }
+  ]
+}

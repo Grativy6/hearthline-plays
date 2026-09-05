@@ -1,0 +1,23 @@
+{
+  "schema": "hearthline-plays.morrow-proposal.v1",
+  "status": "PROPOSAL_ONLY_NO_ADMISSION",
+  "invocation_cut_binding": "SYNTHETIC_EXAMPLE_MORROW_CUT_0001",
+  "scheduling_view_sha256": "b17062916ee272ffb20bb6c1b4b09bd336f1fbd53cc2870d784dedb6d0b3fd9a",
+  "policy_ref": "STABLE_EFFECTIVE_PRIORITY_THEN_APPROVED_COST_THEN_ARRIVAL_V2",
+  "ready_order": [
+    "SYNTHETIC_EXAMPLE_MORROW_ITEM_0001",
+    "SYNTHETIC_EXAMPLE_MORROW_ITEM_0004",
+    "SYNTHETIC_EXAMPLE_MORROW_ITEM_0003",
+    "SYNTHETIC_EXAMPLE_MORROW_ITEM_0002"
+  ],
+  "reason_codes": [
+    "MAXIMUM_OVERTAKES_DUE_OLDEST_FIRST",
+    "PRIORITY_RANK_ASCENDING_ZERO_FIRST",
+    "CONTROLLER_APPROVED_COST_ASCENDING_WITHIN_PRIORITY",
+    "READY_ARRIVAL_RANK_ASCENDING_TIE_BREAK"
+  ],
+  "pure_metadata_only": true,
+  "deterministic_stateless": true,
+  "persistent_state_ref": null,
+  "external_effect_count": 0
+}

@@ -60,22 +60,35 @@ needs a separately reviewed stage result and Gate B.
   separately bounded Sparks, ledgers, Homes, and controller-admitted,
   broker/domain-written effects.
 - [`design/RETURN_QUEUE.md`](design/RETURN_QUEUE.md) — an implemented offline
-  reference for receipt-bound Homecoming synchronization, bounded overtaking,
-  and controller-only single-head admission; it is not wired to a runner.
+  reference for dispatch priority, receipt-bound Homecoming synchronization,
+  Morrow proposals, bounded overtaking, durable holds, controller-owned retry
+  rotation, and single-head admission; it is not wired to a runner.
+- [`design/MORROW_AND_THE_MARKED_TETHERS.md`](design/MORROW_AND_THE_MARKED_TETHERS.md)
+  — the story and executable boundary for Hearthline's dispatch marks and
+  Morrow, the deterministic stateless Queue Steward.
 - [`prep/ARC_AGI_3_NO_RUN_PREFLIGHT.md`](prep/ARC_AGI_3_NO_RUN_PREFLIGHT.md) —
   the stop boundary for this preparation pass and the gates a later run would
   have to satisfy.
 - [`schemas/research-source.v1.schema.json`](schemas/research-source.v1.schema.json),
   [`schemas/creature-manifest.v1.schema.json`](schemas/creature-manifest.v1.schema.json),
   [`schemas/objective-window.v1.schema.json`](schemas/objective-window.v1.schema.json),
-  and [`schemas/return-queue.v1.schema.json`](schemas/return-queue.v1.schema.json)
-  — closed schema surfaces.
+  [`schemas/return-queue.v1.schema.json`](schemas/return-queue.v1.schema.json),
+  [`schemas/return-queue.v2.schema.json`](schemas/return-queue.v2.schema.json),
+  [`schemas/morrow-scheduling-view.v1.schema.json`](schemas/morrow-scheduling-view.v1.schema.json),
+  and [`schemas/morrow-proposal.v1.schema.json`](schemas/morrow-proposal.v1.schema.json)
+  — closed schema surfaces; return-queue v1 remains the historical predecessor
+  to the priority-aware v2 successor.
 - [`fixtures/creature-manifest.synthetic.json`](fixtures/creature-manifest.synthetic.json),
   [`fixtures/objective-window.synthetic.json`](fixtures/objective-window.synthetic.json),
   and [`fixtures/return-queue.synthetic.json`](fixtures/return-queue.synthetic.json)
   — fabricated structure and receipt order only, with no operational or
   challenge data.
-- [`tools/verify_station.py`](tools/verify_station.py) and
+- [`examples/morrow-scheduling-view.synthetic.json`](examples/morrow-scheduling-view.synthetic.json)
+  and [`examples/morrow-proposal.synthetic.json`](examples/morrow-proposal.synthetic.json)
+  — an exact synthetic stdin/stdout pair for the Morrow CLI.
+- [`tools/morrow_queue.py`](tools/morrow_queue.py),
+  [`tools/verify_station.py`](tools/verify_station.py), and
+  [`tests/test_morrow_queue.py`](tests/test_morrow_queue.py) with
   [`tests/test_verify_station.py`](tests/test_verify_station.py) —
   standard-library-only offline validation.
 
@@ -121,20 +134,44 @@ upgrade terminal status.
 
 ### Homecoming return synchronization
 
-When receipt-bound Homecomings reach one synchronization point, the offline
-reference queue gives every distinct return a controller-linearized intake
-identity before any scheduling proposal. A manifest-bound, task-scoped Queue
-Steward may propose only an order over an exact frozen snapshot. Controller-
-approved cost metadata can reduce ordinary waiting, while
-`maximum_overtakes` forces an older ready item to the head before indefinite
-overtake. Invalid or absent proposals fall back to FIFO.
+Hearthline assigns a controller-authorized sequencing mark while each task is
+still dispatch-pending. The controller persists that required root mark before
+release; bounded, append-only revisions may affect only eligible successor
+snapshot cuts while the same task remains pending and unadmitted. Priority does
+not grant or renew authority, validity, budget, deadline, custody, or carry.
 
-Arrival, proposal, order, and admission receipts remain separate. One
-controller step admits one revalidated head; held items remain visible and new
-arrivals wait for the next snapshot. Queue admission leaves evaluator-owned
-status, `HOMECOMING:RETURNED` custody, carry selection, grants, and authority
-unchanged and performs no external effect. The reference is deterministic
-offline structure, not a hosted concurrency or performance claim.
+When receipt-bound Homecomings reach one synchronization point, every distinct
+return receives a controller-linearized intake identity. The controller then
+freezes a full snapshot and gives Morrow only a minimal ready-only projection:
+fresh opaque invocation and item bindings, dense ready-arrival rank, effective
+priority rank, controller-approved cost, and persisted overtake count. Morrow
+is a deterministic stateless function, not a Queue Steward Creature. It has no
+memory, ledger, network, filesystem, liveness, admission, carry, custody,
+authority, effect, or Thulia surface.
+
+Fairness-due items form a stable oldest-first prefix; other items sort by
+priority, approved cost, and ready arrival. Morrow's exact context-bound order
+is proposal-only. Invalid output is reduced to a closed digest-and-byte-count
+capture, without retaining raw untrusted bytes, and the controller computes a
+priority-then-FIFO fallback for the same frozen ready set. The fallback makes no
+wall-clock or eventual-disposition guarantee.
+
+Arrival, proposal, final order, service disposition, readiness, and admission
+receipts remain separate. One controller step may admit one revalidated head.
+A failed or `UNKNOWN` service outcome instead moves the head to a durable hold
+without resetting its overtake count. Before reopening, a controller-owned
+retry-rotation receipt proves either a later service attempt for a distinct
+ready item or that no other eligible ready item exists at the exact pre-reopen
+cut; an unknown outcome additionally requires matching reconciliation and
+current revalidation. Held items and all rotation evidence remain outside
+Morrow's view, and new arrivals wait for the next snapshot. Morrow and Thulia
+have disjoint identifiers, no direct channel, no invocation or impersonation
+route, and no dependency on one another. Morrow cannot read or write Thulia
+state; Thulia cannot read or write Morrow's view or proposal or set scheduling
+cost. Queue processing leaves evaluator-
+owned status, `HOMECOMING:RETURNED` custody, carry, grants, and authority
+unchanged and performs no external effect. This is deterministic offline
+structure, not a hosted concurrency or performance claim.
 
 ## Heartbeat rule
 

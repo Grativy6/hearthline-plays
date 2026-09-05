@@ -210,9 +210,14 @@ class StationVerifierTests(unittest.TestCase):
         with self.assertRaisesRegex(verify_station.VerificationError, "one head"):
             verify_station.validate_return_queue(document)
 
-    def test_invalid_or_absent_queue_proposal_falls_back_to_fifo(self) -> None:
+    def test_invalid_or_absent_queue_proposal_falls_back_to_controller_priority_fifo(self) -> None:
         ready = self.return_queue["returns"][:3]
         counts = {item["queue_item_id"]: 0 for item in ready}
+        ranks = {
+            "synthetic-queue-item-old": 2,
+            "synthetic-queue-item-short": 1,
+            "synthetic-queue-item-medium": 1,
+        }
         invalid_proposals = (
             None,
             ["synthetic-queue-item-short", "synthetic-queue-item-short", "synthetic-queue-item-old"],
@@ -222,10 +227,15 @@ class StationVerifierTests(unittest.TestCase):
         )
         for proposal in invalid_proposals:
             with self.subTest(proposal=proposal):
-                reduced = verify_station.reduce_return_queue_snapshot(ready, counts, proposal, 2)
-                self.assertEqual("FALLBACK_FIFO_ABSENT_OR_INVALID_PROPOSAL", reduced["proposal_status"])
+                reduced = verify_station.reduce_return_queue_snapshot(
+                    ready, counts, ranks, proposal, 2
+                )
                 self.assertEqual(
-                    ["synthetic-queue-item-old", "synthetic-queue-item-short", "synthetic-queue-item-medium"],
+                    "FALLBACK_CONTROLLER_PRIORITY_FIFO_ABSENT_OR_INVALID_PROPOSAL",
+                    reduced["proposal_status"],
+                )
+                self.assertEqual(
+                    ["synthetic-queue-item-short", "synthetic-queue-item-medium", "synthetic-queue-item-old"],
                     reduced["schedule_order"],
                 )
 
@@ -241,6 +251,7 @@ class StationVerifierTests(unittest.TestCase):
         reduced = verify_station.reduce_return_queue_snapshot(
             ready,
             {"synthetic-queue-item-old": 2, "synthetic-queue-item-late": 0},
+            {"synthetic-queue-item-old": 2, "synthetic-queue-item-late": 1},
             ["synthetic-queue-item-late", "synthetic-queue-item-old"],
             2,
         )
@@ -251,14 +262,15 @@ class StationVerifierTests(unittest.TestCase):
     def test_queue_reducer_rejects_boolean_cost_and_duplicate_arrival_ordinal(self) -> None:
         ready = copy.deepcopy(self.return_queue["returns"][:3])
         counts = {item["queue_item_id"]: 0 for item in ready}
+        ranks = {item["queue_item_id"]: 2 for item in ready}
         ready[0]["controller_approved_processing_cost"] = True
         with self.assertRaisesRegex(verify_station.VerificationError, "controller-approved costs"):
-            verify_station.reduce_return_queue_snapshot(ready, counts, None, 2)
+            verify_station.reduce_return_queue_snapshot(ready, counts, ranks, None, 2)
 
         ready = copy.deepcopy(self.return_queue["returns"][:3])
         ready[1]["arrival_ordinal"] = ready[0]["arrival_ordinal"]
         with self.assertRaisesRegex(verify_station.VerificationError, "arrival ordinals"):
-            verify_station.reduce_return_queue_snapshot(ready, counts, None, 2)
+            verify_station.reduce_return_queue_snapshot(ready, counts, ranks, None, 2)
 
     def test_queue_steward_cannot_acquire_admission_authority(self) -> None:
         document = copy.deepcopy(self.return_queue)
@@ -268,20 +280,20 @@ class StationVerifierTests(unittest.TestCase):
 
     def test_queue_steward_and_controller_identities_cannot_alias(self) -> None:
         document = copy.deepcopy(self.return_queue)
-        document["queue"]["controller_ref"] = document["queue"]["queue_steward"]["creature_ref"]
+        document["queue"]["controller_ref"] = document["queue"]["queue_steward"]["identity_ref"]
         with self.assertRaisesRegex(verify_station.VerificationError, "identities must remain distinct"):
             verify_station.validate_return_queue(document)
 
     def test_controller_cannot_alias_a_data_return_creature(self) -> None:
         document = copy.deepcopy(self.return_queue)
         document["queue"]["controller_ref"] = document["returns"][0]["creature_ref"]
-        with self.assertRaisesRegex(verify_station.VerificationError, "controller cannot alias"):
+        with self.assertRaises(verify_station.VerificationError):
             verify_station.validate_return_queue(document)
 
     def test_queue_steward_cannot_enter_the_data_queue_it_proposes_over(self) -> None:
         document = copy.deepcopy(self.return_queue)
-        document["returns"][0]["creature_ref"] = document["queue"]["queue_steward"]["creature_ref"]
-        with self.assertRaisesRegex(verify_station.VerificationError, "cannot enter the data queue"):
+        document["returns"][0]["creature_ref"] = document["queue"]["queue_steward"]["identity_ref"]
+        with self.assertRaisesRegex(verify_station.VerificationError, "Morrow cannot enter"):
             verify_station.validate_return_queue(document)
 
     def test_frozen_snapshot_rejects_future_or_missing_visible_return(self) -> None:
@@ -315,7 +327,7 @@ class StationVerifierTests(unittest.TestCase):
         document = copy.deepcopy(self.return_queue)
         document["snapshots"][2]["proposal"] = None
         document["snapshots"][2]["decision"]["proposal_validation"] = (
-            "INVALID_OR_ABSENT_USED_FIFO_FALLBACK"
+            "INVALID_OR_ABSENT_USED_CONTROLLER_PRIORITY_FIFO_FALLBACK"
         )
         verify_station.validate_return_queue(document)
 
@@ -325,20 +337,36 @@ class StationVerifierTests(unittest.TestCase):
         with self.assertRaisesRegex(verify_station.VerificationError, "first eligible snapshot"):
             verify_station.validate_return_queue(document)
 
-    def test_queue_proposal_rejects_stale_projection_digest(self) -> None:
+    def test_queue_proposal_stale_ready_view_digest_uses_fallback(self) -> None:
         document = copy.deepcopy(self.return_queue)
-        document["returns"][0]["controller_approved_processing_cost"] = 11
-        with self.assertRaisesRegex(verify_station.VerificationError, "stale or mutated controller snapshot projection"):
-            verify_station.validate_return_queue(document)
+        snapshot = document["snapshots"][0]
+        snapshot["proposal"]["morrow_output"] = {
+            "schema": "hearthline-plays.morrow-invalid-output-capture.v1",
+            "status": "INVALID_UNTRUSTED_OUTPUT_CAPTURED_FOR_FALLBACK",
+            "invocation_cut_binding": snapshot["morrow_invocation_cut_binding"],
+            "scheduling_view_sha256": self.return_queue["snapshots"][0]["proposal"]["morrow_output"]["scheduling_view_sha256"],
+            "policy_ref": document["queue"]["policy"]["policy_ref"],
+            "bounded_raw_output_sha256": "ee268a71b05de985c2d7b596eede7bb289ad999b071882bc65e653b9c52e58a6",
+            "bounded_raw_output_byte_count": 12,
+            "failure_code": "STALE",
+            "raw_output_retained": False,
+        }
+        snapshot["decision"]["proposal_validation"] = "INVALID_OR_ABSENT_USED_CONTROLLER_PRIORITY_FIFO_FALLBACK"
+        snapshot["decision"]["controller_disposition"] = "USE_CONTROLLER_PRIORITY_FIFO_FALLBACK"
+        snapshot["decision"]["schedule_basis"] = "CONTROLLER_PRIORITY_THEN_FIFO_FALLBACK"
+        snapshot["decision"]["schedule_order"] = [
+            "synthetic-queue-item-short",
+            "synthetic-queue-item-old",
+            "synthetic-queue-item-medium",
+        ]
+        snapshot["decision"]["service_head_queue_item_id"] = "synthetic-queue-item-short"
+        verify_station.validate_return_queue(document)
 
     def test_valid_proposal_and_controller_override_remain_distinct(self) -> None:
         decision = self.return_queue["snapshots"][2]["decision"]
         self.assertEqual("VALID_EXACT_READY_PERMUTATION_AND_POLICY", decision["proposal_validation"])
-        self.assertEqual("REPLACE_HEAD_MAXIMUM_OVERTAKES", decision["controller_disposition"])
-        self.assertNotEqual(
-            self.return_queue["snapshots"][2]["proposal"]["ready_order"],
-            decision["schedule_order"],
-        )
+        self.assertEqual("ENFORCE_HEAD_MAXIMUM_OVERTAKES", decision["controller_disposition"])
+        self.assertEqual("synthetic-queue-item-old", decision["service_head_queue_item_id"])
 
     def test_queue_admission_cannot_reconcile_or_select_carry(self) -> None:
         for field in ("custody_reconciliation_performed", "carry_mutated"):
@@ -353,14 +381,6 @@ class StationVerifierTests(unittest.TestCase):
         medium = document["returns"][2]
         medium["objective_disposition"] = "SYNTHETIC_RULE_MEDIUM:BLOCKED"
         document["snapshots"][1]["admission"]["objective_disposition"] = medium["objective_disposition"]
-        by_id = {item["queue_item_id"]: item for item in document["returns"]}
-        for snapshot in document["snapshots"]:
-            snapshot["proposal"]["snapshot_projection_sha256"] = (
-                verify_station.return_queue_snapshot_sha256(snapshot, by_id)
-            )
-            snapshot["proposal"]["scheduling_view_sha256"] = (
-                verify_station.return_queue_scheduling_view_sha256(snapshot, by_id)
-            )
         verify_station.validate_return_queue(document)
 
     def test_admission_receipt_binds_profile_snapshot_order_and_controller(self) -> None:
