@@ -10,18 +10,19 @@ machinery, strategy, evaluation, runtime observation, or result.
 ## Review successor — not adopted, no new authority
 
 - Branch: `codex/arc3-charter-sendoff-20260905`
-- Commit: `485e154effd3e9c623e9a34989e1c0ea545a40c0`
-- Tree: `b89eaed944b8778f2b294b919a0254851ae01604`
+- Commit: `fefa73efb87061c112ff012d8117d48c00bf8e68`
+- Tree: `35fca83a67901e1f7bc62599da6461c187eb88cf`
 - [Draft review PR #4](https://github.com/Grativy6/hearthline-plays/pull/4)
-- [Copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/485e154effd3e9c623e9a34989e1c0ea545a40c0/launch/SENDOFF_2026-09-05.md)
+- [Draft copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/fefa73efb87061c112ff012d8117d48c00bf8e68/launch/SENDOFF_2026-09-05.md)
 
 This successor has exact launch `97f5805…` and hardened station `e2b2eec…` in
 its ancestry. It adds the exact Honesty PCP scientific-run entrance and a
 bounded publication anchor for [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471),
 whose role is research context rather than an ARC input, permission, or result.
-The executable candidate bytes remain unchanged. Review or adoption of the
-successor cannot open Gate A or Gate B, certify honesty, establish runtime
-closure, or confer submission authority.
+The sendoff's exact bytes remain a Codex draft until Christopher explicitly
+adopts them. The executable candidate bytes remain unchanged. Review or
+adoption of the successor cannot open Gate A or Gate B, certify honesty,
+establish runtime closure, or confer submission authority.
 
 ## Exact candidate
 
