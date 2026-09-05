@@ -37,10 +37,10 @@ procedure are a Codex-assisted synthesis drafted on 5 September 2026 for
 Christopher's explicit review. They are not part of the source protocol and are
 not a human-adopted repository rule until he expressly accepts them.
 
-## Required run gate
+## Proposed required run gate
 
-Before a scientific, benchmark, evaluation, or ARC run may be described as
-clean:
+If this preflight is adopted, before a scientific, benchmark, evaluation, or
+ARC run may be described as clean:
 
 1. **Choose explicitly under a narrow rule.** A conversational scientific,
    evaluation, benchmark, or ARC run must record Honesty PCP v1.0 as `ADOPTED`
