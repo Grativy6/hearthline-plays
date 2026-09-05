@@ -96,5 +96,6 @@ offline structural verification against the exact pinned public starter
 contract. This does not establish the private runtime, score, or generalization.
 Kaggle staging and competition ignition remain closed and each requires a
 separate one-use human grant under [`gates/README.md`](gates/README.md).
-The dated successor send-off preserves purpose and authorizes repository
-preparation only; it does not change this natural stop.
+The dated successor send-off preserves purpose and records the requested
+repository-preparation scope, but is not a standing grant; it does not change
+this natural stop.
