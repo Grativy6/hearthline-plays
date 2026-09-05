@@ -27,7 +27,7 @@ remain unchanged from the canonical launch ancestor.
 | [`launch/FOUNDER_SENDOFF.md`](FOUNDER_SENDOFF.md) | Preserved human founding objective |
 | [`launch/SENDOFF_2026-09-05.md`](SENDOFF_2026-09-05.md) | Draft append-only successor send-off for human review; opens neither gate |
 | [`launch/RUN_GRANT_2026-09-03.md`](RUN_GRANT_2026-09-03.md) | Expired, spent historical grant with a present-day non-executable banner; the original record is preserved verbatim below it |
-| [`docs/SCIENTIFIC_RUN_ENTRY.md`](../docs/SCIENTIFIC_RUN_ENTRY.md) | Canonical honesty preflight; a required explicit disposition, not authority |
+| [`docs/SCIENTIFIC_RUN_ENTRY.md`](../docs/SCIENTIFIC_RUN_ENTRY.md) | Draft canonical honesty preflight for human review; no authority |
 | [`launch/source-lock.v2.json`](source-lock.v2.json) | Historical public-orientation source lock |
 | [`launch/source-lock.v3.json`](source-lock.v3.json) | Current official starter/toolkit/Agents/benchmark/Kaggle and bounded-context identities |
 | [`launch/status/current.json`](status/current.json) | Mutable v2 current projection over preserved legacy status |
