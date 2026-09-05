@@ -3,7 +3,9 @@
 This map records bounded design influence for the ARC-AGI-3 research station.
 It does not claim that a cited source was executed, that similar structure is
 independent corroboration, or that any proposed mechanism improves ARC
-performance. Exact identities are in [`sources.lock.json`](sources.lock.json).
+performance. Exact identities for the five locked inputs are in
+[`sources.lock.json`](sources.lock.json); unlocked context is identified below
+and is not run-bound.
 
 | Source | Candidate use in the station | What does not cross |
 | --- | --- | --- |
@@ -56,3 +58,23 @@ roles, and ceilings.
 | [Full Bandwidth Is Not Full Trace v0.1](https://doi.org/10.5281/zenodo.22228162) | Separate mutable latent feedback from typed trace | No code import, causal trace-fidelity credit, ARC credit, or safety result |
 | [GOLD v0.1](https://doi.org/10.5281/zenodo.22236848) | A `1+5` common/comparison lens and route-residual fixtures | No privileged geometry, physics, consciousness, PAL-canon, or authority claim |
 | [The Context Draws a Map v1.0](https://doi.org/10.5281/zenodo.21831000) | Local context maps and reopening handles | No complete world model, independent evidence, experiential memory, or authority |
+
+## Published companion anchor outside the title lock
+
+Christopher D. Pang supplied the public publication anchor for **CHARTER v1.0:
+Certification and History Architecture for Robust Transport, Evidence, and
+Retention — Framed Prime Shells and Bound Persistent Shells** on 5 September
+2026:
+
+- record: [Zenodo 22288471](https://zenodo.org/records/22288471)
+- DOI: [`10.5281/zenodo.22288471`](https://doi.org/10.5281/zenodo.22288471)
+- relationship: same-author companion design context
+- run-binding status: `UNBOUND_NOT_A_RUN_INPUT`
+
+This anchor records publication and provenance only. It does not import
+CHARTER into `sources.lock.json`, implement its mechanisms, establish ARC
+performance, independently corroborate this lineage, or grant environment,
+credential, staging, submission, or other authority. Exact public deposit-file
+identities were not independently bound in this successor. Any later run-bound
+use requires a reviewed successor source lock with exact artifact identities,
+roles, and claim ceilings.
