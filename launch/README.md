@@ -25,7 +25,7 @@ remain unchanged from the canonical launch ancestor.
 | Path | Purpose |
 |---|---|
 | [`launch/FOUNDER_SENDOFF.md`](FOUNDER_SENDOFF.md) | Preserved human founding objective |
-| [`launch/SENDOFF_2026-09-05.md`](SENDOFF_2026-09-05.md) | Append-only human send-off for successor preparation; opens neither gate |
+| [`launch/SENDOFF_2026-09-05.md`](SENDOFF_2026-09-05.md) | Draft append-only successor send-off for human review; opens neither gate |
 | [`launch/RUN_GRANT_2026-09-03.md`](RUN_GRANT_2026-09-03.md) | Expired, spent historical grant with a present-day non-executable banner; the original record is preserved verbatim below it |
 | [`docs/SCIENTIFIC_RUN_ENTRY.md`](../docs/SCIENTIFIC_RUN_ENTRY.md) | Canonical honesty preflight; a required explicit disposition, not authority |
 | [`launch/source-lock.v2.json`](source-lock.v2.json) | Historical public-orientation source lock |
