@@ -117,6 +117,7 @@ ALLOWED_EXTENSIONLESS_PATHS = {
 ALLOWED_AUXILIARY_SHA256 = {
     ".gitignore": "2529f03b84a9bba177bd89550bcc07d33a53a317a9dbc220cd8df84ab239a615",
     ".gitattributes": "4f2272aad1f4374099b84639375d72c5bed891f59994d627759cd7fe61a2d81c",
+    "docs/honesty/HONESTY_PCP_v1.0_PROMPT.txt": "e54ccd89828d8736ce2f025589d419b7c3ab2db8966c175b8d9bba85f3906e83",
     "tests/fixtures/ARC-AGI-3-Agents-LICENSE.txt": "cd95f6fb04cbe8f172890cf3746bb57295d131eb110bb78c1a0a528ea8acf87d",
     "tests/fixtures/agents-main-4743e7d0.blob": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b",
 }
@@ -203,7 +204,7 @@ ALLOWED_PYTHON_SHA256 = {
     "scripts/verify_candidate.py": "e366926f4ed4a030c86ac2f60a64bc19c7cda65f8114954f9e2eefb660f520d5",
     "scripts/verify_human_gate.py": "59a253514bd0f143461b6f1cd8d0486b63a7b111548659845e3ef3c4916448e0",
     "tests/test_candidate.py": "91be63b48bc169e9e7d5ded6c0e77fef319e772ef261316a25d1bc57eaddd4f2",
-    "tests/test_human_gates.py": "47a265e21328db78ec7dea36c11d4ead0ef5dfc85b8665355b4051c7e6aab235",
+    "tests/test_human_gates.py": "3053ffc520816044c5175063434e03a3647650c8e41b8801cc640fe6247b4073",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
     "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
@@ -214,7 +215,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
     "tools/verify_station.py": "051460d08cba7153363d13bce1372748b907c0ef96a89e03a63844f8c3864c3a",
 }
-SELF_AST_SHA256 = "21fd7875f5b7c6b838897f73c9df98e6e0bf40bb76b56586946edbb129c887e3"
+SELF_AST_SHA256 = "538b561ea7daf1003fc07104ad4b534fab330d7b88bfdda837b1451215693875"
 
 
 class GuardError(RuntimeError):

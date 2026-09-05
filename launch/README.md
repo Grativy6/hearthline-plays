@@ -1,19 +1,35 @@
 # Hearthline ARC-AGI-3 launchpad
 
-**Branch:** `arc-agi/titles/arc-agi-3-hearthline-launch-20260903`  
-**Parent station:** `74728f8c4ec9409bd0e6c8064a0b6b356da776f6`  
+**Canonical branch:** `arc-agi/titles/arc-agi-3-hearthline-launch-20260903`
+
+**Integration source:** `codex/arc3-charter-sendoff-20260905`
+
+**Canonical launch ancestor:** `97f580504e22bbd59b425274d6b5e0f9a18fe66e`
+
+**Hardened station ancestor:** `e2b2eec1544caeb8a1a07825d56db1d932c9e3f6`
+
+**Original parent station:** `74728f8c4ec9409bd0e6c8064a0b6b356da776f6`
 **Current phase:** `RECONCILED_OFFLINE_CANDIDATE_PREPARATION`
 
 **Competition/Kaggle phase:** `NOT_AUTHORIZED_NOT_STARTED`
 
 This is a removable launch layer over the earlier research station. It keeps the founding prompt, exact public-source locks, practice requests, compact world models, Spark/Pair-Static records, retired-run records, and receipts in distinct directories so later cleanup can move or delete one layer without rewriting the others.
 
+This candidate successor explicitly reconciles the canonical launch and hardened station
+siblings, retains the exact Astra embargo commit as an ancestor, and adds only
+the documentary run-entry, publication-anchor, and send-off surfaces; the exact
+model-facing Honesty PCP input; and the narrow guard/workflow updates needed to
+admit and verify that prompt. The executable candidate and source-lock bytes
+remain unchanged from the canonical launch ancestor.
+
 ## Fast map
 
 | Path | Purpose |
 |---|---|
 | [`launch/FOUNDER_SENDOFF.md`](FOUNDER_SENDOFF.md) | Preserved human founding objective |
+| [`launch/SENDOFF_2026-09-05.md`](SENDOFF_2026-09-05.md) | Adopted append-only successor context; opens neither gate |
 | [`launch/RUN_GRANT_2026-09-03.md`](RUN_GRANT_2026-09-03.md) | Expired, spent historical grant with a present-day non-executable banner; the original record is preserved verbatim below it |
+| [`docs/SCIENTIFIC_RUN_ENTRY.md`](../docs/SCIENTIFIC_RUN_ENTRY.md) | Repository-adopted canonical honesty preflight; no external authority |
 | [`launch/source-lock.v2.json`](source-lock.v2.json) | Historical public-orientation source lock |
 | [`launch/source-lock.v3.json`](source-lock.v3.json) | Current official starter/toolkit/Agents/benchmark/Kaggle and bounded-context identities |
 | [`launch/status/current.json`](status/current.json) | Mutable v2 current projection over preserved legacy status |
@@ -82,3 +98,6 @@ offline structural verification against the exact pinned public starter
 contract. This does not establish the private runtime, score, or generalization.
 Kaggle staging and competition ignition remain closed and each requires a
 separate one-use human grant under [`gates/README.md`](gates/README.md).
+The dated successor send-off preserves purpose and records the requested
+repository-preparation scope, but is not a standing grant; it does not change
+this natural stop.
