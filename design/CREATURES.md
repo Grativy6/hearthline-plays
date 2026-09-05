@@ -162,6 +162,21 @@ admit B and C; return C then B with synthetic rule-owned dispositions; resume
 and return A; then close one aggregate response. Passing validation is not a
 live concurrency, scheduling, or task-success result.
 
+## Homecoming return queue
+
+The separately documented [`Homecoming return queue`](RETURN_QUEUE.md) is an
+offline reference for the point where multiple receipt-bound returns reach one
+controller. Intake fixes each queue-item identity and arrival ordinal. A
+manifest-bound Queue Steward Creature may propose a pure metadata order over an
+exact frozen snapshot, but only the controller records the final order and
+admits one revalidated head.
+
+The queue does not reconcile Homecoming custody, select carry, change a
+rule-owned result, consume or renew a grant, or execute an external effect.
+Held returns stay visible, later arrivals wait for the next snapshot, and a
+persisted `maximum_overtakes` limit prevents a cost proposal from bypassing an
+older ready return indefinitely within terminating controller steps.
+
 ## Matched evaluation design
 
 A later authorized evaluation must use at least two physically isolated arms:

@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/blob/arc-agi/titles/arc-agi-3-hearthline-launch-20260903/schemas/return-queue.v1.schema.json",
+  "title": "Hearthline Plays synthetic Homecoming return queue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "fixture_kind",
+    "status",
+    "claim_ceiling",
+    "queue",
+    "returns",
+    "snapshots",
+    "accounting"
+  ],
+  "properties": {
+    "schema": {"const": "hearthline-plays.return-queue.v1"},
+    "fixture_kind": {"const": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY"},
+    "status": {"const": "OFFLINE_REFERENCE_IMPLEMENTED_NOT_WIRED"},
+    "claim_ceiling": {"type": "string", "minLength": 1},
+    "queue": {"$ref": "#/$defs/queue"},
+    "returns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/returnItem"}
+    },
+    "snapshots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/snapshot"}
+    },
+    "accounting": {"$ref": "#/$defs/accounting"}
+  },
+  "$defs": {
+    "nullableString": {"type": ["string", "null"]},
+    "idArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "queue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queue_id",
+        "destination_ref",
+        "synchronization_point_ref",
+        "profile_ref",
+        "profile_epoch",
+        "service_epoch",
+        "controller_ref",
+        "effect_executor_ref",
+        "queue_scope",
+        "maximum_snapshot_items",
+        "external_effect_count",
+        "queue_steward",
+        "policy"
+      ],
+      "properties": {
+        "queue_id": {"type": "string", "minLength": 1},
+        "destination_ref": {"type": "string", "minLength": 1},
+        "synchronization_point_ref": {"type": "string", "minLength": 1},
+        "profile_ref": {"type": "string", "minLength": 1},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "controller_ref": {"type": "string", "minLength": 1},
+        "effect_executor_ref": {"const": "UNBOUND"},
+        "queue_scope": {"const": "HOMECOMING_RETURN_BUNDLES_ONLY"},
+        "maximum_snapshot_items": {"type": "integer", "minimum": 1},
+        "external_effect_count": {"type": "integer", "const": 0},
+        "queue_steward": {"$ref": "#/$defs/queueSteward"},
+        "policy": {"$ref": "#/$defs/policy"}
+      }
+    },
+    "queueSteward": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creature_ref",
+        "manifest_ref",
+        "task_ref",
+        "control_return_aperture_ref",
+        "control_return_profile_ref",
+        "control_return_scope",
+        "scheduling_view_field_allowlist",
+        "role",
+        "authority",
+        "can_enter_data_queue_under_review",
+        "can_admit",
+        "can_mutate_return",
+        "can_select_carry",
+        "can_grant_or_renew",
+        "can_execute_effect"
+      ],
+      "properties": {
+        "creature_ref": {"type": "string", "minLength": 1},
+        "manifest_ref": {"type": "string", "minLength": 1},
+        "task_ref": {"type": "string", "minLength": 1},
+        "control_return_aperture_ref": {"type": "string", "minLength": 1},
+        "control_return_profile_ref": {"type": "string", "minLength": 1},
+        "control_return_scope": {"const": "QUEUE_ORDER_PROPOSAL_ONLY"},
+        "scheduling_view_field_allowlist": {
+          "const": [
+            "opaque_queue_item_binding",
+            "arrival_ordinal",
+            "controller_approved_processing_cost",
+            "scheduling_metadata_provenance_ref",
+            "overtake_count"
+          ]
+        },
+        "role": {"const": "TASK_SCOPED_METADATA_ONLY_PURE_PROPOSER"},
+        "authority": {"const": "PROPOSE_READY_ORDER_ONLY"},
+        "can_enter_data_queue_under_review": {"const": false},
+        "can_admit": {"const": false},
+        "can_mutate_return": {"const": false},
+        "can_select_carry": {"const": false},
+        "can_grant_or_renew": {"const": false},
+        "can_execute_effect": {"const": false}
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_ref",
+        "maximum_overtakes",
+        "invalid_or_absent_proposal",
+        "new_arrival_rule",
+        "admission_width",
+        "revalidate_head_before_admission"
+      ],
+      "properties": {
+        "policy_ref": {"const": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1"},
+        "maximum_overtakes": {"type": "integer", "minimum": 1},
+        "invalid_or_absent_proposal": {"const": "FIFO_READY_BY_ARRIVAL"},
+        "new_arrival_rule": {"const": "NEXT_SNAPSHOT_ONLY"},
+        "admission_width": {"const": 1},
+        "revalidate_head_before_admission": {"const": true}
+      }
+    },
+    "returnItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queue_item_id",
+        "return_id",
+        "idempotency_key",
+        "objective_id",
+        "creature_ref",
+        "scheduling_binding",
+        "scheduling_metadata_provenance_ref",
+        "intake_receipt_ref",
+        "enqueue_receipt_ref",
+        "return_receipt_ref",
+        "arrival_ordinal",
+        "available_snapshot_ordinal",
+        "controller_approved_processing_cost",
+        "content_sha256",
+        "evaluation_rule_ref",
+        "objective_disposition",
+        "homecoming_custody_state",
+        "carry_state",
+        "initial_queue_state",
+        "hold_reason",
+        "hold_reopen_ref",
+        "external_effect_receipt_ref"
+      ],
+      "properties": {
+        "queue_item_id": {"type": "string", "minLength": 1},
+        "return_id": {"type": "string", "minLength": 1},
+        "idempotency_key": {"type": "string", "minLength": 1},
+        "objective_id": {"type": "string", "minLength": 1},
+        "creature_ref": {"type": "string", "minLength": 1},
+        "scheduling_binding": {"type": "string", "minLength": 1},
+        "scheduling_metadata_provenance_ref": {"type": "string", "minLength": 1},
+        "intake_receipt_ref": {"type": "string", "minLength": 1},
+        "enqueue_receipt_ref": {"type": "string", "minLength": 1},
+        "return_receipt_ref": {"type": "string", "minLength": 1},
+        "arrival_ordinal": {"type": "integer", "minimum": 1},
+        "available_snapshot_ordinal": {"type": "integer", "minimum": 1},
+        "controller_approved_processing_cost": {"type": "integer", "minimum": 1},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "evaluation_rule_ref": {"type": "string", "minLength": 1},
+        "objective_disposition": {"type": "string", "minLength": 1},
+        "homecoming_custody_state": {"const": "HOMECOMING:RETURNED"},
+        "carry_state": {"const": "CARRY:UNSELECTED"},
+        "initial_queue_state": {"enum": ["READY", "HELD"]},
+        "hold_reason": {"$ref": "#/$defs/nullableString"},
+        "hold_reopen_ref": {"$ref": "#/$defs/nullableString"},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "overtakeCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["queue_item_id", "count"],
+      "properties": {
+        "queue_item_id": {"type": "string", "minLength": 1},
+        "count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "costBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "opaque_queue_item_binding",
+        "controller_approved_processing_cost",
+        "scheduling_metadata_provenance_ref"
+      ],
+      "properties": {
+        "opaque_queue_item_binding": {"type": "string", "minLength": 1},
+        "controller_approved_processing_cost": {"type": "integer", "minimum": 1},
+        "scheduling_metadata_provenance_ref": {"type": "string", "minLength": 1}
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_ref",
+        "queue_id",
+        "snapshot_id",
+        "profile_ref",
+        "profile_epoch",
+        "service_epoch",
+        "snapshot_projection_sha256",
+        "scheduling_view_sha256",
+        "proposer_creature_ref",
+        "steward_manifest_ref",
+        "control_return_aperture_ref",
+        "policy_ref",
+        "approved_cost_projection",
+        "ready_order",
+        "pure_metadata_only"
+      ],
+      "properties": {
+        "proposal_ref": {"type": "string", "minLength": 1},
+        "queue_id": {"type": "string", "minLength": 1},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "profile_ref": {"type": "string", "minLength": 1},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "snapshot_projection_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "scheduling_view_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "proposer_creature_ref": {"type": "string", "minLength": 1},
+        "steward_manifest_ref": {"type": "string", "minLength": 1},
+        "control_return_aperture_ref": {"type": "string", "minLength": 1},
+        "policy_ref": {"const": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1"},
+        "approved_cost_projection": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/costBinding"}
+        },
+        "ready_order": {"$ref": "#/$defs/idArray"},
+        "pure_metadata_only": {"const": true}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controller_ref",
+        "queue_id",
+        "profile_ref",
+        "profile_epoch",
+        "service_epoch",
+        "snapshot_id",
+        "proposal_validation",
+        "controller_disposition",
+        "schedule_basis",
+        "schedule_order",
+        "forced_head_queue_item_id",
+        "order_receipt_ref",
+        "service_head_queue_item_id"
+      ],
+      "properties": {
+        "controller_ref": {"type": "string", "minLength": 1},
+        "queue_id": {"type": "string", "minLength": 1},
+        "profile_ref": {"type": "string", "minLength": 1},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "proposal_validation": {
+          "enum": [
+            "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+            "INVALID_OR_ABSENT_USED_FIFO_FALLBACK"
+          ]
+        },
+        "controller_disposition": {
+          "enum": [
+            "USE_VALID_PROPOSAL",
+            "USE_FIFO_FALLBACK",
+            "REPLACE_HEAD_MAXIMUM_OVERTAKES"
+          ]
+        },
+        "schedule_basis": {
+          "enum": [
+            "VALID_COST_PROPOSAL",
+            "FIFO_FALLBACK",
+            "MAXIMUM_OVERTAKES_FIFO_FORCED"
+          ]
+        },
+        "schedule_order": {"$ref": "#/$defs/idArray"},
+        "forced_head_queue_item_id": {"$ref": "#/$defs/nullableString"},
+        "order_receipt_ref": {"type": "string", "minLength": 1},
+        "service_head_queue_item_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "admission_receipt_ref",
+        "controller_ref",
+        "queue_id",
+        "profile_ref",
+        "profile_epoch",
+        "service_epoch",
+        "snapshot_id",
+        "order_receipt_ref",
+        "service_ordinal",
+        "queue_item_id",
+        "return_id",
+        "objective_id",
+        "creature_ref",
+        "intake_receipt_ref",
+        "enqueue_receipt_ref",
+        "return_receipt_ref",
+        "content_sha256",
+        "evaluation_rule_ref",
+        "objective_disposition",
+        "homecoming_custody_state",
+        "carry_state",
+        "overtake_counts_before",
+        "overtake_counts_after",
+        "revalidation",
+        "custody_reconciliation_performed",
+        "authority_or_grant_mutated",
+        "validity_or_status_mutated",
+        "carry_mutated",
+        "external_effect_receipt_ref"
+      ],
+      "properties": {
+        "admission_receipt_ref": {"type": "string", "minLength": 1},
+        "controller_ref": {"type": "string", "minLength": 1},
+        "queue_id": {"type": "string", "minLength": 1},
+        "profile_ref": {"type": "string", "minLength": 1},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "order_receipt_ref": {"type": "string", "minLength": 1},
+        "service_ordinal": {"type": "integer", "minimum": 1},
+        "queue_item_id": {"type": "string", "minLength": 1},
+        "return_id": {"type": "string", "minLength": 1},
+        "objective_id": {"type": "string", "minLength": 1},
+        "creature_ref": {"type": "string", "minLength": 1},
+        "intake_receipt_ref": {"type": "string", "minLength": 1},
+        "enqueue_receipt_ref": {"type": "string", "minLength": 1},
+        "return_receipt_ref": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "evaluation_rule_ref": {"type": "string", "minLength": 1},
+        "objective_disposition": {"type": "string", "minLength": 1},
+        "homecoming_custody_state": {"const": "HOMECOMING:RETURNED"},
+        "carry_state": {"const": "CARRY:UNSELECTED"},
+        "overtake_counts_before": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/overtakeCount"}
+        },
+        "overtake_counts_after": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/overtakeCount"}
+        },
+        "revalidation": {"const": "INTAKE_PROJECTION_MATCH_PASS"},
+        "custody_reconciliation_performed": {"const": false},
+        "authority_or_grant_mutated": {"const": false},
+        "validity_or_status_mutated": {"const": false},
+        "carry_mutated": {"const": false},
+        "external_effect_receipt_ref": {"type": "null"}
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "queue_id",
+        "destination_ref",
+        "synchronization_point_ref",
+        "snapshot_id",
+        "snapshot_ordinal",
+        "profile_ref",
+        "profile_epoch",
+        "service_epoch",
+        "policy_ref",
+        "cut_arrival_ordinal",
+        "visible_ids",
+        "ready_ids",
+        "held_ids",
+        "previously_admitted_ids",
+        "overtake_counts_before",
+        "snapshot_projection_sha256",
+        "proposal",
+        "decision",
+        "admission"
+      ],
+      "properties": {
+        "queue_id": {"type": "string", "minLength": 1},
+        "destination_ref": {"type": "string", "minLength": 1},
+        "synchronization_point_ref": {"type": "string", "minLength": 1},
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "snapshot_ordinal": {"type": "integer", "minimum": 1},
+        "profile_ref": {"type": "string", "minLength": 1},
+        "profile_epoch": {"type": "integer", "minimum": 1},
+        "service_epoch": {"type": "integer", "minimum": 1},
+        "policy_ref": {"const": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1"},
+        "cut_arrival_ordinal": {"type": "integer", "minimum": 1},
+        "visible_ids": {"$ref": "#/$defs/idArray"},
+        "ready_ids": {"$ref": "#/$defs/idArray"},
+        "held_ids": {"$ref": "#/$defs/idArray"},
+        "previously_admitted_ids": {"$ref": "#/$defs/idArray"},
+        "overtake_counts_before": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/overtakeCount"}
+        },
+        "snapshot_projection_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "proposal": {
+          "anyOf": [
+            {"$ref": "#/$defs/proposal"},
+            {"type": "null"}
+          ]
+        },
+        "decision": {"$ref": "#/$defs/decision"},
+        "admission": {"$ref": "#/$defs/admission"}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intake_order",
+        "admission_order",
+        "ready_residual_ids",
+        "held_residual_ids",
+        "unreconciled_admitted_ids",
+        "dropped_ids",
+        "merged_ids",
+        "distinct_same_content_pair",
+        "all_intakes_accounted",
+        "carry_selection_performed",
+        "custody_reconciliation_performed",
+        "external_effect_count"
+      ],
+      "properties": {
+        "intake_order": {"$ref": "#/$defs/idArray"},
+        "admission_order": {"$ref": "#/$defs/idArray"},
+        "ready_residual_ids": {"$ref": "#/$defs/idArray"},
+        "held_residual_ids": {"$ref": "#/$defs/idArray"},
+        "unreconciled_admitted_ids": {"$ref": "#/$defs/idArray"},
+        "dropped_ids": {"$ref": "#/$defs/idArray"},
+        "merged_ids": {"$ref": "#/$defs/idArray"},
+        "distinct_same_content_pair": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "all_intakes_accounted": {"const": true},
+        "carry_selection_performed": {"const": false},
+        "custody_reconciliation_performed": {"const": false},
+        "external_effect_count": {"type": "integer", "const": 0}
+      }
+    }
+  }
+}
