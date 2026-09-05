@@ -1,14 +1,14 @@
 # Scientific Run Entry v1.0
 
-Status: `DRAFT_REQUIRED_PREFLIGHT`
+Status: `REPOSITORY_ADOPTED_REQUIRED_PREFLIGHT`
 
 Protocol status: `PROPOSED_UNVALIDATED`
 
-Repository preflight adoption: `PENDING_EXPLICIT_HUMAN_REVIEW`
+Repository preflight adoption: `ADOPTED_BY_STEWARD_2026-09-05`
 
-Repository effect: `NONE`
+Repository effect: `REPOSITORY_RULE_ONLY_NO_EXTERNAL_EFFECT`
 
-If adopted, this is the single canonical honesty preflight for Hearthline Plays
+This is the single canonical honesty preflight for Hearthline Plays
 scientific, evaluation, benchmark, and ARC routes. A title may link here; it
 must not make a drifting unlabeled copy.
 
@@ -33,14 +33,15 @@ and extracted hashes before use; do not reconstruct or silently edit the prompt.
 
 The source protocol and extracted prompt are Christopher D. Pang's work. The
 surrounding repository-local preflight, disposition vocabulary, and run
-procedure are a Codex-assisted synthesis drafted on 5 September 2026 for
-Christopher's explicit review. They are not part of the source protocol and are
-not a human-adopted repository rule until he expressly accepts them.
+procedure are a Codex-assisted synthesis drafted on 5 September 2026 and
+explicitly adopted by Christopher for Hearthline Plays repository use on that
+date. They are not part of the source protocol, do not validate it, and create
+no authority beyond the repository rule stated here.
 
-## Proposed required run gate
+## Required run gate
 
-If this preflight is adopted, before a scientific, benchmark, evaluation, or
-ARC run may be described as clean:
+Before a scientific, benchmark, evaluation, or ARC run may be described as
+clean:
 
 1. **Choose explicitly under a narrow rule.** A conversational scientific,
    evaluation, benchmark, or ARC run must record Honesty PCP v1.0 as `ADOPTED`
@@ -49,9 +50,9 @@ ARC run may be described as clean:
    Honesty PCP, with its pairing and reason frozen before execution.
    `NOT_APPLICABLE` is available only when no conversational or model-facing
    boundary exists.
-2. **Apply only at the model-facing boundary.** If adopted, use the exact
-   verified prompt file as the first user message in a fresh context and retain
-   the model's exact `Ready.` acknowledgement. For non-conversational
+2. **Apply only at the model-facing boundary.** When a run records `ADOPTED`,
+   use the exact verified prompt file as the first user message in a fresh
+   context and retain the model's exact `Ready.` acknowledgement. For non-conversational
    deterministic tooling, record non-applicability instead of injecting a prompt
    that would change an unrelated benchmark surface.
 3. **Seal identity before execution.** Record procedure and independent scoring

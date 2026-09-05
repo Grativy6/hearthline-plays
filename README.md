@@ -10,8 +10,8 @@ This repository is organized by branch so one growing playground does not become
 
 - [Playground index](docs/PLAYGROUND_INDEX.md) — every current public branch,
   exact tip, role, and honest status.
-- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the draft,
-  versioned honesty preflight awaiting explicit human review for scientific,
+- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the
+  repository-adopted, versioned honesty preflight for future scientific,
   evaluation, benchmark, and ARC routes.
 - [ARC-AGI-3 sendoff route](docs/ARC3_SENDOFF.md) — the exact current
   candidate, evidence, blocker, closed gates, and human-only reopening sequence.
@@ -20,19 +20,20 @@ This repository is organized by branch so one growing playground does not become
 - [Machine-readable branch snapshot](manifests/branch-status.v1.json) — the
   dated source for exact branch tips and index classifications.
 
-The current ARC-AGI-3 review candidate is
+The current ARC-AGI-3 candidate is
 `arc-agi/titles/arc-agi-3-hearthline-launch-20260903` at
-`97f580504e22bbd59b425274d6b5e0f9a18fe66e`. Its exact remote verification is
-green, but its operational status remains
+`bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
+`7ff81534a7bc093224b29a5916b69d618e1cd27c`. Its exact reviewed source tree
+passed remote verification, but its operational status remains
 `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED` and its terminal blocker
 remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
 
-A [2026-09-05 review successor](https://github.com/Grativy6/hearthline-plays/pull/4)
-reconciles that launch tip with the hardened research-station sibling, adds the
-published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor and a
-draft sendoff, and leaves the executable candidate bytes unchanged. It is
-review-only until adopted; it does not open either human gate or resolve the
-private-runtime blocker.
+The [2026-09-05 merged successor](https://github.com/Grativy6/hearthline-plays/pull/4)
+reconciles the prior launch tip with the hardened research-station sibling,
+adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
+anchor, and repository-adopts the scientific preflight and sendoff context. It
+leaves the executable candidate and source-lock bytes unchanged, opens neither
+human gate, and does not resolve the private-runtime blocker.
 
 ## Shared game embodiment blueprint
 

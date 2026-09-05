@@ -47,14 +47,15 @@ account, contact, holdout, submission, or publication authority.
 The [machine-readable snapshot](../manifests/branch-status.v1.json) contains
 full parents, source paths, claim ceilings, and relationship records.
 
-## After-snapshot ARC review successor
+## After-snapshot ARC merged successor
 
-The later review-only branch `codex/arc3-charter-sendoff-20260905` at
-[`129ebe3…`](https://github.com/Grativy6/hearthline-plays/tree/129ebe3f892403994751fbd671da7f8e79560b0a)
-reconciles the two ARC-AGI-3 tips, preserves the executable candidate bytes,
-and adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
-anchor plus the scientific-run/sendoff route. It is tracked in
-[draft PR #4](https://github.com/Grativy6/hearthline-plays/pull/4) and is not
+The canonical ARC-AGI-3 title branch now points to merge commit
+[`bb6327e…`](https://github.com/Grativy6/hearthline-plays/tree/bb6327e1f5f96da929c4068d6b95fa94d4f73600),
+tree `7ff81534a7bc093224b29a5916b69d618e1cd27c`. The successor reconciles the two
+ARC-AGI-3 tips, preserves the executable candidate and source-lock bytes, and
+adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
+anchor plus the repository-adopted scientific-run/sendoff route. It was merged
+through [PR #4](https://github.com/Grativy6/hearthline-plays/pull/4) and is not
 silently folded into the dated snapshot above. It opens no gate and creates no
 runtime, account, contact, submission, score, or publication authority.
 

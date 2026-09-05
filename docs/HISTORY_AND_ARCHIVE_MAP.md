@@ -16,6 +16,10 @@ or redirect is proposed here.
   `d4716557587302910b0002757b8e9e65c90b9fd7`, with one unique commit each.
 - The launch-only tree delta adds the Astra embargo JSON and Markdown receipts
   and updates the receipt index. It does not replace ARC machinery.
+- The canonical ARC-AGI-3 title now points to merge
+  `bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
+  `7ff81534a7bc093224b29a5916b69d618e1cd27c`. It joins the launch and hardened
+  station histories while retaining their earlier divergence as provenance.
 - Millennium `3449bd282309aa291a98d1e08819232b1849832e` is an
   append-only successor from `ef18554b2ca828b270dfb78512550b9b401ab6e4`, not
   a current ARC launch.
@@ -53,7 +57,8 @@ An index pointer cannot replace those bytes.
 | Rosetta calibration | `BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING` |
 | Kaggriculture Build 001 | Closed local pinned-interpreter result, not official Kaggle |
 
-Use the [playground index](PLAYGROUND_INDEX.md), [scientific run
-entry](SCIENTIFIC_RUN_ENTRY.md), and [machine-readable
-snapshot](../manifests/branch-status.v1.json) as current reading aids. Reopen
-historical questions from the exact branch commit, not from a prose summary.
+Use the [playground index](PLAYGROUND_INDEX.md) and [scientific run
+entry](SCIENTIFIC_RUN_ENTRY.md) as current reading aids. The
+[machine-readable snapshot](../manifests/branch-status.v1.json) is a dated
+pre-merge inventory and remains unchanged as provenance. Reopen historical
+questions from the exact branch commit, not from a prose summary.
