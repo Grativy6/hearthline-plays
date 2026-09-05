@@ -30,7 +30,7 @@ remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
 A [2026-09-05 review successor](https://github.com/Grativy6/hearthline-plays/pull/4)
 reconciles that launch tip with the hardened research-station sibling, adds the
 published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor and a
-copy-ready sendoff, and leaves the executable candidate bytes unchanged. It is
+draft sendoff, and leaves the executable candidate bytes unchanged. It is
 review-only until adopted; it does not open either human gate or resolve the
 private-runtime blocker.
 
