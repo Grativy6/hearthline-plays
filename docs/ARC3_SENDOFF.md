@@ -10,10 +10,10 @@ machinery, strategy, evaluation, runtime observation, or result.
 ## Review successor — not adopted, no new authority
 
 - Branch: `codex/arc3-charter-sendoff-20260905`
-- Commit: `fefa73efb87061c112ff012d8117d48c00bf8e68`
-- Tree: `35fca83a67901e1f7bc62599da6461c187eb88cf`
+- Commit: `8f837c178562f496acff08e496a9b677b45f2432`
+- Tree: `4ab270523ce36ebb37b7032ec75bd05dd2d2c4eb`
 - [Draft review PR #4](https://github.com/Grativy6/hearthline-plays/pull/4)
-- [Draft copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/fefa73efb87061c112ff012d8117d48c00bf8e68/launch/SENDOFF_2026-09-05.md)
+- [Draft copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/8f837c178562f496acff08e496a9b677b45f2432/launch/SENDOFF_2026-09-05.md)
 
 This successor has exact launch `97f5805…` and hardened station `e2b2eec…` in
 its ancestry. It adds the exact Honesty PCP scientific-run entrance and a
