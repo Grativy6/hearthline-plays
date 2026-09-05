@@ -1,22 +1,25 @@
 # Scientific Run Entry v1.0
 
-Status: `REQUIRED_PREFLIGHT`
+Status: `DRAFT_REQUIRED_PREFLIGHT`
 
 Protocol status: `PROPOSED_UNVALIDATED`
 
+Repository preflight adoption: `PENDING_EXPLICIT_HUMAN_REVIEW`
+
 Repository effect: `NONE`
 
-This is the single canonical honesty preflight for Hearthline Plays scientific,
-evaluation, benchmark, and ARC routes. A title may link here; it must not make a
-drifting unlabeled copy.
+If adopted, this is the single canonical honesty preflight for Hearthline Plays
+scientific, evaluation, benchmark, and ARC routes. A title may link here; it
+must not make a drifting unlabeled copy.
 
 > Honesty Prompt Code Protocol v1.0 declares an honesty condition. It does not certify that the resulting output is honest.
 
-## Source identity
+## Source protocol and prompt identity
 
 - Author: Christopher D. Pang
 - Date: 8 August 2026
-- DOI: [`10.5281/zenodo.21831000`](https://doi.org/10.5281/zenodo.21831000)
+- Container deposit DOI: [`10.5281/zenodo.21831000`](https://doi.org/10.5281/zenodo.21831000);
+  the companion protocol DOCX is included in that deposit
 - Supplied DOCX SHA-256: `a4d6e7079984cea18b11d9caf32ede5df7d6094d1df5717ceb14bbd7072f904a`
 - Protocol claim status: proposed and unvalidated; no experimental result is reported
 - Exact extracted run input: [`honesty/HONESTY_PCP_v1.0_PROMPT.txt`](honesty/HONESTY_PCP_v1.0_PROMPT.txt)
@@ -28,14 +31,24 @@ The text file is an exact extraction of the sole prompt-code table cell from the
 verified DOCX. Its presence does not adopt it for every run. Verify both source
 and extracted hashes before use; do not reconstruct or silently edit the prompt.
 
+The source protocol and extracted prompt are Christopher D. Pang's work. The
+surrounding repository-local preflight, disposition vocabulary, and run
+procedure are a Codex-assisted synthesis drafted on 5 September 2026 for
+Christopher's explicit review. They are not part of the source protocol and are
+not a human-adopted repository rule until he expressly accepts them.
+
 ## Required run gate
 
 Before a scientific, benchmark, evaluation, or ARC run may be described as
 clean:
 
-1. **Choose explicitly.** Record Honesty PCP v1.0 as `ADOPTED`, `EXCLUDED`, or
-   `NOT_APPLICABLE`, with the reason. A baseline that tests the protocol itself
-   must exclude it.
+1. **Choose explicitly under a narrow rule.** A conversational scientific,
+   evaluation, benchmark, or ARC run must record Honesty PCP v1.0 as `ADOPTED`
+   and use the exact prompt first. `EXCLUDED` is available only to a
+   predeclared matched baseline or disclosure-only control specifically testing
+   Honesty PCP, with its pairing and reason frozen before execution.
+   `NOT_APPLICABLE` is available only when no conversational or model-facing
+   boundary exists.
 2. **Apply only at the model-facing boundary.** If adopted, use the exact
    verified prompt file as the first user message in a fresh context and retain
    the model's exact `Ready.` acknowledgement. For non-conversational
