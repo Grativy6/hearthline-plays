@@ -185,7 +185,7 @@ ALLOWED_IMPORT_SHA256 = {
     "tools/pair_static.py": "d71ac7c99e18ad72814e2cc06100e6be1eb54c11a2cd6528e5e404e31b3acb55",
     "tools/repository_guard.py": "4e65ac4cd3b11eb7e25989c0774fa9111d759dd7b7b1345cc74b92d37ef49bfa",
     "tools/validate_launchpad.py": "40a9161ed96e583476421fbd32dd6c85baff0da73eecbfe829e201eac4c40923",
-    "tools/verify_station.py": "91204fd5f258ec6f4ad72909aad1b36196deabc5c094e25e2e483bee42c38ff9",
+    "tools/verify_station.py": "4a958c8a339ddb3fc47c32829cdceacd41e74228ea6f3e65865ab7dc620ef3a1",
 }
 
 # Full staged-blob commitments close the executable surface rather than trying
@@ -209,13 +209,13 @@ ALLOWED_PYTHON_SHA256 = {
     "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
     "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
     "tests/test_source_context.py": "35602b972270ed2029011a11fe5f92904e0fccdd18ced1d8be2453e17d6a01f9",
-    "tests/test_verify_station.py": "366357c73c73b9248d6f8dd11ba2d6c77f9af37399a7e38a4e69ecef2d0e1f63",
+    "tests/test_verify_station.py": "5cadfab6f70d28839a4042c1efd098e265aca1d0016efd934d78188e9bb22d89",
     "tools/orientation_archive_guard.py": "744b2bec891cf9e4369c1a2a2fe43dc6bf38b6f22302ad3065ad888e184a33d2",
     "tools/pair_static.py": "aa231b448d059fea8b0990f4c21a134cd63bc759ad9170c3e9b49cf2b1f467ac",
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
-    "tools/verify_station.py": "051460d08cba7153363d13bce1372748b907c0ef96a89e03a63844f8c3864c3a",
+    "tools/verify_station.py": "5cb72ad8973de27d6fc8810f3cf5e03ff1b61e170e36766301bffd73a0493908",
 }
-SELF_AST_SHA256 = "538b561ea7daf1003fc07104ad4b534fab330d7b88bfdda837b1451215693875"
+SELF_AST_SHA256 = "1de8f9a6f188f39c4a406718871b0684cc48b9792a7425de02973ac06ac28853"
 
 
 class GuardError(RuntimeError):

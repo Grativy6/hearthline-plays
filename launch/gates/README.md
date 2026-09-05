@@ -5,6 +5,12 @@ one-use grant documents; they cannot authenticate, browse, stage, submit, or
 perform an ARC/Kaggle action. A consumed grant is not evidence that the later
 human effect happened.
 
+The offline [Homecoming return queue](../../design/RETURN_QUEUE.md) is not part
+of this gate-consumption path. It queues synthetic receipt-bound return bundles,
+not human grants, and it does not wait around, weaken, replace, or renew the
+fail-closed ledger lock below. Concurrent gate consumption therefore continues
+to fail closed exactly as documented and tested.
+
 Gate A is prepared for a private, non-competition calibration stage. Gate B is
 deliberately unavailable in this commit with status
 `RUNTIME_CLOSURE_UNFROZEN`. The private stage must first record the complete

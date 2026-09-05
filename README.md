@@ -59,15 +59,20 @@ needs a separately reviewed stage result and Gate B.
 - [`design/CREATURES.md`](design/CREATURES.md) — the proposed composite of
   separately bounded Sparks, ledgers, Homes, and controller-admitted,
   broker/domain-written effects.
+- [`design/RETURN_QUEUE.md`](design/RETURN_QUEUE.md) — an implemented offline
+  reference for receipt-bound Homecoming synchronization, bounded overtaking,
+  and controller-only single-head admission; it is not wired to a runner.
 - [`prep/ARC_AGI_3_NO_RUN_PREFLIGHT.md`](prep/ARC_AGI_3_NO_RUN_PREFLIGHT.md) —
   the stop boundary for this preparation pass and the gates a later run would
   have to satisfy.
 - [`schemas/research-source.v1.schema.json`](schemas/research-source.v1.schema.json),
   [`schemas/creature-manifest.v1.schema.json`](schemas/creature-manifest.v1.schema.json),
-  and [`schemas/objective-window.v1.schema.json`](schemas/objective-window.v1.schema.json)
+  [`schemas/objective-window.v1.schema.json`](schemas/objective-window.v1.schema.json),
+  and [`schemas/return-queue.v1.schema.json`](schemas/return-queue.v1.schema.json)
   — closed schema surfaces.
-- [`fixtures/creature-manifest.synthetic.json`](fixtures/creature-manifest.synthetic.json)
-  and [`fixtures/objective-window.synthetic.json`](fixtures/objective-window.synthetic.json)
+- [`fixtures/creature-manifest.synthetic.json`](fixtures/creature-manifest.synthetic.json),
+  [`fixtures/objective-window.synthetic.json`](fixtures/objective-window.synthetic.json),
+  and [`fixtures/return-queue.synthetic.json`](fixtures/return-queue.synthetic.json)
   — fabricated structure and receipt order only, with no operational or
   challenge data.
 - [`tools/verify_station.py`](tools/verify_station.py) and
@@ -113,6 +118,23 @@ uncertainty.
 A frozen terminal-authority source establishes the terminal observation. The
 adapter may validate and project that observation; it cannot manufacture or
 upgrade terminal status.
+
+### Homecoming return synchronization
+
+When receipt-bound Homecomings reach one synchronization point, the offline
+reference queue gives every distinct return a controller-linearized intake
+identity before any scheduling proposal. A manifest-bound, task-scoped Queue
+Steward may propose only an order over an exact frozen snapshot. Controller-
+approved cost metadata can reduce ordinary waiting, while
+`maximum_overtakes` forces an older ready item to the head before indefinite
+overtake. Invalid or absent proposals fall back to FIFO.
+
+Arrival, proposal, order, and admission receipts remain separate. One
+controller step admits one revalidated head; held items remain visible and new
+arrivals wait for the next snapshot. Queue admission leaves evaluator-owned
+status, `HOMECOMING:RETURNED` custody, carry selection, grants, and authority
+unchanged and performs no external effect. The reference is deterministic
+offline structure, not a hosted concurrency or performance claim.
 
 ## Heartbeat rule
 

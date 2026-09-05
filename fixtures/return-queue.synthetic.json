@@ -1,0 +1,649 @@
+{
+  "schema": "hearthline-plays.return-queue.v1",
+  "fixture_kind": "WHOLLY_SYNTHETIC_STRUCTURE_ONLY",
+  "status": "OFFLINE_REFERENCE_IMPLEMENTED_NOT_WIRED",
+  "claim_ceiling": "This fabricated Homecoming queue validates deterministic data transitions only. It is not a hosted scheduler, concurrency or latency result, Creature run, ARC interaction, task result, custody reconciliation, carry decision, authority receipt, or external effect.",
+  "queue": {
+    "queue_id": "synthetic-return-queue-0001",
+    "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+    "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+    "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+    "profile_epoch": 1,
+    "service_epoch": 1,
+    "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+    "effect_executor_ref": "UNBOUND",
+    "queue_scope": "HOMECOMING_RETURN_BUNDLES_ONLY",
+    "maximum_snapshot_items": 16,
+    "external_effect_count": 0,
+    "queue_steward": {
+      "creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+      "manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
+      "task_ref": "SYNTHETIC_QUEUE_SORT_TASK_0001",
+      "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
+      "control_return_profile_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_PROFILE_0001",
+      "control_return_scope": "QUEUE_ORDER_PROPOSAL_ONLY",
+      "scheduling_view_field_allowlist": [
+        "opaque_queue_item_binding",
+        "arrival_ordinal",
+        "controller_approved_processing_cost",
+        "scheduling_metadata_provenance_ref",
+        "overtake_count"
+      ],
+      "role": "TASK_SCOPED_METADATA_ONLY_PURE_PROPOSER",
+      "authority": "PROPOSE_READY_ORDER_ONLY",
+      "can_enter_data_queue_under_review": false,
+      "can_admit": false,
+      "can_mutate_return": false,
+      "can_select_carry": false,
+      "can_grant_or_renew": false,
+      "can_execute_effect": false
+    },
+    "policy": {
+      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+      "maximum_overtakes": 2,
+      "invalid_or_absent_proposal": "FIFO_READY_BY_ARRIVAL",
+      "new_arrival_rule": "NEXT_SNAPSHOT_ONLY",
+      "admission_width": 1,
+      "revalidate_head_before_admission": true
+    }
+  },
+  "returns": [
+    {
+      "queue_item_id": "synthetic-queue-item-old",
+      "return_id": "synthetic-return-old",
+      "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_OLD_0001",
+      "objective_id": "synthetic-objective-old",
+      "creature_ref": "SYNTHETIC_CREATURE_OLD",
+      "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
+      "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001",
+      "intake_receipt_ref": "SYNTHETIC_INTAKE_0001",
+      "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0001",
+      "return_receipt_ref": "SYNTHETIC_HOMECOMING_OLD_0001",
+      "arrival_ordinal": 1,
+      "available_snapshot_ordinal": 1,
+      "controller_approved_processing_cost": 10,
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evaluation_rule_ref": "SYNTHETIC_RULE_OLD",
+      "objective_disposition": "SYNTHETIC_RULE_OLD:SATISFIED",
+      "homecoming_custody_state": "HOMECOMING:RETURNED",
+      "carry_state": "CARRY:UNSELECTED",
+      "initial_queue_state": "READY",
+      "hold_reason": null,
+      "hold_reopen_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "queue_item_id": "synthetic-queue-item-short",
+      "return_id": "synthetic-return-short",
+      "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_SHORT_0001",
+      "objective_id": "synthetic-objective-short",
+      "creature_ref": "SYNTHETIC_CREATURE_SHORT",
+      "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0002",
+      "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0002",
+      "intake_receipt_ref": "SYNTHETIC_INTAKE_0002",
+      "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0002",
+      "return_receipt_ref": "SYNTHETIC_HOMECOMING_SHORT_0001",
+      "arrival_ordinal": 2,
+      "available_snapshot_ordinal": 1,
+      "controller_approved_processing_cost": 1,
+      "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evaluation_rule_ref": "SYNTHETIC_RULE_SHORT",
+      "objective_disposition": "SYNTHETIC_RULE_SHORT:SATISFIED",
+      "homecoming_custody_state": "HOMECOMING:RETURNED",
+      "carry_state": "CARRY:UNSELECTED",
+      "initial_queue_state": "READY",
+      "hold_reason": null,
+      "hold_reopen_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "queue_item_id": "synthetic-queue-item-medium",
+      "return_id": "synthetic-return-medium",
+      "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_MEDIUM_0001",
+      "objective_id": "synthetic-objective-medium",
+      "creature_ref": "SYNTHETIC_CREATURE_MEDIUM",
+      "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
+      "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003",
+      "intake_receipt_ref": "SYNTHETIC_INTAKE_0003",
+      "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0003",
+      "return_receipt_ref": "SYNTHETIC_HOMECOMING_MEDIUM_0001",
+      "arrival_ordinal": 3,
+      "available_snapshot_ordinal": 1,
+      "controller_approved_processing_cost": 2,
+      "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evaluation_rule_ref": "SYNTHETIC_RULE_MEDIUM",
+      "objective_disposition": "SYNTHETIC_RULE_MEDIUM:SATISFIED",
+      "homecoming_custody_state": "HOMECOMING:RETURNED",
+      "carry_state": "CARRY:UNSELECTED",
+      "initial_queue_state": "READY",
+      "hold_reason": null,
+      "hold_reopen_ref": null,
+      "external_effect_receipt_ref": null
+    },
+    {
+      "queue_item_id": "synthetic-queue-item-held",
+      "return_id": "synthetic-return-held",
+      "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_HELD_0001",
+      "objective_id": "synthetic-objective-held",
+      "creature_ref": "SYNTHETIC_CREATURE_HELD",
+      "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0004",
+      "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0004",
+      "intake_receipt_ref": "SYNTHETIC_INTAKE_0004",
+      "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0004",
+      "return_receipt_ref": "SYNTHETIC_HOMECOMING_HELD_0001",
+      "arrival_ordinal": 4,
+      "available_snapshot_ordinal": 1,
+      "controller_approved_processing_cost": 1,
+      "content_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "evaluation_rule_ref": "SYNTHETIC_RULE_HELD",
+      "objective_disposition": "SYNTHETIC_RULE_HELD:SATISFIED",
+      "homecoming_custody_state": "HOMECOMING:RETURNED",
+      "carry_state": "CARRY:UNSELECTED",
+      "initial_queue_state": "HELD",
+      "hold_reason": "SYNTHETIC_CONTROLLER_HOLD_PENDING_REVIEW",
+      "hold_reopen_ref": "SYNTHETIC_HOLD_REOPEN_0001",
+      "external_effect_receipt_ref": null
+    },
+    {
+      "queue_item_id": "synthetic-queue-item-late",
+      "return_id": "synthetic-return-late",
+      "idempotency_key": "SYNTHETIC_RETURN_IDEMPOTENCY_LATE_0001",
+      "objective_id": "synthetic-objective-late",
+      "creature_ref": "SYNTHETIC_CREATURE_LATE",
+      "scheduling_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
+      "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005",
+      "intake_receipt_ref": "SYNTHETIC_INTAKE_0005",
+      "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0005",
+      "return_receipt_ref": "SYNTHETIC_HOMECOMING_LATE_0001",
+      "arrival_ordinal": 5,
+      "available_snapshot_ordinal": 2,
+      "controller_approved_processing_cost": 3,
+      "content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "evaluation_rule_ref": "SYNTHETIC_RULE_LATE",
+      "objective_disposition": "SYNTHETIC_RULE_LATE:SATISFIED",
+      "homecoming_custody_state": "HOMECOMING:RETURNED",
+      "carry_state": "CARRY:UNSELECTED",
+      "initial_queue_state": "READY",
+      "hold_reason": null,
+      "hold_reopen_ref": null,
+      "external_effect_receipt_ref": null
+    }
+  ],
+  "snapshots": [
+    {
+      "queue_id": "synthetic-return-queue-0001",
+      "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+      "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+      "snapshot_id": "synthetic-queue-snapshot-0001",
+      "snapshot_ordinal": 1,
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+      "snapshot_projection_sha256": "169cebbad2bb8fc6416abe69a5132e6cf1b2dc950637de9c977c2f5684b237d3",
+      "cut_arrival_ordinal": 4,
+      "visible_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-held"
+      ],
+      "ready_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium"
+      ],
+      "held_ids": [
+        "synthetic-queue-item-held"
+      ],
+      "previously_admitted_ids": [],
+      "overtake_counts_before": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "count": 0
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-short",
+          "count": 0
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "count": 0
+        }
+      ],
+      "proposal": {
+        "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "snapshot_id": "synthetic-queue-snapshot-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_projection_sha256": "169cebbad2bb8fc6416abe69a5132e6cf1b2dc950637de9c977c2f5684b237d3",
+        "scheduling_view_sha256": "369deecbb0d93fe6367818b8ced439020d046622267530365f81fe0a699529a2",
+        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
+        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
+        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+        "approved_cost_projection": [
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
+            "controller_approved_processing_cost": 10,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
+          },
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0002",
+            "controller_approved_processing_cost": 1,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0002"
+          },
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
+            "controller_approved_processing_cost": 2,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003"
+          }
+        ],
+        "ready_order": [
+          "SYNTHETIC_OPAQUE_BINDING_0002",
+          "SYNTHETIC_OPAQUE_BINDING_0003",
+          "SYNTHETIC_OPAQUE_BINDING_0001"
+        ],
+        "pure_metadata_only": true
+      },
+      "decision": {
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0001",
+        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+        "controller_disposition": "USE_VALID_PROPOSAL",
+        "schedule_basis": "VALID_COST_PROPOSAL",
+        "schedule_order": [
+          "synthetic-queue-item-short",
+          "synthetic-queue-item-medium",
+          "synthetic-queue-item-old"
+        ],
+        "forced_head_queue_item_id": null,
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0001",
+        "service_head_queue_item_id": "synthetic-queue-item-short"
+      },
+      "admission": {
+        "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0001",
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0001",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0001",
+        "service_ordinal": 1,
+        "queue_item_id": "synthetic-queue-item-short",
+        "return_id": "synthetic-return-short",
+        "objective_id": "synthetic-objective-short",
+        "creature_ref": "SYNTHETIC_CREATURE_SHORT",
+        "intake_receipt_ref": "SYNTHETIC_INTAKE_0002",
+        "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0002",
+        "return_receipt_ref": "SYNTHETIC_HOMECOMING_SHORT_0001",
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evaluation_rule_ref": "SYNTHETIC_RULE_SHORT",
+        "objective_disposition": "SYNTHETIC_RULE_SHORT:SATISFIED",
+        "homecoming_custody_state": "HOMECOMING:RETURNED",
+        "carry_state": "CARRY:UNSELECTED",
+        "overtake_counts_before": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 0
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-short",
+            "count": 0
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-medium",
+            "count": 0
+          }
+        ],
+        "overtake_counts_after": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 1
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-medium",
+            "count": 0
+          }
+        ],
+        "revalidation": "INTAKE_PROJECTION_MATCH_PASS",
+        "custody_reconciliation_performed": false,
+        "authority_or_grant_mutated": false,
+        "validity_or_status_mutated": false,
+        "carry_mutated": false,
+        "external_effect_receipt_ref": null
+      }
+    },
+    {
+      "queue_id": "synthetic-return-queue-0001",
+      "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+      "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+      "snapshot_id": "synthetic-queue-snapshot-0002",
+      "snapshot_ordinal": 2,
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+      "snapshot_projection_sha256": "ed50ed8d1043a25448553d07341dc7666f1f0a81b34f771b806ca1e1f1e8b5af",
+      "cut_arrival_ordinal": 5,
+      "visible_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-held",
+        "synthetic-queue-item-late"
+      ],
+      "ready_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-late"
+      ],
+      "held_ids": [
+        "synthetic-queue-item-held"
+      ],
+      "previously_admitted_ids": [
+        "synthetic-queue-item-short"
+      ],
+      "overtake_counts_before": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "count": 1
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-medium",
+          "count": 0
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "count": 0
+        }
+      ],
+      "proposal": {
+        "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0002",
+        "queue_id": "synthetic-return-queue-0001",
+        "snapshot_id": "synthetic-queue-snapshot-0002",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_projection_sha256": "ed50ed8d1043a25448553d07341dc7666f1f0a81b34f771b806ca1e1f1e8b5af",
+        "scheduling_view_sha256": "09f468db5bf759638312be895ea985da0b9837908e78b5d61a7f42b50df99f7b",
+        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
+        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
+        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+        "approved_cost_projection": [
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
+            "controller_approved_processing_cost": 10,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
+          },
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0003",
+            "controller_approved_processing_cost": 2,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0003"
+          },
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
+            "controller_approved_processing_cost": 3,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005"
+          }
+        ],
+        "ready_order": [
+          "SYNTHETIC_OPAQUE_BINDING_0003",
+          "SYNTHETIC_OPAQUE_BINDING_0005",
+          "SYNTHETIC_OPAQUE_BINDING_0001"
+        ],
+        "pure_metadata_only": true
+      },
+      "decision": {
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0002",
+        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+        "controller_disposition": "USE_VALID_PROPOSAL",
+        "schedule_basis": "VALID_COST_PROPOSAL",
+        "schedule_order": [
+          "synthetic-queue-item-medium",
+          "synthetic-queue-item-late",
+          "synthetic-queue-item-old"
+        ],
+        "forced_head_queue_item_id": null,
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0002",
+        "service_head_queue_item_id": "synthetic-queue-item-medium"
+      },
+      "admission": {
+        "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0002",
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0002",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0002",
+        "service_ordinal": 2,
+        "queue_item_id": "synthetic-queue-item-medium",
+        "return_id": "synthetic-return-medium",
+        "objective_id": "synthetic-objective-medium",
+        "creature_ref": "SYNTHETIC_CREATURE_MEDIUM",
+        "intake_receipt_ref": "SYNTHETIC_INTAKE_0003",
+        "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0003",
+        "return_receipt_ref": "SYNTHETIC_HOMECOMING_MEDIUM_0001",
+        "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "evaluation_rule_ref": "SYNTHETIC_RULE_MEDIUM",
+        "objective_disposition": "SYNTHETIC_RULE_MEDIUM:SATISFIED",
+        "homecoming_custody_state": "HOMECOMING:RETURNED",
+        "carry_state": "CARRY:UNSELECTED",
+        "overtake_counts_before": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 1
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-medium",
+            "count": 0
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "overtake_counts_after": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 2
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "revalidation": "INTAKE_PROJECTION_MATCH_PASS",
+        "custody_reconciliation_performed": false,
+        "authority_or_grant_mutated": false,
+        "validity_or_status_mutated": false,
+        "carry_mutated": false,
+        "external_effect_receipt_ref": null
+      }
+    },
+    {
+      "queue_id": "synthetic-return-queue-0001",
+      "destination_ref": "SYNTHETIC_HOMECOMING_RECONCILIATION_DESTINATION_0001",
+      "synchronization_point_ref": "SYNTHETIC_HOMECOMING_SYNC_POINT_0001",
+      "snapshot_id": "synthetic-queue-snapshot-0003",
+      "snapshot_ordinal": 3,
+      "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+      "profile_epoch": 1,
+      "service_epoch": 1,
+      "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+      "snapshot_projection_sha256": "13c68c5add5eb28dbdc9db8c3659e9648342822428e8c8fb83905bddcc99f722",
+      "cut_arrival_ordinal": 5,
+      "visible_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium",
+        "synthetic-queue-item-held",
+        "synthetic-queue-item-late"
+      ],
+      "ready_ids": [
+        "synthetic-queue-item-old",
+        "synthetic-queue-item-late"
+      ],
+      "held_ids": [
+        "synthetic-queue-item-held"
+      ],
+      "previously_admitted_ids": [
+        "synthetic-queue-item-short",
+        "synthetic-queue-item-medium"
+      ],
+      "overtake_counts_before": [
+        {
+          "queue_item_id": "synthetic-queue-item-old",
+          "count": 2
+        },
+        {
+          "queue_item_id": "synthetic-queue-item-late",
+          "count": 0
+        }
+      ],
+      "proposal": {
+        "proposal_ref": "SYNTHETIC_QUEUE_PROPOSAL_0003",
+        "queue_id": "synthetic-return-queue-0001",
+        "snapshot_id": "synthetic-queue-snapshot-0003",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_projection_sha256": "13c68c5add5eb28dbdc9db8c3659e9648342822428e8c8fb83905bddcc99f722",
+        "scheduling_view_sha256": "b3064c3d032cfcd6fe9903718513705420376bd5fde6305316dcae502969d390",
+        "proposer_creature_ref": "SYNTHETIC_QUEUE_STEWARD_CREATURE_0001",
+        "steward_manifest_ref": "SYNTHETIC_QUEUE_STEWARD_MANIFEST_0001",
+        "control_return_aperture_ref": "SYNTHETIC_QUEUE_STEWARD_CONTROL_APERTURE_0001",
+        "policy_ref": "STABLE_ASCENDING_CONTROLLER_APPROVED_COST_THEN_ARRIVAL_V1",
+        "approved_cost_projection": [
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0001",
+            "controller_approved_processing_cost": 10,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0001"
+          },
+          {
+            "opaque_queue_item_binding": "SYNTHETIC_OPAQUE_BINDING_0005",
+            "controller_approved_processing_cost": 3,
+            "scheduling_metadata_provenance_ref": "SYNTHETIC_CONTROLLER_SCHEDULING_ATTESTATION_0005"
+          }
+        ],
+        "ready_order": [
+          "SYNTHETIC_OPAQUE_BINDING_0005",
+          "SYNTHETIC_OPAQUE_BINDING_0001"
+        ],
+        "pure_metadata_only": true
+      },
+      "decision": {
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0003",
+        "proposal_validation": "VALID_EXACT_READY_PERMUTATION_AND_POLICY",
+        "controller_disposition": "REPLACE_HEAD_MAXIMUM_OVERTAKES",
+        "schedule_basis": "MAXIMUM_OVERTAKES_FIFO_FORCED",
+        "schedule_order": [
+          "synthetic-queue-item-old",
+          "synthetic-queue-item-late"
+        ],
+        "forced_head_queue_item_id": "synthetic-queue-item-old",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0003",
+        "service_head_queue_item_id": "synthetic-queue-item-old"
+      },
+      "admission": {
+        "admission_receipt_ref": "SYNTHETIC_QUEUE_ADMISSION_0003",
+        "controller_ref": "SYNTHETIC_CONTROLLER_0001",
+        "queue_id": "synthetic-return-queue-0001",
+        "profile_ref": "SYNTHETIC_RETURN_QUEUE_PROFILE_0001",
+        "profile_epoch": 1,
+        "service_epoch": 1,
+        "snapshot_id": "synthetic-queue-snapshot-0003",
+        "order_receipt_ref": "SYNTHETIC_QUEUE_ORDER_0003",
+        "service_ordinal": 3,
+        "queue_item_id": "synthetic-queue-item-old",
+        "return_id": "synthetic-return-old",
+        "objective_id": "synthetic-objective-old",
+        "creature_ref": "SYNTHETIC_CREATURE_OLD",
+        "intake_receipt_ref": "SYNTHETIC_INTAKE_0001",
+        "enqueue_receipt_ref": "SYNTHETIC_ENQUEUE_0001",
+        "return_receipt_ref": "SYNTHETIC_HOMECOMING_OLD_0001",
+        "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evaluation_rule_ref": "SYNTHETIC_RULE_OLD",
+        "objective_disposition": "SYNTHETIC_RULE_OLD:SATISFIED",
+        "homecoming_custody_state": "HOMECOMING:RETURNED",
+        "carry_state": "CARRY:UNSELECTED",
+        "overtake_counts_before": [
+          {
+            "queue_item_id": "synthetic-queue-item-old",
+            "count": 2
+          },
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "overtake_counts_after": [
+          {
+            "queue_item_id": "synthetic-queue-item-late",
+            "count": 0
+          }
+        ],
+        "revalidation": "INTAKE_PROJECTION_MATCH_PASS",
+        "custody_reconciliation_performed": false,
+        "authority_or_grant_mutated": false,
+        "validity_or_status_mutated": false,
+        "carry_mutated": false,
+        "external_effect_receipt_ref": null
+      }
+    }
+  ],
+  "accounting": {
+    "intake_order": [
+      "synthetic-queue-item-old",
+      "synthetic-queue-item-short",
+      "synthetic-queue-item-medium",
+      "synthetic-queue-item-held",
+      "synthetic-queue-item-late"
+    ],
+    "admission_order": [
+      "synthetic-queue-item-short",
+      "synthetic-queue-item-medium",
+      "synthetic-queue-item-old"
+    ],
+    "ready_residual_ids": [
+      "synthetic-queue-item-late"
+    ],
+    "held_residual_ids": [
+      "synthetic-queue-item-held"
+    ],
+    "unreconciled_admitted_ids": [
+      "synthetic-queue-item-short",
+      "synthetic-queue-item-medium",
+      "synthetic-queue-item-old"
+    ],
+    "dropped_ids": [],
+    "merged_ids": [],
+    "distinct_same_content_pair": [
+      "synthetic-queue-item-old",
+      "synthetic-queue-item-short"
+    ],
+    "all_intakes_accounted": true,
+    "carry_selection_performed": false,
+    "custody_reconciliation_performed": false,
+    "external_effect_count": 0
+  }
+}
