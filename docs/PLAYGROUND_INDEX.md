@@ -47,6 +47,17 @@ account, contact, holdout, submission, or publication authority.
 The [machine-readable snapshot](../manifests/branch-status.v1.json) contains
 full parents, source paths, claim ceilings, and relationship records.
 
+## After-snapshot ARC review successor
+
+The later review-only branch `codex/arc3-charter-sendoff-20260905` at
+[`485e154…`](https://github.com/Grativy6/hearthline-plays/tree/485e154effd3e9c623e9a34989e1c0ea545a40c0)
+reconciles the two ARC-AGI-3 tips, preserves the executable candidate bytes,
+and adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
+anchor plus the scientific-run/sendoff route. It is tracked in
+[draft PR #4](https://github.com/Grativy6/hearthline-plays/pull/4) and is not
+silently folded into the dated snapshot above. It opens no gate and creates no
+runtime, account, contact, submission, score, or publication authority.
+
 ## ARC-AGI-3 evidence ceiling
 
 The launch candidate reconciles five historical anonymous public ARC contacts,
