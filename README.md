@@ -22,8 +22,8 @@ This repository is organized by branch so one growing playground does not become
 
 The current ARC-AGI-3 candidate is
 `arc-agi/titles/arc-agi-3-hearthline-launch-20260903` at
-`a3f99acedd1fa91417510f66eba35c444533f335`, tree
-`c7eac0a173c1b50ac62447785734f96a986bf4fb`. Its exact reviewed source tree
+`25e154d539b1c85e28c5334b9b940ab6880ca600`, tree
+`d249cec7b81d942b84a6f728a421e3cd18ddaf31`. Its exact reviewed source tree
 passed remote verification, but its operational status remains
 `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED` and its terminal blocker
 remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
@@ -34,9 +34,19 @@ histories, added the published
 [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor, and adopted the
 scientific preflight and sendoff context. The
 [Homecoming return-queue successor](https://github.com/Grativy6/hearthline-plays/pull/6)
-adds a deterministic offline reference for receipt-bound synchronization,
-bounded overtaking, and controller-only single-head admission. It does not wire
-a hosted scheduler, alter the executable ARC candidate or source-lock bytes,
+is preserved in its ancestry. The current
+[Morrow priority-queue successor](https://github.com/Grativy6/hearthline-plays/pull/8)
+adds dispatch-time priority, retry rotation, a deterministic
+[stateless sorter](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/tools/morrow_queue.py),
+and the story
+[Morrow and the Marked Tethers](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/MORROW_AND_THE_MARKED_TETHERS.md).
+Hearthline marks priority at dispatch; the controller owns durable state and
+final admission; Morrow receives only a fresh ready-only view. Thulia remains a
+separate durable chronicler: neither may read, write, invoke, impersonate,
+depend on, or share state with the other, and each must work when the other is
+absent. The full
+[offline queue design](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/RETURN_QUEUE.md)
+does not wire a hosted scheduler, alter executable ARC or source-lock bytes,
 open either human gate, perform external contact, or establish a result.
 
 ## Shared game embodiment blueprint

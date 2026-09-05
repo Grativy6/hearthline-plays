@@ -50,19 +50,29 @@ full parents, source paths, claim ceilings, and relationship records.
 ## After-snapshot ARC successor chain
 
 The canonical ARC-AGI-3 title branch now points to merge commit
-[`a3f99ac…`](https://github.com/Grativy6/hearthline-plays/tree/a3f99acedd1fa91417510f66eba35c444533f335),
-tree `c7eac0a173c1b50ac62447785734f96a986bf4fb`, merged through
-[PR #6](https://github.com/Grativy6/hearthline-plays/pull/6).
-It descends from `bb6327e…`, the PR #4 successor that reconciled the launch and
-hardened-station histories and adopted the
+[`25e154d…`](https://github.com/Grativy6/hearthline-plays/tree/25e154d539b1c85e28c5334b9b940ab6880ca600),
+tree `d249cec7b81d942b84a6f728a421e3cd18ddaf31`, merged through
+[PR #8](https://github.com/Grativy6/hearthline-plays/pull/8). Its reviewed
+source head `2f22c90bf2de57e5cb6b2d21b05c4b5c5cdc964b` has the same tree. Its first
+parent is `a3f99ac…`, the [PR #6](https://github.com/Grativy6/hearthline-plays/pull/6)
+Homecoming successor; its second parent is that reviewed source head. PR #6 in
+turn descends from `bb6327e…`, the PR #4 successor that reconciled the launch
+and hardened-station histories and adopted the
 [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) and preflight context.
 
-The new successor adds the
-[offline Homecoming return queue](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/design/RETURN_QUEUE.md).
-It preserves the executable candidate and source-lock bytes, queues no human
-grant, opens no gate, and creates no runtime, account, contact, submission,
-score, result, or publication authority. Neither after-snapshot successor is
-silently folded into the dated snapshot above.
+The current successor adds
+[Morrow and the Marked Tethers](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/MORROW_AND_THE_MARKED_TETHERS.md),
+the
+[priority-aware return queue](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/RETURN_QUEUE.md),
+and a usable
+[stateless stdin/stdout sorter](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/tools/morrow_queue.py).
+Hearthline assigns priority at dispatch, the controller owns durable state and
+final admission, and Morrow sees only a fresh ready-only projection. Morrow and
+Thulia have symmetric non-interference boundaries and do not depend on each
+other's presence. The design preserves executable candidate and source-lock
+bytes, queues no human grant, opens no gate, and creates no runtime, account,
+contact, submission, score, result, or publication authority. None of the
+after-snapshot successors is silently folded into the dated snapshot above.
 
 ## ARC-AGI-3 evidence ceiling
 
