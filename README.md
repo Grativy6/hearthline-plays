@@ -4,6 +4,29 @@ A public playground for building, running, and playing games with AI models.
 
 This repository is organized by branch so one growing playground does not become one crowded root. `main` is the front door and shared map. Each game series has a stable anchor branch; individual titles, worlds, and bounded experiments branch from that anchor.
 
+## Start here
+
+`main` is an index, not a runnable title and not a grant of external authority.
+
+- [Playground index](docs/PLAYGROUND_INDEX.md) — every current public branch,
+  exact tip, role, and honest status.
+- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the required,
+  versioned honesty preflight for scientific, evaluation, benchmark, and ARC
+  routes.
+- [ARC-AGI-3 sendoff route](docs/ARC3_SENDOFF.md) — the exact current
+  candidate, evidence, blocker, closed gates, and human-only reopening sequence.
+- [History and archive map](docs/HISTORY_AND_ARCHIVE_MAP.md) — retained,
+  merged, divergent, sealed, and inherited surfaces without flattening them.
+- [Machine-readable branch snapshot](manifests/branch-status.v1.json) — the
+  dated source for exact branch tips and index classifications.
+
+The current ARC-AGI-3 review candidate is
+`arc-agi/titles/arc-agi-3-hearthline-launch-20260903` at
+`97f580504e22bbd59b425274d6b5e0f9a18fe66e`. Its exact remote verification is
+green, but its operational status remains
+`OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED` and its terminal blocker
+remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
+
 ## Shared game embodiment blueprint
 
 [`Hearthline Game Embodiment Blueprint v0.1`](docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md) defines the title-neutral controller–heartbeat architecture for persistent AI play: the environment is the world and referee, the controller is the body, the heartbeat is the sensory return, and Hearthline is the player.

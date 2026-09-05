@@ -1,0 +1,227 @@
+{
+  "schema": "hearthline-plays.branch-status.v1",
+  "snapshot": {
+    "repository": "Grativy6/hearthline-plays",
+    "visibility": "PUBLIC",
+    "observed_at_utc": "2026-09-05T02:59:22Z",
+    "remote_ref_source": "git ls-remote --heads origin",
+    "default_branch": "main",
+    "default_branch_commit": "37010b5c775d7e137b957e386fb5b79e7ce96be2",
+    "default_branch_tree": "83d1dbb911e3ba05fdf5fe7e7e3fdf1e4ca96872"
+  },
+  "authority": {
+    "activates_runtime": false,
+    "grants_external_action": false,
+    "grants_account_use": false,
+    "grants_holdout_access": false,
+    "grants_submission": false,
+    "promotes_status": false
+  },
+  "preservation": {
+    "title_trees_modified": false,
+    "source_locks_modified": false,
+    "status_sources_remain_on_owning_branches": true
+  },
+  "branches": [
+    {
+      "name": "arc-agi/main",
+      "commit": "eafa59a16877f544547081b6cb910fcde683907c",
+      "tree": "459847abe0f3cdeacc858d7b1eceeb0122f960cb",
+      "parents": ["228d80f0559277c55031f4a80f6179320e10364c", "259064e582b3f2ca5107aeddb408e96d49fb1f4c"],
+      "role": "ARC series anchor whose current tree is the merged ARC-AGI-2 title",
+      "declared_status": ["PREPARED_NOT_RUN"],
+      "index_classification": "CURRENT_SERIES_ANCHOR_ARC2_SHAPED",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md"],
+      "claim_ceiling": "Public preparation only; no official run or score",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/eafa59a16877f544547081b6cb910fcde683907c"
+    },
+    {
+      "name": "arc-agi/titles/arc-agi-2-readiness-20260904",
+      "commit": "259064e582b3f2ca5107aeddb408e96d49fb1f4c",
+      "tree": "459847abe0f3cdeacc858d7b1eceeb0122f960cb",
+      "parents": ["228d80f0559277c55031f4a80f6179320e10364c"],
+      "role": "ARC-AGI-2 readiness title",
+      "declared_status": ["PREPARED_NOT_RUN"],
+      "index_classification": "MERGED_REDUNDANT_TOPOLOGY_PRESERVED",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md"],
+      "claim_ceiling": "Prepared public title; no official run or score",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/259064e582b3f2ca5107aeddb408e96d49fb1f4c"
+    },
+    {
+      "name": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+      "commit": "97f580504e22bbd59b425274d6b5e0f9a18fe66e",
+      "tree": "18897b5c31c5dc83385935b56accda3bb4ba58fa",
+      "parents": ["d4716557587302910b0002757b8e9e65c90b9fd7"],
+      "role": "Canonical ARC-AGI-3 active review candidate",
+      "declared_status": ["OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED", "RUNTIME_CLOSURE_UNFROZEN", "NOT_KAGGLE_AUTHORIZED"],
+      "index_classification": "ACTIVE_CANDIDATE",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["launch/README.md", "launch/status/current.json", "launch/gates/README.md", "launch/source-lock.v3.json"],
+      "claim_ceiling": "Offline repository verification only; no private stage, holdout, submission, or score",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/97f580504e22bbd59b425274d6b5e0f9a18fe66e"
+    },
+    {
+      "name": "arc-agi/titles/arc-agi-3-research-station",
+      "commit": "e2b2eec1544caeb8a1a07825d56db1d932c9e3f6",
+      "tree": "08bba4c343d87cfff5fa7e17a740da787730bd90",
+      "parents": ["74728f8c4ec9409bd0e6c8064a0b6b356da776f6", "d4716557587302910b0002757b8e9e65c90b9fd7"],
+      "role": "Divergent hardened ARC-AGI-3 research-station sibling",
+      "declared_status": ["OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED", "RUNTIME_CLOSURE_UNFROZEN"],
+      "index_classification": "HISTORICAL_PROVENANCE_DIVERGENT_SIBLING",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["launch/README.md", "launch/status/current.json", "launch/gates/README.md"],
+      "claim_ceiling": "Trace-bearing sibling; not canonical launch tip or official result",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/e2b2eec1544caeb8a1a07825d56db1d932c9e3f6"
+    },
+    {
+      "name": "design/creature-charter-20260905",
+      "commit": "8d859bf124cdda27c1caa0c6dc44cf7b9c4b719e",
+      "tree": "b2b64f4377bb9c70696c50811e15f8ce45e94da2",
+      "parents": ["3449bd282309aa291a98d1e08819232b1849832e"],
+      "role": "Creature narrative and design field guide",
+      "declared_status": ["NARRATIVE_DESIGN_GUIDE", "PROPOSED_NOT_IMPLEMENTED", "PREPARED_NOT_RUN"],
+      "index_classification": "MILLENNIUM_SIDE_BRANCH",
+      "activity_class": "NARRATIVE_DESIGN",
+      "status_source_paths": ["design/CHARTER_CREATURE_FIELD_GUIDE.md", "design/CREATURES.md", "research/INSPIRATION_MAP.md"],
+      "claim_ceiling": "Design guide only; inherited ARC text is HISTORICAL_INHERITED_NOT_CURRENT_NOT_EXECUTABLE",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/8d859bf124cdda27c1caa0c6dc44cf7b9c4b719e"
+    },
+    {
+      "name": "finis-solutus/main",
+      "commit": "0ccad419880547cb7b3a28499fa61e722b6d7d17",
+      "tree": "ca5517d939d6da27ab2f54e0230cf4ce0bfe1e57",
+      "parents": ["986288008f5fa21aec8ebb0b73b0d98ccecaaf6a"],
+      "role": "Finis Solutus series scaffold",
+      "declared_status": ["NO_PERSISTENT_WORLD_INSTALLED"],
+      "index_classification": "SERIES_SCAFFOLD",
+      "activity_class": "GENERAL_PLAY",
+      "status_source_paths": ["README.md"],
+      "claim_ceiling": "Scaffold only",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/0ccad419880547cb7b3a28499fa61e722b6d7d17"
+    },
+    {
+      "name": "kaggle/main",
+      "commit": "c6077763fedb768e599031982a840ad324eb1051",
+      "tree": "27e529fc1cf6a282ed620243efa74ee0d0289793",
+      "parents": ["8e1bdfa38d4d3169efffdd0cda2c06799981fbfe"],
+      "role": "Kaggle series anchor",
+      "declared_status": ["NO_STANDING_ACCOUNT_AUTHORITY"],
+      "index_classification": "SERIES_ANCHOR",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md"],
+      "claim_ceiling": "Index only; no authentication, entry, data, run, submission, or score",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/c6077763fedb768e599031982a840ad324eb1051"
+    },
+    {
+      "name": "kaggle/titles/biohub-cell-tracking-during-development",
+      "commit": "f1cce3cd219b013b40a7adcca7b43949eaeea9d9",
+      "tree": "97afde70c7706e77be82a34ca2d567f79f59941d",
+      "parents": ["8e1bdfa38d4d3169efffdd0cda2c06799981fbfe"],
+      "role": "Biohub cell-tracking title",
+      "declared_status": ["PREPARED_NOT_RUN", "NOT_ENTERED_UNVERIFIED"],
+      "index_classification": "PREPARED_TITLE",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md", "status/station-status.v1.json"],
+      "claim_ceiling": "run_enabled=false; no entry, data access, training, inference, submission, or score",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/f1cce3cd219b013b40a7adcca7b43949eaeea9d9"
+    },
+    {
+      "name": "kaggle/titles/kaggriculture-hearthline-farm",
+      "commit": "682c948c35f17af288b376ad0d3c34a8aa6698d3",
+      "tree": "b0af68b943a5858816fe80084950b5167643ee53",
+      "parents": ["77e1b7fa8bc6b4ae5bfac47b7139b22bb7267d26"],
+      "role": "Kaggriculture Hearthline Farm title",
+      "declared_status": ["CLOSED_IN_SCOPE_LOCAL_PINNED_INTERPRETER"],
+      "index_classification": "LOCAL_RESULT_NOT_OFFICIAL_KAGGLE",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md"],
+      "claim_ceiling": "Build 001 local pinned-interpreter result only; not an official Kaggle result",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/682c948c35f17af288b376ad0d3c34a8aa6698d3"
+    },
+    {
+      "name": "kaggle/titles/rosetta",
+      "commit": "f793298569c4f334901adaa4674c095219931c60",
+      "tree": "cdab781d8d2a1d5f5ba69545d162374945fd9ca9",
+      "parents": ["919ef83a30bee041346c1bc4a631f68ecf5b300a"],
+      "role": "Rosetta formal title and separate calibration surface",
+      "declared_status": ["PREPARED_NOT_RUN", "PILOT_UNSELECTED_UNCONSUMED", "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING"],
+      "index_classification": "FORMAL_PREPARED_CALIBRATION_BLOCKED",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["README.md", "status/station-status.v1.json", "status/rosetta-cal-001-status.v1.json"],
+      "claim_ceiling": "No formal pilot consumption, model or evaluator call, publication, or substitute result",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/f793298569c4f334901adaa4674c095219931c60"
+    },
+    {
+      "name": "main",
+      "commit": "37010b5c775d7e137b957e386fb5b79e7ce96be2",
+      "tree": "83d1dbb911e3ba05fdf5fe7e7e3fdf1e4ca96872",
+      "parents": ["9a28add802337c175c0bb6611b658faf12ceb550"],
+      "role": "Shared front door and title-neutral game-embodiment blueprint",
+      "declared_status": ["INDEX_ONLY_NO_AUTHORITY"],
+      "index_classification": "CURRENT_CANON_FRONT_DOOR",
+      "activity_class": "GENERAL_PLAY",
+      "status_source_paths": ["README.md", "docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md"],
+      "claim_ceiling": "No executable title on main",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/37010b5c775d7e137b957e386fb5b79e7ce96be2"
+    },
+    {
+      "name": "millennium/playground-genesis-20260904",
+      "commit": "3449bd282309aa291a98d1e08819232b1849832e",
+      "tree": "a998743133603db09e4badb678541ae5bc5e228f",
+      "parents": ["ef18554b2ca828b270dfb78512550b9b401ab6e4"],
+      "role": "Millennium playground genesis",
+      "declared_status": ["GENESIS_SEALED", "PLAY_NOT_PROOF"],
+      "index_classification": "HISTORICAL_SUCCESSOR_SIDE_BRANCH",
+      "activity_class": "SCIENTIFIC_EVALUATION",
+      "status_source_paths": ["millennium/README.md", "millennium/attestations/README.md"],
+      "claim_ceiling": "Play and sealed genesis only; inherited ARC text is HISTORICAL_INHERITED_NOT_CURRENT_NOT_EXECUTABLE",
+      "branch_url": "https://github.com/Grativy6/hearthline-plays/tree/3449bd282309aa291a98d1e08819232b1849832e"
+    }
+  ],
+  "relationships": [
+    {
+      "kind": "TREE_EQUAL_TO_MERGED_TITLE",
+      "left": "arc-agi/main",
+      "right": "arc-agi/titles/arc-agi-2-readiness-20260904",
+      "tree": "459847abe0f3cdeacc858d7b1eceeb0122f960cb",
+      "disposition": "MERGED_REDUNDANT_TOPOLOGY_PRESERVED"
+    },
+    {
+      "kind": "DIVERGENT_SIBLINGS_ONE_UNIQUE_COMMIT_EACH",
+      "left": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+      "right": "arc-agi/titles/arc-agi-3-research-station",
+      "merge_base": "d4716557587302910b0002757b8e9e65c90b9fd7",
+      "left_unique": 1,
+      "right_unique": 1
+    },
+    {
+      "kind": "DIRECT_SUCCESSOR",
+      "parent": "millennium/playground-genesis-20260904",
+      "child": "design/creature-charter-20260905",
+      "unique_commits": 1
+    }
+  ],
+  "canonical_arc3_candidate_ci": {
+    "branch": "arc-agi/titles/arc-agi-3-hearthline-launch-20260903",
+    "head_sha": "97f580504e22bbd59b425274d6b5e0f9a18fe66e",
+    "tree": "18897b5c31c5dc83385935b56accda3bb4ba58fa",
+    "status": "OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED",
+    "blocker": "RUNTIME_CLOSURE_UNFROZEN",
+    "claim_ceiling": "offline repository verification only",
+    "runs": [
+      {"id": 33917834890, "name": "Verify research station", "event": "push", "status": "completed", "conclusion": "success", "created_at": "2026-09-04T20:45:47Z", "head_sha": "97f580504e22bbd59b425274d6b5e0f9a18fe66e", "url": "https://github.com/Grativy6/hearthline-plays/actions/runs/33917834890"},
+      {"id": 33917834892, "name": "Verify Hearthline ARC launch kit", "event": "push", "status": "completed", "conclusion": "success", "created_at": "2026-09-04T20:45:47Z", "head_sha": "97f580504e22bbd59b425274d6b5e0f9a18fe66e", "url": "https://github.com/Grativy6/hearthline-plays/actions/runs/33917834892"},
+      {"id": 33917834935, "name": "Verify ARC launchpad", "event": "push", "status": "completed", "conclusion": "success", "created_at": "2026-09-04T20:45:47Z", "head_sha": "97f580504e22bbd59b425274d6b5e0f9a18fe66e", "url": "https://github.com/Grativy6/hearthline-plays/actions/runs/33917834935"}
+    ]
+  },
+  "astra_embargo": {
+    "state": "ACTIVE",
+    "condition_status": "UNRESOLVED_NOT_RECORDED",
+    "this_index_lifts_embargo": false,
+    "this_index_admits_astra_contribution": false,
+    "reopening": "A later append-only steward declaration may record the milestone satisfied; first admitted Astra use separately requires an explicit grant and successor receipt."
+  },
+  "scientific_run_entry": "docs/SCIENTIFIC_RUN_ENTRY.md"
+}
