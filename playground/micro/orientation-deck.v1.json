@@ -1,0 +1,191 @@
+{
+  "schema_version": "hearthline-public-micro.v1",
+  "deck_id": "PUBLIC-ORIENTATION-001",
+  "title": "Lantern rules: a tiny rule-acquisition practice deck",
+  "origin": "ORIGINAL_HEARTHLINE_PRACTICE_MATERIAL",
+  "classification": "PRACTICE_NOT_BENCHMARK",
+  "upstream_material": {
+    "task_rows": 0,
+    "test_cases": 0,
+    "maps": 0,
+    "code_fragments": 0
+  },
+  "use": {
+    "default_model_calls": 0,
+    "optional_model_call_ceiling": 1,
+    "attempts_per_episode": 1,
+    "show_learner_view_first": true,
+    "reveal_coach_view_after_answer_is_sealed": true,
+    "reset_between_episodes": true
+  },
+  "episodes": [
+    {
+      "episode_id": "LANTERN-LEDGER-01",
+      "lesson": "Evidence earns a mapping; familiarity does not.",
+      "learner_view": {
+        "convention": "Object words remain literal. Only action words use the local surface.",
+        "demonstrations": [
+          {
+            "evidence_id": "D1",
+            "ordinary": "mark amber",
+            "surface": "sela amber"
+          },
+          {
+            "evidence_id": "D2",
+            "ordinary": "mark teal",
+            "surface": "sela teal"
+          },
+          {
+            "evidence_id": "D3",
+            "ordinary": "join amber teal",
+            "surface": "doru amber teal"
+          }
+        ],
+        "requests": [
+          "Render: mark violet",
+          "Render: reverse amber teal"
+        ],
+        "required_record": [
+          "mapping",
+          "status",
+          "evidence_ids",
+          "render_or_refusal"
+        ]
+      },
+      "coach_view": {
+        "earned_correspondences": [
+          {
+            "ordinary": "mark",
+            "surface": "sela",
+            "status": "SUPPORTED",
+            "evidence_ids": [
+              "D1",
+              "D2"
+            ]
+          },
+          {
+            "ordinary": "join",
+            "surface": "doru",
+            "status": "SUPPORTED",
+            "evidence_ids": [
+              "D3"
+            ]
+          }
+        ],
+        "request_outcomes": [
+          {
+            "request": "mark violet",
+            "status": "SUPPORTED_RENDER",
+            "render": "sela violet"
+          },
+          {
+            "request": "reverse amber teal",
+            "status": "UNRESOLVED",
+            "render": null,
+            "reason": "No demonstration supports a reverse action."
+          }
+        ]
+      }
+    },
+    {
+      "episode_id": "LANTERN-REFORMULATE-01",
+      "lesson": "Compose supported operations instead of inventing a convenient one.",
+      "learner_view": {
+        "convention": "Variables and list punctuation remain literal. Operation words use the local surface.",
+        "demonstrations": [
+          {
+            "evidence_id": "D1",
+            "ordinary": "head([amber, teal]) = amber",
+            "surface": "vek([amber, teal]) = amber"
+          },
+          {
+            "evidence_id": "D2",
+            "ordinary": "tail([amber, teal]) = [teal]",
+            "surface": "sul([amber, teal]) = [teal]"
+          },
+          {
+            "evidence_id": "D3",
+            "ordinary": "append([teal], amber) = [teal, amber]",
+            "surface": "ora([teal], amber) = [teal, amber]"
+          }
+        ],
+        "goal": "For a two-item list x, express its reversed list without inventing a token for reverse.",
+        "required_record": [
+          "supported_operations",
+          "unavailable_obvious_operation",
+          "reformulation",
+          "surface_render",
+          "evidence_ids"
+        ]
+      },
+      "coach_view": {
+        "supported_operations": [
+          "head",
+          "tail",
+          "append"
+        ],
+        "unavailable_obvious_operation": "reverse",
+        "ordinary_reformulation": "append(tail(x), head(x))",
+        "supported_surface_render": "ora(sul(x), vek(x))",
+        "evidence_ids": [
+          "D1",
+          "D2",
+          "D3"
+        ]
+      }
+    },
+    {
+      "episode_id": "LANTERN-RESET-01",
+      "lesson": "A surface mapping is local to one episode.",
+      "learner_view": {
+        "session_a_closed": {
+          "demonstration": {
+            "ordinary": "open box",
+            "surface": "luma box"
+          },
+          "instruction": "Seal and destroy this ledger before session B."
+        },
+        "session_b_current": {
+          "demonstration": {
+            "evidence_id": "B1",
+            "ordinary": "count stones",
+            "surface": "luma stones"
+          },
+          "request": "Render: count shells"
+        },
+        "required_record": [
+          "session_b_mapping",
+          "session_b_evidence",
+          "render",
+          "session_a_state_destroyed"
+        ]
+      },
+      "coach_view": {
+        "session_b_mapping": {
+          "ordinary": "count",
+          "surface": "luma",
+          "status": "SUPPORTED",
+          "evidence_ids": [
+            "B1"
+          ]
+        },
+        "render": "luma shells",
+        "required_reset_receipt": true,
+        "note": "The spelling luma has no cross-episode meaning."
+      }
+    }
+  ],
+  "reflection_template": {
+    "episode_id": "",
+    "correspondences_used": [],
+    "evidence_ids_used": [],
+    "unresolved_requests": [],
+    "assumptions_withheld": [],
+    "reformulations": [],
+    "answer_sealed_before_coach_view": false,
+    "state_reset_confirmed": false,
+    "score_or_match": null,
+    "what_changed_next_time": ""
+  },
+  "claim_ceiling": "This deck teaches process and is openly answer-keyed. It is not a held-out test, Rosetta score, Gloss result, or ARC-AGI-3 result."
+}

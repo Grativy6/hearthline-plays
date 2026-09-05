@@ -60,6 +60,42 @@ No update, retry, publication, or formal-pilot consumption remains authorized.
 See
 [`status/rosetta-cal-001-status.v1.json`](status/rosetta-cal-001-status.v1.json).
 
+## Public learning playground
+
+The reusable part of this title is now a small **library-learning lane**. Its
+goal is to practice acquiring a local rule system, preserving provenance,
+refusing unsupported mappings, reformulating from supported operations, and
+resetting state between problems. A score, if one is collected in a separately
+authorized future session, is a byproduct rather than the primary artifact.
+
+Start with [the public-playground guide](docs/PUBLIC_PLAYGROUND.md). The lane
+contains:
+
+- a link-only catalog of the public Core and Python task forms and current
+  public surfaces in [`playground/public-resources.v1.json`](playground/public-resources.v1.json);
+- conservative route and storage defaults in
+  [`playground/routes.example.toml`](playground/routes.example.toml);
+- a wholly original, answer-keyed three-episode orientation deck in
+  [`playground/micro/orientation-deck.v1.json`](playground/micro/orientation-deck.v1.json);
+- `hearthline_learning`, a deterministic problem-local ledger that distinguishes
+  supported, ambiguous, conflicting, unresolved, and contract-error outcomes;
+- create-never-overwrite session scaffolding and strict offline validators.
+
+The shortest zero-call start is:
+
+```text
+py tools/verify_public_playground.py
+py tools/show_public_micro_episode.py LANTERN-LEDGER-01
+py tools/validate_public_learning_session.py templates/public-learning-session.v1.json
+py tools/new_public_learning_session.py --output-root C:\HearthlineData\RosettaBench\playground\sessions --mode micro_fixture --session-id lantern-0001 --problem-id LANTERN-LEDGER-01 --learning-goal "Practice evidence-bounded rule acquisition and reset."
+```
+
+The last command creates an empty learning record; it does not play the
+episode, open Kaggle, or call a model. Session output is intentionally rejected
+on `E:\`, where this removable checkout lives. Public benchmark references are
+available as future modes, but full Core/Python routes, data materialization,
+model calls, evaluator runs, and publication remain disabled.
+
 ## Frozen formal design target
 
 `ROSETTA-001` is a three-system by two-task-form design:
@@ -97,7 +133,8 @@ Start with [the preparation guide](docs/GETTING_STARTED.md). The branch includes
 an offline station verifier, an offline check-only/explicit code-fetch split, a
 strict exclusion-aware metadata-only pilot selector, a structural result-bundle
 validator, and one bounded private calibration task. It contains no publication
-command.
+command. The public-playground verifier is included in the main offline station
+check.
 
 ## Before any run
 

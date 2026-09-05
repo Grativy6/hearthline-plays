@@ -1,0 +1,66 @@
+{
+  "schema_version": "public-learning-session.v1",
+  "status": "PUBLIC_PLAYGROUND_NOT_FORMAL_EXPERIMENT",
+  "session_mode": "micro_fixture",
+  "source": {
+    "kind": "REPOSITORY_LOCAL_ORIGINAL",
+    "locator": "playground/micro/orientation-deck.v1.json",
+    "version": "v1"
+  },
+  "exercise": {
+    "session_id": "public-play-0001",
+    "problem_id": "LANTERN-LEDGER-01",
+    "learning_goal": "Study one original rule-learning exercise while recording evidence and reformulations."
+  },
+  "budgets": {
+    "model_calls": 0,
+    "evaluator_runs": 0,
+    "candidate_code_executions": 0
+  },
+  "activity": {
+    "model_calls_completed": 0,
+    "evaluator_runs_completed": 0,
+    "candidate_code_executions_completed": 0
+  },
+  "future_plan": {
+    "status": "NO_RUN_PLANNED",
+    "description": null
+  },
+  "learning_trace": {
+    "observations": [],
+    "hypotheses": [],
+    "requests": [],
+    "reformulations": [],
+    "reflections": [],
+    "evidence_ids_used": [],
+    "assumptions_withheld": [],
+    "receipt_bindings": {
+      "verification": "RECEIPTS_UNBOUND",
+      "source_sha256": "b88a0bc011378e69449315384e675edc263427457b39c8606d9c994f67a0920c",
+      "ledger_receipt_sha256": null,
+      "reset_receipt_sha256": null
+    },
+    "episode_control": {
+      "learner_view_opened": false,
+      "answer_sealed_before_coach_view": false,
+      "coach_view_opened": false,
+      "state_reset_confirmed": false
+    },
+    "score_or_match": null,
+    "what_changed_next_time": null
+  },
+  "provenance": {
+    "created_at_utc": "2026-09-04T00:00:00Z",
+    "created_by": "tools/new_public_learning_session.py",
+    "source_is_public": false,
+    "network_accessed_by_generator": false,
+    "model_invoked_by_generator": false,
+    "evaluator_invoked_by_generator": false,
+    "candidate_code_executed_by_generator": false
+  },
+  "formal_pilot": {
+    "experiment_id": "ROSETTA-001",
+    "consumed": false
+  },
+  "claim_ceiling": "Learning-oriented public playground record only; not a formal experiment, Rosetta score, learning tax, or leaderboard result."
+}

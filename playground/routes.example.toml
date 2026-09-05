@@ -1,0 +1,112 @@
+schema_version = "hearthline-public-routes.v1"
+default_route = "micro_original"
+formal_experiment_enabled = false
+calibration_retry_enabled = false
+publication_enabled = false
+
+[session]
+default_model_calls = 0
+optional_model_call_ceiling = 1
+attempts_per_episode = 1
+fresh_context_per_episode = true
+cross_episode_memory = false
+score_is_primary_goal = false
+reflection_required = true
+
+[tooling]
+learning_library = "hearthline_learning"
+micro_viewer = "tools/show_public_micro_episode.py"
+session_generator = "tools/new_public_learning_session.py"
+session_validator = "tools/validate_public_learning_session.py"
+playground_verifier = "tools/verify_public_playground.py"
+all_offline = true
+
+[storage]
+bulk_data_enabled = false
+# Empty means unset. Replace only after separate authorization and an exact
+# fixed-internal or external-storage destination check.
+bulk_data_root = ""
+storage_class = ""
+allowed_storage_classes = ["FIXED_INTERNAL_DRIVE", "EXPLICIT_EXTERNAL_STORAGE"]
+forbidden_roots = ["E:\\"]
+configuration_grants_download_authority = false
+
+[routes.micro_original]
+enabled = true
+kind = "LOCAL_ORIGINAL_PRACTICE"
+fixture = "playground/micro/orientation-deck.v1.json"
+fixture_sha256 = "b88a0bc011378e69449315384e675edc263427457b39c8606d9c994f67a0920c"
+materialization = "NONE"
+external_calls = 0
+default_model_calls = 0
+optional_model_call_ceiling = 1
+learner_context_field = "learner_view"
+coach_context_field = "coach_view"
+objectives = [
+  "rule_acquisition",
+  "evidence_vs_assumption",
+  "supported_reformulation",
+  "task_local_reset",
+  "reflection",
+]
+
+[routes.public_source_read]
+enabled = true
+kind = "LINK_ONLY_STUDY"
+catalog = "playground/public-resources.v1.json"
+allowed_surface_ids = [
+  "kaggle_writeup",
+  "github_repository",
+  "github_core_notebook",
+  "github_python_notebook",
+  "github_dataset_builder_notebook",
+]
+authentication = false
+downloads = false
+model_calls = 0
+evaluator_calls = 0
+
+[routes.public_leaderboard_observe]
+enabled = true
+kind = "PUBLIC_OBSERVATION"
+surface_id = "kaggle_leaderboard_api"
+authentication = false
+external_writes = false
+model_calls = 0
+evaluator_calls = 0
+refresh_required_for_current_claim = true
+
+[routes.public_core_reference]
+enabled = false
+kind = "PUBLIC_RUNNABLE_TASK_REFERENCE"
+surface_id = "kaggle_core_v1"
+task_version = 1
+reason = "Full 150-problem execution is outside the low-usage playground."
+requires_separate_authorization = true
+
+[routes.public_python_reference]
+enabled = false
+kind = "PUBLIC_RUNNABLE_TASK_REFERENCE"
+surface_id = "kaggle_python_control_v1"
+task_version = 1
+reason = "Full 150-problem execution is outside the low-usage playground."
+requires_separate_authorization = true
+
+[routes.bulk_dataset]
+enabled = false
+kind = "PUBLIC_BULK_DATA_REFERENCE"
+surface_ids = ["kaggle_dataset_v1", "hugging_face_dataset_pin"]
+destination = ""
+forbidden_roots = ["E:\\"]
+requires_separate_authorization = true
+copy_into_repository = false
+
+[separation.rosetta_001]
+status = "PREPARED_NOT_RUN"
+pilot = "PILOT_UNSELECTED_UNCONSUMED"
+playground_consumes_pilot = false
+
+[separation.rosetta_cal_001]
+status = "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING"
+repair_or_retry_authorized = false
+public_observation_substitutes_for_result = false

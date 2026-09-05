@@ -29,6 +29,46 @@ PUBLICATION_NOT_AUTHORIZED
 The pinned SDK identities and credential hazards are recorded in
 [`KAGGLE_BENCHMARKS_SDK.md`](KAGGLE_BENCHMARKS_SDK.md).
 
+## Start with the public learning lane
+
+For lightweight play and reusable learning traces, use
+[`PUBLIC_PLAYGROUND.md`](PUBLIC_PLAYGROUND.md) before considering the formal
+experiment. It keeps public practice separate from `ROSETTA-001` and defaults
+to an original local micro deck, zero model calls, and zero data downloads.
+
+Verify the complete public-play kit:
+
+```text
+py tools/verify_public_playground.py
+```
+
+List the original episodes and inspect only the learner view of one:
+
+```text
+py tools/show_public_micro_episode.py
+py tools/show_public_micro_episode.py LANTERN-LEDGER-01
+```
+
+Seal an answer before explicitly unlocking its coach view with
+`--coach-view --answer-sealed`. The checked-in learning-session template is
+valid without any external action:
+
+```text
+py tools/validate_public_learning_session.py templates/public-learning-session.v1.json
+```
+
+To create a fresh, still-empty session record on the fixed internal drive:
+
+```text
+py tools/new_public_learning_session.py --output-root C:\HearthlineData\RosettaBench\playground\sessions --mode micro_fixture --session-id lantern-0001 --problem-id LANTERN-LEDGER-01 --learning-goal "Practice evidence-bounded rule acquisition and reset."
+```
+
+Creation is not execution. The generator is offline, refuses overwrites and
+`E:\` destinations, and records completed model/evaluator/code activity as
+zero. Future `public_core` or `public_python` records use their exact pinned
+public URL and version; their existence still grants no task access or run
+authority.
+
 ## Intended experiment
 
 The proposed comparison is three systems by two task forms. These are six
@@ -243,6 +283,9 @@ The safe station check is:
 ```text
 py tools/verify_station.py
 ```
+
+That command also verifies the public-playground routes, original deck,
+zero-activity session template, and learning-ledger refusal/reset behavior.
 
 Run tooling should be separate again from source fetching, and publication
 tooling should be separate from both. A general readiness verifier must remain

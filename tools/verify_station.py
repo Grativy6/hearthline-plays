@@ -13,6 +13,17 @@ import tomllib
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path, PurePosixPath
 
+try:
+    from tools.verify_public_playground import (
+        PlaygroundVerificationError,
+        verify_public_playground,
+    )
+except ModuleNotFoundError:  # Direct execution from the tools directory.
+    from verify_public_playground import (  # type: ignore[no-redef]
+        PlaygroundVerificationError,
+        verify_public_playground,
+    )
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT_ID = "ROSETTA-001"
 BRANCH = "kaggle/titles/rosetta"
@@ -68,27 +79,42 @@ REQUIRED_FILES = {
     "docs/GETTING_STARTED.md",
     "docs/GLOSS_CONTRACT.md",
     "docs/KAGGLE_BENCHMARKS_SDK.md",
+    "docs/PUBLIC_PLAYGROUND.md",
     "docs/ROSETTA_CAL_001.md",
     "docs/ROSETTA_001_PROTOCOL.md",
     "exclusions/development-tasks.v1.json",
     "metadata/public-observation.v1.json",
+    "hearthline_learning/__init__.py",
+    "hearthline_learning/ledger.py",
+    "playground/micro/orientation-deck.v1.json",
+    "playground/public-resources.v1.json",
+    "playground/routes.example.toml",
     "pyproject.toml",
     "source-lock.v1.json",
     "status/station-status.v1.json",
     "status/rosetta-cal-001-status.v1.json",
     "templates/pilot-selection.v1.json",
+    "templates/public-learning-session.v1.json",
     "templates/result-bundle.v1.json",
     "tools/bootstrap_environment.ps1",
     "tools/fetch_pinned_code.py",
+    "tools/new_public_learning_session.py",
     "tools/select_pilot.py",
+    "tools/show_public_micro_episode.py",
     "tools/validate_result_bundle.py",
+    "tools/validate_public_learning_session.py",
     "tools/verify_calibration.py",
+    "tools/verify_public_playground.py",
     "tools/verify_station.py",
     "tests/test_fetch_pinned_code.py",
+    "tests/test_learning_ledger.py",
+    "tests/test_public_learning_session.py",
     "tests/test_select_pilot.py",
+    "tests/test_show_public_micro_episode.py",
     "tests/test_validate_result_bundle.py",
     "tests/test_rosetta_cal_001_task.py",
     "tests/test_verify_calibration.py",
+    "tests/test_verify_public_playground.py",
     "tests/test_verify_station.py",
 }
 PROHIBITED_DIRECTORIES = {
@@ -1229,12 +1255,17 @@ def verify_station(repo_root: Path = REPO_ROOT, *, candidate_paths: Iterable[str
     except (OSError, UnicodeDecodeError) as exc:
         raise VerificationError(f"cannot read bootstrap script: {exc}") from exc
     validate_bootstrap(bootstrap_text)
+    try:
+        public_playground = verify_public_playground(root)
+    except PlaygroundVerificationError as exc:
+        raise VerificationError(f"public playground verification failed: {exc}") from exc
     inventory = scan_inventory(root, candidate_paths if candidate_paths is not None else collect_candidate_paths(root))
     return {
         "verdict": "PASS_PREPARATION_ONLY",
         "experiment_id": EXPERIMENT_ID,
         "station_status": "PREPARED_NOT_RUN",
         "required_files_checked": len(REQUIRED_FILES),
+        "public_playground": public_playground,
         "inventory": inventory,
         "verification_side_effects": {
             "data_downloads": 0,

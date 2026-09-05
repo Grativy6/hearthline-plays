@@ -42,6 +42,25 @@ consumed. No further update, run, retry, download, publication, or formal-pilot
 consumption is authorized; any further external action requires a new user
 instruction.
 
+A later 2026-09-04 instruction added a separate public-playground authority:
+create repository-local, original or link-only learning resources; implement
+offline routes, validators, and a problem-local evidence ledger; and preserve
+scores as optional byproducts rather than the purpose of the lane. This permits
+manual use of the original micro fixtures, offline zero-activity session
+scaffolds on a non-`E:` destination, and unauthenticated reading of the pinned
+public descriptions or leaderboard. It does not permit opening or copying task
+rows, downloading benchmark data, invoking a model or evaluator, executing
+generated candidate code, retrying `ROSETTA-CAL-001`, consuming the formal
+pilot, or publishing a result.
+
+Public-playground records must use the labels in `docs/PUBLIC_PLAYGROUND.md`.
+The default is `micro_original`; public Core/Python runnable references and the
+bulk-data route remain disabled until separately authorized. Keep original
+practice fixtures visibly separate from upstream Rosetta material. Because the
+pinned RosettaBench repository license is unresolved, retain upstream code,
+notebooks, rows, tests, generated maps, and model outputs as link-only or
+excluded material.
+
 Outside that one-shot calibration grant, do not:
 
 - authenticate to Kaggle or test stored credentials;

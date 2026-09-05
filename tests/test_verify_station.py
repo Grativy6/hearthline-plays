@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import copy
 import json
-from pathlib import Path
 import tempfile
 import tomllib
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from tools import verify_station as verifier
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -189,6 +188,15 @@ class VerifyStationTests(unittest.TestCase):
             {"data_downloads": 0, "network_calls": 0, "model_calls": 0, "evaluator_runs": 0},
         )
         self.assertFalse(any(report["claims_earned"].values()))
+
+    def test_playground_error_is_reported_as_station_verification_error(self) -> None:
+        failure = verifier.PlaygroundVerificationError("route drift")
+        with mock.patch.object(verifier, "verify_public_playground", side_effect=failure):
+            with self.assertRaisesRegex(
+                verifier.VerificationError,
+                "public playground verification failed: route drift",
+            ):
+                verifier.verify_station(REPO_ROOT, candidate_paths=[])
 
 
 if __name__ == "__main__":

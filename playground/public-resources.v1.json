@@ -1,0 +1,186 @@
+{
+  "schema_version": "hearthline-public-resources.v1",
+  "recorded_at_utc": "2026-09-04T23:15:42Z",
+  "purpose": "Link-only catalog for public Rosetta study and original low-usage rule-acquisition play.",
+  "classification": "PUBLIC_PLAYGROUND_NOT_FORMAL_EVALUATION",
+  "boundaries": {
+    "upstream_material_copied": false,
+    "dataset_downloaded": false,
+    "model_invoked": false,
+    "evaluator_invoked": false,
+    "external_write_performed": false,
+    "rosetta_001_status": "PREPARED_NOT_RUN",
+    "rosetta_001_pilot_status": "PILOT_UNSELECTED_UNCONSUMED",
+    "rosetta_cal_001_status": "BLOCKED_EXTERNAL_HOSTED_PARQUET_ENGINE_MISSING"
+  },
+  "benchmark_shape": {
+    "public_task_forms": 2,
+    "documented_public_hidden_split": false,
+    "problem_count": 150,
+    "difficulty_counts": {
+      "easy": 40,
+      "medium": 50,
+      "hard": 60
+    },
+    "note": "Core and Python are paired task forms over the same public problem set, not public and hidden releases."
+  },
+  "pins": {
+    "rosettabench_commit": "099b4837252becbd2c650ca54b206ac1a6bc3470",
+    "hugging_face_dataset_commit": "87567193229336fae36f0da95c4af6a2a46bf90f",
+    "kaggle_dataset_version": 1,
+    "kaggle_core_task_version": 1,
+    "kaggle_python_task_version": 1
+  },
+  "public_surfaces": [
+    {
+      "id": "kaggle_benchmark",
+      "kind": "benchmark_collection_and_leaderboard",
+      "url": "https://www.kaggle.com/benchmarks/namanbnsl/rosetta",
+      "visibility": "PUBLIC",
+      "use": "Observe paired public task results; do not treat them as Hearthline runs."
+    },
+    {
+      "id": "kaggle_leaderboard_api",
+      "kind": "public_metadata_api",
+      "url": "https://www.kaggle.com/api/v1/benchmarks/namanbnsl/rosetta/leaderboard",
+      "visibility": "PUBLIC",
+      "use": "Timestamped read-only observation."
+    },
+    {
+      "id": "kaggle_core_v1",
+      "kind": "public_runnable_task_reference",
+      "url": "https://www.kaggle.com/benchmarks/tasks/namanbnsl/rosettabench-core",
+      "version": 1,
+      "visibility": "PUBLIC",
+      "default_route_enabled": false,
+      "reason_disabled": "A 150-problem hosted run is not a low-usage orientation."
+    },
+    {
+      "id": "kaggle_python_control_v1",
+      "kind": "public_runnable_task_reference",
+      "url": "https://www.kaggle.com/benchmarks/tasks/namanbnsl/rosettabench-python-baseline-control",
+      "version": 1,
+      "visibility": "PUBLIC",
+      "default_route_enabled": false,
+      "reason_disabled": "A 150-problem hosted run is not a low-usage orientation."
+    },
+    {
+      "id": "kaggle_writeup",
+      "kind": "public_description",
+      "url": "https://www.kaggle.com/competitions/kaggle-measuring-agi/writeups/rosettabench",
+      "visibility": "PUBLIC",
+      "materialization": "LINK_ONLY"
+    },
+    {
+      "id": "github_repository",
+      "kind": "public_source_reference",
+      "url": "https://github.com/namanbnsl/RosettaBench/tree/099b4837252becbd2c650ca54b206ac1a6bc3470",
+      "visibility": "PUBLIC",
+      "materialization": "LINK_ONLY",
+      "license_status": "UNRESOLVED_NO_LICENSE_FILE"
+    },
+    {
+      "id": "github_core_notebook",
+      "kind": "public_notebook_reference",
+      "url": "https://github.com/namanbnsl/RosettaBench/blob/099b4837252becbd2c650ca54b206ac1a6bc3470/rosetta-core.ipynb",
+      "visibility": "PUBLIC",
+      "materialization": "LINK_ONLY"
+    },
+    {
+      "id": "github_python_notebook",
+      "kind": "public_notebook_reference",
+      "url": "https://github.com/namanbnsl/RosettaBench/blob/099b4837252becbd2c650ca54b206ac1a6bc3470/rosetta-baselines.ipynb",
+      "visibility": "PUBLIC",
+      "materialization": "LINK_ONLY"
+    },
+    {
+      "id": "github_dataset_builder_notebook",
+      "kind": "public_notebook_reference",
+      "url": "https://github.com/namanbnsl/RosettaBench/blob/099b4837252becbd2c650ca54b206ac1a6bc3470/rosetta-dataset-builder.ipynb",
+      "visibility": "PUBLIC",
+      "materialization": "LINK_ONLY"
+    },
+    {
+      "id": "kaggle_dataset_v1",
+      "kind": "public_bulk_dataset_reference",
+      "url": "https://www.kaggle.com/datasets/namanbnsl/rosettabench-150-stratified-compressed",
+      "version": 1,
+      "visibility": "PUBLIC",
+      "materialization": "DISABLED",
+      "declared_license": "MIT"
+    },
+    {
+      "id": "hugging_face_dataset_pin",
+      "kind": "public_bulk_dataset_mirror_reference",
+      "url": "https://huggingface.co/datasets/namanbnsl/rosettabench-150-stratified-compressed/tree/87567193229336fae36f0da95c4af6a2a46bf90f",
+      "visibility": "PUBLIC",
+      "materialization": "DISABLED",
+      "license_status": "UNRESOLVED_UNSPECIFIED_CC_VARIANT"
+    }
+  ],
+  "public_observations": [
+    {
+      "observation_id": "KAGGLE_PUBLIC_TERRA_2026-09-04T23:15:42Z",
+      "classification": "PUBLIC_OBSERVATION",
+      "source_surface_id": "kaggle_leaderboard_api",
+      "observed_at_utc": "2026-09-04T23:15:42Z",
+      "model_display_name": "GPT-5.6 Terra",
+      "task_versions": {
+        "core": 1,
+        "python_control": 1
+      },
+      "scores": {
+        "core": 0.49333333333333335,
+        "python_control": 0.8933333333333333,
+        "python_minus_core": 0.4,
+        "units": "proportion"
+      },
+      "not_our_run": true,
+      "not_rosetta_cal_001_evidence": true,
+      "drift_warning": "Refresh the public API before any current-state claim."
+    }
+  ],
+  "publicness_caveat": {
+    "mapping_generator_public": true,
+    "fixed_seed_procedure_public": true,
+    "distributed_dataset_has_private_test_cases_field": true,
+    "sealed_rosetta_holdout_documented": false,
+    "interpretation": "The novel interface is generated, but the public release is reproducible rather than secret."
+  },
+  "local_original_resources": [
+    {
+      "id": "orientation_deck_v1",
+      "path": "playground/micro/orientation-deck.v1.json",
+      "origin": "ORIGINAL_HEARTHLINE_PRACTICE_MATERIAL",
+      "sha256": "b88a0bc011378e69449315384e675edc263427457b39c8606d9c994f67a0920c",
+      "upstream_task_rows_used": 0,
+      "default_model_calls": 0,
+      "optional_model_call_ceiling": 1
+    }
+  ],
+  "storage_policy": {
+    "bulk_data_enabled": false,
+    "bulk_data_root": null,
+    "allowed_destination_classes_after_separate_authorization": [
+      "FIXED_INTERNAL_DRIVE",
+      "EXPLICIT_EXTERNAL_STORAGE"
+    ],
+    "forbidden_roots": [
+      "E:\\"
+    ],
+    "path_configuration_is_authority": false
+  },
+  "license_boundary": {
+    "status": "UNRESOLVED_CROSS_SURFACE",
+    "policy": "LINK_AND_PIN_ONLY",
+    "excluded_from_repository": [
+      "upstream code",
+      "upstream notebooks",
+      "task rows",
+      "test cases",
+      "generated mappings",
+      "model outputs"
+    ]
+  },
+  "claim_ceiling": "Practice may evidence rule-ledger, uncertainty, reformulation, reset, and reflection behavior; it does not earn a Rosetta, Gloss, durable-learning, contamination, ARC-AGI-3, or formal-experiment claim."
+}
