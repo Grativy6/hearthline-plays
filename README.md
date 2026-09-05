@@ -10,9 +10,9 @@ This repository is organized by branch so one growing playground does not become
 
 - [Playground index](docs/PLAYGROUND_INDEX.md) — every current public branch,
   exact tip, role, and honest status.
-- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the required,
-  versioned honesty preflight for scientific, evaluation, benchmark, and ARC
-  routes.
+- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the draft,
+  versioned honesty preflight awaiting explicit human review for scientific,
+  evaluation, benchmark, and ARC routes.
 - [ARC-AGI-3 sendoff route](docs/ARC3_SENDOFF.md) — the exact current
   candidate, evidence, blocker, closed gates, and human-only reopening sequence.
 - [History and archive map](docs/HISTORY_AND_ARCHIVE_MAP.md) — retained,
