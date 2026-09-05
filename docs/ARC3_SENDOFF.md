@@ -7,42 +7,62 @@ Terminal blocker: `RUNTIME_CLOSURE_UNFROZEN`
 This is a custodial route to existing ARC-AGI-3 material. It admits no new ARC
 machinery, strategy, evaluation, runtime observation, or result.
 
-## Current merged successor — repository-adopted, no external authority
+## Current Homecoming return-queue successor — repository-adopted, no external authority
 
 - Canonical branch: `arc-agi/titles/arc-agi-3-hearthline-launch-20260903`
-- Merge commit: `bb6327e1f5f96da929c4068d6b95fa94d4f73600`
-- Tree: `7ff81534a7bc093224b29a5916b69d618e1cd27c`
-- Reviewed source head: `27e14f15a3c19723d4e344691fed609c1e1f9975`
-- [Merged PR #4](https://github.com/Grativy6/hearthline-plays/pull/4)
-- [Adopted copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/bb6327e1f5f96da929c4068d6b95fa94d4f73600/launch/SENDOFF_2026-09-05.md)
+- Merge commit: `a3f99acedd1fa91417510f66eba35c444533f335`
+- Tree: `c7eac0a173c1b50ac62447785734f96a986bf4fb`
+- Reviewed source head: `5ba87114119cae8dbf96a5fbd9634c076b23200c`
+- [Merged PR #6](https://github.com/Grativy6/hearthline-plays/pull/6)
+- [Offline Homecoming return queue](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/design/RETURN_QUEUE.md)
+- [Adopted copy-ready sendoff](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/launch/SENDOFF_2026-09-05.md)
 
-This successor has exact launch predecessor `97f5805…` and hardened station
-`e2b2eec…` in its ancestry. It adds the exact Honesty PCP scientific-run
-entrance and a bounded publication anchor for
-[CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471), whose role is research
-context rather than an ARC input, permission, or result. Christopher explicitly
-adopted the repository preflight and sendoff context on 5 September 2026. The
-protocol itself remains `PROPOSED_UNVALIDATED`; the executable candidate and
-source-lock bytes remain unchanged. Repository adoption opens neither Gate A
-nor Gate B, certifies no honesty or performance result, establishes no runtime
-closure, and confers no submission authority.
+This successor has exact merged predecessor
+`bb6327e1f5f96da929c4068d6b95fa94d4f73600`, produced through PR #4. It adds
+an offline queue reference and fabricated verification fixture. It queues
+Homecoming returns, not grants; admits one revalidated head per controller
+step; and leaves result authority, carry selection, source-lock bytes,
+human-gate states, and external effects unchanged. It is not wired to a runner
+and is not a hosted-concurrency or performance result.
+
+The preserved PR #4 predecessor reconciled the launch and hardened-station
+histories. It added the exact Honesty PCP scientific-run entrance and the
+published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor as
+research context rather than an ARC input, permission, or result. Christopher
+explicitly adopted that repository preflight and sendoff context on 5 September
+2026. The protocol remains `PROPOSED_UNVALIDATED`; that adoption opened neither
+human gate and conferred no submission authority.
 
 ## Current canonical candidate
 
 - Branch: `arc-agi/titles/arc-agi-3-hearthline-launch-20260903`
-- Commit: `bb6327e1f5f96da929c4068d6b95fa94d4f73600`
-- Tree: `7ff81534a7bc093224b29a5916b69d618e1cd27c`
-- [Operational README](https://github.com/Grativy6/hearthline-plays/blob/bb6327e1f5f96da929c4068d6b95fa94d4f73600/launch/README.md)
-- [Current status](https://github.com/Grativy6/hearthline-plays/blob/bb6327e1f5f96da929c4068d6b95fa94d4f73600/launch/status/current.json)
-- [Human gates](https://github.com/Grativy6/hearthline-plays/blob/bb6327e1f5f96da929c4068d6b95fa94d4f73600/launch/gates/README.md)
-- [Source lock v3](https://github.com/Grativy6/hearthline-plays/blob/bb6327e1f5f96da929c4068d6b95fa94d4f73600/launch/source-lock.v3.json)
+- Commit: `a3f99acedd1fa91417510f66eba35c444533f335`
+- Tree: `c7eac0a173c1b50ac62447785734f96a986bf4fb`
+- [Operational README](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/launch/README.md)
+- [Current status](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/launch/status/current.json)
+- [Human gates](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/launch/gates/README.md)
+- [Source lock v3](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/launch/source-lock.v3.json)
 - [Scientific Run Entry v1.0](SCIENTIFIC_RUN_ENTRY.md)
 
-## Exact successor-tree remote checks
+## Exact current queue-tree remote checks
+
+On 5 September 2026, three pull-request workflows completed successfully at
+reviewed source head `5ba87114119cae8dbf96a5fbd9634c076b23200c`, whose
+tree is exactly the current merged tree:
+
+- [Verify ARC launchpad — run 33978105033](https://github.com/Grativy6/hearthline-plays/actions/runs/33978105033)
+- [Verify Hearthline ARC launch kit — run 33978104990](https://github.com/Grativy6/hearthline-plays/actions/runs/33978104990)
+- [Verify research station — run 33978105014](https://github.com/Grativy6/hearthline-plays/actions/runs/33978105014)
+
+Their claim ceiling is offline repository verification on Ubuntu/Python 3.12.
+They do not establish a hosted scheduler, private runtime, Gate A, runtime
+closure, Gate B, submission, score, or launch readiness.
+
+## Preserved PR #4 successor verification
 
 On 5 September 2026, three pull-request workflows completed successfully at
 reviewed source head `27e14f15a3c19723d4e344691fed609c1e1f9975`, whose
-tree is exactly the current merged tree:
+tree is exactly the preserved `bb6327e…` predecessor tree:
 
 - [Verify ARC launchpad — run 33974001362](https://github.com/Grativy6/hearthline-plays/actions/runs/33974001362)
 - [Verify Hearthline ARC launch kit — run 33974001361](https://github.com/Grativy6/hearthline-plays/actions/runs/33974001361)

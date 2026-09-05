@@ -22,18 +22,22 @@ This repository is organized by branch so one growing playground does not become
 
 The current ARC-AGI-3 candidate is
 `arc-agi/titles/arc-agi-3-hearthline-launch-20260903` at
-`bb6327e1f5f96da929c4068d6b95fa94d4f73600`, tree
-`7ff81534a7bc093224b29a5916b69d618e1cd27c`. Its exact reviewed source tree
+`a3f99acedd1fa91417510f66eba35c444533f335`, tree
+`c7eac0a173c1b50ac62447785734f96a986bf4fb`. Its exact reviewed source tree
 passed remote verification, but its operational status remains
 `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED` and its terminal blocker
 remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
 
-The [2026-09-05 merged successor](https://github.com/Grativy6/hearthline-plays/pull/4)
-reconciles the prior launch tip with the hardened research-station sibling,
-adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
-anchor, and repository-adopts the scientific preflight and sendoff context. It
-leaves the executable candidate and source-lock bytes unchanged, opens neither
-human gate, and does not resolve the private-runtime blocker.
+The [CHARTER and preflight predecessor](https://github.com/Grativy6/hearthline-plays/pull/4)
+remains in this title's ancestry. It reconciled the launch and hardened-station
+histories, added the published
+[CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor, and adopted the
+scientific preflight and sendoff context. The
+[Homecoming return-queue successor](https://github.com/Grativy6/hearthline-plays/pull/6)
+adds a deterministic offline reference for receipt-bound synchronization,
+bounded overtaking, and controller-only single-head admission. It does not wire
+a hosted scheduler, alter the executable ARC candidate or source-lock bytes,
+open either human gate, perform external contact, or establish a result.
 
 ## Shared game embodiment blueprint
 

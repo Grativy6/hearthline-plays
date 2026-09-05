@@ -47,17 +47,22 @@ account, contact, holdout, submission, or publication authority.
 The [machine-readable snapshot](../manifests/branch-status.v1.json) contains
 full parents, source paths, claim ceilings, and relationship records.
 
-## After-snapshot ARC merged successor
+## After-snapshot ARC successor chain
 
 The canonical ARC-AGI-3 title branch now points to merge commit
-[`bb6327e…`](https://github.com/Grativy6/hearthline-plays/tree/bb6327e1f5f96da929c4068d6b95fa94d4f73600),
-tree `7ff81534a7bc093224b29a5916b69d618e1cd27c`. The successor reconciles the two
-ARC-AGI-3 tips, preserves the executable candidate and source-lock bytes, and
-adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
-anchor plus the repository-adopted scientific-run/sendoff route. It was merged
-through [PR #4](https://github.com/Grativy6/hearthline-plays/pull/4) and is not
-silently folded into the dated snapshot above. It opens no gate and creates no
-runtime, account, contact, submission, score, or publication authority.
+[`a3f99ac…`](https://github.com/Grativy6/hearthline-plays/tree/a3f99acedd1fa91417510f66eba35c444533f335),
+tree `c7eac0a173c1b50ac62447785734f96a986bf4fb`, merged through
+[PR #6](https://github.com/Grativy6/hearthline-plays/pull/6).
+It descends from `bb6327e…`, the PR #4 successor that reconciled the launch and
+hardened-station histories and adopted the
+[CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) and preflight context.
+
+The new successor adds the
+[offline Homecoming return queue](https://github.com/Grativy6/hearthline-plays/blob/a3f99acedd1fa91417510f66eba35c444533f335/design/RETURN_QUEUE.md).
+It preserves the executable candidate and source-lock bytes, queues no human
+grant, opens no gate, and creates no runtime, account, contact, submission,
+score, result, or publication authority. Neither after-snapshot successor is
+silently folded into the dated snapshot above.
 
 ## ARC-AGI-3 evidence ceiling
 
