@@ -10,6 +10,12 @@ around the bundle: membership, routing, evidence projection, budgets, return
 paths, and effect boundaries become inspectable without confusing the bundle
 with a model, a person, a new Spark role, or a source of authority.
 
+For the affectionate Creature vocabulary, Light Trio formation checklist,
+one-way Homecoming route, and bounded correspondence to CHARTER v1.0, see the
+[`CHARTER Creature Field Guide`](CHARTER_CREATURE_FIELD_GUIDE.md). That
+same-author narrative adaptation does not amend the station's frozen source
+lock or authorize a run.
+
 ## Layering
 
 ```text

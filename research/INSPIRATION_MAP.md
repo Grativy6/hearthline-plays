@@ -3,7 +3,9 @@
 This map records bounded design influence for the ARC-AGI-3 research station.
 It does not claim that a cited source was executed, that similar structure is
 independent corroboration, or that any proposed mechanism improves ARC
-performance. Exact identities are in [`sources.lock.json`](sources.lock.json).
+performance. Exact identities for the five locked inputs are in
+[`sources.lock.json`](sources.lock.json); unlocked context is identified below
+and is not run-bound.
 
 | Source | Candidate use in the station | What does not cross |
 | --- | --- | --- |
@@ -56,3 +58,20 @@ roles, and ceilings.
 | [Full Bandwidth Is Not Full Trace v0.1](https://doi.org/10.5281/zenodo.22228162) | Separate mutable latent feedback from typed trace | No code import, causal trace-fidelity credit, ARC credit, or safety result |
 | [GOLD v0.1](https://doi.org/10.5281/zenodo.22236848) | A `1+5` common/comparison lens and route-residual fixtures | No privileged geometry, physics, consciousness, PAL-canon, or authority claim |
 | [The Context Draws a Map v1.0](https://doi.org/10.5281/zenodo.21831000) | Local context maps and reopening handles | No complete world model, independent evidence, experiential memory, or authority |
+
+## Reserved companion source outside the title lock
+
+CHARTER v1.0 is the formal same-author source for the Creature aliases used in
+the [field guide](../design/CHARTER_CREATURE_FIELD_GUIDE.md). At the time this
+map was prepared, DOI
+[10.5281/zenodo.22288471](https://doi.org/10.5281/zenodo.22288471) was reserved
+and the deposit was not yet public. The supplied release PDF has SHA-256
+`541130b912024b306268888eeb8566377ae5598f4b54fbbcc6f1c80461745926`.
+
+This provenance note does not add CHARTER to `sources.lock.json`, bind it as a
+run input, or make it independent corroboration. The inherited Lean core is
+delimited; the TTC/BPS, Systemic Friction, translation, and
+minimum-asymmetry layers remain manuscript-level proposals without a dedicated
+post-core Lean receipt, implementation, calibration, deployment, or
+independent review. A successor source lock is required before any run-bound
+use.
