@@ -50,7 +50,7 @@ full parents, source paths, claim ceilings, and relationship records.
 ## After-snapshot ARC review successor
 
 The later review-only branch `codex/arc3-charter-sendoff-20260905` at
-[`485e154…`](https://github.com/Grativy6/hearthline-plays/tree/485e154effd3e9c623e9a34989e1c0ea545a40c0)
+[`fefa73e…`](https://github.com/Grativy6/hearthline-plays/tree/fefa73efb87061c112ff012d8117d48c00bf8e68)
 reconciles the two ARC-AGI-3 tips, preserves the executable candidate bytes,
 and adds the published [CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471)
 anchor plus the scientific-run/sendoff route. It is tracked in
