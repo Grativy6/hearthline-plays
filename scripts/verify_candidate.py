@@ -463,7 +463,7 @@ def inspect_metadata(metadata: Any) -> dict[str, Any]:
     )
     require(match is not None, "kernel identity format")
     expected_scalars = {
-        "title": "Hearthline ARC-AGI-3 Readiness Candidate",
+        "title": "Hearthline ARC3 Readiness",
         "code_file": "submission.ipynb",
         "language": "python",
         "kernel_type": "notebook",
@@ -478,6 +478,10 @@ def inspect_metadata(metadata: Any) -> dict[str, Any]:
     }
     for key, expected in expected_scalars.items():
         require(metadata[key] == expected and type(metadata[key]) is type(expected), f"kernel metadata {key} mismatch")
+    require(
+        metadata["title"].lower().replace(" ", "-") == metadata["id"].rsplit("/", 1)[1],
+        "kernel title must resolve to the declared id slug",
+    )
     require(type(metadata["enable_gpu"]) is bool, "kernel metadata enable_gpu must be boolean")
     return {
         "account_slug": match.group(1),

@@ -153,7 +153,7 @@ PYTHON_CODING_COOKIE = re.compile(
 ALLOWED_CONTROL_JSON_SHA256 = {
     "launch/contracts/official-starter-eeb153.contract.json": "dd332a2d60997b60b6c1b55e2fbff804c0905637ad2f3b169f1a7572204d3e99",
     "launch/source-lock.v3.json": "9f551d9ba7829a4b6a324d53f53dafaa2fa661fca14762bbb937fa192ccd13d7",
-    "notebooks/kernel-metadata.template.json": "cce20860106970d0daf1317ce9a74b88fe2febcb6f035913b57ebfae5e964937",
+    "notebooks/kernel-metadata.template.json": "4eccba9836496a2f6abd09b0e375c8f8d7c28dacfee926e9df592da17f0628ce",
 }
 ALLOWED_SENSITIVE_PATH_REFERENCES = {
     "launch/source-lock.v3.json": {".kaggle/access_token"},
@@ -204,9 +204,9 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
     "scripts/build_notebook.py": "3027a9668af7366c41a85ca48bd20c3426730f98b5dad065557005dfb1eaa9b9",
-    "scripts/verify_candidate.py": "e366926f4ed4a030c86ac2f60a64bc19c7cda65f8114954f9e2eefb660f520d5",
+    "scripts/verify_candidate.py": "a4760c296cf7e15d8b040be7658128cc0f2434b5447311ceefbc48ff9f86322b",
     "scripts/verify_human_gate.py": "59a253514bd0f143461b6f1cd8d0486b63a7b111548659845e3ef3c4916448e0",
-    "tests/test_candidate.py": "91be63b48bc169e9e7d5ded6c0e77fef319e772ef261316a25d1bc57eaddd4f2",
+    "tests/test_candidate.py": "c0f3177099c41ede2b141cfd91458d2ca5ffa7093f23e3cdc46003e440780ea9",
     "tests/test_human_gates.py": "3053ffc520816044c5175063434e03a3647650c8e41b8801cc640fe6247b4073",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
@@ -221,7 +221,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "c1990e466864fc845cc63580d9756791e11660ebffc9238f1c7870d0059ddcec"
+SELF_AST_SHA256 = "8076869d875a1ebc5fd8c0580f9303ade87d065ea3c810e92b113d46e281aa74"
 
 
 class GuardError(RuntimeError):

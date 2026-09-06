@@ -332,6 +332,18 @@ class CandidatePackageTests(unittest.TestCase):
             BUILD._validate_username("éé")
         self.assertEqual(BUILD._validate_username("fixture-user"), "fixture-user")
 
+    def test_metadata_title_resolves_to_declared_kernel_slug(self) -> None:
+        metadata = json.loads(
+            (ROOT / "notebooks/kernel-metadata.template.json").read_text(encoding="utf-8")
+        )
+        metadata["id"] = "fixture-user/hearthline-arc3-readiness"
+        inspected = VERIFY.inspect_metadata(metadata)
+        self.assertEqual(inspected["kernel_id"], metadata["id"])
+        self.assertEqual(
+            metadata["title"].lower().replace(" ", "-"),
+            metadata["id"].rsplit("/", 1)[1],
+        )
+
     def verify_fixture(
         self,
         output: Path,
