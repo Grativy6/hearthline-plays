@@ -468,7 +468,7 @@ class CandidatePackageTests(unittest.TestCase):
         )
         self.assertEqual(
             source_lock["dependency_resolution"]["required_runtime_versions"],
-            {"arc-agi": "0.9.9", "arcengine": "0.9.3"},
+            {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
         )
         source_lock["dependency_resolution"]["required_runtime_versions"][
             "arcengine"
@@ -498,7 +498,11 @@ class CandidatePackageTests(unittest.TestCase):
             license_file,
         )
 
-    def _execute_stage_inventory(self, rows: list[tuple[str, str]]) -> str:
+    def _execute_stage_inventory(
+        self,
+        rows: list[tuple[str, str]],
+        resolved_versions: dict[str, str] | None = None,
+    ) -> str:
         run_source = self._stage_notebook()["cells"][4]["source"]
         distributions = [
             types.SimpleNamespace(
@@ -512,9 +516,13 @@ class CandidatePackageTests(unittest.TestCase):
         dataframe = mock.Mock()
         pandas.DataFrame = mock.Mock(return_value=dataframe)
         emitted: list[str] = []
+        resolved_versions = dict(resolved_versions or {})
         with mock.patch(
             "importlib.metadata.distributions",
             return_value=distributions,
+        ), mock.patch(
+            "importlib.metadata.version",
+            side_effect=lambda name: resolved_versions[name],
         ), mock.patch.dict(
             sys.modules,
             {"pandas": pandas},
@@ -587,6 +595,32 @@ class CandidatePackageTests(unittest.TestCase):
                 self._execute_stage_inventory(rows)
             self.assertEqual(str(raised.exception), expected)
 
+    def test_stage_inventory_resolves_same_name_shadow_by_runtime_precedence(self) -> None:
+        rows = [("blinker", "1.4"), ("blinker", "1.9.0")]
+        for ordered in (rows, list(reversed(rows))):
+            with self.subTest(rows=ordered):
+                line = self._execute_stage_inventory(
+                    ordered,
+                    {"blinker": "1.9.0"},
+                )
+                inventory = json.loads(
+                    line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
+                )
+                self.assertEqual(
+                    inventory["distributions"],
+                    [{"name": "blinker", "version": "1.9.0"}],
+                )
+
+    def test_stage_inventory_unresolved_same_name_conflict_reports_all_versions(self) -> None:
+        rows = [("blinker", "1.9.0"), ("blinker", "1.4")]
+        with self.assertRaises(RuntimeError) as raised:
+            self._execute_stage_inventory(rows, {"blinker": "2.0"})
+        self.assertEqual(
+            str(raised.exception),
+            "conflicting canonical distribution versions: "
+            "blinker: '1.4' != '1.9.0'",
+        )
+
     def test_stage_inventory_output_is_canonical_and_order_independent(self) -> None:
         rows = [
             ("Zulu_Pkg", "2.0"),
@@ -619,17 +653,54 @@ class CandidatePackageTests(unittest.TestCase):
         locked = source_lock["dependency_resolution"]["required_runtime_versions"][
             "arc-agi"
         ]
-        self.assertEqual(locked, "0.9.9")
+        self.assertEqual(locked, "0.9.8")
         install = self._stage_notebook()["cells"][1]["source"]
         self.assertEqual(
             install,
-            "!python -m pip install --no-index --find-links "
-            "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/"
-            "arc_agi_3_wheels arc-agi==0.9.9 python-dotenv",
+            "import subprocess\n"
+            "import sys\n\n"
+            "subprocess.run(\n"
+            "    [\n"
+            "        sys.executable,\n"
+            "        \"-m\",\n"
+            "        \"pip\",\n"
+            "        \"install\",\n"
+            "        \"--no-index\",\n"
+            "        \"--find-links\",\n"
+            "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
+            "        \"arc-agi==0.9.8\",\n"
+            "        \"python-dotenv\",\n"
+            "    ],\n"
+            "    check=True,\n"
+            ")\n",
         )
         self.assertEqual(
             VERIFY._install_projection(install)["packages"],
             ["arc-agi", "python-dotenv"],
+        )
+
+    def test_install_cell_failure_is_fail_fast(self) -> None:
+        install = self._stage_notebook()["cells"][1]["source"]
+        failure = BUILD.subprocess.CalledProcessError(
+            1,
+            [sys.executable, "-m", "pip"],
+        )
+        with mock.patch("subprocess.run", side_effect=failure) as run:
+            with self.assertRaises(BUILD.subprocess.CalledProcessError):
+                exec(compile(install, "offline-install", "exec"), {})
+        run.assert_called_once_with(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "--no-index",
+                "--find-links",
+                "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels",
+                "arc-agi==0.9.8",
+                "python-dotenv",
+            ],
+            check=True,
         )
 
     def test_git_reads_disable_ambient_config_hooks_and_lazy_fetch(self) -> None:
@@ -682,7 +753,7 @@ class CandidatePackageTests(unittest.TestCase):
         self,
         root: Path,
     ) -> tuple[str, Path, Path, Path, dict[str, str]]:
-        runtime_versions = {"arc-agi": "0.9.9", "arcengine": "0.9.3"}
+        runtime_versions = {"arc-agi": "0.9.8", "arcengine": "0.9.3"}
         framework = root / "source"
         target = root / "target"
         test_agent = root / "my_agent.py"
@@ -919,7 +990,7 @@ class CandidatePackageTests(unittest.TestCase):
             self.assertIn(json.dumps(digest), run_source)
 
     def test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess(self) -> None:
-        runtime_versions = {"arc-agi": "0.9.9", "arcengine": "0.9.3"}
+        runtime_versions = {"arc-agi": "0.9.8", "arcengine": "0.9.3"}
         relative_paths = (
             "agents/agent.py",
             "agents/recorder.py",
@@ -977,7 +1048,7 @@ class CandidatePackageTests(unittest.TestCase):
         run.assert_not_called()
 
     def test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys(self) -> None:
-        runtime_versions = {"arc-agi": "0.9.9", "arcengine": "0.9.3"}
+        runtime_versions = {"arc-agi": "0.9.8", "arcengine": "0.9.3"}
         relative_paths = (
             "agents/agent.py",
             "agents/recorder.py",

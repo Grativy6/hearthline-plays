@@ -479,7 +479,7 @@ def expected_runtime_versions(verification: dict[str, Any]) -> dict[str, str]:
     require(inputs.get("source_lock_sha256") == candidate["source_lock_sha256"], "verified source-lock binding")
     versions = inputs.get("runtime_versions")
     require_exact_keys(versions, {"arc-agi", "arcengine"}, "verified runtime versions")
-    require(versions == {"arc-agi": "0.9.9", "arcengine": "0.9.3"}, "verified runtime version pins")
+    require(versions == {"arc-agi": "0.9.8", "arcengine": "0.9.3"}, "verified runtime version pins")
     return dict(versions)
 
 

@@ -112,7 +112,8 @@ notebook prints one canonical
 `HEARTHLINE_STAGE_INVENTORY` line: copy its complete Python/distribution list
 and Agents file plus `LICENSE` hashes into the receipt, then reconcile them with
 `launch/source-lock.v3.json`. The resolved inventory must include exactly
-`arc-agi==0.9.9` and `arcengine==0.9.3`; every transitive distribution is still
+the contest wheelhouse runtime `arc-agi==0.9.8` and `arcengine==0.9.3`; the
+separately pinned public ARC-AGI source remains version 0.9.9, and every transitive distribution is still
 recorded even where this lock does not prescribe its version. A failed,
 incomplete, unreviewed, differently
 hashed, missing-inventory, or source-mismatched run closes Gate B.

@@ -211,9 +211,22 @@ def notebook_document(
     accel = ACCELERATORS[accelerator]
 
     install = code_cell(
-        "!python -m pip install --no-index --find-links "
-        "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels "
-        "arc-agi==0.9.9 python-dotenv"
+        "import subprocess\n"
+        "import sys\n\n"
+        "subprocess.run(\n"
+        "    [\n"
+        "        sys.executable,\n"
+        "        \"-m\",\n"
+        "        \"pip\",\n"
+        "        \"install\",\n"
+        "        \"--no-index\",\n"
+        "        \"--find-links\",\n"
+        "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
+        "        \"arc-agi==0.9.8\",\n"
+        "        \"python-dotenv\",\n"
+        "    ],\n"
+        "    check=True,\n"
+        ")\n"
     )
     write_agent = code_cell("%%writefile /tmp/my_agent.py\n" + agent_source)
 
@@ -551,6 +564,7 @@ def notebook_document(
 
         if not os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
             distribution_versions = {}
+            distribution_raw_names = {}
             for distribution in importlib.metadata.distributions():
                 raw_name = str(distribution.metadata.get("Name", distribution.name)).strip()
                 name = re.sub(r"[-_.]+", "-", raw_name).lower()
@@ -558,22 +572,26 @@ def notebook_document(
                     raise RuntimeError(f"invalid canonical distribution name: {raw_name!r}")
                 version = str(distribution.version)
                 distribution_versions.setdefault(name, set()).add(version)
-            conflicting_names = sorted(
-                name
-                for name, versions in distribution_versions.items()
-                if len(versions) > 1
-            )
-            if conflicting_names:
-                name = conflicting_names[0]
+                distribution_raw_names.setdefault(name, set()).add(raw_name)
+            distributions = {}
+            for name in sorted(distribution_versions):
                 versions = sorted(distribution_versions[name])
-                raise RuntimeError(
-                    "conflicting canonical distribution versions: "
-                    + f"{name}: {' != '.join(repr(version) for version in versions)}"
-                )
-            distributions = {
-                name: sorted(distribution_versions[name])[0]
-                for name in sorted(distribution_versions)
-            }
+                raw_names = distribution_raw_names[name]
+                if len(versions) == 1:
+                    distributions[name] = versions[0]
+                    continue
+                effective_version = None
+                if len(raw_names) == 1:
+                    try:
+                        effective_version = str(importlib.metadata.version(name))
+                    except importlib.metadata.PackageNotFoundError:
+                        pass
+                if effective_version not in versions:
+                    raise RuntimeError(
+                        "conflicting canonical distribution versions: "
+                        + f"{name}: {' != '.join(repr(version) for version in versions)}"
+                    )
+                distributions[name] = effective_version
             framework_root = Path(
                 "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/ARC-AGI-3-Agents"
             )

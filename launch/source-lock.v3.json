@@ -1,6 +1,6 @@
 {
   "schema": "hearthline-plays.arc3-launch-source-lock.v3",
-  "recorded_at": "2026-09-04T07:30:00Z",
+  "recorded_at": "2026-09-06T19:33:32Z",
   "status": "OFFLINE_CANDIDATE_PREPARATION_NO_EFFECT_AUTHORITY",
   "steward": "Christopher D. Pang",
   "predecessor": {
@@ -10,10 +10,10 @@
   },
   "candidate_base": {
     "repository": "Grativy6/hearthline-plays",
-    "branch": "codex/arc-agi-3-readiness-20260904",
-    "commit": "90c23339dd745411e343105678a1cbdd18d3cb54",
-    "tree": "03c72d51edd2ee14989439bc8191059edba809c8",
-    "note": "A packaged candidate must bind its own later commit, tree, agent, notebook, metadata, and verification receipt hashes."
+    "branch": "codex/gate-a-kaggle-slug-fix-20260906",
+    "commit": "998ad941c91ef832b8eef48b1238253902e8146f",
+    "tree": "3dce7e5252e0d9f3958538fff41e44ccb98c7260",
+    "note": "Preserved failed Gate-A successor base. A repaired package must bind its own later commit, tree, agent, notebook, metadata, and verification receipt hashes."
   },
   "official_software": [
     {
@@ -50,7 +50,7 @@
       "tree": "9ee140e4183df0df109cec50b7cd0d2531c47168",
       "version": "0.9.9",
       "bytes_copied": false,
-      "relationship": "runtime identity only; no current environment contact authorized"
+      "relationship": "public toolkit source identity only; the contest wheelhouse runtime is separately evidence-bound below"
     },
     {
       "repository": "arcprize/ARC-AGI-3-Agents",
@@ -137,13 +137,13 @@
   "dependency_resolution": {
     "starter_ranges_observed": ["arc-agi>=0.9.6", "kaggle>=2.2", "ARC-AGI-3-Agents moving main"],
     "required_runtime_versions": {
-      "arc-agi": "0.9.9",
+      "arc-agi": "0.9.8",
       "arcengine": "0.9.3"
     },
     "runtime_closure_status": "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
-    "candidate_policy": "Source commits above are frozen. Any installed wheel and transitive version must be enumerated in the Gate A stage receipt, then a successor candidate must bind the complete imported distribution and sealed framework-file closure.",
+    "candidate_policy": "The public ARC-AGI source identity remains frozen at 0.9.9. The generated Kaggle install is pinned separately to the contest wheelhouse version 0.9.8 observed in failed private kernel versions 1 and 2. Every installed wheel and transitive version must still be enumerated in a successful Gate A stage receipt before Gate B.",
     "successor_requirement": "Gate B remains unavailable until a post-Stage-A successor source lock records FROZEN_POST_STAGE_SUCCESSOR with the reviewed imported dependency versions and file bindings.",
-    "current_blocker": "RUNTIME_CLOSURE_UNFROZEN: no authenticated Kaggle wheel inventory or staged-runtime receipt exists."
+    "current_blocker": "RUNTIME_CLOSURE_UNFROZEN: failed private version 1 log sha256 a837391bffba86457722eaa90e2988fc32f9d4ae67a7416cc50a0bfe3d4dcec observed arc-agi 0.9.8 and arcengine 0.9.3; failed version 2 log sha256 c808ec1f47abddef7f706153bc6d1ae48650c8ec6339c5ebc3928f793600f181 proved the bound offline wheelhouse does not offer arc-agi 0.9.9. Neither run produced a complete successful inventory."
   },
   "bounded_context_sources": [
     {
@@ -239,6 +239,7 @@
     "FBT and GOLD publication artifact bytes are not admitted locally; their roles remain off-by-default conceptual context through an exact registry identity.",
     "The official starter uses dependency ranges and a moving Agents main; a later package receipt must bind resolved wheels and the frozen Agents identity.",
     "Live competition rules are mutable and must be rechecked at both human gates.",
-    "No Kaggle staging, competition rerun, private holdout, or current environment result is represented by this lock."
+    "Failed private Gate-A kernel versions 1 and 2 are represented only by the exact log hashes in dependency_resolution.current_blocker; their private evidence remains outside Git.",
+    "No successful Kaggle stage, competition rerun, private holdout, or competition result is represented by this lock."
   ]
 }

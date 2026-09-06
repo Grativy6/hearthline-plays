@@ -27,6 +27,16 @@ class SourceLockV3Tests(unittest.TestCase):
             lock["dependency_resolution"]["runtime_closure_status"],
             "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
         )
+        self.assertEqual(
+            lock["dependency_resolution"]["required_runtime_versions"],
+            {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
+        )
+        public_toolkit = next(
+            row for row in lock["official_software"]
+            if row["repository"] == "arcprize/ARC-AGI"
+        )
+        self.assertEqual(public_toolkit["version"], "0.9.9")
+        self.assertIn("contest wheelhouse runtime", public_toolkit["relationship"])
         self.assertTrue(
             lock["dependency_resolution"]["current_blocker"].startswith(
                 "RUNTIME_CLOSURE_UNFROZEN:"

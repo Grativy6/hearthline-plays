@@ -75,7 +75,7 @@ class HumanGateTests(unittest.TestCase):
                 "agents_license_file": {
                     "LICENSE": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
                 },
-                "runtime_versions": {"arc-agi": "0.9.9", "arcengine": "0.9.3"},
+                "runtime_versions": {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
                 "runtime_closure_status": "FROZEN_POST_STAGE_SUCCESSOR",
             },
         }
@@ -210,7 +210,7 @@ class HumanGateTests(unittest.TestCase):
                 "complete": True,
                 "python_version": "3.12.13",
                 "distributions": [
-                    {"name": "arc-agi", "version": "0.9.9"},
+                    {"name": "arc-agi", "version": "0.9.8"},
                     {"name": "arcengine", "version": "0.9.3"},
                     {"name": "python-dotenv", "version": "1.1.1"},
                 ],

@@ -15,7 +15,6 @@ import hashlib
 import json
 import os
 import re
-import shlex
 import stat
 import subprocess
 import sys
@@ -491,7 +490,54 @@ def inspect_metadata(metadata: Any) -> dict[str, Any]:
 
 
 def _install_projection(source: str) -> dict[str, Any]:
-    tokens = shlex.split(source.removeprefix("!").replace("\\\n", " "))
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        raise CandidateError("starter install cell is not Python") from exc
+    require(len(tree.body) == 3, "starter install cell shape")
+    require(
+        isinstance(tree.body[0], ast.Import)
+        and [alias.name for alias in tree.body[0].names] == ["subprocess"],
+        "starter install subprocess import",
+    )
+    require(
+        isinstance(tree.body[1], ast.Import)
+        and [alias.name for alias in tree.body[1].names] == ["sys"],
+        "starter install sys import",
+    )
+    expression = tree.body[2]
+    require(
+        isinstance(expression, ast.Expr)
+        and isinstance(expression.value, ast.Call)
+        and isinstance(expression.value.func, ast.Attribute)
+        and isinstance(expression.value.func.value, ast.Name)
+        and expression.value.func.value.id == "subprocess"
+        and expression.value.func.attr == "run",
+        "starter install subprocess shape",
+    )
+    call = expression.value
+    require(
+        len(call.args) == 1
+        and isinstance(call.args[0], ast.List)
+        and len(call.keywords) == 1
+        and call.keywords[0].arg == "check"
+        and isinstance(call.keywords[0].value, ast.Constant)
+        and call.keywords[0].value.value is True,
+        "starter install must fail fast",
+    )
+    argv = call.args[0].elts
+    require(
+        argv
+        and isinstance(argv[0], ast.Attribute)
+        and isinstance(argv[0].value, ast.Name)
+        and argv[0].value.id == "sys"
+        and argv[0].attr == "executable",
+        "starter install interpreter binding",
+    )
+    try:
+        tokens = ["python", *[ast.literal_eval(item) for item in argv[1:]]]
+    except (ValueError, TypeError) as exc:
+        raise CandidateError("starter install argv must be literal") from exc
     if tokens[:3] == ["python", "-m", "pip"]:
         tokens = ["pip", *tokens[3:]]
     require(tokens[:2] == ["pip", "install"], "starter install command shape")
@@ -680,6 +726,7 @@ def inspect_notebook(notebook: Any, agent_source: str) -> dict[str, Any]:
         require(cell["outputs"] == [], f"notebook code cell {index} must have no outputs")
         require(isinstance(cell["source"], str), f"notebook code cell {index} source")
     code = [cell["source"] for cell in cells[1:]]
+    _install_projection(code[0])
     embedded = [text for text in code if text.startswith("%%writefile /tmp/my_agent.py\n")]
     require(len(embedded) == 1 and embedded[0].split("\n", 1)[1] == agent_source, "embedded agent differs from committed source")
     joined = "\n".join(code)
@@ -767,13 +814,24 @@ def inspect_trusted_contracts(committed: dict[str, bytes]) -> tuple[dict[str, An
     }
     require(len(by_repository) == len(source_lock["official_software"]), "source lock repository identities must be unique objects")
     starter = by_repository.get("arcprize/ARC-AGI-3-Kaggle-Starter")
+    toolkit = by_repository.get("arcprize/ARC-AGI")
     agents = by_repository.get("arcprize/ARC-AGI-3-Agents")
-    require(isinstance(starter, dict) and isinstance(agents, dict), "pinned starter and Agents identities are required")
+    require(
+        isinstance(starter, dict)
+        and isinstance(toolkit, dict)
+        and isinstance(agents, dict),
+        "pinned starter, toolkit, and Agents identities are required",
+    )
     require(starter.get("commit") == "eeb1535404f321d280a8f9194bbc1d7aca5f05fc", "source lock starter commit")
     require(starter.get("tree") == "332ff438d9b092c95e58a07eace6194379de06b4", "source lock starter tree")
     require(starter.get("upstream_file_vendored") is False, "source lock starter vendoring disposition")
     require(starter.get("interoperability_literals_reexpressed") is True, "source lock starter interoperability disposition")
     require(starter.get("license_or_notice_file_observed_at_pin") is False, "source lock starter license observation")
+    require(
+        toolkit.get("commit") == "f12822c4d550121c35a275008d964afbbed47d2f"
+        and toolkit.get("version") == "0.9.9",
+        "source lock public ARC-AGI identity",
+    )
     require(
         isinstance(starter.get("contract"), dict)
         and starter["contract"].get("python_minor") == "3.12",
@@ -826,7 +884,7 @@ def inspect_trusted_contracts(committed: dict[str, bytes]) -> tuple[dict[str, An
     }, "source lock dependency resolution")
     require(
         dependency_resolution["required_runtime_versions"]
-        == {"arc-agi": "0.9.9", "arcengine": "0.9.3"},
+        == {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
         "source lock required runtime versions",
     )
     require(
@@ -882,9 +940,27 @@ def _expected_notebook(
     require(accelerator in ACCELERATOR_SETTINGS, "candidate accelerator")
     accel = ACCELERATOR_SETTINGS[accelerator]
     install = _expected_code_cell(
-        "!python -m pip install --no-index --find-links "
-        "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels "
-        "arc-agi==0.9.9 python-dotenv"
+        dedent(
+            """\
+            import subprocess
+            import sys
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "pip",
+                    "install",
+                    "--no-index",
+                    "--find-links",
+                    "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels",
+                    "arc-agi==0.9.8",
+                    "python-dotenv",
+                ],
+                check=True,
+            )
+            """
+        )
     )
     write_agent = _expected_code_cell("%%writefile /tmp/my_agent.py\n" + agent_source)
     python_minor_literal = json.dumps(python_minor)
@@ -1216,6 +1292,7 @@ def _expected_notebook(
 
         if not os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
             distribution_versions = {}
+            distribution_raw_names = {}
             for distribution in importlib.metadata.distributions():
                 raw_name = str(distribution.metadata.get("Name", distribution.name)).strip()
                 name = re.sub(r"[-_.]+", "-", raw_name).lower()
@@ -1223,22 +1300,26 @@ def _expected_notebook(
                     raise RuntimeError(f"invalid canonical distribution name: {raw_name!r}")
                 version = str(distribution.version)
                 distribution_versions.setdefault(name, set()).add(version)
-            conflicting_names = sorted(
-                name
-                for name, versions in distribution_versions.items()
-                if len(versions) > 1
-            )
-            if conflicting_names:
-                name = conflicting_names[0]
+                distribution_raw_names.setdefault(name, set()).add(raw_name)
+            distributions = {}
+            for name in sorted(distribution_versions):
                 versions = sorted(distribution_versions[name])
-                raise RuntimeError(
-                    "conflicting canonical distribution versions: "
-                    + f"{name}: {' != '.join(repr(version) for version in versions)}"
-                )
-            distributions = {
-                name: sorted(distribution_versions[name])[0]
-                for name in sorted(distribution_versions)
-            }
+                raw_names = distribution_raw_names[name]
+                if len(versions) == 1:
+                    distributions[name] = versions[0]
+                    continue
+                effective_version = None
+                if len(raw_names) == 1:
+                    try:
+                        effective_version = str(importlib.metadata.version(name))
+                    except importlib.metadata.PackageNotFoundError:
+                        pass
+                if effective_version not in versions:
+                    raise RuntimeError(
+                        "conflicting canonical distribution versions: "
+                        + f"{name}: {' != '.join(repr(version) for version in versions)}"
+                    )
+                distributions[name] = effective_version
             framework_root = Path(
                 "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/ARC-AGI-3-Agents"
             )

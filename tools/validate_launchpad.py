@@ -83,9 +83,17 @@ def check_source_lock() -> None:
     )
     identities = {row["repository"]: row["commit"] for row in repos}
     require(identities["arcprize/ARC-AGI-3-Kaggle-Starter"] == "eeb1535404f321d280a8f9194bbc1d7aca5f05fc", "starter commit")
+    require(identities["arcprize/ARC-AGI"] == "f12822c4d550121c35a275008d964afbbed47d2f", "ARC-AGI public source commit")
     require(identities["arcprize/ARC-AGI-3-Agents"] == "4743e7d0aaae0ded0d98a89a7e282e63564cd58b", "Agents commit")
     require(identities["arcprize/arc-agi-3-benchmarking"] == "1aa78da7e3058e0ead572ede7cd97065d1e5befc", "benchmark commit")
     require(identities["Kaggle/kaggle-api"] == "659469c4185cfca0fb3be01edad6f50277528d9d", "Kaggle CLI commit")
+    toolkit = next(row for row in repos if row["repository"] == "arcprize/ARC-AGI")
+    require(toolkit["version"] == "0.9.9", "ARC-AGI public source version")
+    require(
+        data["dependency_resolution"]["required_runtime_versions"]
+        == {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
+        "contest wheelhouse runtime versions",
+    )
     agents = next(row for row in repos if row["repository"] == "arcprize/ARC-AGI-3-Agents")
     require(
         {path: binding["sha256"] for path, binding in agents["inspected_file_bindings"].items()}

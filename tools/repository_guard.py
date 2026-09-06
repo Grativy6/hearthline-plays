@@ -133,9 +133,22 @@ NOTEBOOK_BUILDER = "scripts/build_notebook.py"
 NOTEBOOK_RUNTIME_CONTEXT = NOTEBOOK_BUILDER + "::<run_framework>"
 NOTEBOOK_DUMMY_CONTEXT = NOTEBOOK_BUILDER + "::<dummy>"
 NOTEBOOK_INSTALL_CELL = (
-    "!python -m pip install --no-index --find-links "
-    "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels "
-    "arc-agi==0.9.9 python-dotenv"
+    "import subprocess\n"
+    "import sys\n\n"
+    "subprocess.run(\n"
+    "    [\n"
+    "        sys.executable,\n"
+    "        \"-m\",\n"
+    "        \"pip\",\n"
+    "        \"install\",\n"
+    "        \"--no-index\",\n"
+    "        \"--find-links\",\n"
+    "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
+    "        \"arc-agi==0.9.8\",\n"
+    "        \"python-dotenv\",\n"
+    "    ],\n"
+    "    check=True,\n"
+    ")\n"
 )
 ALLOWED_WORKFLOW_NORMALIZED_SHA256 = {
     ".github/workflows/arc3-orientation-probe.yml": "2f766102a704b7d99a16ff3889b5c61652c0aaa4a21fd0d8c713d8d23f238158",
@@ -152,7 +165,7 @@ PYTHON_CODING_COOKIE = re.compile(
 )
 ALLOWED_CONTROL_JSON_SHA256 = {
     "launch/contracts/official-starter-eeb153.contract.json": "dd332a2d60997b60b6c1b55e2fbff804c0905637ad2f3b169f1a7572204d3e99",
-    "launch/source-lock.v3.json": "9f551d9ba7829a4b6a324d53f53dafaa2fa661fca14762bbb937fa192ccd13d7",
+    "launch/source-lock.v3.json": "900965eb497a0260e165976c80793c97c605e15f38ec89b55afef593a5c0478d",
     "notebooks/kernel-metadata.template.json": "4eccba9836496a2f6abd09b0e375c8f8d7c28dacfee926e9df592da17f0628ce",
 }
 ALLOWED_SENSITIVE_PATH_REFERENCES = {
@@ -172,7 +185,7 @@ ALLOWED_IMPORT_SHA256 = {
     "launch/tools/static_pair.py": "ba0fe87cf91836ff182ddb6d7967f57687e6c04f30bb188691caf81e3cd6b466",
     "launch/tools/static_pair_v2.py": "ca63c23f27eb20c14a5558abc78728d29f09c2d681f8c4d9e1d2dae8c528e4f1",
     "scripts/build_notebook.py": "3daf648749f98aed41333315d324a7eaeb718dac12d0abc55102f3069e760063",
-    "scripts/verify_candidate.py": "cf9def163bd0a257e6e2ea44fbe2ed085a3765941cd910b28dfeafbeeefffe3a",
+    "scripts/verify_candidate.py": "709f82ba86af52f584fd22276e23b0a232f65139c3b69101d0af6d77bc975f74",
     "scripts/verify_human_gate.py": "c27d125c1e5f323a9c2403244fe8ef6168a3d36a440c4401c411f78b5413b937",
     "tests/test_candidate.py": "bb23848639bacc0c3417db12868a2ad4b943ebf0b286abf28c7480590c78186f",
     "tests/test_human_gates.py": "8b27e1e0d584b91a09b33f24c217e2bb78cac5e84e67397f6a6d78baec68f7a4",
@@ -203,25 +216,25 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/orientation_console.py": "09aa09b4b69f9a0c4c663ff17c1c105edf35049c8ff6b1fe06044ac661a06fb6",
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
-    "scripts/build_notebook.py": "af63db16027f626aed8ca1473d7359c5845a4a964d4c5087dce664c4e9fd2916",
-    "scripts/verify_candidate.py": "bc044b0f9eab364152f1340a397a25022b0e6d77d2cd9a7006c4c0ac8d26df70",
-    "scripts/verify_human_gate.py": "59a253514bd0f143461b6f1cd8d0486b63a7b111548659845e3ef3c4916448e0",
-    "tests/test_candidate.py": "6feb713994923c68f6f9f2d58491538fe58514030b9db523ecfe92f5341cb8be",
-    "tests/test_human_gates.py": "3053ffc520816044c5175063434e03a3647650c8e41b8801cc640fe6247b4073",
+    "scripts/build_notebook.py": "99dfd3b3458002b3c75fe29c9d2cb2d3951a8f1c16e9ccf121ab4b1cf39800db",
+    "scripts/verify_candidate.py": "fa634964328f249108b6889cca77a3a6496e79e0b86ebe05295409da13861863",
+    "scripts/verify_human_gate.py": "dfef4f93c0228ac1b367b6d53c896bad9e83f81b6b49fa0acb9f5fef9ebf410c",
+    "tests/test_candidate.py": "0e0dbfc711dab1f71f31b3d6f61250f5de77b7dd17c6de21526edea21c5a69c2",
+    "tests/test_human_gates.py": "e0b1aedcc2599a70ae5401672c65c4dd7898d87576a484d0f3e5a7b73c41ffde",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
     "tests/test_morrow_queue.py": "326c27b60c1d464554025dd0e4be7970e67c45ab2f2390049630ac108c9beda8",
     "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
     "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
-    "tests/test_source_context.py": "35602b972270ed2029011a11fe5f92904e0fccdd18ced1d8be2453e17d6a01f9",
+    "tests/test_source_context.py": "9d37747ec741b515bdd5faa81082325e515e2c6096a45a9f88b50060bd193d78",
     "tests/test_verify_station.py": "4e326dc4de022726149ffba6b1c9b64e20fc092307f6a8059ff90f0c1a5190c2",
     "tools/morrow_queue.py": "f17834aec9d931f0ef97ff50235ce48a8a64d289352324fa980aebf297aa4498",
     "tools/orientation_archive_guard.py": "744b2bec891cf9e4369c1a2a2fe43dc6bf38b6f22302ad3065ad888e184a33d2",
     "tools/pair_static.py": "aa231b448d059fea8b0990f4c21a134cd63bc759ad9170c3e9b49cf2b1f467ac",
-    "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
+    "tools/validate_launchpad.py": "b62180e3220c2466964b4a16085c066e5ab2a8144f7857658715ebc9a086978f",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "9552d4e069d119051e997dcb3cd8f877fefb76763b19ac61c3e0331c0631c106"
+SELF_AST_SHA256 = "0f3fd7f17563e0574c92a5439a1a19a222a4fcf112a8454560aa898efb2fa797"
 
 
 class GuardError(RuntimeError):
@@ -497,6 +510,7 @@ _RUNTIME_EXEC_TESTS = (
     "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess",
     "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys",
     "_execute_stage_inventory",
+    "test_install_cell_failure_is_fail_fast",
 )
 _RUNTIME_EXEC_TEST_AST_SHA256 = {
     "test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects": "2a8bfd2c151d1f276b58aa7f2a8834214deb0bea4135f0048a43b3bf80a4ab1f",
@@ -505,9 +519,10 @@ _RUNTIME_EXEC_TEST_AST_SHA256 = {
     "test_competition_rerun_python_minor_drift_fails_before_any_framework_effect": "3181788009ed055c9b0662f89125b68f561dfb6a144b16e8f8dc72991a50b754",
     "test_competition_rerun_runtime_drift_fails_before_any_framework_effect": "3fed0ce6caf7d472ad26592c317a6ee7afaddddc6104e6df45bea5a3a34e668d",
     "test_competition_rerun_source_drift_fails_before_copy_or_framework_import": "2c1c7c2b92f7a001b17b53f712356865a5acf9c562db680cef7054495f86478a",
-    "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess": "5a256623e1ae0585a8adb9a9bb2399be4833cf653130c7d71b2be5226e547da2",
-    "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys": "4fae3a108f3ae68304426664437dca623247b2ada0fe67d45c7f6696901bcdf7",
-    "_execute_stage_inventory": "041f0e6d9280f31c5870d0a739a5f94e346ffed0ab8c8d88ea4d75d957b6c252",
+    "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess": "d5feb59defb77a6e52d20e9ac7d7a003021ab3f3faab29fef5b191dff64bc974",
+    "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys": "a256acb6a4cb1747dc832cc4dd78aced7ef4c1aac7148d97f433cd84bd995cb7",
+    "_execute_stage_inventory": "f0ce1ae9fe2a80b4e5e90dcc9fdae145f05e7c90998b2a9d89184c988627e1c7",
+    "test_install_cell_failure_is_fail_fast": "783a8d7b017fd0015d43f865dff95c444273adf3d321f6c72df90dd422a43c41",
 }
 _ALLOWED_DYNAMIC_EXEC_CALLS: dict[tuple[str, str], Counter[str]] = {
     ("tests/test_candidate.py", function_name): Counter({
@@ -522,6 +537,11 @@ _ALLOWED_DYNAMIC_EXEC_CALLS.update({
     ("tests/test_candidate.py", "_execute_stage_inventory"): Counter({
         _parse_call(
             'exec(compile(run_source, "stage-inventory", "exec"), {})'
+        ): 1,
+    }),
+    ("tests/test_candidate.py", "test_install_cell_failure_is_fail_fast"): Counter({
+        _parse_call(
+            'exec(compile(install, "offline-install", "exec"), {})'
         ): 1,
     }),
     ("scripts/verify_human_gate.py", "verify_current_candidate"): Counter({

@@ -94,7 +94,7 @@
                 "required": ["name", "version"],
                 "properties": {
                   "name": {"const": "arc-agi"},
-                  "version": {"const": "0.9.9"}
+                  "version": {"const": "0.9.8"}
                 }
               }
             },
