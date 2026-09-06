@@ -135,7 +135,7 @@ NOTEBOOK_DUMMY_CONTEXT = NOTEBOOK_BUILDER + "::<dummy>"
 NOTEBOOK_INSTALL_CELL = (
     "!python -m pip install --no-index --find-links "
     "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels "
-    "arc-agi python-dotenv"
+    "arc-agi==0.9.9 python-dotenv"
 )
 ALLOWED_WORKFLOW_NORMALIZED_SHA256 = {
     ".github/workflows/arc3-orientation-probe.yml": "2f766102a704b7d99a16ff3889b5c61652c0aaa4a21fd0d8c713d8d23f238158",
@@ -203,10 +203,10 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/orientation_console.py": "09aa09b4b69f9a0c4c663ff17c1c105edf35049c8ff6b1fe06044ac661a06fb6",
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
-    "scripts/build_notebook.py": "3027a9668af7366c41a85ca48bd20c3426730f98b5dad065557005dfb1eaa9b9",
-    "scripts/verify_candidate.py": "a4760c296cf7e15d8b040be7658128cc0f2434b5447311ceefbc48ff9f86322b",
+    "scripts/build_notebook.py": "af63db16027f626aed8ca1473d7359c5845a4a964d4c5087dce664c4e9fd2916",
+    "scripts/verify_candidate.py": "bc044b0f9eab364152f1340a397a25022b0e6d77d2cd9a7006c4c0ac8d26df70",
     "scripts/verify_human_gate.py": "59a253514bd0f143461b6f1cd8d0486b63a7b111548659845e3ef3c4916448e0",
-    "tests/test_candidate.py": "c0f3177099c41ede2b141cfd91458d2ca5ffa7093f23e3cdc46003e440780ea9",
+    "tests/test_candidate.py": "6feb713994923c68f6f9f2d58491538fe58514030b9db523ecfe92f5341cb8be",
     "tests/test_human_gates.py": "3053ffc520816044c5175063434e03a3647650c8e41b8801cc640fe6247b4073",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
@@ -221,7 +221,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "ae7a1e30b27fa98ef32e209b75a98a69372bed73d4c59d67452504f85fa916dc",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "8076869d875a1ebc5fd8c0580f9303ade87d065ea3c810e92b113d46e281aa74"
+SELF_AST_SHA256 = "9552d4e069d119051e997dcb3cd8f877fefb76763b19ac61c3e0331c0631c106"
 
 
 class GuardError(RuntimeError):
@@ -496,6 +496,7 @@ _RUNTIME_EXEC_TESTS = (
     "test_competition_rerun_source_drift_fails_before_copy_or_framework_import",
     "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess",
     "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys",
+    "_execute_stage_inventory",
 )
 _RUNTIME_EXEC_TEST_AST_SHA256 = {
     "test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects": "2a8bfd2c151d1f276b58aa7f2a8834214deb0bea4135f0048a43b3bf80a4ab1f",
@@ -506,6 +507,7 @@ _RUNTIME_EXEC_TEST_AST_SHA256 = {
     "test_competition_rerun_source_drift_fails_before_copy_or_framework_import": "2c1c7c2b92f7a001b17b53f712356865a5acf9c562db680cef7054495f86478a",
     "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess": "5a256623e1ae0585a8adb9a9bb2399be4833cf653130c7d71b2be5226e547da2",
     "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys": "4fae3a108f3ae68304426664437dca623247b2ada0fe67d45c7f6696901bcdf7",
+    "_execute_stage_inventory": "041f0e6d9280f31c5870d0a739a5f94e346ffed0ab8c8d88ea4d75d957b6c252",
 }
 _ALLOWED_DYNAMIC_EXEC_CALLS: dict[tuple[str, str], Counter[str]] = {
     ("tests/test_candidate.py", function_name): Counter({
@@ -514,8 +516,14 @@ _ALLOWED_DYNAMIC_EXEC_CALLS: dict[tuple[str, str], Counter[str]] = {
         ): 1,
     })
     for function_name in _RUNTIME_EXEC_TESTS
+    if function_name != "_execute_stage_inventory"
 }
 _ALLOWED_DYNAMIC_EXEC_CALLS.update({
+    ("tests/test_candidate.py", "_execute_stage_inventory"): Counter({
+        _parse_call(
+            'exec(compile(run_source, "stage-inventory", "exec"), {})'
+        ): 1,
+    }),
     ("scripts/verify_human_gate.py", "verify_current_candidate"): Counter({
         _parse_call(
             'exec(compile(verifier_bytes, str(path), "exec"), module.__dict__)'

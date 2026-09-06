@@ -480,14 +480,15 @@ class CandidatePackageTests(unittest.TestCase):
         with self.assertRaisesRegex(VERIFY.CandidateError, "runtime versions"):
             VERIFY.inspect_trusted_contracts(altered)
 
-    def test_stage_inventory_rejects_pep503_canonical_alias_collisions(self) -> None:
+    @staticmethod
+    def _stage_notebook() -> dict:
         source_lock = json.loads(
             (ROOT / "launch/source-lock.v3.json").read_text(encoding="utf-8")
         )
         python_minor, status, runtime_versions, agents_files, license_file = (
             BUILD._execution_guard_inputs(source_lock)
         )
-        dummy_source = BUILD.notebook_document(
+        return BUILD.notebook_document(
             "# test agent\n",
             "cpu",
             python_minor,
@@ -495,10 +496,141 @@ class CandidatePackageTests(unittest.TestCase):
             runtime_versions,
             agents_files,
             license_file,
-        )["cells"][4]["source"]
-        self.assertIn('re.sub(r"[-_.]+", "-", raw_name).lower()', dummy_source)
-        self.assertIn("if name in distributions:", dummy_source)
-        self.assertIn("duplicate canonical distribution name", dummy_source)
+        )
+
+    def _execute_stage_inventory(self, rows: list[tuple[str, str]]) -> str:
+        run_source = self._stage_notebook()["cells"][4]["source"]
+        distributions = [
+            types.SimpleNamespace(
+                metadata={"Name": name},
+                name=name,
+                version=version,
+            )
+            for name, version in rows
+        ]
+        pandas = types.ModuleType("pandas")
+        dataframe = mock.Mock()
+        pandas.DataFrame = mock.Mock(return_value=dataframe)
+        emitted: list[str] = []
+        with mock.patch(
+            "importlib.metadata.distributions",
+            return_value=distributions,
+        ), mock.patch.dict(
+            sys.modules,
+            {"pandas": pandas},
+        ), mock.patch.dict(
+            os.environ,
+            {},
+            clear=True,
+        ), mock.patch(
+            "builtins.print",
+            side_effect=emitted.append,
+        ):
+            exec(compile(run_source, "stage-inventory", "exec"), {})
+        pandas.DataFrame.assert_called_once_with(
+            data=[["1_0", "1", True, 1]],
+            columns=["row_id", "game_id", "end_of_game", "score"],
+        )
+        dataframe.to_parquet.assert_called_once_with(
+            "/kaggle/working/submission.parquet",
+            index=False,
+        )
+        self.assertEqual(len(emitted), 1)
+        return emitted[0]
+
+    def test_stage_inventory_collapses_equal_pep503_alias_versions(self) -> None:
+        line = self._execute_stage_inventory([
+            ("PyGObject", "3.50.0"),
+            ("pygobject", "3.50.0"),
+        ])
+        inventory = json.loads(line.removeprefix("HEARTHLINE_STAGE_INVENTORY="))
+        self.assertEqual(
+            inventory["distributions"],
+            [{"name": "pygobject", "version": "3.50.0"}],
+        )
+
+    def test_stage_inventory_conflicting_alias_versions_fail_deterministically(self) -> None:
+        two_versions = [
+            ("PyGObject", "3.48.2"),
+            ("pygobject", "3.50.0"),
+        ]
+        multiple_conflicts = [
+            ("Zulu_Pkg", "9.0"),
+            ("PyGObject", "3.50.0"),
+            ("PYGOBJECT", "3.49.0"),
+            ("pygobject", "3.48.2"),
+            ("zulu.pkg", "8.0"),
+        ]
+        for rows, expected in (
+            (
+                two_versions,
+                "conflicting canonical distribution versions: "
+                "pygobject: '3.48.2' != '3.50.0'",
+            ),
+            (
+                list(reversed(two_versions)),
+                "conflicting canonical distribution versions: "
+                "pygobject: '3.48.2' != '3.50.0'",
+            ),
+            (
+                multiple_conflicts,
+                "conflicting canonical distribution versions: "
+                "pygobject: '3.48.2' != '3.49.0' != '3.50.0'",
+            ),
+            (
+                list(reversed(multiple_conflicts)),
+                "conflicting canonical distribution versions: "
+                "pygobject: '3.48.2' != '3.49.0' != '3.50.0'",
+            ),
+        ):
+            with self.subTest(rows=rows), self.assertRaises(RuntimeError) as raised:
+                self._execute_stage_inventory(rows)
+            self.assertEqual(str(raised.exception), expected)
+
+    def test_stage_inventory_output_is_canonical_and_order_independent(self) -> None:
+        rows = [
+            ("Zulu_Pkg", "2.0"),
+            ("PyGObject", "3.50.0"),
+            ("alpha.pkg", "1.0"),
+            ("pygobject", "3.50.0"),
+        ]
+        first = self._execute_stage_inventory(rows)
+        second = self._execute_stage_inventory(list(reversed(rows)))
+        self.assertEqual(first, second)
+        prefix = "HEARTHLINE_STAGE_INVENTORY="
+        inventory = json.loads(first.removeprefix(prefix))
+        self.assertEqual(
+            inventory["distributions"],
+            [
+                {"name": "alpha-pkg", "version": "1.0"},
+                {"name": "pygobject", "version": "3.50.0"},
+                {"name": "zulu-pkg", "version": "2.0"},
+            ],
+        )
+        self.assertEqual(
+            first,
+            prefix + json.dumps(inventory, sort_keys=True, separators=(",", ":")),
+        )
+
+    def test_install_cell_pins_locked_arc_agi_version(self) -> None:
+        source_lock = json.loads(
+            (ROOT / "launch/source-lock.v3.json").read_text(encoding="utf-8")
+        )
+        locked = source_lock["dependency_resolution"]["required_runtime_versions"][
+            "arc-agi"
+        ]
+        self.assertEqual(locked, "0.9.9")
+        install = self._stage_notebook()["cells"][1]["source"]
+        self.assertEqual(
+            install,
+            "!python -m pip install --no-index --find-links "
+            "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/"
+            "arc_agi_3_wheels arc-agi==0.9.9 python-dotenv",
+        )
+        self.assertEqual(
+            VERIFY._install_projection(install)["packages"],
+            ["arc-agi", "python-dotenv"],
+        )
 
     def test_git_reads_disable_ambient_config_hooks_and_lazy_fetch(self) -> None:
         with mock.patch.dict(

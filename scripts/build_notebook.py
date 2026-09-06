@@ -213,7 +213,7 @@ def notebook_document(
     install = code_cell(
         "!python -m pip install --no-index --find-links "
         "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels "
-        "arc-agi python-dotenv"
+        "arc-agi==0.9.9 python-dotenv"
     )
     write_agent = code_cell("%%writefile /tmp/my_agent.py\n" + agent_source)
 
@@ -550,15 +550,30 @@ def notebook_document(
         from pathlib import Path
 
         if not os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
-            distributions = {}
+            distribution_versions = {}
             for distribution in importlib.metadata.distributions():
                 raw_name = str(distribution.metadata.get("Name", distribution.name)).strip()
                 name = re.sub(r"[-_.]+", "-", raw_name).lower()
                 if re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) is None:
                     raise RuntimeError(f"invalid canonical distribution name: {raw_name!r}")
-                if name in distributions:
-                    raise RuntimeError(f"duplicate canonical distribution name: {name}")
-                distributions[name] = str(distribution.version)
+                version = str(distribution.version)
+                distribution_versions.setdefault(name, set()).add(version)
+            conflicting_names = sorted(
+                name
+                for name, versions in distribution_versions.items()
+                if len(versions) > 1
+            )
+            if conflicting_names:
+                name = conflicting_names[0]
+                versions = sorted(distribution_versions[name])
+                raise RuntimeError(
+                    "conflicting canonical distribution versions: "
+                    + f"{name}: {' != '.join(repr(version) for version in versions)}"
+                )
+            distributions = {
+                name: sorted(distribution_versions[name])[0]
+                for name in sorted(distribution_versions)
+            }
             framework_root = Path(
                 "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/ARC-AGI-3-Agents"
             )
