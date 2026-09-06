@@ -216,10 +216,10 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/orientation_console.py": "09aa09b4b69f9a0c4c663ff17c1c105edf35049c8ff6b1fe06044ac661a06fb6",
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
-    "scripts/build_notebook.py": "99dfd3b3458002b3c75fe29c9d2cb2d3951a8f1c16e9ccf121ab4b1cf39800db",
+    "scripts/build_notebook.py": "caa12b97977ab52383d991a2ace9345c5c65f8a577cc60174602fb9e20f742f1",
     "scripts/verify_candidate.py": "fa634964328f249108b6889cca77a3a6496e79e0b86ebe05295409da13861863",
     "scripts/verify_human_gate.py": "dfef4f93c0228ac1b367b6d53c896bad9e83f81b6b49fa0acb9f5fef9ebf410c",
-    "tests/test_candidate.py": "0e0dbfc711dab1f71f31b3d6f61250f5de77b7dd17c6de21526edea21c5a69c2",
+    "tests/test_candidate.py": "bd00632669d679c2ceead02cf345d496cb02e562d0e4a33510f841f350d61123",
     "tests/test_human_gates.py": "e0b1aedcc2599a70ae5401672c65c4dd7898d87576a484d0f3e5a7b73c41ffde",
     "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
     "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
@@ -234,7 +234,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "b62180e3220c2466964b4a16085c066e5ab2a8144f7857658715ebc9a086978f",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "0f3fd7f17563e0574c92a5439a1a19a222a4fcf112a8454560aa898efb2fa797"
+SELF_AST_SHA256 = "9f3f214cf165be27796f1292ad1cba2225b9816eeedf160c4bdcf73480c06fc4"
 
 
 class GuardError(RuntimeError):

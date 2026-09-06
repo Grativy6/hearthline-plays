@@ -592,8 +592,30 @@ class CandidatePackageTests(unittest.TestCase):
             ),
         ):
             with self.subTest(rows=rows), self.assertRaises(RuntimeError) as raised:
-                self._execute_stage_inventory(rows)
+                self._execute_stage_inventory(
+                    rows,
+                    {"pygobject": "0.0"},
+                )
             self.assertEqual(str(raised.exception), expected)
+
+    def test_stage_inventory_resolves_pep503_alias_shadow_by_runtime_precedence(self) -> None:
+        rows = [
+            ("importlib_metadata", "4.6.4"),
+            ("importlib-metadata", "8.7.1"),
+        ]
+        for ordered in (rows, list(reversed(rows))):
+            with self.subTest(rows=ordered):
+                line = self._execute_stage_inventory(
+                    ordered,
+                    {"importlib-metadata": "8.7.1"},
+                )
+                inventory = json.loads(
+                    line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
+                )
+                self.assertEqual(
+                    inventory["distributions"],
+                    [{"name": "importlib-metadata", "version": "8.7.1"}],
+                )
 
     def test_stage_inventory_resolves_same_name_shadow_by_runtime_precedence(self) -> None:
         rows = [("blinker", "1.4"), ("blinker", "1.9.0")]
