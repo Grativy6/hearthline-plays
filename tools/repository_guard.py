@@ -217,7 +217,7 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
     "scripts/build_notebook.py": "caa12b97977ab52383d991a2ace9345c5c65f8a577cc60174602fb9e20f742f1",
-    "scripts/verify_candidate.py": "fa634964328f249108b6889cca77a3a6496e79e0b86ebe05295409da13861863",
+    "scripts/verify_candidate.py": "111a51657393ed2bd8191c6177e6cd5364f50f45f5ce22eb56b4f84e021afc5f",
     "scripts/verify_human_gate.py": "dfef4f93c0228ac1b367b6d53c896bad9e83f81b6b49fa0acb9f5fef9ebf410c",
     "tests/test_candidate.py": "bd00632669d679c2ceead02cf345d496cb02e562d0e4a33510f841f350d61123",
     "tests/test_human_gates.py": "e0b1aedcc2599a70ae5401672c65c4dd7898d87576a484d0f3e5a7b73c41ffde",
@@ -234,7 +234,7 @@ ALLOWED_PYTHON_SHA256 = {
     "tools/validate_launchpad.py": "b62180e3220c2466964b4a16085c066e5ab2a8144f7857658715ebc9a086978f",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "9f3f214cf165be27796f1292ad1cba2225b9816eeedf160c4bdcf73480c06fc4"
+SELF_AST_SHA256 = "d9e7003cf923131bd30366e52a0342e0b0059884abccadbef2a931f400be9758"
 
 
 class GuardError(RuntimeError):

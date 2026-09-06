@@ -1292,7 +1292,6 @@ def _expected_notebook(
 
         if not os.getenv("KAGGLE_IS_COMPETITION_RERUN"):
             distribution_versions = {}
-            distribution_raw_names = {}
             for distribution in importlib.metadata.distributions():
                 raw_name = str(distribution.metadata.get("Name", distribution.name)).strip()
                 name = re.sub(r"[-_.]+", "-", raw_name).lower()
@@ -1300,20 +1299,17 @@ def _expected_notebook(
                     raise RuntimeError(f"invalid canonical distribution name: {raw_name!r}")
                 version = str(distribution.version)
                 distribution_versions.setdefault(name, set()).add(version)
-                distribution_raw_names.setdefault(name, set()).add(raw_name)
             distributions = {}
             for name in sorted(distribution_versions):
                 versions = sorted(distribution_versions[name])
-                raw_names = distribution_raw_names[name]
                 if len(versions) == 1:
                     distributions[name] = versions[0]
                     continue
                 effective_version = None
-                if len(raw_names) == 1:
-                    try:
-                        effective_version = str(importlib.metadata.version(name))
-                    except importlib.metadata.PackageNotFoundError:
-                        pass
+                try:
+                    effective_version = str(importlib.metadata.version(name))
+                except importlib.metadata.PackageNotFoundError:
+                    pass
                 if effective_version not in versions:
                     raise RuntimeError(
                         "conflicting canonical distribution versions: "
