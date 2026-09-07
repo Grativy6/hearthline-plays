@@ -13,9 +13,19 @@ def load(relative: str) -> dict:
     return json.loads((ROOT / relative).read_text(encoding="utf-8"))
 
 
-class SourceLockV3Tests(unittest.TestCase):
+class SourceLockV4Tests(unittest.TestCase):
     def test_official_identities_and_live_safe_limit_are_frozen(self) -> None:
-        lock = load("launch/source-lock.v3.json")
+        lock = load("launch/source-lock.v4.json")
+        self.assertEqual(lock["schema"], "hearthline-plays.arc3-launch-source-lock.v4")
+        self.assertEqual(lock["status"], "FROZEN_POST_STAGE_SUCCESSOR_LOCAL_REPAIR_ONLY")
+        self.assertEqual(
+            lock["predecessor"],
+            {
+                "path": "launch/source-lock.v3.json",
+                "sha256": "900965eb497a0260e165976c80793c97c605e15f38ec89b55afef593a5c0478d",
+                "treatment": "pre-stage runtime-closure lock; preserved byte-for-byte",
+            },
+        )
         commits = {row["repository"]: row["commit"] for row in lock["official_software"]}
         self.assertEqual(commits["arcprize/ARC-AGI-3-Kaggle-Starter"], "eeb1535404f321d280a8f9194bbc1d7aca5f05fc")
         self.assertEqual(commits["arcprize/ARC-AGI-3-Agents"], "4743e7d0aaae0ded0d98a89a7e282e63564cd58b")
@@ -25,11 +35,11 @@ class SourceLockV3Tests(unittest.TestCase):
         self.assertFalse(lock["credential_contract"]["credential_use_authorized"])
         self.assertEqual(
             lock["dependency_resolution"]["runtime_closure_status"],
-            "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
+            "FROZEN_POST_STAGE_SUCCESSOR",
         )
         self.assertEqual(
             lock["dependency_resolution"]["required_runtime_versions"],
-            {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
+            {"arc-agi": "0.9.8", "arcengine": "0.9.3", "python-dotenv": "1.2.2"},
         )
         public_toolkit = next(
             row for row in lock["official_software"]
@@ -39,7 +49,7 @@ class SourceLockV3Tests(unittest.TestCase):
         self.assertIn("contest wheelhouse runtime", public_toolkit["relationship"])
         self.assertTrue(
             lock["dependency_resolution"]["current_blocker"].startswith(
-                "RUNTIME_CLOSURE_UNFROZEN:"
+                "NO_EXTERNAL_EFFECT_AUTHORITY:"
             )
         )
         starter = next(
@@ -92,7 +102,12 @@ class SourceLockV3Tests(unittest.TestCase):
         fixture_binding = agents["repository_fixture"]
         self.assertEqual(
             (ROOT / ".gitattributes").read_text(encoding="utf-8"),
-            "tests/fixtures/*.blob -text\n",
+            "tests/fixtures/*.blob -text\n"
+            "launch/source-lock.v4.json -text\n"
+            "launch/runtime/kaggle-stage-v4-runtime-inventory.json -text\n"
+            "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json -text\n"
+            "launch/gates/stage-result.v4.template.json -text\n"
+            "launch/schemas/v4/stage-result.schema.json -text\n",
         )
         fixture = (ROOT / fixture_binding["path"]).read_bytes()
         self.assertEqual(hashlib.sha256(fixture).hexdigest(), fixture_binding["sha256"])
@@ -114,8 +129,54 @@ class SourceLockV3Tests(unittest.TestCase):
             fixture_binding["license_copy_sha256"],
         )
 
+        runtime = lock["dependency_resolution"]["reviewed_stage_runtime"]
+        inventory_path = ROOT / runtime["inventory"]["path"]
+        receipt_path = ROOT / runtime["human_review"]["receipt_path"]
+        self.assertEqual(
+            hashlib.sha256(inventory_path.read_bytes()).hexdigest(),
+            "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce",
+        )
+        self.assertEqual(
+            hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
+            "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b",
+        )
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+        names = [row["name"] for row in inventory["distributions"]]
+        self.assertEqual(len(names), 875)
+        self.assertEqual(names, sorted(names))
+        self.assertEqual(len(names), len(set(names)))
+        versions = {row["name"]: row["version"] for row in inventory["distributions"]}
+        self.assertEqual(
+            {name: versions[name] for name in ("arc-agi", "arcengine", "python-dotenv")},
+            {"arc-agi": "0.9.8", "arcengine": "0.9.3", "python-dotenv": "1.2.2"},
+        )
+        self.assertEqual(runtime["runtime_file_bindings"], inventory["agents_files"])
+        self.assertEqual(runtime["runtime_license_binding"]["sha256"], inventory["agents_license_file"]["LICENSE"])
+        provenance = runtime["official_historical_provenance"]
+        self.assertEqual(provenance["commit"], "135f20aaf44f13341ebc425666bf03b5cac58d3c")
+        self.assertEqual(
+            provenance["inspected_file_bindings"]["agents/agent.py"]["sha256"],
+            "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+        )
+        self.assertNotEqual(
+            agents["inspected_file_bindings"]["agents/agent.py"]["sha256"],
+            provenance["inspected_file_bindings"]["agents/agent.py"]["sha256"],
+        )
+        review = load(runtime["human_review"]["receipt_path"])
+        self.assertFalse(review["authority_boundary"]["kaggle_contact_or_stage_authorized"])
+        self.assertFalse(review["authority_boundary"]["gate_b_authorized"])
+        self.assertFalse(review["authority_boundary"]["competition_submission_authorized"])
+        self.assertFalse(review["authority_boundary"]["expired_grant_may_be_edited_or_reused"])
+
+    def test_v3_predecessor_bytes_remain_sealed(self) -> None:
+        self.assertEqual(
+            hashlib.sha256((ROOT / "launch/source-lock.v3.json").read_bytes()).hexdigest(),
+            "900965eb497a0260e165976c80793c97c605e15f38ec89b55afef593a5c0478d",
+        )
+
     def test_context_roles_default_off_and_profiles_are_exact_ablations(self) -> None:
         context = load("launch/context/roles.v2.json")
+        self.assertEqual(context["source_lock"], "launch/source-lock.v4.json")
         roles = {row["role_id"] for row in context["roles"]}
         self.assertEqual(len(roles), 8)
         self.assertTrue(all(not row["default_enabled"] for row in context["roles"]))

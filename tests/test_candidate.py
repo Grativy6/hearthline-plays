@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import importlib.util
 import json
 import os
@@ -297,6 +298,20 @@ class CandidatePackageTests(unittest.TestCase):
         "worktree_clean": True,
     }
 
+    @staticmethod
+    def notebook_evidence_hashes() -> tuple[str, str]:
+        return (
+            hashlib.sha256(
+                (ROOT / "launch/source-lock.v4.json").read_bytes()
+            ).hexdigest(),
+            hashlib.sha256(
+                (
+                    ROOT
+                    / "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+                ).read_bytes()
+            ).hexdigest(),
+        )
+
     def trusted_snapshot(self) -> dict:
         return {
             "identity": dict(self.CLEAN_IDENTITY),
@@ -387,12 +402,38 @@ class CandidatePackageTests(unittest.TestCase):
             self.build_fixture(output)
             self.assertEqual(first, (output / "submission.ipynb").read_bytes())
             result = self.verify_fixture(output)
+            self.assertEqual(
+                result["schema"],
+                "hearthline.arc3.offline-candidate-verification.v4",
+            )
             self.assertEqual(result["structural_verification"], "PASS")
             self.assertTrue(result["kaggle_stage_ready"])
             self.assertFalse(result["competition_ignition_ready"])
             self.assertEqual(
                 result["verified_inputs"]["runtime_closure_status"],
-                "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
+                "FROZEN_POST_STAGE_SUCCESSOR",
+            )
+            self.assertEqual(
+                len(result["verified_inputs"]["kaggle_runtime_distributions"]),
+                875,
+            )
+            self.assertEqual(
+                result["verified_inputs"]["public_source_agents_files"][
+                    "agents/agent.py"
+                ],
+                "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073",
+            )
+            self.assertEqual(
+                result["verified_inputs"]["kaggle_runtime_files"]["agents/agent.py"],
+                "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+            )
+            self.assertEqual(
+                result["verified_inputs"]["kaggle_runtime_evidence_manifest_sha256"],
+                "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+            )
+            self.assertEqual(
+                result["verified_inputs"]["kaggle_runtime_logs_sha256"],
+                "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53",
             )
             snapshot = Path(result["verified_snapshot"]["path"])
             self.assertTrue(snapshot.is_dir())
@@ -464,46 +505,308 @@ class CandidatePackageTests(unittest.TestCase):
     def test_trusted_runtime_versions_are_exactly_pinned(self) -> None:
         committed = self.trusted_snapshot()["files"]
         source_lock = json.loads(
-            committed["launch/source-lock.v3.json"].decode("utf-8")
+            committed["launch/source-lock.v4.json"].decode("utf-8")
         )
         self.assertEqual(
             source_lock["dependency_resolution"]["required_runtime_versions"],
-            {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
+            {
+                "arc-agi": "0.9.8",
+                "arcengine": "0.9.3",
+                "python-dotenv": "1.2.2",
+            },
         )
         source_lock["dependency_resolution"]["required_runtime_versions"][
             "arcengine"
         ] = "0.0.0"
         altered = dict(committed)
-        altered["launch/source-lock.v3.json"] = (
+        altered["launch/source-lock.v4.json"] = (
             json.dumps(source_lock).encode("utf-8")
         )
         with self.assertRaisesRegex(VERIFY.CandidateError, "runtime versions"):
             VERIFY.inspect_trusted_contracts(altered)
 
+    def test_builder_independently_rejects_public_arc_agi_identity_drift(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        for field, changed in (
+            ("commit", "0" * 40),
+            ("tree", "1" * 40),
+            ("version", "0.9.8"),
+        ):
+            with self.subTest(field=field):
+                source_lock = json.loads(
+                    committed["launch/source-lock.v4.json"].decode("utf-8")
+                )
+                public_toolkit = next(
+                    row
+                    for row in source_lock["official_software"]
+                    if row["repository"] == "arcprize/ARC-AGI"
+                )
+                public_toolkit[field] = changed
+                with self.assertRaisesRegex(
+                    BUILD.BuildError, "public ARC-AGI source identity changed"
+                ):
+                    BUILD._execution_guard_inputs(
+                        source_lock,
+                        committed[
+                            "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+                        ],
+                        committed[
+                            "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"
+                        ],
+                    )
+
+    def test_verifier_independently_rejects_public_arc_agi_identity_drift(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        for field, changed in (
+            ("commit", "0" * 40),
+            ("tree", "1" * 40),
+            ("version", "0.9.8"),
+        ):
+            with self.subTest(field=field):
+                source_lock = json.loads(
+                    committed["launch/source-lock.v4.json"].decode("utf-8")
+                )
+                public_toolkit = next(
+                    row
+                    for row in source_lock["official_software"]
+                    if row["repository"] == "arcprize/ARC-AGI"
+                )
+                public_toolkit[field] = changed
+                altered = dict(committed)
+                altered["launch/source-lock.v4.json"] = json.dumps(
+                    source_lock
+                ).encode("utf-8")
+                with self.assertRaisesRegex(
+                    VERIFY.CandidateError, "source lock public ARC-AGI identity"
+                ):
+                    VERIFY.inspect_trusted_contracts(altered)
+
+    def test_runtime_inventory_bytes_are_hash_bound(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        inventory = json.loads(
+            committed[
+                "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+            ].decode("utf-8")
+        )
+        inventory["distributions"][0]["version"] += ".altered"
+        altered = dict(committed)
+        altered["launch/runtime/kaggle-stage-v4-runtime-inventory.json"] = (
+            json.dumps(inventory).encode("utf-8")
+        )
+        with self.assertRaisesRegex(
+            VERIFY.CandidateError, "reviewed runtime inventory binding"
+        ):
+            VERIFY.inspect_trusted_contracts(altered)
+
+    def test_runtime_inventory_closed_schema_count_order_duplicate_and_version(self) -> None:
+        original = json.loads(
+            (ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        attacks: list[tuple[str, dict, str]] = []
+        missing = json.loads(json.dumps(original))
+        missing["distributions"].pop()
+        attacks.append(("count", missing, "distribution count"))
+        reordered = json.loads(json.dumps(original))
+        reordered["distributions"][0], reordered["distributions"][1] = (
+            reordered["distributions"][1],
+            reordered["distributions"][0],
+        )
+        attacks.append(("order", reordered, "inventory ordering"))
+        duplicate = json.loads(json.dumps(original))
+        duplicate["distributions"][1] = dict(duplicate["distributions"][0])
+        attacks.append(("duplicate", duplicate, "duplicate distribution"))
+        bad_version = json.loads(json.dumps(original))
+        bad_version["distributions"][0]["version"] = ""
+        attacks.append(("version", bad_version, "distribution 0 version"))
+        extra_key = json.loads(json.dumps(original))
+        extra_key["unexpected"] = True
+        attacks.append(("schema", extra_key, "runtime inventory fields"))
+        for name, attacked, message in attacks:
+            with self.subTest(name=name), self.assertRaisesRegex(
+                VERIFY.CandidateError, message
+            ):
+                VERIFY._validated_distribution_inventory(attacked)
+
+    def test_altered_runtime_review_receipt_is_rejected(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        receipt_path = "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"
+        receipt = json.loads(committed[receipt_path].decode("utf-8"))
+        receipt["authority_boundary"]["gate_b_authorized"] = True
+        altered = dict(committed)
+        altered[receipt_path] = json.dumps(receipt).encode("utf-8")
+        with self.assertRaisesRegex(
+            VERIFY.CandidateError, "human review binding"
+        ):
+            VERIFY.inspect_trusted_contracts(altered)
+
+    def test_altered_runtime_machine_evidence_hashes_are_rejected(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        for field in ("evidence_manifest_sha256", "logs_sha256"):
+            with self.subTest(field=field):
+                source_lock = json.loads(
+                    committed["launch/source-lock.v4.json"].decode("utf-8")
+                )
+                source_lock["dependency_resolution"]["reviewed_stage_runtime"][
+                    "machine_evidence"
+                ][field] = "0" * 64
+                altered = dict(committed)
+                altered["launch/source-lock.v4.json"] = json.dumps(source_lock).encode(
+                    "utf-8"
+                )
+                with self.assertRaisesRegex(
+                    VERIFY.CandidateError, "machine evidence binding"
+                ):
+                    VERIFY.inspect_trusted_contracts(altered)
+
+    def test_public_source_cannot_be_conflated_with_kaggle_runtime(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        source_lock = json.loads(
+            committed["launch/source-lock.v4.json"].decode("utf-8")
+        )
+        public_agents = next(
+            row for row in source_lock["official_software"]
+            if row["repository"] == "arcprize/ARC-AGI-3-Agents"
+        )
+        public_agents["inspected_file_bindings"]["agents/agent.py"]["sha256"] = (
+            source_lock["dependency_resolution"]["reviewed_stage_runtime"]
+            ["runtime_file_bindings"]["agents/agent.py"]
+        )
+        altered = dict(committed)
+        altered["launch/source-lock.v4.json"] = json.dumps(source_lock).encode("utf-8")
+        with self.assertRaisesRegex(VERIFY.CandidateError, "file hashes"):
+            VERIFY.inspect_trusted_contracts(altered)
+
+    def test_runtime_inventory_file_mismatch_is_rejected(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        source_lock = json.loads(
+            committed["launch/source-lock.v4.json"].decode("utf-8")
+        )
+        inventory = json.loads(
+            committed[
+                "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+            ].decode("utf-8")
+        )
+        inventory["agents_files"]["agents/agent.py"] = "0" * 64
+        inventory_bytes = (json.dumps(inventory) + "\n").encode("utf-8")
+        source_lock["dependency_resolution"]["reviewed_stage_runtime"]["inventory"][
+            "sha256"
+        ] = hashlib.sha256(inventory_bytes).hexdigest()
+        public_agents = next(
+            row for row in source_lock["official_software"]
+            if row["repository"] == "arcprize/ARC-AGI-3-Agents"
+        )
+        public_toolkit = next(
+            row for row in source_lock["official_software"]
+            if row["repository"] == "arcprize/ARC-AGI"
+        )
+        with self.assertRaisesRegex(
+            VERIFY.CandidateError, "inventory/file binding mismatch"
+        ):
+            VERIFY._validate_reviewed_runtime_assets(
+                source_lock,
+                inventory_bytes,
+                committed[
+                    "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"
+                ],
+                public_agents=public_agents,
+                public_toolkit=public_toolkit,
+            )
+
+    def test_complete_reviewed_inventory_is_embedded_and_checked_exactly(self) -> None:
+        committed = self.trusted_snapshot()["files"]
+        source_lock, _, _, runtime_state = VERIFY.inspect_trusted_contracts(committed)
+        rows = runtime_state["distribution_rows"]
+        self.assertEqual(len(rows), 875)
+        self.assertEqual(rows, sorted(rows, key=lambda row: row["name"]))
+        run_source = self._stage_notebook()["cells"][3]["source"]
+        self.assertIn(
+            json.dumps(runtime_state["version_map"], sort_keys=True),
+            run_source,
+        )
+        self.assertIn(json.dumps("3.12.13"), run_source)
+        extra = self.runtime_distributions(runtime_state["version_map"])
+        extra.append(
+            types.SimpleNamespace(
+                metadata={"Name": "unexpected-runtime-package"},
+                name="unexpected-runtime-package",
+                version="1.0",
+            )
+        )
+        with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+            sys, "version", "3.12.13 (test)"
+        ), mock.patch(
+            "importlib.metadata.distributions", return_value=extra
+        ), mock.patch("urllib.request.build_opener") as gateway, mock.patch(
+            "shutil.copy2"
+        ) as copy2, mock.patch("subprocess.run") as run:
+            with self.assertRaisesRegex(RuntimeError, "runtime version mismatch"):
+                exec(compile(run_source, "complete-runtime-preflight", "exec"), {})
+        gateway.assert_not_called()
+        copy2.assert_not_called()
+        run.assert_not_called()
+
     @staticmethod
     def _stage_notebook() -> dict:
         source_lock = json.loads(
-            (ROOT / "launch/source-lock.v3.json").read_text(encoding="utf-8")
+            (ROOT / "launch/source-lock.v4.json").read_text(encoding="utf-8")
         )
-        python_minor, status, runtime_versions, agents_files, license_file = (
-            BUILD._execution_guard_inputs(source_lock)
+        python_version, status, runtime_versions, agents_files, license_file = (
+            BUILD._execution_guard_inputs(
+                source_lock,
+                (ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json").read_bytes(),
+                (ROOT / "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json").read_bytes(),
+            )
         )
         return BUILD.notebook_document(
             "# test agent\n",
             "cpu",
-            python_minor,
+            python_version,
             status,
             runtime_versions,
             agents_files,
             license_file,
+            *CandidatePackageTests.notebook_evidence_hashes(),
+        )
+
+    @staticmethod
+    def _independent_stage_notebook() -> dict:
+        source_lock = json.loads(
+            (ROOT / "launch/source-lock.v4.json").read_text(encoding="utf-8")
+        )
+        python_version, status, runtime_versions, agents_files, license_file = (
+            BUILD._execution_guard_inputs(
+                source_lock,
+                (ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json").read_bytes(),
+                (ROOT / "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json").read_bytes(),
+            )
+        )
+        return VERIFY._expected_notebook(
+            "# test agent\n",
+            "cpu",
+            python_version,
+            status,
+            runtime_versions,
+            agents_files,
+            license_file,
+            *CandidatePackageTests.notebook_evidence_hashes(),
         )
 
     def _execute_stage_inventory(
         self,
         rows: list[tuple[str, str]],
+        *,
+        independent: bool = False,
         resolved_versions: dict[str, str] | None = None,
+        expected_resolution_names: tuple[str, ...] = (),
     ) -> str:
-        run_source = self._stage_notebook()["cells"][4]["source"]
+        notebook = (
+            self._independent_stage_notebook()
+            if independent
+            else self._stage_notebook()
+        )
+        run_source = notebook["cells"][4]["source"]
         distributions = [
             types.SimpleNamespace(
                 metadata={"Name": name},
@@ -517,13 +820,19 @@ class CandidatePackageTests(unittest.TestCase):
         pandas.DataFrame = mock.Mock(return_value=dataframe)
         emitted: list[str] = []
         resolved_versions = dict(resolved_versions or {})
+
+        def resolve_version(name: str) -> str:
+            if name not in resolved_versions:
+                raise importlib.metadata.PackageNotFoundError(name)
+            return resolved_versions[name]
+
         with mock.patch(
             "importlib.metadata.distributions",
             return_value=distributions,
         ), mock.patch(
             "importlib.metadata.version",
-            side_effect=lambda name: resolved_versions[name],
-        ), mock.patch.dict(
+            side_effect=resolve_version,
+        ) as version, mock.patch.dict(
             sys.modules,
             {"pandas": pandas},
         ), mock.patch.dict(
@@ -534,7 +843,13 @@ class CandidatePackageTests(unittest.TestCase):
             "builtins.print",
             side_effect=emitted.append,
         ):
-            exec(compile(run_source, "stage-inventory", "exec"), {})
+            try:
+                exec(compile(run_source, "stage-inventory", "exec"), {})
+            finally:
+                self.assertEqual(
+                    [call.args[0] for call in version.call_args_list],
+                    list(expected_resolution_names),
+                )
         pandas.DataFrame.assert_called_once_with(
             data=[["1_0", "1", True, 1]],
             columns=["row_id", "game_id", "end_of_game", "score"],
@@ -547,15 +862,19 @@ class CandidatePackageTests(unittest.TestCase):
         return emitted[0]
 
     def test_stage_inventory_collapses_equal_pep503_alias_versions(self) -> None:
-        line = self._execute_stage_inventory([
-            ("PyGObject", "3.50.0"),
-            ("pygobject", "3.50.0"),
-        ])
-        inventory = json.loads(line.removeprefix("HEARTHLINE_STAGE_INVENTORY="))
-        self.assertEqual(
-            inventory["distributions"],
-            [{"name": "pygobject", "version": "3.50.0"}],
-        )
+        for independent in (False, True):
+            with self.subTest(independent=independent):
+                line = self._execute_stage_inventory([
+                    ("PyGObject", "3.50.0"),
+                    ("pygobject", "3.50.0"),
+                ], independent=independent)
+                inventory = json.loads(
+                    line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
+                )
+                self.assertEqual(
+                    inventory["distributions"],
+                    [{"name": "pygobject", "version": "3.50.0"}],
+                )
 
     def test_stage_inventory_conflicting_alias_versions_fail_deterministically(self) -> None:
         two_versions = [
@@ -569,7 +888,7 @@ class CandidatePackageTests(unittest.TestCase):
             ("pygobject", "3.48.2"),
             ("zulu.pkg", "8.0"),
         ]
-        for rows, expected in (
+        cases = (
             (
                 two_versions,
                 "conflicting canonical distribution versions: "
@@ -590,58 +909,76 @@ class CandidatePackageTests(unittest.TestCase):
                 "conflicting canonical distribution versions: "
                 "pygobject: '3.48.2' != '3.49.0' != '3.50.0'",
             ),
-        ):
-            with self.subTest(rows=rows), self.assertRaises(RuntimeError) as raised:
+        )
+        for independent in (False, True):
+            for rows, expected in cases:
+                for resolver in (None, {"pygobject": "0.0"}):
+                    with self.subTest(
+                        independent=independent,
+                        rows=rows,
+                        resolver=resolver,
+                    ), self.assertRaises(RuntimeError) as raised:
+                        self._execute_stage_inventory(
+                            rows,
+                            independent=independent,
+                            resolved_versions=resolver,
+                            expected_resolution_names=("pygobject",),
+                        )
+                    self.assertEqual(str(raised.exception), expected)
+
+    def test_stage_inventory_resolves_reviewed_runtime_shadows(self) -> None:
+        cases = (
+            (
+                [
+                    ("importlib_metadata", "4.6.4"),
+                    ("importlib-metadata", "8.7.1"),
+                ],
+                "importlib-metadata",
+                "8.7.1",
+            ),
+            (
+                [("blinker", "1.4"), ("blinker", "1.9.0")],
+                "blinker",
+                "1.9.0",
+            ),
+        )
+        for independent in (False, True):
+            for rows, canonical_name, effective_version in cases:
+                for ordered in (rows, list(reversed(rows))):
+                    with self.subTest(
+                        independent=independent,
+                        rows=ordered,
+                    ):
+                        line = self._execute_stage_inventory(
+                            ordered,
+                            independent=independent,
+                            resolved_versions={canonical_name: effective_version},
+                            expected_resolution_names=(canonical_name,),
+                        )
+                        inventory = json.loads(
+                            line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
+                        )
+                        self.assertEqual(
+                            inventory["distributions"],
+                            [{"name": canonical_name, "version": effective_version}],
+                        )
+
+    def test_stage_inventory_same_name_conflict_reports_all_versions(self) -> None:
+        rows = [("blinker", "1.9.0"), ("blinker", "1.4")]
+        for independent in (False, True):
+            with self.subTest(
+                independent=independent,
+            ), self.assertRaises(RuntimeError) as raised:
                 self._execute_stage_inventory(
                     rows,
-                    {"pygobject": "0.0"},
+                    independent=independent,
+                    expected_resolution_names=("blinker",),
                 )
-            self.assertEqual(str(raised.exception), expected)
-
-    def test_stage_inventory_resolves_pep503_alias_shadow_by_runtime_precedence(self) -> None:
-        rows = [
-            ("importlib_metadata", "4.6.4"),
-            ("importlib-metadata", "8.7.1"),
-        ]
-        for ordered in (rows, list(reversed(rows))):
-            with self.subTest(rows=ordered):
-                line = self._execute_stage_inventory(
-                    ordered,
-                    {"importlib-metadata": "8.7.1"},
-                )
-                inventory = json.loads(
-                    line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
-                )
-                self.assertEqual(
-                    inventory["distributions"],
-                    [{"name": "importlib-metadata", "version": "8.7.1"}],
-                )
-
-    def test_stage_inventory_resolves_same_name_shadow_by_runtime_precedence(self) -> None:
-        rows = [("blinker", "1.4"), ("blinker", "1.9.0")]
-        for ordered in (rows, list(reversed(rows))):
-            with self.subTest(rows=ordered):
-                line = self._execute_stage_inventory(
-                    ordered,
-                    {"blinker": "1.9.0"},
-                )
-                inventory = json.loads(
-                    line.removeprefix("HEARTHLINE_STAGE_INVENTORY=")
-                )
-                self.assertEqual(
-                    inventory["distributions"],
-                    [{"name": "blinker", "version": "1.9.0"}],
-                )
-
-    def test_stage_inventory_unresolved_same_name_conflict_reports_all_versions(self) -> None:
-        rows = [("blinker", "1.9.0"), ("blinker", "1.4")]
-        with self.assertRaises(RuntimeError) as raised:
-            self._execute_stage_inventory(rows, {"blinker": "2.0"})
-        self.assertEqual(
-            str(raised.exception),
-            "conflicting canonical distribution versions: "
-            "blinker: '1.4' != '1.9.0'",
-        )
+            self.assertEqual(
+                str(raised.exception),
+                "conflicting canonical distribution versions: "
+                "blinker: '1.4' != '1.9.0'",
+            )
 
     def test_stage_inventory_output_is_canonical_and_order_independent(self) -> None:
         rows = [
@@ -650,32 +987,103 @@ class CandidatePackageTests(unittest.TestCase):
             ("alpha.pkg", "1.0"),
             ("pygobject", "3.50.0"),
         ]
-        first = self._execute_stage_inventory(rows)
-        second = self._execute_stage_inventory(list(reversed(rows)))
-        self.assertEqual(first, second)
-        prefix = "HEARTHLINE_STAGE_INVENTORY="
-        inventory = json.loads(first.removeprefix(prefix))
-        self.assertEqual(
-            inventory["distributions"],
-            [
-                {"name": "alpha-pkg", "version": "1.0"},
-                {"name": "pygobject", "version": "3.50.0"},
-                {"name": "zulu-pkg", "version": "2.0"},
-            ],
-        )
-        self.assertEqual(
-            first,
-            prefix + json.dumps(inventory, sort_keys=True, separators=(",", ":")),
-        )
+        for independent in (False, True):
+            with self.subTest(independent=independent):
+                first = self._execute_stage_inventory(
+                    rows,
+                    independent=independent,
+                )
+                second = self._execute_stage_inventory(
+                    list(reversed(rows)),
+                    independent=independent,
+                )
+                self.assertEqual(first, second)
+                prefix = "HEARTHLINE_STAGE_INVENTORY="
+                inventory = json.loads(first.removeprefix(prefix))
+                self.assertEqual(
+                    inventory["distributions"],
+                    [
+                        {"name": "alpha-pkg", "version": "1.0"},
+                        {"name": "pygobject", "version": "3.50.0"},
+                        {"name": "zulu-pkg", "version": "2.0"},
+                    ],
+                )
+                self.assertEqual(
+                    first,
+                    prefix + json.dumps(
+                        inventory,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ),
+                )
 
-    def test_install_cell_pins_locked_arc_agi_version(self) -> None:
-        source_lock = json.loads(
-            (ROOT / "launch/source-lock.v3.json").read_text(encoding="utf-8")
+    def test_builder_and_independent_notebook_metadata_bind_distinct_sources(self) -> None:
+        source_lock_sha256, runtime_inventory_sha256 = (
+            self.notebook_evidence_hashes()
         )
-        locked = source_lock["dependency_resolution"]["required_runtime_versions"][
-            "arc-agi"
-        ]
-        self.assertEqual(locked, "0.9.8")
+        builder_notebook = self._stage_notebook()
+        independent_notebook = self._independent_stage_notebook()
+        self.assertEqual(builder_notebook, independent_notebook)
+        hearthline = builder_notebook["metadata"]["hearthline"]
+        self.assertEqual(
+            hearthline,
+            {
+                "agent_sha256": hashlib.sha256(b"# test agent\n").hexdigest(),
+                "builder": "scripts/build_notebook.py",
+                "public_agents_commit": (
+                    "4743e7d0aaae0ded0d98a89a7e282e63564cd58b"
+                ),
+                "kaggle_runtime_agents_commit": (
+                    "135f20aaf44f13341ebc425666bf03b5cac58d3c"
+                ),
+                "official_starter_commit": (
+                    "eeb1535404f321d280a8f9194bbc1d7aca5f05fc"
+                ),
+                "source_lock_sha256": source_lock_sha256,
+                "runtime_inventory_sha256": runtime_inventory_sha256,
+            },
+        )
+        self.assertNotIn("official_agents_commit", hearthline)
+        VERIFY.inspect_notebook(
+            builder_notebook,
+            "# test agent\n",
+            source_lock_sha256,
+            runtime_inventory_sha256,
+        )
+        with self.assertRaisesRegex(
+            VERIFY.CandidateError,
+            "source_lock_sha256 mismatch",
+        ):
+            VERIFY.inspect_notebook(
+                builder_notebook,
+                "# test agent\n",
+                "0" * 64,
+                runtime_inventory_sha256,
+            )
+        with self.assertRaisesRegex(
+            VERIFY.CandidateError,
+            "runtime_inventory_sha256 mismatch",
+        ):
+            VERIFY.inspect_notebook(
+                builder_notebook,
+                "# test agent\n",
+                source_lock_sha256,
+                "0" * 64,
+            )
+
+    def test_install_cell_directly_pins_all_installed_runtime_versions(self) -> None:
+        source_lock = json.loads(
+            (ROOT / "launch/source-lock.v4.json").read_text(encoding="utf-8")
+        )
+        locked = source_lock["dependency_resolution"]["required_runtime_versions"]
+        self.assertEqual(
+            locked,
+            {
+                "arc-agi": "0.9.8",
+                "arcengine": "0.9.3",
+                "python-dotenv": "1.2.2",
+            },
+        )
         install = self._stage_notebook()["cells"][1]["source"]
         self.assertEqual(
             install,
@@ -691,14 +1099,15 @@ class CandidatePackageTests(unittest.TestCase):
             "        \"--find-links\",\n"
             "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
             "        \"arc-agi==0.9.8\",\n"
-            "        \"python-dotenv\",\n"
+            "        \"arcengine==0.9.3\",\n"
+            "        \"python-dotenv==1.2.2\",\n"
             "    ],\n"
             "    check=True,\n"
             ")\n",
         )
         self.assertEqual(
             VERIFY._install_projection(install)["packages"],
-            ["arc-agi", "python-dotenv"],
+            ["arc-agi", "arcengine", "python-dotenv"],
         )
 
     def test_install_cell_failure_is_fail_fast(self) -> None:
@@ -720,7 +1129,8 @@ class CandidatePackageTests(unittest.TestCase):
                 "--find-links",
                 "/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels",
                 "arc-agi==0.9.8",
-                "python-dotenv",
+                "arcengine==0.9.3",
+                "python-dotenv==1.2.2",
             ],
             check=True,
         )
@@ -755,19 +1165,24 @@ class CandidatePackageTests(unittest.TestCase):
         runtime_closure_status: str = "FROZEN_POST_STAGE_SUCCESSOR",
     ) -> tuple[str, dict[str, str], dict[str, str]]:
         source_lock = json.loads(
-            (ROOT / "launch/source-lock.v3.json").read_text(encoding="utf-8")
+            (ROOT / "launch/source-lock.v4.json").read_text(encoding="utf-8")
         )
-        python_minor, _, runtime_versions, agents_files, license_file = (
-            BUILD._execution_guard_inputs(source_lock)
+        python_version, _, runtime_versions, agents_files, license_file = (
+            BUILD._execution_guard_inputs(
+                source_lock,
+                (ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json").read_bytes(),
+                (ROOT / "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json").read_bytes(),
+            )
         )
         notebook = BUILD.notebook_document(
             "# test agent\n",
             "cpu",
-            python_minor,
+            python_version,
             runtime_closure_status,
             runtime_versions,
             agents_files,
             license_file,
+            *self.notebook_evidence_hashes(),
         )
         return notebook["cells"][3]["source"], runtime_versions, agents_files
 
@@ -798,11 +1213,12 @@ class CandidatePackageTests(unittest.TestCase):
         run_source = BUILD.notebook_document(
             "# test agent\n",
             "cpu",
-            "3.12",
+            "3.12.13",
             "FROZEN_POST_STAGE_SUCCESSOR",
             runtime_versions,
             agents_files,
             {"LICENSE": hashlib.sha256(license_bytes).hexdigest()},
+            *self.notebook_evidence_hashes(),
         )["cells"][3]["source"]
         return run_source, framework, target, test_agent, runtime_versions
 
@@ -830,9 +1246,24 @@ class CandidatePackageTests(unittest.TestCase):
 
         return redirected_path
 
+    @staticmethod
+    def runtime_distributions(
+        runtime_versions: dict[str, str],
+    ) -> list[types.SimpleNamespace]:
+        return [
+            types.SimpleNamespace(
+                metadata={"Name": name},
+                name=name,
+                version=version,
+            )
+            for name, version in sorted(runtime_versions.items())
+        ]
+
     def test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects(self) -> None:
         run_source, _, _ = self.rerun_source("UNFROZEN_PENDING_GATE_A_SUCCESSOR")
         with mock.patch.object(os, "getenv", return_value="1"), mock.patch(
+            "importlib.metadata.distributions"
+        ) as distributions, mock.patch(
             "importlib.metadata.version"
         ) as version, mock.patch("urllib.request.build_opener") as build_opener, mock.patch(
             "shutil.copy2"
@@ -841,6 +1272,7 @@ class CandidatePackageTests(unittest.TestCase):
                 exec(compile(run_source, "competition-rerun", "exec"), {})
 
         version.assert_not_called()
+        distributions.assert_not_called()
         build_opener.assert_not_called()
         copy2.assert_not_called()
         run.assert_not_called()
@@ -856,7 +1288,12 @@ class CandidatePackageTests(unittest.TestCase):
             gateway_opener = mock.MagicMock()
             gateway_opener.open.return_value = response
             redirected_path = self.redirect_runtime_paths(framework, target, test_agent)
-            with mock.patch.object(os, "getenv", return_value="1"), mock.patch(
+            with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+                sys, "version", "3.12.13 (test)"
+            ), mock.patch(
+                "importlib.metadata.distributions",
+                return_value=self.runtime_distributions(runtime_versions),
+            ), mock.patch(
                 "importlib.metadata.version",
                 side_effect=lambda name: runtime_versions[name],
             ), mock.patch("pathlib.Path", side_effect=redirected_path), mock.patch(
@@ -911,7 +1348,12 @@ class CandidatePackageTests(unittest.TestCase):
             gateway_opener.open.side_effect = rebind_interpreter
             redirected_path = self.redirect_runtime_paths(framework, target, test_agent)
             with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+                sys, "version", "3.12.13 (test)"
+            ), mock.patch.object(
                 sys, "executable", str(interpreter)
+            ), mock.patch(
+                "importlib.metadata.distributions",
+                return_value=self.runtime_distributions(runtime_versions),
             ), mock.patch(
                 "importlib.metadata.version",
                 side_effect=lambda name: runtime_versions[name],
@@ -926,16 +1368,19 @@ class CandidatePackageTests(unittest.TestCase):
     def test_competition_rerun_python_minor_drift_fails_before_any_framework_effect(self) -> None:
         run_source, _, _ = self.rerun_source()
         with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
-            sys, "version_info", (3, 13, 0)
-        ), mock.patch("importlib.metadata.version") as version, mock.patch(
+            sys, "version", "3.13.0"
+        ), mock.patch("importlib.metadata.distributions") as distributions, mock.patch(
+            "importlib.metadata.version"
+        ) as version, mock.patch(
             "urllib.request.build_opener"
         ) as build_opener, mock.patch("shutil.copy2") as copy2, mock.patch(
             "subprocess.run"
         ) as run:
-            with self.assertRaisesRegex(RuntimeError, "Python minor mismatch"):
+            with self.assertRaisesRegex(RuntimeError, "Python version mismatch"):
                 exec(compile(run_source, "competition-rerun", "exec"), {})
 
         version.assert_not_called()
+        distributions.assert_not_called()
         build_opener.assert_not_called()
         copy2.assert_not_called()
         run.assert_not_called()
@@ -943,13 +1388,14 @@ class CandidatePackageTests(unittest.TestCase):
     def test_competition_rerun_runtime_drift_fails_before_any_framework_effect(self) -> None:
         run_source, runtime_versions, _ = self.rerun_source()
 
-        def drifted_version(name: str) -> str:
-            if name == "arcengine":
-                return "0.0.0"
-            return runtime_versions[name]
+        drifted_versions = dict(runtime_versions)
+        drifted_versions["arcengine"] = "0.0.0"
 
-        with mock.patch.object(os, "getenv", return_value="1"), mock.patch(
-            "importlib.metadata.version", side_effect=drifted_version
+        with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+            sys, "version", "3.12.13 (test)"
+        ), mock.patch(
+            "importlib.metadata.distributions",
+            return_value=self.runtime_distributions(drifted_versions),
         ), mock.patch("urllib.request.build_opener") as build_opener, mock.patch(
             "shutil.copytree"
         ) as copytree, mock.patch("shutil.copy2") as copy2, mock.patch(
@@ -962,6 +1408,142 @@ class CandidatePackageTests(unittest.TestCase):
         copytree.assert_not_called()
         copy2.assert_not_called()
         run.assert_not_called()
+
+    def test_competition_runtime_unresolved_conflicts_fail_before_effects(self) -> None:
+        rows = [
+            ("Zulu_Pkg", "9.0"),
+            ("PyGObject", "3.50.0"),
+            ("PYGOBJECT", "3.49.0"),
+            ("pygobject", "3.48.2"),
+            ("zulu.pkg", "8.0"),
+        ]
+        expected = (
+            "conflicting canonical distribution versions: "
+            "pygobject: '3.48.2' != '3.49.0' != '3.50.0'"
+        )
+        notebooks = {
+            "builder": self._stage_notebook(),
+            "independent-verifier": self._independent_stage_notebook(),
+        }
+        for renderer, notebook in notebooks.items():
+            run_source = notebook["cells"][3]["source"]
+            for ordered in (rows, list(reversed(rows))):
+                for package_missing in (False, True):
+                    distributions = [
+                        types.SimpleNamespace(
+                            metadata={"Name": name},
+                            name=name,
+                            version=version,
+                        )
+                        for name, version in ordered
+                    ]
+
+                    def resolve_version(name: str) -> str:
+                        if package_missing:
+                            raise importlib.metadata.PackageNotFoundError(name)
+                        return "0.0"
+
+                    with self.subTest(
+                        renderer=renderer,
+                        rows=ordered,
+                        package_missing=package_missing,
+                    ), mock.patch.object(
+                        os,
+                        "getenv",
+                        return_value="1",
+                    ), mock.patch.object(
+                        sys,
+                        "version",
+                        "3.12.13 (test)",
+                    ), mock.patch(
+                        "importlib.metadata.distributions",
+                        return_value=distributions,
+                    ), mock.patch(
+                        "importlib.metadata.version",
+                        side_effect=resolve_version,
+                    ) as version, mock.patch(
+                        "urllib.request.build_opener"
+                    ) as build_opener, mock.patch(
+                        "shutil.copy2"
+                    ) as copy2, mock.patch(
+                        "subprocess.run"
+                    ) as run:
+                        with self.assertRaises(RuntimeError) as raised:
+                            exec(
+                                compile(run_source, "competition-rerun", "exec"),
+                                {},
+                            )
+                    self.assertEqual(str(raised.exception), expected)
+                    version.assert_called_once_with("pygobject")
+                    build_opener.assert_not_called()
+                    copy2.assert_not_called()
+                    run.assert_not_called()
+
+    def test_competition_runtime_resolves_reviewed_shadows_before_effects(self) -> None:
+        notebooks = {
+            "builder": self._stage_notebook(),
+            "independent-verifier": self._independent_stage_notebook(),
+        }
+        _, runtime_versions, _ = self.rerun_source()
+        self.assertEqual(runtime_versions["blinker"], "1.9.0")
+        self.assertEqual(runtime_versions["importlib-metadata"], "8.7.1")
+        self.assertEqual(runtime_versions["pygobject"], "3.48.2")
+        rows = [
+            (distribution.metadata["Name"], distribution.version)
+            for distribution in self.runtime_distributions(runtime_versions)
+        ]
+        rows.extend((
+            ("blinker", "1.4"),
+            ("importlib_metadata", "4.6.4"),
+            ("PyGObject", "3.48.2"),
+        ))
+        for renderer, notebook in notebooks.items():
+            run_source = notebook["cells"][3]["source"]
+            for ordered in (rows, list(reversed(rows))):
+                distributions = [
+                    types.SimpleNamespace(
+                        metadata={"Name": name},
+                        name=name,
+                        version=version,
+                    )
+                    for name, version in ordered
+                ]
+                with self.subTest(
+                    renderer=renderer,
+                    reversed=ordered is not rows,
+                ), mock.patch.object(
+                    os,
+                    "getenv",
+                    return_value="1",
+                ), mock.patch.object(
+                    sys,
+                    "version",
+                    "3.12.13 (test)",
+                ), mock.patch(
+                    "importlib.metadata.distributions",
+                    return_value=distributions,
+                ), mock.patch(
+                    "importlib.metadata.version",
+                    side_effect=lambda name: runtime_versions[name],
+                ) as version, mock.patch(
+                    "pathlib.Path.read_bytes",
+                    side_effect=OSError("sealed source unavailable"),
+                ), mock.patch(
+                    "urllib.request.build_opener"
+                ) as build_opener, mock.patch(
+                    "shutil.copy2"
+                ) as copy2, mock.patch(
+                    "subprocess.run"
+                ) as run:
+                    with self.assertRaisesRegex(RuntimeError, "Agents source mismatch"):
+                        exec(compile(run_source, "competition-rerun", "exec"), {})
+                self.assertEqual(
+                    version.call_args_list,
+                    [mock.call("blinker"), mock.call("importlib-metadata")],
+                )
+                build_opener.assert_not_called()
+                copy2.assert_not_called()
+                run.assert_not_called()
 
     def test_competition_rerun_source_drift_fails_before_copy_or_framework_import(self) -> None:
         run_source, runtime_versions, agents_files = self.rerun_source()
@@ -982,7 +1564,12 @@ class CandidatePackageTests(unittest.TestCase):
                     return framework
                 return real_path(value)
 
-            with mock.patch.object(os, "getenv", return_value="1"), mock.patch(
+            with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+                sys, "version", "3.12.13 (test)"
+            ), mock.patch(
+                "importlib.metadata.distributions",
+                return_value=self.runtime_distributions(runtime_versions),
+            ), mock.patch(
                 "importlib.metadata.version",
                 side_effect=lambda name: runtime_versions[name],
             ), mock.patch("pathlib.Path", side_effect=redirected_path), mock.patch(
@@ -1041,11 +1628,12 @@ class CandidatePackageTests(unittest.TestCase):
             run_source = BUILD.notebook_document(
                 "# test agent\n",
                 "cpu",
-                "3.12",
+                "3.12.13",
                 "FROZEN_POST_STAGE_SUCCESSOR",
                 runtime_versions,
                 agents_files,
                 {"LICENSE": "0" * 64},
+                *self.notebook_evidence_hashes(),
             )["cells"][3]["source"]
 
             def redirected_path(value: object) -> Path:
@@ -1053,7 +1641,12 @@ class CandidatePackageTests(unittest.TestCase):
                     return framework
                 return real_path(value)
 
-            with mock.patch.object(os, "getenv", return_value="1"), mock.patch(
+            with mock.patch.object(os, "getenv", return_value="1"), mock.patch.object(
+                sys, "version", "3.12.13 (test)"
+            ), mock.patch(
+                "importlib.metadata.distributions",
+                return_value=self.runtime_distributions(runtime_versions),
+            ), mock.patch(
                 "importlib.metadata.version",
                 side_effect=lambda name: runtime_versions[name],
             ), mock.patch("pathlib.Path", side_effect=redirected_path), mock.patch(
@@ -1112,11 +1705,12 @@ class CandidatePackageTests(unittest.TestCase):
             run_source = BUILD.notebook_document(
                 "# test agent\n",
                 "cpu",
-                "3.12",
+                "3.12.13",
                 "FROZEN_POST_STAGE_SUCCESSOR",
                 runtime_versions,
                 agents_files,
                 {"LICENSE": hashlib.sha256(license_bytes).hexdigest()},
+                *self.notebook_evidence_hashes(),
             )["cells"][3]["source"]
 
             def redirected_path(value: object) -> Path:
@@ -1146,6 +1740,11 @@ class CandidatePackageTests(unittest.TestCase):
             }
             with mock.patch.dict(os.environ, ambient_secrets, clear=False), mock.patch.object(
                 os, "getenv", return_value="1"
+            ), mock.patch.object(
+                sys, "version", "3.12.13 (test)"
+            ), mock.patch(
+                "importlib.metadata.distributions",
+                return_value=self.runtime_distributions(runtime_versions),
             ), mock.patch(
                 "importlib.metadata.version",
                 side_effect=lambda name: runtime_versions[name],
@@ -1204,7 +1803,7 @@ class CandidatePackageTests(unittest.TestCase):
     def test_trusted_agents_execution_hashes_are_exactly_pinned(self) -> None:
         committed = self.trusted_snapshot()["files"]
         source_lock = json.loads(
-            committed["launch/source-lock.v3.json"].decode("utf-8")
+            committed["launch/source-lock.v4.json"].decode("utf-8")
         )
         agents = next(
             row
@@ -1213,7 +1812,7 @@ class CandidatePackageTests(unittest.TestCase):
         )
         agents["inspected_file_bindings"]["main.py"]["sha256"] = "0" * 64
         altered = dict(committed)
-        altered["launch/source-lock.v3.json"] = json.dumps(source_lock).encode("utf-8")
+        altered["launch/source-lock.v4.json"] = json.dumps(source_lock).encode("utf-8")
         with self.assertRaisesRegex(VERIFY.CandidateError, "file hashes"):
             VERIFY.inspect_trusted_contracts(altered)
 

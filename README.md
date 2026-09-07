@@ -1,6 +1,6 @@
 # ARC-AGI-3 Hearthline launch successor
 
-**Status:** `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED`
+**Status:** `FROZEN_POST_STAGE_SUCCESSOR_LOCAL_REPAIR_ONLY`
 
 **Series anchor:** [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
 
@@ -10,14 +10,15 @@
 
 This title branch began as a public research station and now includes a
 sanitized successor layer. Five historical public-orientation workflow runs
-are reconciled without rewriting sealed history. A deterministic
-starter-compatible agent and notebook builder are ready for offline review and
-a human-gated private calibration stage; generated packages remain ignored.
-Competition ignition is deliberately blocked as `RUNTIME_CLOSURE_UNFROZEN`
-until the stage's exact dependency inventory is bound into a reviewed
-successor candidate. No current environment contact, private holdout,
-credential use, Kaggle stage, competition ignition, or score is authorized or
-claimed.
+are reconciled without rewriting sealed history. Private kernel version 4
+completed, and its output plus full 875-distribution runtime inventory were
+reviewed by Christopher D. Pang. `launch/source-lock.v4.json` therefore records
+`FROZEN_POST_STAGE_SUCCESSOR` for local repair while keeping the public
+ARC-AGI 0.9.9/Agents source pin separate from the observed Kaggle runtime.
+That evidence predates this repair and does not verify or authorize its
+successor. Both human gates remain closed; no current credential use, Kaggle
+contact or stage, Gate B action, competition submission, or score is authorized
+or claimed.
 
 The predecessor station's recorded state was `PREPARED_NOT_RUN`. That literal
 describes the preserved station boundary, not the successor status above. Its
@@ -28,22 +29,32 @@ public contacts are reported separately below and in the reconciled receipts.
 
 | Surface | State |
 | --- | --- |
-| Kaggle contacted | `false` |
+| New Kaggle contact authorized | `false` |
 | Reconciled public ARC contacts | `5` |
 | Private or sealed holdout accessed | `false` |
-| Submission attempted | `false` |
+| Competition submission attempted | `false` |
 | Reconciled observed environment actions | `27` |
 | Holdout consumption | `0` |
 | Current public starter contract | `eeb1535404f321d280a8f9194bbc1d7aca5f05fc` |
 | Current official Agents source identity | `4743e7d0aaae0ded0d98a89a7e282e63564cd58b` |
-| Private Kaggle runtime/evaluator | `UNOBSERVED` |
+| Reviewed private kernel evidence | version `4`, `COMPLETE`, private, internet-off, CPU |
+| Reviewed Kaggle runtime inventory | `875` unique, sorted canonical distributions |
+| Observed runtime Agents provenance | `135f20aaf44f13341ebc425666bf03b5cac58d3c` |
+| Successor snapshot record | Post-commit, ignored local verification receipt; exact hash intentionally not embedded in this tracked projection |
+| Human Gate A / Gate B | `CLOSED` / `CLOSED` |
 | Operator and scribe models | `UNBOUND` |
 | Run budgets | `UNBOUND` |
 
-The exact public locks do not establish what a future private Kaggle runtime
-will resolve. A later stage needs a fresh rules review, a clean hash-bound
-candidate, Gate A, and a recorded runtime inventory. Competition ignition then
-needs a separately reviewed stage result and Gate B.
+The tracked projection cannot embed its own final commit-bound snapshot hash
+without becoming self-referential. The exact successor hash is therefore
+generated only after the local commit and retained in the ignored
+`build/verification.json` receipt.
+
+The reviewed version-4 stage established one exact predecessor runtime; it did
+not stage the repaired successor. The next external path requires a newly
+verified snapshot from the final clean successor commit, a current rules
+review, a fresh Gate-A grant, one exact private restage, and a reviewed v4 stage
+result. Only then may a separate human Gate B decision be considered.
 
 ## Station map
 

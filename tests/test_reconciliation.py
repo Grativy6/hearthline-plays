@@ -49,8 +49,13 @@ class ReconciliationTests(unittest.TestCase):
 
     def test_status_is_fail_closed(self) -> None:
         status = load_json("launch/status/current.json")
-        self.assertFalse(status["competition"]["kaggle_stage_authorized"])
+        self.assertFalse(status["competition"]["current_kaggle_contact_authorized"])
+        self.assertFalse(status["competition"]["successor_kaggle_stage_authorized"])
         self.assertFalse(status["competition"]["competition_ignition_authorized"])
+        self.assertFalse(status["authority"]["credential_use_authorized"])
+        self.assertFalse(status["authority"]["kaggle_contact_authorized"])
+        self.assertEqual(status["authority"]["current_gate_a_grant"], "ABSENT")
+        self.assertEqual(status["authority"]["current_gate_b_grant"], "ABSENT")
         self.assertFalse(status["public_orientation"]["new_contact_authorized"])
         self.assertEqual(status["public_orientation"]["observed_environment_action_count"], 27)
         self.assertEqual(status["competition"]["daily_submission_limit_safe_assumption"], 1)

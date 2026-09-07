@@ -1,6 +1,10 @@
-# Reviewed lineage and public-orientation receipts
+# Reviewed lineage, public-orientation, and runtime-closure receipts
 
-This directory contains deliberately selected lineage declarations and sanitized public-practice receipts. Raw event streams, official recordings, anonymous keys, server-issued identifiers, environment variables, and private or competition material remain outside Git.
+This directory contains deliberately selected lineage declarations, sanitized
+public-practice receipts, and one sanitized human-reviewed binding to private
+kernel version-4 machine evidence. Raw logs, output bytes, event streams,
+official recordings, anonymous keys, server-issued identifiers, credentials,
+environment variables, and other private or competition material remain outside Git.
 
 ## Model-lineage boundary records
 
@@ -12,3 +16,12 @@ This directory contains deliberately selected lineage declarations and sanitized
 A receipt may establish bounded contact, configuration, action counts, state transitions, and an official terminal response for its named session. It does not prove general capability, independent replication, competition eligibility, or authorization for another run.
 
 The five GitHub Actions orientation artifacts are admitted as field-limited derivatives under `orientation/` and indexed by `20260904T070000Z-orientation-reconciliation.v2.json`. Each derivative binds the archive, source receipt, artifact request, tracked request, commit, and workflow identifiers. Raw artifacts remain outside Git.
+
+## Private-stage runtime review
+
+[`20260907T002817Z-stage-v4-runtime-review.json`](20260907T002817Z-stage-v4-runtime-review.json)
+records Christopher D. Pang's acceptance of the exact version-4 output and
+875-entry runtime inventory identified by their hashes. It retains only a
+sanitized binding, provenance, hashes, and an explicit local-repair authority
+ceiling. It contains no raw logs, output bytes, credentials, grant, Gate B
+authorization, or competition-submission authority.

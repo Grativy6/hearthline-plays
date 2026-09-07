@@ -1,7 +1,7 @@
 {
   "schema": "hearthline.arc3.compact-context.v2",
   "context_id": "ARC3-CONTEXT-0001",
-  "source_lock": "launch/source-lock.v3.json",
+  "source_lock": "launch/source-lock.v4.json",
   "common_safety_shell": {
     "ablatable": false,
     "invariants": [

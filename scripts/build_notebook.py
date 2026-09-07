@@ -23,7 +23,20 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 AGENT_PATH = ROOT / "agent/my_agent.py"
 METADATA_TEMPLATE = ROOT / "notebooks/kernel-metadata.template.json"
-SOURCE_LOCK = ROOT / "launch/source-lock.v3.json"
+SOURCE_LOCK = ROOT / "launch/source-lock.v4.json"
+RUNTIME_INVENTORY = ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+RUNTIME_REVIEW_RECEIPT = (
+    ROOT / "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"
+)
+REVIEWED_RUNTIME_INVENTORY_SHA256 = (
+    "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce"
+)
+RUNTIME_REVIEW_RECEIPT_SHA256 = (
+    "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b"
+)
+RUNTIME_REVIEW_ATTESTATION_SHA256 = (
+    "d721087df9ad28f26da262cddb066a7273b42f61d7fd96f7bb641c0840393dc2"
+)
 STARTER_CONTRACT = ROOT / "launch/contracts/official-starter-eeb153.contract.json"
 BUILDER_PATH = ROOT / "scripts/build_notebook.py"
 DEFAULT_OUTPUT = ROOT / "build"
@@ -82,6 +95,60 @@ def strict_json_bytes(data: bytes, label: str) -> Any:
         raise BuildError(f"{label}: invalid strict UTF-8 JSON: {exc}") from exc
 
 
+def _require_exact_keys(value: Any, keys: set[str], label: str) -> None:
+    if not isinstance(value, dict):
+        raise BuildError(f"{label} must be an object")
+    actual = set(value)
+    if actual != keys:
+        raise BuildError(
+            f"{label} fields: missing={sorted(keys - actual)}, "
+            f"extra={sorted(actual - keys)}"
+        )
+
+
+def _require_sha256(value: Any, label: str) -> str:
+    if (
+        not isinstance(value, str)
+        or re.fullmatch(r"[0-9a-f]{64}", value) is None
+    ):
+        raise BuildError(f"{label} must be one lowercase SHA-256")
+    return value
+
+
+def _canonical_distribution_map(inventory: Any) -> dict[str, str]:
+    """Validate the reviewed inventory's closed, canonical ordered rows."""
+    _require_exact_keys(
+        inventory,
+        {"agents_files", "agents_license_file", "distributions", "python_version"},
+        "runtime inventory",
+    )
+    rows = inventory["distributions"]
+    if not isinstance(rows, list) or len(rows) != 875:
+        raise BuildError("runtime inventory must contain exactly 875 distributions")
+    versions: dict[str, str] = {}
+    ordered_names: list[str] = []
+    for index, row in enumerate(rows):
+        _require_exact_keys(row, {"name", "version"}, f"runtime distribution {index}")
+        name = row["name"]
+        version = row["version"]
+        if (
+            not isinstance(name, str)
+            or re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) is None
+        ):
+            raise BuildError(f"runtime distribution {index} name is not canonical")
+        if not isinstance(version, str) or not version:
+            raise BuildError(f"runtime distribution {index} version is invalid")
+        if name in versions:
+            raise BuildError(f"duplicate runtime distribution: {name}")
+        versions[name] = version
+        ordered_names.append(name)
+    if ordered_names != sorted(ordered_names):
+        raise BuildError("runtime inventory distribution ordering is not canonical")
+    if inventory["python_version"] != "3.12.13":
+        raise BuildError("reviewed Kaggle Python version is not exactly 3.12.13")
+    return versions
+
+
 def code_cell(source: str) -> dict[str, Any]:
     return {
         "cell_type": "code",
@@ -98,35 +165,63 @@ def markdown_cell(source: str) -> dict[str, Any]:
 
 def _execution_guard_inputs(
     source_lock: Any,
+    runtime_inventory_bytes: bytes,
+    runtime_review_receipt_bytes: bytes,
 ) -> tuple[str, str, dict[str, str], dict[str, str], dict[str, str]]:
     """Extract the closed competition-rerun preflight from the source lock."""
     if not isinstance(source_lock, dict):
         raise BuildError("source lock must be an object")
+    _require_exact_keys(source_lock, {
+        "schema", "recorded_at", "status", "steward", "predecessor",
+        "candidate_base", "official_software", "competition_contract",
+        "credential_contract", "dependency_resolution", "bounded_context_sources",
+        "run_rules", "residuals",
+    }, "source lock")
+    if source_lock.get("schema") != "hearthline-plays.arc3-launch-source-lock.v4":
+        raise BuildError("source lock schema is not v4")
+    if source_lock.get("status") != "FROZEN_POST_STAGE_SUCCESSOR_LOCAL_REPAIR_ONLY":
+        raise BuildError("source lock status is invalid")
     dependency_resolution = source_lock.get("dependency_resolution")
     if not isinstance(dependency_resolution, dict):
         raise BuildError("source lock dependency resolution must be an object")
+    _require_exact_keys(dependency_resolution, {
+        "starter_ranges_observed", "required_runtime_versions",
+        "runtime_closure_status", "candidate_policy", "reviewed_stage_runtime",
+        "successor_requirement", "current_blocker",
+    }, "source lock dependency resolution")
     runtime_closure_status = dependency_resolution.get("runtime_closure_status")
-    if runtime_closure_status not in {
-        "UNFROZEN_PENDING_GATE_A_SUCCESSOR",
-        "FROZEN_POST_STAGE_SUCCESSOR",
+    if runtime_closure_status != "FROZEN_POST_STAGE_SUCCESSOR":
+        raise BuildError("source lock runtime closure is not frozen")
+    required_runtime_versions = dependency_resolution.get("required_runtime_versions")
+    if required_runtime_versions != {
+        "arc-agi": "0.9.8",
+        "arcengine": "0.9.3",
+        "python-dotenv": "1.2.2",
     }:
-        raise BuildError("source lock runtime closure status is invalid")
-    runtime_versions = dependency_resolution.get("required_runtime_versions")
-    if (
-        not isinstance(runtime_versions, dict)
-        or set(runtime_versions) != {"arc-agi", "arcengine"}
-        or any(
-            not isinstance(name, str)
-            or not isinstance(version, str)
-            or not version
-            for name, version in runtime_versions.items()
-        )
-    ):
-        raise BuildError("source lock runtime versions are not a closed exact map")
+        raise BuildError("source lock required runtime versions are not exact")
 
     official_software = source_lock.get("official_software")
     if not isinstance(official_software, list):
         raise BuildError("source lock official software must be a list")
+    toolkit_rows = [
+        row
+        for row in official_software
+        if isinstance(row, dict)
+        and row.get("repository") == "arcprize/ARC-AGI"
+    ]
+    if len(toolkit_rows) != 1:
+        raise BuildError(
+            "source lock must contain exactly one public ARC-AGI identity"
+        )
+    public_toolkit = toolkit_rows[0]
+    if (
+        public_toolkit.get("commit")
+        != "f12822c4d550121c35a275008d964afbbed47d2f"
+        or public_toolkit.get("tree")
+        != "9ee140e4183df0df109cec50b7cd0d2531c47168"
+        or public_toolkit.get("version") != "0.9.9"
+    ):
+        raise BuildError("public ARC-AGI source identity changed")
     starter_rows = [
         row
         for row in official_software
@@ -155,7 +250,15 @@ def _execution_guard_inputs(
     ]
     if len(agents_rows) != 1:
         raise BuildError("source lock must contain exactly one Agents identity")
-    bindings = agents_rows[0].get("inspected_file_bindings")
+    public_agents = agents_rows[0]
+    if (
+        public_agents.get("commit")
+        != "4743e7d0aaae0ded0d98a89a7e282e63564cd58b"
+        or public_agents.get("tree")
+        != "6878fdfdd0156059323b541fc229b6329ad4fd28"
+    ):
+        raise BuildError("public Agents source identity changed")
+    bindings = public_agents.get("inspected_file_bindings")
     expected_paths = {
         "agents/agent.py",
         "agents/recorder.py",
@@ -165,7 +268,7 @@ def _execution_guard_inputs(
     }
     if not isinstance(bindings, dict) or set(bindings) != expected_paths:
         raise BuildError("source lock executed Agents files are not a closed exact map")
-    agents_files: dict[str, str] = {}
+    public_agents_files: dict[str, str] = {}
     for relative, binding in bindings.items():
         if not isinstance(binding, dict):
             raise BuildError(f"source lock Agents binding is not an object: {relative}")
@@ -176,8 +279,12 @@ def _execution_guard_inputs(
             or any(character not in "0123456789abcdef" for character in digest)
         ):
             raise BuildError(f"source lock Agents sha256 is invalid: {relative}")
-        agents_files[relative] = digest
-    license_binding = agents_rows[0].get("license_file_binding")
+        public_agents_files[relative] = digest
+    if public_agents_files.get("agents/agent.py") != (
+        "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073"
+    ):
+        raise BuildError("public Agents source pin was conflated with Kaggle runtime")
+    license_binding = public_agents.get("license_file_binding")
     if not isinstance(license_binding, dict) or license_binding.get("path") != "LICENSE":
         raise BuildError("source lock Agents license binding is invalid")
     license_digest = license_binding.get("sha256")
@@ -187,28 +294,333 @@ def _execution_guard_inputs(
         or any(character not in "0123456789abcdef" for character in license_digest)
     ):
         raise BuildError("source lock Agents license sha256 is invalid")
+    runtime_inventory = strict_json_bytes(runtime_inventory_bytes, "runtime inventory")
+    runtime_review = strict_json_bytes(
+        runtime_review_receipt_bytes, "runtime review receipt"
+    )
+    runtime_versions = _canonical_distribution_map(runtime_inventory)
+    for name, version in required_runtime_versions.items():
+        if runtime_versions.get(name) != version:
+            raise BuildError(f"runtime inventory required version mismatch: {name}")
+
+    reviewed = dependency_resolution.get("reviewed_stage_runtime")
+    _require_exact_keys(reviewed, {
+        "schema", "stage_identity", "output", "python_version", "inventory",
+        "runtime_file_bindings", "runtime_license_binding",
+        "official_historical_provenance", "machine_evidence", "human_review",
+    }, "reviewed stage runtime")
+    if reviewed["schema"] != "hearthline-plays.arc3-reviewed-stage-runtime.v1":
+        raise BuildError("reviewed stage runtime schema")
+    _require_exact_keys(reviewed["stage_identity"], {
+        "kernel_slug", "kernel_version", "status", "visibility",
+        "internet_enabled", "accelerator", "candidate_snapshot_sha256",
+        "machine_evidence_recorded_at_utc",
+    }, "reviewed stage identity")
+    if reviewed["stage_identity"] != {
+        "kernel_slug": "grativy6/hearthline-arc3-readiness",
+        "kernel_version": 4,
+        "status": "COMPLETE",
+        "visibility": "private",
+        "internet_enabled": False,
+        "accelerator": "cpu",
+        "candidate_snapshot_sha256": "823cd5c7a99b16141959a09f011e361b2c03615ea37e72a65880a9eb5e8db4d0",
+        "machine_evidence_recorded_at_utc": "2026-09-06T23:53:42Z",
+    }:
+        raise BuildError("reviewed stage identity mismatch")
+    _require_exact_keys(reviewed["output"], {
+        "path", "bytes", "sha256", "parquet_magic_valid",
+        "output_inventory_count",
+    }, "reviewed stage output")
+    if reviewed["output"] != {
+        "path": "submission.parquet",
+        "bytes": 2648,
+        "sha256": "71bfd543030e339d87bd9ff744d466218398a1259650b2c255626d27049c88bb",
+        "parquet_magic_valid": True,
+        "output_inventory_count": 1,
+    }:
+        raise BuildError("reviewed stage output mismatch")
+    if reviewed["python_version"] != runtime_inventory["python_version"]:
+        raise BuildError("reviewed stage Python/inventory mismatch")
+    _require_exact_keys(reviewed["inventory"], {
+        "path", "sha256", "distribution_count", "canonical_names_unique",
+        "canonical_names_sorted",
+    }, "reviewed inventory binding")
+    if reviewed["inventory"] != {
+        "path": "launch/runtime/kaggle-stage-v4-runtime-inventory.json",
+        "sha256": sha256_bytes(runtime_inventory_bytes),
+        "distribution_count": len(runtime_versions),
+        "canonical_names_unique": True,
+        "canonical_names_sorted": True,
+    }:
+        raise BuildError("reviewed inventory binding mismatch")
+    if sha256_bytes(runtime_inventory_bytes) != REVIEWED_RUNTIME_INVENTORY_SHA256:
+        raise BuildError("reviewed runtime inventory evidence hash mismatch")
+    runtime_files = reviewed["runtime_file_bindings"]
+    expected_runtime_files = {
+        "agents/agent.py": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+        "agents/recorder.py": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8",
+        "agents/swarm.py": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39",
+        "agents/tracing.py": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f",
+        "main.py": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b",
+    }
+    if runtime_files != expected_runtime_files:
+        raise BuildError("reviewed Kaggle runtime file hashes mismatch")
+    if runtime_inventory["agents_files"] != runtime_files:
+        raise BuildError("runtime inventory/file binding mismatch")
+    _require_exact_keys(reviewed["runtime_license_binding"], {
+        "path", "sha256", "spdx", "copyright_notice",
+    }, "reviewed runtime license binding")
+    runtime_license = reviewed["runtime_license_binding"]
+    if runtime_license != {
+        "path": "LICENSE",
+        "sha256": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04",
+        "spdx": "MIT",
+        "copyright_notice": "Copyright (c) 2025 ARC Prize",
+    }:
+        raise BuildError("reviewed Kaggle runtime license mismatch")
+    if runtime_inventory["agents_license_file"] != {
+        runtime_license["path"]: runtime_license["sha256"]
+    }:
+        raise BuildError("runtime inventory/license binding mismatch")
+
+    provenance = reviewed["official_historical_provenance"]
+    _require_exact_keys(provenance, {
+        "kind", "repository", "commit", "tree", "inspected_file_bindings",
+        "license_file_binding", "same_agents_agent_blob_also_at_parallel_commit",
+        "claim_ceiling",
+    }, "runtime provenance")
+    if (
+        provenance["kind"] != "KAGGLE_PLATFORM_COMPETITION_INPUT"
+        or provenance["repository"] != "arcprize/ARC-AGI-3-Agents"
+        or provenance["commit"] != "135f20aaf44f13341ebc425666bf03b5cac58d3c"
+        or provenance["tree"] != "d7fbafe6e2ed191189db89e5b571fd26da3dc375"
+        or provenance["same_agents_agent_blob_also_at_parallel_commit"]
+        != "ca950a814c1a16b90e08ac9bc6e2f7720871980d"
+    ):
+        raise BuildError("runtime historical provenance mismatch")
+    provenance_files = provenance["inspected_file_bindings"]
+    if not isinstance(provenance_files, dict) or set(provenance_files) != set(runtime_files):
+        raise BuildError("runtime historical file inventory mismatch")
+    if {
+        path: binding.get("sha256") if isinstance(binding, dict) else None
+        for path, binding in provenance_files.items()
+    } != runtime_files:
+        raise BuildError("runtime historical provenance/file mismatch")
+    for path, binding in provenance_files.items():
+        _require_exact_keys(binding, {"git_blob", "sha256"}, f"runtime provenance {path}")
+        if not re.fullmatch(r"[0-9a-f]{40}", binding["git_blob"]):
+            raise BuildError(f"runtime provenance git blob is invalid: {path}")
+    _require_exact_keys(
+        provenance["license_file_binding"],
+        {"path", "git_blob", "sha256"},
+        "runtime provenance license",
+    )
+    if (
+        provenance["license_file_binding"]["path"] != runtime_license["path"]
+        or provenance["license_file_binding"]["sha256"] != runtime_license["sha256"]
+    ):
+        raise BuildError("runtime provenance/license mismatch")
+
+    _require_exact_keys(reviewed["machine_evidence"], {
+        "evidence_manifest_sha256", "logs_sha256", "recorded_at_utc",
+        "private_artifact_paths_committed",
+    }, "runtime machine evidence")
+    machine_evidence = reviewed["machine_evidence"]
+    _require_sha256(machine_evidence["evidence_manifest_sha256"], "evidence manifest")
+    _require_sha256(machine_evidence["logs_sha256"], "runtime logs")
+    if (
+        machine_evidence["evidence_manifest_sha256"]
+        != "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06"
+        or machine_evidence["logs_sha256"]
+        != "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53"
+        or
+        machine_evidence["recorded_at_utc"]
+        != reviewed["stage_identity"]["machine_evidence_recorded_at_utc"]
+        or machine_evidence["private_artifact_paths_committed"] is not False
+    ):
+        raise BuildError("runtime machine evidence mismatch")
+    _require_exact_keys(reviewed["human_review"], {
+        "receipt_path", "receipt_sha256", "reviewed_by", "reviewed_at_utc",
+        "attestation_sha256", "public_source_pin_retained",
+        "runtime_binding_accepted",
+    }, "runtime human review")
+    human_review = reviewed["human_review"]
+    if (
+        human_review["receipt_path"]
+        != "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"
+        or human_review["receipt_sha256"] != sha256_bytes(runtime_review_receipt_bytes)
+        or human_review["receipt_sha256"] != RUNTIME_REVIEW_RECEIPT_SHA256
+        or human_review["reviewed_by"] != "Christopher D. Pang"
+        or human_review["reviewed_at_utc"] != "2026-09-07T00:28:17Z"
+        or human_review["attestation_sha256"]
+        != RUNTIME_REVIEW_ATTESTATION_SHA256
+        or human_review["public_source_pin_retained"] is not True
+        or human_review["runtime_binding_accepted"] is not True
+    ):
+        raise BuildError("runtime human review binding mismatch")
+
+    _require_exact_keys(runtime_review, {
+        "schema", "recorded_at", "status", "review", "binding",
+        "authority_boundary",
+    }, "runtime review receipt")
+    if (
+        runtime_review["schema"]
+        != "hearthline-plays.arc3-stage-runtime-review-receipt.v1"
+        or runtime_review["status"]
+        != "HUMAN_REVIEW_ACCEPTED_FOR_LOCAL_SUCCESSOR_REPAIR"
+        or runtime_review["recorded_at"] != "2026-09-07T00:28:17Z"
+    ):
+        raise BuildError("runtime review receipt identity mismatch")
+    _require_exact_keys(
+        runtime_review["review"],
+        {"reviewed_by", "reviewed_at", "attestation", "attestation_sha256"},
+        "runtime review",
+    )
+    receipt_review = runtime_review["review"]
+    if (
+        receipt_review["reviewed_by"] != human_review["reviewed_by"]
+        or receipt_review["reviewed_at"] != human_review["reviewed_at_utc"]
+        or receipt_review["attestation_sha256"] != human_review["attestation_sha256"]
+        or sha256_bytes(receipt_review["attestation"].encode("utf-8"))
+        != receipt_review["attestation_sha256"]
+    ):
+        raise BuildError("runtime review attestation mismatch")
+    _require_exact_keys(runtime_review["binding"], {
+        "candidate_evidence", "stage", "output", "runtime_inventory",
+        "runtime_file_bindings", "runtime_license_binding", "machine_evidence",
+        "public_source_pin", "observed_runtime_provenance",
+    }, "runtime review binding")
+    receipt_binding = runtime_review["binding"]
+    _require_exact_keys(
+        receipt_binding["candidate_evidence"],
+        {"commit", "tree", "snapshot_sha256"},
+        "runtime review candidate evidence",
+    )
+    if receipt_binding["candidate_evidence"] != {
+        "commit": "543ffbd2f90e3593dad577b3e088f9baacbef002",
+        "tree": "c7c2f2660524cc38143dfa3f16edf03d2d8bc011",
+        "snapshot_sha256": reviewed["stage_identity"]["candidate_snapshot_sha256"],
+    }:
+        raise BuildError("runtime review candidate evidence mismatch")
+    _require_exact_keys(receipt_binding["stage"], {
+        "kernel_slug", "kernel_version", "status", "visibility",
+        "internet_enabled", "accelerator", "machine_evidence_recorded_at",
+    }, "runtime review stage")
+    # The receipt projection renames the timestamp and omits the separately
+    # bound candidate snapshot.
+    expected_stage = dict(reviewed["stage_identity"])
+    expected_stage.pop("candidate_snapshot_sha256")
+    expected_stage["machine_evidence_recorded_at"] = expected_stage.pop(
+        "machine_evidence_recorded_at_utc"
+    )
+    if receipt_binding["stage"] != expected_stage:
+        raise BuildError("runtime review stage projection mismatch")
+    if (
+        receipt_binding["output"] != reviewed["output"]
+        or receipt_binding["runtime_file_bindings"] != runtime_files
+    ):
+        raise BuildError("runtime review content binding mismatch")
+    if receipt_binding["runtime_inventory"] != {
+        **reviewed["inventory"],
+        "python_version": reviewed["python_version"],
+        "required_versions": required_runtime_versions,
+    }:
+        raise BuildError("runtime review inventory projection mismatch")
+    receipt_license = receipt_binding["runtime_license_binding"]
+    _require_exact_keys(receipt_license, {
+        "path", "git_blob", "sha256", "spdx", "copyright_notice",
+    }, "runtime review license")
+    if {
+        key: receipt_license.get(key)
+        for key in ("path", "sha256", "spdx", "copyright_notice")
+    } != runtime_license:
+        raise BuildError("runtime review license projection mismatch")
+    if receipt_binding["observed_runtime_provenance"] != {
+        "kind": provenance["kind"],
+        "repository": provenance["repository"],
+        "official_historical_commit": provenance["commit"],
+        "official_historical_tree": provenance["tree"],
+        "inspected_file_bindings": provenance["inspected_file_bindings"],
+        "license_file_binding": provenance["license_file_binding"],
+        "same_agents_agent_blob_also_occurs_at_parallel_commit": provenance[
+            "same_agents_agent_blob_also_at_parallel_commit"
+        ],
+        "claim_ceiling": provenance["claim_ceiling"],
+    }:
+        raise BuildError("runtime review provenance projection mismatch")
+    if receipt_binding["public_source_pin"] != {
+        "repository": "arcprize/ARC-AGI-3-Agents",
+        "commit": public_agents["commit"],
+        "tree": public_agents["tree"],
+        "agents_agent_git_blob": bindings["agents/agent.py"]["git_blob"],
+        "agents_agent_sha256": public_agents_files["agents/agent.py"],
+        "arc_agi_source_version": "0.9.9",
+        "retained_unchanged": True,
+    }:
+        raise BuildError("runtime review public source projection mismatch")
+    _require_exact_keys(receipt_binding["machine_evidence"], {
+        "evidence_manifest_sha256", "logs_sha256",
+        "private_artifact_paths_committed",
+    }, "runtime review machine evidence")
+    if receipt_binding["machine_evidence"] != {
+        key: machine_evidence[key]
+        for key in (
+            "evidence_manifest_sha256", "logs_sha256",
+            "private_artifact_paths_committed",
+        )
+    }:
+        raise BuildError("runtime review machine evidence projection mismatch")
+    _require_exact_keys(runtime_review["authority_boundary"], {
+        "local_repair_authorized", "grant_creation_or_consumption_authorized",
+        "local_git_commit_as_repair_step_authorized", "remote_git_push_authorized",
+        "kaggle_contact_or_stage_authorized", "gate_b_authorized",
+        "competition_submission_authorized", "expired_grant_may_be_edited_or_reused",
+    }, "runtime review authority boundary")
+    if runtime_review["authority_boundary"] != {
+        "local_repair_authorized": True,
+        "grant_creation_or_consumption_authorized": False,
+        "local_git_commit_as_repair_step_authorized": True,
+        "remote_git_push_authorized": False,
+        "kaggle_contact_or_stage_authorized": False,
+        "gate_b_authorized": False,
+        "competition_submission_authorized": False,
+        "expired_grant_may_be_edited_or_reused": False,
+    }:
+        raise BuildError("runtime review authority boundary mismatch")
+    if public_agents_files["agents/agent.py"] == runtime_files["agents/agent.py"]:
+        raise BuildError("public source and Kaggle runtime bindings were conflated")
     return (
-        python_minor,
+        reviewed["python_version"],
         runtime_closure_status,
         {name: runtime_versions[name] for name in sorted(runtime_versions)},
-        {name: agents_files[name] for name in sorted(agents_files)},
-        {"LICENSE": license_digest},
+        {name: runtime_files[name] for name in sorted(runtime_files)},
+        {runtime_license["path"]: runtime_license["sha256"]},
     )
 
 
 def notebook_document(
     agent_source: str,
     accelerator: str,
-    python_minor: str,
+    python_version: str,
     runtime_closure_status: str,
     runtime_versions: dict[str, str],
     agents_files: dict[str, str],
     license_file: dict[str, str],
+    source_lock_sha256: str,
+    runtime_inventory_sha256: str,
 ) -> dict[str, Any]:
     """Return the exact notebook document for a declared accelerator."""
     if accelerator not in ACCELERATORS:
         raise BuildError(f"unknown accelerator: {accelerator}")
     accel = ACCELERATORS[accelerator]
+    source_lock_sha256 = _require_sha256(
+        source_lock_sha256,
+        "source lock SHA-256",
+    )
+    runtime_inventory_sha256 = _require_sha256(
+        runtime_inventory_sha256,
+        "runtime inventory SHA-256",
+    )
 
     install = code_cell(
         "import subprocess\n"
@@ -223,7 +635,8 @@ def notebook_document(
         "        \"--find-links\",\n"
         "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
         "        \"arc-agi==0.9.8\",\n"
-        "        \"python-dotenv\",\n"
+        "        \"arcengine==0.9.3\",\n"
+        "        \"python-dotenv==1.2.2\",\n"
         "    ],\n"
         "    check=True,\n"
         ")\n"
@@ -239,13 +652,14 @@ def notebook_document(
     candidate_agent_sha256_literal = json.dumps(
         sha256_bytes(agent_source.encode("utf-8"))
     )
-    python_minor_literal = json.dumps(python_minor)
+    python_version_literal = json.dumps(python_version)
     runtime_closure_status_literal = json.dumps(runtime_closure_status)
     run_source = dedent(
         """\
         import hashlib
         import importlib.metadata
         import os
+        import re
         import shutil
         import stat
         import subprocess
@@ -260,12 +674,12 @@ def notebook_document(
                 raise RuntimeError(
                     "RUNTIME_CLOSURE_UNFROZEN: Gate B requires a reviewed post-Stage-A successor"
                 )
-            expected_python_minor = __EXPECTED_PYTHON_MINOR__
-            observed_python_minor = ".".join(str(part) for part in sys.version_info[:2])
-            if observed_python_minor != expected_python_minor:
+            expected_python_version = __EXPECTED_PYTHON_VERSION__
+            observed_python_version = sys.version.split()[0]
+            if observed_python_version != expected_python_version:
                 raise RuntimeError(
-                    "Python minor mismatch before competition rerun: "
-                    f"expected={expected_python_minor!r}, observed={observed_python_minor!r}"
+                    "Python version mismatch before competition rerun: "
+                    f"expected={expected_python_version!r}, observed={observed_python_version!r}"
                 )
             try:
                 bound_interpreter_path = Path(sys.executable).resolve(strict=True)
@@ -282,14 +696,31 @@ def notebook_document(
             )
 
             expected_runtime_versions = __EXPECTED_RUNTIME_VERSIONS__
+            distribution_versions = {}
+            for distribution in importlib.metadata.distributions():
+                raw_name = str(distribution.metadata.get("Name", distribution.name)).strip()
+                name = re.sub(r"[-_.]+", "-", raw_name).lower()
+                if re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) is None:
+                    raise RuntimeError(f"invalid canonical distribution name: {raw_name!r}")
+                version = str(distribution.version)
+                distribution_versions.setdefault(name, set()).add(version)
             observed_runtime_versions = {}
-            for distribution_name in sorted(expected_runtime_versions):
+            for name in sorted(distribution_versions):
+                versions = sorted(distribution_versions[name])
+                if len(versions) == 1:
+                    observed_runtime_versions[name] = versions[0]
+                    continue
+                effective_version = None
                 try:
-                    observed_runtime_versions[distribution_name] = importlib.metadata.version(
-                        distribution_name
-                    )
+                    effective_version = str(importlib.metadata.version(name))
                 except importlib.metadata.PackageNotFoundError:
-                    observed_runtime_versions[distribution_name] = None
+                    pass
+                if effective_version not in versions:
+                    raise RuntimeError(
+                        "conflicting canonical distribution versions: "
+                        + f"{name}: {' != '.join(repr(version) for version in versions)}"
+                    )
+                observed_runtime_versions[name] = effective_version
             if observed_runtime_versions != expected_runtime_versions:
                 raise RuntimeError(
                     "runtime version mismatch before competition rerun: "
@@ -541,7 +972,7 @@ def notebook_document(
     run_source = run_source.replace(
         "__RUNTIME_CLOSURE_STATUS__", runtime_closure_status_literal
     ).replace(
-        "__EXPECTED_PYTHON_MINOR__", python_minor_literal
+        "__EXPECTED_PYTHON_VERSION__", python_version_literal
     ).replace(
         "__EXPECTED_RUNTIME_VERSIONS__", runtime_versions_literal
     ).replace(
@@ -653,8 +1084,11 @@ def notebook_document(
             "hearthline": {
                 "agent_sha256": sha256_bytes(agent_source.encode("utf-8")),
                 "builder": "scripts/build_notebook.py",
-                "official_agents_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+                "public_agents_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+                "kaggle_runtime_agents_commit": "135f20aaf44f13341ebc425666bf03b5cac58d3c",
                 "official_starter_commit": "eeb1535404f321d280a8f9194bbc1d7aca5f05fc",
+                "source_lock_sha256": source_lock_sha256,
+                "runtime_inventory_sha256": runtime_inventory_sha256,
             },
         },
         "nbformat": 4,
@@ -688,6 +1122,8 @@ def render_candidate(
     agent_bytes: bytes,
     metadata_template_bytes: bytes,
     source_lock_bytes: bytes,
+    runtime_inventory_bytes: bytes,
+    runtime_review_receipt_bytes: bytes,
     starter_contract_bytes: bytes,
     builder_bytes: bytes,
     commit: str,
@@ -717,20 +1153,26 @@ def render_candidate(
     metadata["id"] = kernel_id
     metadata["enable_gpu"] = ACCELERATORS[accelerator]["gpu"]
     (
-        python_minor,
+        python_version,
         runtime_closure_status,
         runtime_versions,
         agents_files,
         license_file,
-    ) = _execution_guard_inputs(source_lock)
+    ) = _execution_guard_inputs(
+        source_lock,
+        runtime_inventory_bytes,
+        runtime_review_receipt_bytes,
+    )
     notebook = notebook_document(
         agent_source,
         accelerator,
-        python_minor,
+        python_version,
         runtime_closure_status,
         runtime_versions,
         agents_files,
         license_file,
+        sha256_bytes(source_lock_bytes),
+        sha256_bytes(runtime_inventory_bytes),
     )
     notebook_bytes = (json.dumps(notebook, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
     metadata_bytes = (json.dumps(metadata, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
@@ -738,7 +1180,9 @@ def render_candidate(
     trusted_inputs = {
         "agent/my_agent.py": sha256_bytes(agent_bytes),
         "launch/contracts/official-starter-eeb153.contract.json": sha256_bytes(starter_contract_bytes),
-        "launch/source-lock.v3.json": sha256_bytes(source_lock_bytes),
+        "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json": sha256_bytes(runtime_review_receipt_bytes),
+        "launch/runtime/kaggle-stage-v4-runtime-inventory.json": sha256_bytes(runtime_inventory_bytes),
+        "launch/source-lock.v4.json": sha256_bytes(source_lock_bytes),
         "notebooks/kernel-metadata.template.json": sha256_bytes(metadata_template_bytes),
         "scripts/build_notebook.py": sha256_bytes(builder_bytes),
     }
@@ -747,7 +1191,7 @@ def render_candidate(
         "submission.ipynb": sha256_bytes(notebook_bytes),
     }
     manifest = {
-        "schema": "hearthline.arc3.offline-candidate-manifest.v3",
+        "schema": "hearthline.arc3.offline-candidate-manifest.v4",
         "candidate": {"commit": commit, "tree": tree, "worktree_clean": True},
         "parameters": {
             "accelerator": accelerator,
@@ -1120,7 +1564,9 @@ def build(output_dir: Path, username: str, accelerator: str) -> dict[str, Any]:
         inputs = {
             "agent/my_agent.py": _git_blob(identity["commit"], "agent/my_agent.py"),
             "notebooks/kernel-metadata.template.json": _git_blob(identity["commit"], "notebooks/kernel-metadata.template.json"),
-            "launch/source-lock.v3.json": _git_blob(identity["commit"], "launch/source-lock.v3.json"),
+            "launch/source-lock.v4.json": _git_blob(identity["commit"], "launch/source-lock.v4.json"),
+            "launch/runtime/kaggle-stage-v4-runtime-inventory.json": _git_blob(identity["commit"], "launch/runtime/kaggle-stage-v4-runtime-inventory.json"),
+            "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json": _git_blob(identity["commit"], "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"),
             "launch/contracts/official-starter-eeb153.contract.json": _git_blob(identity["commit"], "launch/contracts/official-starter-eeb153.contract.json"),
             "scripts/build_notebook.py": _git_blob(identity["commit"], "scripts/build_notebook.py"),
         }
@@ -1133,7 +1579,9 @@ def build(output_dir: Path, username: str, accelerator: str) -> dict[str, Any]:
         rendered = render_candidate(
             agent_bytes=inputs["agent/my_agent.py"],
             metadata_template_bytes=inputs["notebooks/kernel-metadata.template.json"],
-            source_lock_bytes=inputs["launch/source-lock.v3.json"],
+            source_lock_bytes=inputs["launch/source-lock.v4.json"],
+            runtime_inventory_bytes=inputs["launch/runtime/kaggle-stage-v4-runtime-inventory.json"],
+            runtime_review_receipt_bytes=inputs["launch/receipts/20260907T002817Z-stage-v4-runtime-review.json"],
             starter_contract_bytes=inputs["launch/contracts/official-starter-eeb153.contract.json"],
             builder_bytes=inputs["scripts/build_notebook.py"],
             commit=identity["commit"],

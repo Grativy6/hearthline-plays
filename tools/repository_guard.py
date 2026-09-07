@@ -116,7 +116,7 @@ ALLOWED_EXTENSIONLESS_PATHS = {
 }
 ALLOWED_AUXILIARY_SHA256 = {
     ".gitignore": "2529f03b84a9bba177bd89550bcc07d33a53a317a9dbc220cd8df84ab239a615",
-    ".gitattributes": "4f2272aad1f4374099b84639375d72c5bed891f59994d627759cd7fe61a2d81c",
+    ".gitattributes": "ab7b8d3990f8ed193054e607a803c7a34ecaf3c667e0919e87e61748ca3432ec",
     "docs/honesty/HONESTY_PCP_v1.0_PROMPT.txt": "e54ccd89828d8736ce2f025589d419b7c3ab2db8966c175b8d9bba85f3906e83",
     "tests/fixtures/ARC-AGI-3-Agents-LICENSE.txt": "cd95f6fb04cbe8f172890cf3746bb57295d131eb110bb78c1a0a528ea8acf87d",
     "tests/fixtures/agents-main-4743e7d0.blob": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b",
@@ -145,7 +145,8 @@ NOTEBOOK_INSTALL_CELL = (
     "        \"--find-links\",\n"
     "        \"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/arc_agi_3_wheels\",\n"
     "        \"arc-agi==0.9.8\",\n"
-    "        \"python-dotenv\",\n"
+    "        \"arcengine==0.9.3\",\n"
+    "        \"python-dotenv==1.2.2\",\n"
     "    ],\n"
     "    check=True,\n"
     ")\n"
@@ -166,10 +167,16 @@ PYTHON_CODING_COOKIE = re.compile(
 ALLOWED_CONTROL_JSON_SHA256 = {
     "launch/contracts/official-starter-eeb153.contract.json": "dd332a2d60997b60b6c1b55e2fbff804c0905637ad2f3b169f1a7572204d3e99",
     "launch/source-lock.v3.json": "900965eb497a0260e165976c80793c97c605e15f38ec89b55afef593a5c0478d",
+    "launch/source-lock.v4.json": "bc14dfc3e849518177c48066a3df5782f66bc00525e4ef6b7a9dde60ddebcdbd",
+    "launch/runtime/kaggle-stage-v4-runtime-inventory.json": "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce",
+    "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json": "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b",
+    "launch/gates/stage-result.v4.template.json": "1b55ec344897973431af24e6688c8dc356fa278de778be09159ef0735595bd85",
+    "launch/schemas/v4/stage-result.schema.json": "340d42784b4719140960126ae83d3ecaabff13dae382610f43232f33df742177",
     "notebooks/kernel-metadata.template.json": "4eccba9836496a2f6abd09b0e375c8f8d7c28dacfee926e9df592da17f0628ce",
 }
 ALLOWED_SENSITIVE_PATH_REFERENCES = {
     "launch/source-lock.v3.json": {".kaggle/access_token"},
+    "launch/source-lock.v4.json": {".kaggle/access_token"},
 }
 
 # Every tracked Python file has a closed import inventory. This is the
@@ -187,9 +194,9 @@ ALLOWED_IMPORT_SHA256 = {
     "scripts/build_notebook.py": "3daf648749f98aed41333315d324a7eaeb718dac12d0abc55102f3069e760063",
     "scripts/verify_candidate.py": "709f82ba86af52f584fd22276e23b0a232f65139c3b69101d0af6d77bc975f74",
     "scripts/verify_human_gate.py": "c27d125c1e5f323a9c2403244fe8ef6168a3d36a440c4401c411f78b5413b937",
-    "tests/test_candidate.py": "bb23848639bacc0c3417db12868a2ad4b943ebf0b286abf28c7480590c78186f",
-    "tests/test_human_gates.py": "8b27e1e0d584b91a09b33f24c217e2bb78cac5e84e67397f6a6d78baec68f7a4",
-    "tests/test_launchpad.py": "4c853dae076fafc796716f7596a5432c1eded75ebf3ba33e480411827e2f5304",
+    "tests/test_candidate.py": "c8113f0137304bb225c7c6f1d7cb81d5f19002fe42920e3552b50e892176f46d",
+    "tests/test_human_gates.py": "961b67346094dbb980bf4cd15836d6cb37f9dfee1cae76cd67e39582b69c140e",
+    "tests/test_launchpad.py": "53a0eef03140921bfd9c8978b9f36006d52cd4b57da52b18b0b370899d7a3e00",
     "tests/test_morrow_priority_mechanics.py": "53a0eef03140921bfd9c8978b9f36006d52cd4b57da52b18b0b370899d7a3e00",
     "tests/test_morrow_queue.py": "049f4f403a76b7bd1de7f42375e7c5ee1a0b16844487099248eaf15bb832e89d",
     "tests/test_reconciliation.py": "762a61a15e782e7504cfeccc5b3834113d6d4d7b098c401bcfcbb5be08547c77",
@@ -200,7 +207,7 @@ ALLOWED_IMPORT_SHA256 = {
     "tools/morrow_queue.py": "59a1ec75804f557689dcf00b1ea23ad7617a8f50cc7effba85dc63f5a08e2975",
     "tools/pair_static.py": "d71ac7c99e18ad72814e2cc06100e6be1eb54c11a2cd6528e5e404e31b3acb55",
     "tools/repository_guard.py": "4e65ac4cd3b11eb7e25989c0774fa9111d759dd7b7b1345cc74b92d37ef49bfa",
-    "tools/validate_launchpad.py": "40a9161ed96e583476421fbd32dd6c85baff0da73eecbfe829e201eac4c40923",
+    "tools/validate_launchpad.py": "de15a76f5e7afc5aec74601265c7f4858c5ceab4348f9985d070a04e102dff40",
     "tools/verify_station.py": "866237f4e7157e1c0c0ea6f2239f7820026d2eb5522a4a69d73118279aefc894",
 }
 
@@ -216,25 +223,25 @@ ALLOWED_PYTHON_SHA256 = {
     "launch/tools/orientation_console.py": "09aa09b4b69f9a0c4c663ff17c1c105edf35049c8ff6b1fe06044ac661a06fb6",
     "launch/tools/static_pair.py": "e113fd9d4fe9de21f755c11cb1dd7f6a50ae50938249d04333ba476b66f0a926",
     "launch/tools/static_pair_v2.py": "92e3048bf73fc65f421fec208dbc22626082ac91392c222a1b246da0218e0792",
-    "scripts/build_notebook.py": "caa12b97977ab52383d991a2ace9345c5c65f8a577cc60174602fb9e20f742f1",
-    "scripts/verify_candidate.py": "111a51657393ed2bd8191c6177e6cd5364f50f45f5ce22eb56b4f84e021afc5f",
-    "scripts/verify_human_gate.py": "dfef4f93c0228ac1b367b6d53c896bad9e83f81b6b49fa0acb9f5fef9ebf410c",
-    "tests/test_candidate.py": "bd00632669d679c2ceead02cf345d496cb02e562d0e4a33510f841f350d61123",
-    "tests/test_human_gates.py": "e0b1aedcc2599a70ae5401672c65c4dd7898d87576a484d0f3e5a7b73c41ffde",
-    "tests/test_launchpad.py": "f9770e45de26eadf07a0b099d191f52514289afbad4a04f2a22c17b5b3ae2cfa",
+    "scripts/build_notebook.py": "ed9731da53ff4263d12a6599fcc2c6a0bae85b5f609a82b8e901d1ecdb9af172",
+    "scripts/verify_candidate.py": "68379b0ba7a6f3fb62853c83fc759f3ce17e082b8d0ddb74128d25215902c580",
+    "scripts/verify_human_gate.py": "f2d59cee27eb070ec3340389b4ea6cfc51039cf55d4b75ff9c9a50ebd3cd440f",
+    "tests/test_candidate.py": "feb0203ec0bb0455014da65a2d608754eaec4c39009ce109dfb9735eb6da957f",
+    "tests/test_human_gates.py": "7e0cd35d24114cc1e784317c899781ba717fd8c16518ede94136f8eae4d1acd6",
+    "tests/test_launchpad.py": "d8c0e78e019163fc9f137d65e5ac1a062ad48ae4bc5db6f3f4a9ed04fcf43a4e",
     "tests/test_morrow_priority_mechanics.py": "8d1e95cc9304f97c7c7bf63f746b8d75444883335253cd524ad62a00d2a9b961",
     "tests/test_morrow_queue.py": "326c27b60c1d464554025dd0e4be7970e67c45ab2f2390049630ac108c9beda8",
-    "tests/test_reconciliation.py": "5e9cdea14b1875e22ba725b1f4691bd23b2f26c9845b355a569163f9390469fa",
+    "tests/test_reconciliation.py": "a57897bec0ef375e81bb0422b3893090bed6cbf7c38265f066614a021fc8812a",
     "tests/test_repository_guard.py": "ec5863b87026819c10e45588253854f2838f212cfbc00e0861b32e43e5ff8bca",
-    "tests/test_source_context.py": "9d37747ec741b515bdd5faa81082325e515e2c6096a45a9f88b50060bd193d78",
+    "tests/test_source_context.py": "be901a33f96227d9d87b8e8d23caec827116925c794dc3270d10bf71db3e06d6",
     "tests/test_verify_station.py": "4e326dc4de022726149ffba6b1c9b64e20fc092307f6a8059ff90f0c1a5190c2",
     "tools/morrow_queue.py": "f17834aec9d931f0ef97ff50235ce48a8a64d289352324fa980aebf297aa4498",
     "tools/orientation_archive_guard.py": "744b2bec891cf9e4369c1a2a2fe43dc6bf38b6f22302ad3065ad888e184a33d2",
     "tools/pair_static.py": "aa231b448d059fea8b0990f4c21a134cd63bc759ad9170c3e9b49cf2b1f467ac",
-    "tools/validate_launchpad.py": "b62180e3220c2466964b4a16085c066e5ab2a8144f7857658715ebc9a086978f",
+    "tools/validate_launchpad.py": "e2689a74652abe1061358b70c3dcecfa086bcd197e7f549602dd0c1b4bed9c76",
     "tools/verify_station.py": "52c7dcfed5493b41ea2f902a794134fac1bcf49b3d869e91eea0d8e06222f2e6",
 }
-SELF_AST_SHA256 = "d9e7003cf923131bd30366e52a0342e0b0059884abccadbef2a931f400be9758"
+SELF_AST_SHA256 = "a8ca47d750a446fdb857b40baffdfffbbeb82368d7e7d43f9376a86be27d6d69"
 
 
 class GuardError(RuntimeError):
@@ -501,11 +508,14 @@ _ALLOWED_URL_CALLS: dict[tuple[str, str], Counter[str]] = {
 }
 
 _RUNTIME_EXEC_TESTS = (
+    "test_complete_reviewed_inventory_is_embedded_and_checked_exactly",
     "test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects",
     "test_non_200_gateway_response_honors_deadline_without_proxy",
     "test_interpreter_rebind_is_detected_before_subprocess",
     "test_competition_rerun_python_minor_drift_fails_before_any_framework_effect",
     "test_competition_rerun_runtime_drift_fails_before_any_framework_effect",
+    "test_competition_runtime_unresolved_conflicts_fail_before_effects",
+    "test_competition_runtime_resolves_reviewed_shadows_before_effects",
     "test_competition_rerun_source_drift_fails_before_copy_or_framework_import",
     "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess",
     "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys",
@@ -513,16 +523,19 @@ _RUNTIME_EXEC_TESTS = (
     "test_install_cell_failure_is_fail_fast",
 )
 _RUNTIME_EXEC_TEST_AST_SHA256 = {
-    "test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects": "2a8bfd2c151d1f276b58aa7f2a8834214deb0bea4135f0048a43b3bf80a4ab1f",
-    "test_non_200_gateway_response_honors_deadline_without_proxy": "64229cc86cfde1ec246c10d3a3948b74b82435894c5f458352df161b2e5473de",
-    "test_interpreter_rebind_is_detected_before_subprocess": "2f065534504a3aa31ba6774bbc158610c7e9ea6dfbb25499e260c9d553d63947",
-    "test_competition_rerun_python_minor_drift_fails_before_any_framework_effect": "3181788009ed055c9b0662f89125b68f561dfb6a144b16e8f8dc72991a50b754",
-    "test_competition_rerun_runtime_drift_fails_before_any_framework_effect": "3fed0ce6caf7d472ad26592c317a6ee7afaddddc6104e6df45bea5a3a34e668d",
-    "test_competition_rerun_source_drift_fails_before_copy_or_framework_import": "2c1c7c2b92f7a001b17b53f712356865a5acf9c562db680cef7054495f86478a",
-    "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess": "d5feb59defb77a6e52d20e9ac7d7a003021ab3f3faab29fef5b191dff64bc974",
-    "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys": "a256acb6a4cb1747dc832cc4dd78aced7ef4c1aac7148d97f433cd84bd995cb7",
-    "_execute_stage_inventory": "f0ce1ae9fe2a80b4e5e90dcc9fdae145f05e7c90998b2a9d89184c988627e1c7",
-    "test_install_cell_failure_is_fail_fast": "783a8d7b017fd0015d43f865dff95c444273adf3d321f6c72df90dd422a43c41",
+    "test_complete_reviewed_inventory_is_embedded_and_checked_exactly": "96055d9b7e7c186fbf04e9967bd6f2b047307b23cc68f75ffd4c21342de878d0",
+    "test_unfrozen_runtime_closure_blocks_competition_rerun_before_effects": "d161f2153d81ea880716304085804d2db26c7036e58ab285c1be71bd7a6e6f23",
+    "test_non_200_gateway_response_honors_deadline_without_proxy": "f9008e5437736680677eb4cb122b9cc050a32d481063a17e7ff6c3d66ec9723a",
+    "test_interpreter_rebind_is_detected_before_subprocess": "6c7bc78c30e118d3f5c58ae4bd0a6a89d46532bc11ca74ca1eabf4a97ef18203",
+    "test_competition_rerun_python_minor_drift_fails_before_any_framework_effect": "da57a8aebcc6ad1128990e2623d9e32e813ae2c873328675935a6ad115dc7f51",
+    "test_competition_rerun_runtime_drift_fails_before_any_framework_effect": "3bfd7ec00c20cbc1d344c5161b59464a668b010a344ddab7072dd13e0f150184",
+    "test_competition_runtime_unresolved_conflicts_fail_before_effects": "b86417ac6541b1ee28ce11812c8fd968eec4e7ee7a2c3759946c5ff4912fe310",
+    "test_competition_runtime_resolves_reviewed_shadows_before_effects": "f8c20f8ded7e5796d292bdf4d514cb31cf247b5086a116fbb48726e152ab99d6",
+    "test_competition_rerun_source_drift_fails_before_copy_or_framework_import": "9015ee3e66a22ad2824551070b410a427e1637184816c5d9200a416b12322590",
+    "test_competition_rerun_tracing_drift_fails_before_copy_or_subprocess": "af68062c0033345c5026fbf26eeede090622be31eaf50b1df392d81179caa922",
+    "test_competition_subprocess_receives_no_ambient_provider_or_tracing_keys": "eb6653259e964e6c6dd7d20c2845748530f78bacfad8dc7b145add2de39d26f5",
+    "_execute_stage_inventory": "31ac01c084da672a859474d64a16ab78181be8cd07f53fb0c9e4b4670070f0e8",
+    "test_install_cell_failure_is_fail_fast": "d8f2b5ba37c12f65aeb66d030224a4296018de3917e045075837e1eeb3237379",
 }
 _ALLOWED_DYNAMIC_EXEC_CALLS: dict[tuple[str, str], Counter[str]] = {
     ("tests/test_candidate.py", function_name): Counter({
@@ -537,6 +550,11 @@ _ALLOWED_DYNAMIC_EXEC_CALLS.update({
     ("tests/test_candidate.py", "_execute_stage_inventory"): Counter({
         _parse_call(
             'exec(compile(run_source, "stage-inventory", "exec"), {})'
+        ): 1,
+    }),
+    ("tests/test_candidate.py", "test_complete_reviewed_inventory_is_embedded_and_checked_exactly"): Counter({
+        _parse_call(
+            'exec(compile(run_source, "complete-runtime-preflight", "exec"), {})'
         ): 1,
     }),
     ("tests/test_candidate.py", "test_install_cell_failure_is_fail_fast"): Counter({
@@ -1113,7 +1131,7 @@ def _validate_notebook_builder(tree: ast.AST) -> None:
         raise GuardError(f"{NOTEBOOK_BUILDER} run_source must begin as one static literal")
     expected_replacement = ast.parse(
         'run_source.replace("__RUNTIME_CLOSURE_STATUS__", runtime_closure_status_literal)'
-        '.replace("__EXPECTED_PYTHON_MINOR__", python_minor_literal)'
+        '.replace("__EXPECTED_PYTHON_VERSION__", python_version_literal)'
         '.replace("__EXPECTED_RUNTIME_VERSIONS__", runtime_versions_literal)'
         '.replace("__EXPECTED_AGENTS_FILES__", agents_files_literal)'
         '.replace("__EXPECTED_LICENSE_FILE__", license_file_literal)'

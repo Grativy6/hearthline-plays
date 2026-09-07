@@ -1,0 +1,471 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Grativy6/hearthline-plays/launch/schemas/v4/stage-result.schema.json",
+  "title": "Hearthline ARC reviewed-runtime private-kernel stage result v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "status",
+    "candidate",
+    "kernel_id",
+    "kernel_run_id",
+    "kernel_visibility",
+    "internet_enabled",
+    "output_reviewed",
+    "submission",
+    "recorded_by_human",
+    "credential_material_recorded",
+    "external_effect_performed_by_gate_tool",
+    "gate_a",
+    "public_sources",
+    "accepted_runtime_binding",
+    "stage_evidence",
+    "kaggle_runtime",
+    "recorded_at",
+    "claim_ceiling"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "agentsPublicFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agents/agent.py",
+        "agents/recorder.py",
+        "agents/swarm.py",
+        "agents/tracing.py",
+        "main.py"
+      ],
+      "properties": {
+        "agents/agent.py": {
+          "const": "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073"
+        },
+        "agents/recorder.py": {
+          "const": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8"
+        },
+        "agents/swarm.py": {
+          "const": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39"
+        },
+        "agents/tracing.py": {
+          "const": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f"
+        },
+        "main.py": {
+          "const": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"
+        }
+      }
+    },
+    "agentsRuntimeFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agents/agent.py",
+        "agents/recorder.py",
+        "agents/swarm.py",
+        "agents/tracing.py",
+        "main.py"
+      ],
+      "properties": {
+        "agents/agent.py": {
+          "const": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087"
+        },
+        "agents/recorder.py": {
+          "const": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8"
+        },
+        "agents/swarm.py": {
+          "const": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39"
+        },
+        "agents/tracing.py": {
+          "const": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f"
+        },
+        "main.py": {
+          "const": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"
+        }
+      }
+    },
+    "agentsLicense": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["LICENSE"],
+      "properties": {
+        "LICENSE": {
+          "const": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema": {
+      "const": "hearthline.arc3.kaggle-stage-result.v4"
+    },
+    "status": {
+      "const": "COMPLETE"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "tree",
+        "account_slug",
+        "kernel_id",
+        "accelerator",
+        "agent_sha256",
+        "builder_sha256",
+        "notebook_sha256",
+        "kernel_metadata_sha256",
+        "source_lock_sha256",
+        "candidate_manifest_sha256",
+        "verified_snapshot_sha256"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "account_slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}$"
+        },
+        "kernel_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"
+        },
+        "accelerator": {
+          "enum": ["cpu", "t4", "p100", "rtx6000"]
+        },
+        "agent_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "builder_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "notebook_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "kernel_metadata_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_lock_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "candidate_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "verified_snapshot_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "kernel_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"
+    },
+    "kernel_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kernel_visibility": {
+      "const": "PRIVATE"
+    },
+    "internet_enabled": {
+      "const": false
+    },
+    "output_reviewed": {
+      "const": true
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "sha256"],
+      "properties": {
+        "name": {
+          "const": "submission.parquet"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "recorded_by_human": {
+      "const": true
+    },
+    "credential_material_recorded": {
+      "const": false
+    },
+    "external_effect_performed_by_gate_tool": {
+      "const": false
+    },
+    "gate_a": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant_id",
+        "nonce",
+        "grant_sha256",
+        "consumption_receipt_path",
+        "consumption_receipt_sha256",
+        "account_slug",
+        "kernel_id"
+      ],
+      "properties": {
+        "grant_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "grant_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "consumption_receipt_path": {
+          "type": "string",
+          "pattern": "^\\.hearthline/receipts/gate-consumption/[0-9a-f]{64}\\.json$"
+        },
+        "consumption_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "account_slug": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}$"
+        },
+        "kernel_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{1,62}/hearthline-arc3-readiness$"
+        }
+      }
+    },
+    "public_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arc_agi", "agents"],
+      "properties": {
+        "arc_agi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "commit", "version"],
+          "properties": {
+            "repository": {
+              "const": "arcprize/ARC-AGI"
+            },
+            "commit": {
+              "const": "f12822c4d550121c35a275008d964afbbed47d2f"
+            },
+            "version": {
+              "const": "0.9.9"
+            }
+          }
+        },
+        "agents": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "commit", "tree", "files", "license_file"],
+          "properties": {
+            "repository": {
+              "const": "arcprize/ARC-AGI-3-Agents"
+            },
+            "commit": {
+              "const": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b"
+            },
+            "tree": {
+              "const": "6878fdfdd0156059323b541fc229b6329ad4fd28"
+            },
+            "files": {
+              "$ref": "#/$defs/agentsPublicFiles"
+            },
+            "license_file": {
+              "$ref": "#/$defs/agentsLicense"
+            }
+          }
+        }
+      }
+    },
+    "accepted_runtime_binding": {
+      "type": "object",
+      "$comment": "These hashes bind the accepted predecessor kernel-v4 runtime baseline; they are not evidence from the new stage run recorded by this receipt.",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "inventory_sha256",
+        "human_review_receipt_sha256",
+        "baseline_evidence_manifest_sha256",
+        "baseline_logs_sha256"
+      ],
+      "properties": {
+        "status": {
+          "const": "FROZEN_POST_STAGE_SUCCESSOR"
+        },
+        "inventory_sha256": {
+          "const": "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce"
+        },
+        "human_review_receipt_sha256": {
+          "const": "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b"
+        },
+        "baseline_evidence_manifest_sha256": {
+          "const": "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06"
+        },
+        "baseline_logs_sha256": {
+          "const": "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53"
+        }
+      }
+    },
+    "stage_evidence": {
+      "type": "object",
+      "$comment": "These are the dynamic evidence-manifest and log hashes from the new private stage run bound by this receipt.",
+      "additionalProperties": false,
+      "required": ["evidence_manifest_sha256", "logs_sha256"],
+      "properties": {
+        "evidence_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "logs_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "kaggle_runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "captured_from",
+        "complete",
+        "python_version",
+        "distributions",
+        "agents",
+        "reviewed_by_human"
+      ],
+      "properties": {
+        "captured_from": {
+          "const": "HEARTHLINE_STAGE_INVENTORY"
+        },
+        "complete": {
+          "const": true
+        },
+        "python_version": {
+          "const": "3.12.13"
+        },
+        "distributions": {
+          "type": "array",
+          "$comment": "The exact content and order of all 875 rows are semantic gate invariants enforced by scripts/verify_human_gate.py through exact equality and reconstruction of the canonical runtime inventory SHA-256; this structural schema is not a substitute for that semantic check.",
+          "minItems": 875,
+          "maxItems": 875,
+          "uniqueItems": true,
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "version"],
+                "properties": {
+                  "name": {
+                    "const": "arc-agi"
+                  },
+                  "version": {
+                    "const": "0.9.8"
+                  }
+                }
+              }
+            },
+            {
+              "contains": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "version"],
+                "properties": {
+                  "name": {
+                    "const": "arcengine"
+                  },
+                  "version": {
+                    "const": "0.9.3"
+                  }
+                }
+              }
+            },
+            {
+              "contains": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "version"],
+                "properties": {
+                  "name": {
+                    "const": "python-dotenv"
+                  },
+                  "version": {
+                    "const": "1.2.2"
+                  }
+                }
+              }
+            }
+          ],
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "version"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "agents": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provenance", "files", "license_file"],
+          "properties": {
+            "provenance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "repository", "commit", "tree"],
+              "properties": {
+                "kind": {
+                  "const": "KAGGLE_PLATFORM_COMPETITION_INPUT"
+                },
+                "repository": {
+                  "const": "arcprize/ARC-AGI-3-Agents"
+                },
+                "commit": {
+                  "const": "135f20aaf44f13341ebc425666bf03b5cac58d3c"
+                },
+                "tree": {
+                  "const": "d7fbafe6e2ed191189db89e5b571fd26da3dc375"
+                }
+              }
+            },
+            "files": {
+              "$ref": "#/$defs/agentsRuntimeFiles"
+            },
+            "license_file": {
+              "$ref": "#/$defs/agentsLicense"
+            }
+          }
+        },
+        "reviewed_by_human": {
+          "const": true
+        }
+      }
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claim_ceiling": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

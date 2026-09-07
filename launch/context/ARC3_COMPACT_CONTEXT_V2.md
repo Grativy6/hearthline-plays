@@ -1,6 +1,6 @@
 # ARC-AGI-3 compact context successor
 
-This is the smallest successor context intended to change an offline candidate decision. Exact sources and ceilings live in `launch/source-lock.v3.json`; the machine-readable roles and frozen arms live in `launch/context/roles.v2.json`.
+This is the smallest successor context intended to change an offline candidate decision. Exact sources and ceilings live in `launch/source-lock.v4.json`; the machine-readable roles and frozen arms live in `launch/context/roles.v2.json`. The lock keeps the public ARC-AGI 0.9.9/Agents pin separate from the reviewed 875-distribution Kaggle version-4 runtime and marks that predecessor closure `FROZEN_POST_STAGE_SUCCESSOR` for local repair only.
 
 ## Common shell
 
@@ -27,4 +27,4 @@ All eight candidate roles default off. `A0_FULL`, `A0_NO_A0BK`, `A0_NO_FBT_CONTI
 
 The only admitted game-specific carry is `LS20-WM-0001`: five anonymous public contacts, 27 observed actions, 36 frame records, repeatable context-bound translations for ACTION1/ACTION3/ACTION4, and one exact 13-action route that advanced one of seven levels in one run. ACTION2, later levels, reset/death behavior, generalization, and marker causality remain unresolved.
 
-The former public-orientation grant is expired and spent. No role, model, source lock, successful test, founder text, or heartbeat authorizes ARC or Kaggle contact. Phase A private-kernel staging and Phase B competition ignition are separate human acts; Phase B remains UI-only.
+The former public-orientation and Gate-A grants are expired and immutable. The reviewed version-4 evidence does not verify the repaired successor. No role, model, source lock, successful test, founder text, review receipt, or heartbeat authorizes ARC or Kaggle contact. A successor snapshot is verified only after its exact clean commit is built and its hash is recorded in an ignored local receipt; a fresh Gate-A grant must bind that hash before one exact private restage. Gate B remains closed, separate, and UI-only after a reviewed successor stage.

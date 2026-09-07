@@ -15,6 +15,11 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RUNTIME_INVENTORY_PATH = (
+    ROOT / "launch/runtime/kaggle-stage-v4-runtime-inventory.json"
+)
+RUNTIME_INVENTORY_BYTES = RUNTIME_INVENTORY_PATH.read_bytes()
+RUNTIME_INVENTORY = json.loads(RUNTIME_INVENTORY_BYTES)
 
 
 def load_module(name: str, path: Path):
@@ -43,8 +48,8 @@ class HumanGateTests(unittest.TestCase):
         self.candidate = {
             "commit": "1" * 40,
             "tree": "2" * 40,
-            "account_slug": "fixture-user",
-            "kernel_id": "fixture-user/hearthline-arc3-readiness",
+            "account_slug": "grativy6",
+            "kernel_id": "grativy6/hearthline-arc3-readiness",
             "accelerator": "cpu",
             "agent_sha256": "3" * 64,
             "builder_sha256": "4" * 64,
@@ -55,6 +60,7 @@ class HumanGateTests(unittest.TestCase):
             "verified_snapshot_sha256": "9" * 64,
         }
         self.verification = {
+            "schema": "hearthline.arc3.offline-candidate-verification.v4",
             "structural_verification": "PASS",
             "kaggle_stage_ready": True,
             "verified_snapshot": {
@@ -63,20 +69,40 @@ class HumanGateTests(unittest.TestCase):
             },
             "verified_inputs": {
                 "source_lock_sha256": self.candidate["source_lock_sha256"],
-                "agents_repository": "arcprize/ARC-AGI-3-Agents",
-                "agents_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
-                "agents_files": {
-                    "agents/agent.py": "1" * 64,
-                    "agents/recorder.py": "2" * 64,
-                    "agents/swarm.py": "3" * 64,
-                    "agents/tracing.py": "4" * 64,
-                    "main.py": "5" * 64,
-                },
-                "agents_license_file": {
-                    "LICENSE": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
-                },
-                "runtime_versions": {"arc-agi": "0.9.8", "arcengine": "0.9.3"},
+                "runtime_inventory_sha256": hashlib.sha256(
+                    RUNTIME_INVENTORY_BYTES
+                ).hexdigest(),
+                "runtime_review_receipt_sha256": "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b",
                 "runtime_closure_status": "FROZEN_POST_STAGE_SUCCESSOR",
+                "public_source_arc_agi_repository": "arcprize/ARC-AGI",
+                "public_source_arc_agi_commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+                "public_source_arc_agi_version": "0.9.9",
+                "public_source_agents_repository": "arcprize/ARC-AGI-3-Agents",
+                "public_source_agents_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+                "public_source_agents_tree": "6878fdfdd0156059323b541fc229b6329ad4fd28",
+                "public_source_agents_files": dict(GATE.PUBLIC_AGENTS_FILES),
+                "public_source_agents_license_file": dict(GATE.AGENTS_LICENSE_FILE),
+                "kaggle_runtime_kernel_slug": "grativy6/hearthline-arc3-readiness",
+                "kaggle_runtime_kernel_version": 4,
+                "kaggle_runtime_stage_status": "COMPLETE",
+                "kaggle_runtime_visibility": "private",
+                "kaggle_runtime_internet_enabled": False,
+                "kaggle_runtime_accelerator": "cpu",
+                "kaggle_runtime_candidate_snapshot_sha256": "823cd5c7a99b16141959a09f011e361b2c03615ea37e72a65880a9eb5e8db4d0",
+                "kaggle_runtime_evidence_manifest_sha256": "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+                "kaggle_runtime_logs_sha256": "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53",
+                "kaggle_runtime_python_version": RUNTIME_INVENTORY["python_version"],
+                "kaggle_runtime_distributions": copy.deepcopy(
+                    RUNTIME_INVENTORY["distributions"]
+                ),
+                "kaggle_runtime_files": dict(RUNTIME_INVENTORY["agents_files"]),
+                "kaggle_runtime_license_file": dict(
+                    RUNTIME_INVENTORY["agents_license_file"]
+                ),
+                "kaggle_runtime_provenance_kind": "KAGGLE_PLATFORM_COMPETITION_INPUT",
+                "kaggle_runtime_agents_repository": "arcprize/ARC-AGI-3-Agents",
+                "kaggle_runtime_agents_commit": "135f20aaf44f13341ebc425666bf03b5cac58d3c",
+                "kaggle_runtime_agents_tree": "d7fbafe6e2ed191189db89e5b571fd26da3dc375",
             },
         }
         self.private_records: dict[str, bytes] = {}
@@ -184,7 +210,7 @@ class HumanGateTests(unittest.TestCase):
     def stage_receipt(self) -> dict:
         grant, consumption, grant_bytes = self.consume_stage()
         return {
-            "schema": "hearthline.arc3.kaggle-stage-result.v3",
+            "schema": "hearthline.arc3.kaggle-stage-result.v4",
             "status": "COMPLETE",
             "candidate": dict(self.candidate),
             "kernel_id": self.candidate["kernel_id"],
@@ -205,23 +231,15 @@ class HumanGateTests(unittest.TestCase):
                 "account_slug": self.candidate["account_slug"],
                 "kernel_id": self.candidate["kernel_id"],
             },
-            "runtime_inventory": {
-                "captured_from": "HEARTHLINE_STAGE_INVENTORY",
-                "complete": True,
-                "python_version": "3.12.13",
-                "distributions": [
-                    {"name": "arc-agi", "version": "0.9.8"},
-                    {"name": "arcengine", "version": "0.9.3"},
-                    {"name": "python-dotenv", "version": "1.1.1"},
-                ],
-                "agents_repository": "arcprize/ARC-AGI-3-Agents",
-                "agents_expected_commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
-                "agents_files": GATE.expected_agents_files(self.verification),
-                "agents_license_file": GATE.expected_agents_license_file(
-                    self.verification
-                ),
-                "reviewed_by_human": True,
+            "public_sources": GATE.expected_public_sources(self.verification),
+            "accepted_runtime_binding": GATE.expected_accepted_runtime_binding(
+                self.verification
+            ),
+            "stage_evidence": {
+                "evidence_manifest_sha256": "c" * 64,
+                "logs_sha256": "d" * 64,
             },
+            "kaggle_runtime": GATE.expected_kaggle_runtime(self.verification),
             "recorded_at": (self.NOW - timedelta(minutes=3)).isoformat(),
             "claim_ceiling": "Human-recorded private stage only; local attestation is not a signature.",
         }
@@ -241,6 +259,24 @@ class HumanGateTests(unittest.TestCase):
         )
         return grant, receipt_bytes, validated
 
+    def assert_competition_receipt_rejected(
+        self,
+        receipt: dict,
+        pattern: str,
+    ) -> None:
+        receipt_bytes = self.encoded(receipt)
+        receipt_sha = hashlib.sha256(receipt_bytes).hexdigest()
+        grant = self.competition_grant(receipt_sha)
+        with self.assertRaisesRegex(GATE.GateError, pattern):
+            GATE.validate_competition(
+                grant,
+                self.verification,
+                receipt,
+                receipt_sha,
+                ".hearthline/receipts/stage.json",
+                self.NOW,
+            )
+
     def test_phase_a_exact_snapshot_contract_passes(self) -> None:
         result = GATE.validate_stage(self.stage_grant(), self.verification, self.NOW)
         self.assertEqual(result.phase, "KAGGLE_STAGE")
@@ -259,6 +295,17 @@ class HumanGateTests(unittest.TestCase):
         verification["kaggle_stage_ready"] = False
         with self.assertRaisesRegex(GATE.GateError, "not ready for Kaggle staging"):
             GATE.validate_stage(self.stage_grant(), verification, self.NOW)
+
+    def test_phase_a_rejects_missing_or_extra_v4_verified_inputs(self) -> None:
+        missing = copy.deepcopy(self.verification)
+        del missing["verified_inputs"]["kaggle_runtime_logs_sha256"]
+        with self.assertRaisesRegex(GATE.GateError, "verified successor inputs fields"):
+            GATE.validate_stage(self.stage_grant(), missing, self.NOW)
+
+        extra = copy.deepcopy(self.verification)
+        extra["verified_inputs"]["unreviewed_extension"] = True
+        with self.assertRaisesRegex(GATE.GateError, "verified successor inputs fields"):
+            GATE.validate_stage(self.stage_grant(), extra, self.NOW)
 
     def test_phase_a_rejects_extra_wrong_account_and_boolean_rule(self) -> None:
         grant = self.stage_grant()
@@ -540,57 +587,245 @@ class HumanGateTests(unittest.TestCase):
             with self.assertRaisesRegex(GATE.GateError, "Gate A consumption receipt hash"):
                 GATE.consume(validated, self.encoded(grant))
 
-    def test_gate_b_runtime_versions_are_exact(self) -> None:
-        receipt = self.stage_receipt()
-        receipt_bytes = self.encoded(receipt)
-        grant = self.competition_grant(hashlib.sha256(receipt_bytes).hexdigest())
-        receipt["runtime_inventory"]["distributions"][0]["version"] = "99.0"
-        with self.assertRaisesRegex(GATE.GateError, "runtime version mismatch: arc-agi"):
-            GATE.validate_competition(
-                grant,
-                self.verification,
-                receipt,
-                hashlib.sha256(receipt_bytes).hexdigest(),
-                ".hearthline/receipts/stage.json",
-                self.NOW,
-            )
+    def test_gate_b_runtime_distribution_inventory_is_exact_and_ordered(self) -> None:
+        baseline = self.stage_receipt()
+        version_drift = copy.deepcopy(baseline)
+        arc_agi = next(
+            row
+            for row in version_drift["kaggle_runtime"]["distributions"]
+            if row["name"] == "arc-agi"
+        )
+        arc_agi["version"] = "0.9.9"
+        order_drift = copy.deepcopy(baseline)
+        distributions = order_drift["kaggle_runtime"]["distributions"]
+        distributions[0], distributions[1] = distributions[1], distributions[0]
+        count_drift = copy.deepcopy(baseline)
+        count_drift["kaggle_runtime"]["distributions"].pop()
+        for label, receipt in (
+            ("version", version_drift),
+            ("order", order_drift),
+            ("count", count_drift),
+        ):
+            with self.subTest(label=label):
+                self.assert_competition_receipt_rejected(
+                    receipt,
+                    "distribution inventory or order differs",
+                )
 
-    def test_gate_b_rejects_noncanonical_distribution_aliases(self) -> None:
+    def test_gate_b_runtime_python_is_exact(self) -> None:
         receipt = self.stage_receipt()
-        receipt["runtime_inventory"]["distributions"].extend(
-            [
-                {"name": "pkg.name", "version": "1"},
-                {"name": "pkg-name", "version": "2"},
+        receipt["kaggle_runtime"]["python_version"] = "3.12.14"
+        self.assert_competition_receipt_rejected(
+            receipt,
+            "Python version differs",
+        )
+
+    def test_gate_b_runtime_files_and_license_are_exact(self) -> None:
+        baseline = self.stage_receipt()
+        file_drift = copy.deepcopy(baseline)
+        file_drift["kaggle_runtime"]["agents"]["files"]["agents/agent.py"] = "0" * 64
+        license_drift = copy.deepcopy(baseline)
+        license_drift["kaggle_runtime"]["agents"]["license_file"]["LICENSE"] = "0" * 64
+        for label, receipt, pattern in (
+            ("file", file_drift, "Agents files differ"),
+            ("license", license_drift, "Agents license differs"),
+        ):
+            with self.subTest(label=label):
+                self.assert_competition_receipt_rejected(receipt, pattern)
+
+    def test_gate_b_public_and_runtime_agents_cannot_be_conflated(self) -> None:
+        baseline = self.stage_receipt()
+        public_replaced_by_runtime = copy.deepcopy(baseline)
+        public_replaced_by_runtime["public_sources"]["agents"]["files"] = dict(
+            baseline["kaggle_runtime"]["agents"]["files"]
+        )
+        self.assert_competition_receipt_rejected(
+            public_replaced_by_runtime,
+            "public source identities differ",
+        )
+
+        runtime_replaced_by_public = copy.deepcopy(baseline)
+        runtime_replaced_by_public["kaggle_runtime"]["agents"]["files"] = dict(
+            baseline["public_sources"]["agents"]["files"]
+        )
+        self.assert_competition_receipt_rejected(
+            runtime_replaced_by_public,
+            "runtime Agents files differ",
+        )
+
+    def test_gate_b_requires_runtime_human_review_and_accepted_binding(self) -> None:
+        baseline = self.stage_receipt()
+        missing_review = copy.deepcopy(baseline)
+        missing_review["kaggle_runtime"]["reviewed_by_human"] = False
+        self.assert_competition_receipt_rejected(
+            missing_review,
+            "runtime inventory human review required",
+        )
+
+        inventory_hash_drift = copy.deepcopy(baseline)
+        inventory_hash_drift["accepted_runtime_binding"]["inventory_sha256"] = "0" * 64
+        self.assert_competition_receipt_rejected(
+            inventory_hash_drift,
+            "accepted runtime binding differs",
+        )
+
+        review_hash_drift = copy.deepcopy(baseline)
+        review_hash_drift["accepted_runtime_binding"]["human_review_receipt_sha256"] = "0" * 64
+        self.assert_competition_receipt_rejected(
+            review_hash_drift,
+            "accepted runtime binding differs",
+        )
+
+        for field in (
+            "baseline_evidence_manifest_sha256",
+            "baseline_logs_sha256",
+        ):
+            with self.subTest(stage_receipt_field=field):
+                evidence_hash_drift = copy.deepcopy(baseline)
+                evidence_hash_drift["accepted_runtime_binding"][field] = "0" * 64
+                self.assert_competition_receipt_rejected(
+                    evidence_hash_drift,
+                    "accepted runtime binding differs",
+                )
+
+    def test_gate_b_requires_distinct_well_formed_new_run_stage_evidence(self) -> None:
+        baseline = self.stage_receipt()
+        missing = copy.deepcopy(baseline)
+        del missing["stage_evidence"]["logs_sha256"]
+        extra = copy.deepcopy(baseline)
+        extra["stage_evidence"]["unreviewed_field"] = "0" * 64
+        malformed_manifest = copy.deepcopy(baseline)
+        malformed_manifest["stage_evidence"]["evidence_manifest_sha256"] = (
+            "not-a-hash"
+        )
+        malformed_logs = copy.deepcopy(baseline)
+        malformed_logs["stage_evidence"]["logs_sha256"] = "not-a-hash"
+        reused_baseline_manifest = copy.deepcopy(baseline)
+        reused_baseline_manifest["stage_evidence"]["evidence_manifest_sha256"] = (
+            baseline["accepted_runtime_binding"][
+                "baseline_evidence_manifest_sha256"
             ]
         )
-        receipt_bytes = self.encoded(receipt)
-        receipt_sha = hashlib.sha256(receipt_bytes).hexdigest()
-        grant = self.competition_grant(receipt_sha)
-        with self.assertRaisesRegex(GATE.GateError, "PEP 503 canonical distribution name"):
-            GATE.validate_competition(
-                grant,
-                self.verification,
-                receipt,
-                receipt_sha,
-                ".hearthline/receipts/stage.json",
-                self.NOW,
-            )
+        for label, receipt, pattern in (
+            ("missing", missing, "new-run stage evidence fields"),
+            ("extra", extra, "new-run stage evidence fields"),
+            ("manifest format", malformed_manifest, "evidence manifest SHA-256"),
+            ("logs format", malformed_logs, "logs SHA-256"),
+            (
+                "baseline manifest reuse",
+                reused_baseline_manifest,
+                "must differ from the accepted baseline manifest",
+            ),
+        ):
+            with self.subTest(label=label):
+                self.assert_competition_receipt_rejected(receipt, pattern)
 
-    def test_gate_b_agents_license_is_exact(self) -> None:
-        receipt = self.stage_receipt()
-        receipt["runtime_inventory"]["agents_license_file"]["LICENSE"] = "0" * 64
-        receipt_bytes = self.encoded(receipt)
+        same_logs_are_allowed = copy.deepcopy(baseline)
+        same_logs_are_allowed["stage_evidence"]["logs_sha256"] = baseline[
+            "accepted_runtime_binding"
+        ]["baseline_logs_sha256"]
+        receipt_bytes = self.encoded(same_logs_are_allowed)
         receipt_sha = hashlib.sha256(receipt_bytes).hexdigest()
         grant = self.competition_grant(receipt_sha)
-        with self.assertRaisesRegex(GATE.GateError, "Agents license differs"):
-            GATE.validate_competition(
-                grant,
-                self.verification,
-                receipt,
-                receipt_sha,
-                ".hearthline/receipts/stage.json",
-                self.NOW,
-            )
+        validated = GATE.validate_competition(
+            grant,
+            self.verification,
+            same_logs_are_allowed,
+            receipt_sha,
+            ".hearthline/receipts/stage.json",
+            self.NOW,
+        )
+        self.assertEqual(validated.phase, "COMPETITION_IGNITION")
+
+    def test_verified_runtime_inventory_is_canonical_unique_complete_and_sorted(self) -> None:
+        baseline = copy.deepcopy(self.verification)
+        malformed = copy.deepcopy(baseline)
+        malformed["verified_inputs"]["kaggle_runtime_distributions"][0]["name"] = "Bad.Name"
+        duplicate = copy.deepcopy(baseline)
+        duplicate["verified_inputs"]["kaggle_runtime_distributions"][1]["name"] = (
+            duplicate["verified_inputs"]["kaggle_runtime_distributions"][0]["name"]
+        )
+        incomplete = copy.deepcopy(baseline)
+        incomplete["verified_inputs"]["kaggle_runtime_distributions"].pop()
+        unsorted = copy.deepcopy(baseline)
+        rows = unsorted["verified_inputs"]["kaggle_runtime_distributions"]
+        rows[0], rows[1] = rows[1], rows[0]
+        direct_version_drift = copy.deepcopy(baseline)
+        dotenv = next(
+            row
+            for row in direct_version_drift["verified_inputs"]["kaggle_runtime_distributions"]
+            if row["name"] == "python-dotenv"
+        )
+        dotenv["version"] = "1.2.1"
+        for label, verification, pattern in (
+            ("canonical", malformed, "canonical distribution name"),
+            ("unique", duplicate, "distribution names must be unique"),
+            ("complete", incomplete, "exactly 875 distributions"),
+            ("sorted", unsorted, "deterministic name order"),
+            ("direct version", direct_version_drift, "direct versions"),
+        ):
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(GATE.GateError, pattern):
+                    GATE.verified_inputs_v4(verification)
+
+    def test_verified_runtime_machine_evidence_hashes_are_exact(self) -> None:
+        for key, pattern in (
+            (
+                "kaggle_runtime_evidence_manifest_sha256",
+                "evidence manifest hash differs",
+            ),
+            ("kaggle_runtime_logs_sha256", "logs hash differs"),
+        ):
+            with self.subTest(key=key):
+                verification = copy.deepcopy(self.verification)
+                verification["verified_inputs"][key] = "0" * 64
+                with self.assertRaisesRegex(GATE.GateError, pattern):
+                    GATE.verified_inputs_v4(verification)
+
+        malformed = copy.deepcopy(self.verification)
+        malformed["verified_inputs"]["kaggle_runtime_logs_sha256"] = "not-a-hash"
+        with self.assertRaisesRegex(GATE.GateError, "logs SHA-256"):
+            GATE.verified_inputs_v4(malformed)
+
+    def test_verified_runtime_inventory_and_review_receipt_hashes_are_exact(self) -> None:
+        for key, pattern in (
+            ("runtime_inventory_sha256", "runtime inventory hash differs"),
+            (
+                "runtime_review_receipt_sha256",
+                "runtime review receipt hash differs",
+            ),
+        ):
+            with self.subTest(key=key):
+                verification = copy.deepcopy(self.verification)
+                verification["verified_inputs"][key] = "0" * 64
+                with self.assertRaisesRegex(GATE.GateError, pattern):
+                    GATE.verified_inputs_v4(verification)
+
+    def test_verified_runtime_inventory_is_reconstructed_before_acceptance(self) -> None:
+        verification = copy.deepcopy(self.verification)
+        transitive = next(
+            row
+            for row in verification["verified_inputs"]["kaggle_runtime_distributions"]
+            if row["name"] == "a2a-sdk"
+        )
+        transitive["version"] = "0.3.27"
+        with self.assertRaisesRegex(GATE.GateError, "inventory content hash differs"):
+            GATE.verified_inputs_v4(verification)
+
+    def test_candidate_kernel_and_accelerator_match_reviewed_runtime(self) -> None:
+        different_kernel = copy.deepcopy(self.verification)
+        candidate = different_kernel["verified_snapshot"]["candidate_binding"]
+        candidate["account_slug"] = "other-user"
+        candidate["kernel_id"] = "other-user/hearthline-arc3-readiness"
+        with self.assertRaisesRegex(GATE.GateError, "candidate kernel differs"):
+            GATE.verified_inputs_v4(different_kernel)
+
+        different_accelerator = copy.deepcopy(self.verification)
+        different_accelerator["verified_snapshot"]["candidate_binding"][
+            "accelerator"
+        ] = "t4"
+        with self.assertRaisesRegex(GATE.GateError, "candidate accelerator differs"):
+            GATE.verified_inputs_v4(different_accelerator)
 
     def test_gate_b_ledger_day_and_parent_are_replayed_fail_closed(self) -> None:
         grant, _, validated = self.valid_competition()
@@ -841,6 +1076,107 @@ class HumanGateTests(unittest.TestCase):
         for conditional in schema["allOf"]:
             acknowledgement = conditional["then"]["properties"]["acknowledgements"]
             self.assertFalse(acknowledgement["additionalProperties"])
+
+    def test_stage_result_v4_schema_is_closed_and_keeps_old_files_unchanged(self) -> None:
+        old_template = ROOT / "launch/gates/stage-result.v2.template.json"
+        old_schema = ROOT / "launch/schemas/v2/stage-result.schema.json"
+        self.assertEqual(
+            hashlib.sha256(old_template.read_bytes()).hexdigest(),
+            "262cb026ed8bc12e80b05bcd7d4eef0c4b166ed8919cd65766176d6ad09fa206",
+        )
+        self.assertEqual(
+            hashlib.sha256(old_schema.read_bytes()).hexdigest(),
+            "e2e876518f834567a1bf6518d3ce2fd99cc568b178bd02fc753d8243036b639a",
+        )
+
+        schema = json.loads(
+            (ROOT / "launch/schemas/v4/stage-result.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        template = json.loads(
+            (ROOT / "launch/gates/stage-result.v4.template.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(
+            schema["$id"],
+            "https://github.com/Grativy6/hearthline-plays/launch/schemas/v4/stage-result.schema.json",
+        )
+        self.assertEqual(
+            schema["properties"]["schema"]["const"],
+            "hearthline.arc3.kaggle-stage-result.v4",
+        )
+        self.assertFalse(schema["additionalProperties"])
+        self.assertEqual(set(schema["required"]), set(template))
+        for key in (
+            "candidate", "submission", "gate_a", "public_sources",
+            "accepted_runtime_binding", "stage_evidence", "kaggle_runtime",
+        ):
+            self.assertFalse(schema["properties"][key]["additionalProperties"])
+        accepted_runtime_binding = schema["properties"][
+            "accepted_runtime_binding"
+        ]
+        self.assertEqual(
+            set(accepted_runtime_binding["required"]),
+            {
+                "status", "inventory_sha256", "human_review_receipt_sha256",
+                "baseline_evidence_manifest_sha256", "baseline_logs_sha256",
+            },
+        )
+        stage_evidence = schema["properties"]["stage_evidence"]
+        self.assertEqual(
+            set(stage_evidence["required"]),
+            {"evidence_manifest_sha256", "logs_sha256"},
+        )
+        for key in stage_evidence["required"]:
+            self.assertEqual(
+                stage_evidence["properties"][key],
+                {"$ref": "#/$defs/sha256"},
+            )
+        distributions = schema["properties"]["kaggle_runtime"]["properties"]["distributions"]
+        self.assertEqual(distributions["minItems"], 875)
+        self.assertEqual(distributions["maxItems"], 875)
+        self.assertIn("exact content and order", distributions["$comment"])
+
+        def assert_every_object_schema_is_closed(node, path: str = "$") -> None:
+            if isinstance(node, dict):
+                if node.get("type") == "object":
+                    self.assertIs(
+                        node.get("additionalProperties"),
+                        False,
+                        f"open object schema at {path}",
+                    )
+                for key, value in node.items():
+                    assert_every_object_schema_is_closed(value, f"{path}/{key}")
+            elif isinstance(node, list):
+                for index, value in enumerate(node):
+                    assert_every_object_schema_is_closed(value, f"{path}/{index}")
+
+        assert_every_object_schema_is_closed(schema)
+        public_agent = schema["$defs"]["agentsPublicFiles"]["properties"]["agents/agent.py"]["const"]
+        runtime_agent = schema["$defs"]["agentsRuntimeFiles"]["properties"]["agents/agent.py"]["const"]
+        self.assertEqual(public_agent, GATE.PUBLIC_AGENTS_FILES["agents/agent.py"])
+        self.assertEqual(runtime_agent, GATE.KAGGLE_RUNTIME_FILES["agents/agent.py"])
+        self.assertNotEqual(public_agent, runtime_agent)
+
+    def test_populated_stage_result_v4_validates_against_schema(self) -> None:
+        try:
+            from jsonschema import Draft202012Validator, FormatChecker
+        except ImportError:
+            self.skipTest("jsonschema is unavailable on this test host")
+        schema = json.loads(
+            (ROOT / "launch/schemas/v4/stage-result.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        receipt = self.stage_receipt()
+        Draft202012Validator.check_schema(schema)
+        Draft202012Validator(
+            schema,
+            format_checker=FormatChecker(),
+        ).validate(receipt)
+        self.assertEqual(len(receipt["kaggle_runtime"]["distributions"]), 875)
 
 
 if __name__ == "__main__":

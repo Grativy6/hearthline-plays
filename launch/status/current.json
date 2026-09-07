@@ -1,15 +1,41 @@
 {
-  "schema": "hearthline-plays.arc3-launch-status.v2",
-  "updated_at": "2026-09-04T10:30:00Z",
-  "phase": "OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED",
-  "readiness": "NOT_KAGGLE_AUTHORIZED",
+  "schema": "hearthline-plays.arc3-launch-status.v3",
+  "updated_at": "2026-09-07T00:43:46Z",
+  "phase": "FROZEN_POST_STAGE_SUCCESSOR_LOCAL_REPAIR_ONLY",
+  "readiness": "NO_EXTERNAL_EFFECT_AUTHORITY",
   "predecessor": {
     "path": "launch/status.json",
     "sha256": "21e907e181d24fda6e392a2d6ed5209f033d2b2383396d3c5edb8944e6963adb",
     "preserved": true
   },
+  "source_lock": {
+    "path": "launch/source-lock.v4.json",
+    "sha256": "bc14dfc3e849518177c48066a3df5782f66bc00525e4ef6b7a9dde60ddebcdbd",
+    "predecessor_path": "launch/source-lock.v3.json",
+    "predecessor_sha256": "900965eb497a0260e165976c80793c97c605e15f38ec89b55afef593a5c0478d",
+    "runtime_closure_status": "FROZEN_POST_STAGE_SUCCESSOR"
+  },
   "last_reconciliation": "launch/receipts/20260904T070000Z-orientation-reconciliation.v2.json",
-  "world_model": "practice/ls20/world-model.v2.json",
+  "reviewed_stage_evidence": {
+    "scope": "PREDECESSOR_VERSION_4_MACHINE_EVIDENCE_FOR_LOCAL_SUCCESSOR_REPAIR_ONLY",
+    "kernel_slug": "grativy6/hearthline-arc3-readiness",
+    "kernel_version": 4,
+    "status": "COMPLETE",
+    "visibility": "private",
+    "internet_enabled": false,
+    "accelerator": "cpu",
+    "candidate_snapshot_sha256": "823cd5c7a99b16141959a09f011e361b2c03615ea37e72a65880a9eb5e8db4d0",
+    "output_path": "submission.parquet",
+    "output_sha256": "71bfd543030e339d87bd9ff744d466218398a1259650b2c255626d27049c88bb",
+    "runtime_inventory_path": "launch/runtime/kaggle-stage-v4-runtime-inventory.json",
+    "runtime_inventory_sha256": "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce",
+    "runtime_distribution_count": 875,
+    "machine_evidence_manifest_sha256": "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+    "machine_logs_sha256": "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53",
+    "human_review_receipt_path": "launch/receipts/20260907T002817Z-stage-v4-runtime-review.json",
+    "human_review_receipt_sha256": "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b",
+    "successor_snapshot_verified_by_this_evidence": false
+  },
   "public_orientation": {
     "workflow_runs": 5,
     "public_arc_contact_count": 5,
@@ -23,11 +49,13 @@
     "new_contact_authorized": false
   },
   "competition": {
-    "kaggle_contact_count": 0,
-    "kaggle_stage_authorized": false,
+    "bounded_observation": "Private kernel version 4 COMPLETE machine evidence, output, logs, and runtime metadata were previously retrieved and reviewed; no claim is made about unobserved API calls or platform state after that evidence cut.",
+    "current_kaggle_contact_authorized": false,
+    "successor_kaggle_stage_authorized": false,
     "competition_ignition_authorized": false,
+    "competition_submission_observed": false,
     "private_holdout_access": false,
-    "paid_provider_calls": 0,
+    "paid_provider_calls_authorized": false,
     "daily_submission_limit_safe_assumption": 1,
     "limit_must_be_rechecked_at_human_gate": true
   },
@@ -36,19 +64,31 @@
     "agent_source": "agent/my_agent.py",
     "context_profile": "A0_MINIMAL",
     "official_starter_contract": "PASS_EEB153_ORDERED_STRUCTURAL_PROJECTION",
-    "offline_verification": "PASS_STRUCTURE_AND_HASH_AGREEMENT_ONLY",
-    "notebook_built_offline": true,
+    "runtime_closure": "FROZEN_POST_STAGE_SUCCESSOR",
     "generated_artifacts_tracked": false,
     "clean_commit_manifest_required_at_handoff": true,
+    "post_commit_successor_verification": "IGNORED_LOCAL_RECEIPT_REQUIRED_HASH_NOT_EMBEDDED_IN_TRACKED_STATUS",
+    "fresh_gate_a_grant_required": true,
+    "fresh_private_restage_required_before_gate_b": true,
     "human_gate_a": "CLOSED",
     "human_gate_b": "CLOSED",
-    "claim_ceiling": "No private runtime, Kaggle run, competition score, or generalization claim."
+    "claim_ceiling": "The reviewed version-4 evidence closes the observed predecessor runtime only. It does not verify, authorize, or stage the repaired successor snapshot and does not establish a competition score or generalization."
+  },
+  "authority": {
+    "expired_gate_a_grants": "IMMUTABLE_NOT_REUSABLE",
+    "current_gate_a_grant": "ABSENT",
+    "current_gate_b_grant": "ABSENT",
+    "credential_use_authorized": false,
+    "kaggle_contact_authorized": false,
+    "remote_git_push_authorized_by_runtime_review": false,
+    "gate_b_authorized": false,
+    "competition_submission_authorized": false
   },
   "open_residuals": [
-    "A human must rebuild with the intended Kaggle account slug from the exact final clean commit and review its ignored manifest and verification receipt.",
-    "The private Kaggle wheel inventory, bundled Agents runtime identity, gateway, and scorer remain unobserved; a staged-runtime receipt must reconcile them to the source lock.",
-    "No Kaggle staging grant or competition ignition grant exists; both gates are closed.",
-    "Competition rules must be rechecked by a human immediately before any staging grant and again before competition ignition."
+    "Any external handoff must use the ignored local verification receipt generated from this exact clean successor commit; the snapshot hash is not embedded in this self-referential tracked projection.",
+    "A fresh prospective Gate-A grant and one exact private restage of the newly verified successor snapshot are required before any Stage-A successor evidence can exist.",
+    "Gate B remains closed until the successor stage completes, its exact v4 result is reviewed and recorded, and a separate current human Gate-B grant is issued.",
+    "Competition rules must be rechecked by a human immediately before each separately authorized external gate."
   ],
-  "reopening": "Append a new receipt and replace only this mutable current projection. Never edit the predecessor status or sealed receipts."
+  "reopening": "Append a new receipt and replace only this mutable current projection. Never edit predecessor status, source locks, expired grants, or sealed receipts."
 }

@@ -1,0 +1,99 @@
+{
+  "schema": "hearthline.arc3.kaggle-stage-result.v4",
+  "status": "REPLACE_WITH_COMPLETE",
+  "candidate": {
+    "commit": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "tree": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "account_slug": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "kernel_id": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "accelerator": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "agent_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "builder_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "notebook_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "kernel_metadata_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "source_lock_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "candidate_manifest_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT",
+    "verified_snapshot_sha256": "REPLACE_FROM_CONSUMED_PHASE_A_GRANT"
+  },
+  "kernel_id": "REPLACE_WITH_KAGGLE_ACCOUNT/hearthline-arc3-readiness",
+  "kernel_run_id": "REPLACE_WITH_KAGGLE_RUN_ID",
+  "kernel_visibility": "PRIVATE",
+  "internet_enabled": false,
+  "output_reviewed": false,
+  "submission": {
+    "name": "submission.parquet",
+    "sha256": "REPLACE_WITH_OUTPUT_SHA256"
+  },
+  "recorded_by_human": false,
+  "credential_material_recorded": false,
+  "external_effect_performed_by_gate_tool": false,
+  "gate_a": {
+    "grant_id": "REPLACE_WITH_CONSUMED_GATE_A_GRANT_ID",
+    "nonce": "REPLACE_WITH_CONSUMED_GATE_A_NONCE",
+    "grant_sha256": "REPLACE_WITH_CONSUMED_GATE_A_GRANT_SHA256",
+    "consumption_receipt_path": ".hearthline/receipts/gate-consumption/REPLACE_WITH_GRANT_ID_SHA256.json",
+    "consumption_receipt_sha256": "REPLACE_WITH_GATE_A_CONSUMPTION_RECEIPT_SHA256",
+    "account_slug": "REPLACE_WITH_CONSUMED_GATE_A_ACCOUNT",
+    "kernel_id": "REPLACE_WITH_CONSUMED_GATE_A_KERNEL_ID"
+  },
+  "public_sources": {
+    "arc_agi": {
+      "repository": "arcprize/ARC-AGI",
+      "commit": "f12822c4d550121c35a275008d964afbbed47d2f",
+      "version": "0.9.9"
+    },
+    "agents": {
+      "repository": "arcprize/ARC-AGI-3-Agents",
+      "commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+      "tree": "6878fdfdd0156059323b541fc229b6329ad4fd28",
+      "files": {
+        "agents/agent.py": "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073",
+        "agents/recorder.py": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8",
+        "agents/swarm.py": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39",
+        "agents/tracing.py": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f",
+        "main.py": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"
+      },
+      "license_file": {
+        "LICENSE": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
+      }
+    }
+  },
+  "accepted_runtime_binding": {
+    "status": "FROZEN_POST_STAGE_SUCCESSOR",
+    "inventory_sha256": "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce",
+    "human_review_receipt_sha256": "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b",
+    "baseline_evidence_manifest_sha256": "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+    "baseline_logs_sha256": "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53"
+  },
+  "stage_evidence": {
+    "evidence_manifest_sha256": "REPLACE_WITH_NEW_RUN_EVIDENCE_MANIFEST_SHA256",
+    "logs_sha256": "REPLACE_WITH_NEW_RUN_LOGS_SHA256"
+  },
+  "kaggle_runtime": {
+    "captured_from": "HEARTHLINE_STAGE_INVENTORY",
+    "complete": false,
+    "python_version": "3.12.13",
+    "distributions": [],
+    "agents": {
+      "provenance": {
+        "kind": "KAGGLE_PLATFORM_COMPETITION_INPUT",
+        "repository": "arcprize/ARC-AGI-3-Agents",
+        "commit": "135f20aaf44f13341ebc425666bf03b5cac58d3c",
+        "tree": "d7fbafe6e2ed191189db89e5b571fd26da3dc375"
+      },
+      "files": {
+        "agents/agent.py": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+        "agents/recorder.py": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8",
+        "agents/swarm.py": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39",
+        "agents/tracing.py": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f",
+        "main.py": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"
+      },
+      "license_file": {
+        "LICENSE": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
+      }
+    },
+    "reviewed_by_human": false
+  },
+  "recorded_at": "REPLACE_WITH_UTC_TIMESTAMP",
+  "claim_ceiling": "A reviewed private kernel stage result is not a competition rerun or score."
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "hearthline-plays.arc3-stage-runtime-review-receipt.v1",
+  "recorded_at": "2026-09-07T00:28:17Z",
+  "status": "HUMAN_REVIEW_ACCEPTED_FOR_LOCAL_SUCCESSOR_REPAIR",
+  "review": {
+    "reviewed_by": "Christopher D. Pang",
+    "reviewed_at": "2026-09-07T00:28:17Z",
+    "attestation": "I reviewed the version-4 output and the full 875-entry runtime inventory identified by their hashes in the review packet. I accept the exact observed Kaggle runtime as a separate successor binding while retaining the public ARC-AGI 0.9.9 source pin. Proceed with the local repair only; this does not authorize a grant, Kaggle push, Gate B, or competition submission.",
+    "attestation_sha256": "d721087df9ad28f26da262cddb066a7273b42f61d7fd96f7bb641c0840393dc2"
+  },
+  "binding": {
+    "candidate_evidence": {
+      "commit": "543ffbd2f90e3593dad577b3e088f9baacbef002",
+      "tree": "c7c2f2660524cc38143dfa3f16edf03d2d8bc011",
+      "snapshot_sha256": "823cd5c7a99b16141959a09f011e361b2c03615ea37e72a65880a9eb5e8db4d0"
+    },
+    "stage": {
+      "kernel_slug": "grativy6/hearthline-arc3-readiness",
+      "kernel_version": 4,
+      "status": "COMPLETE",
+      "visibility": "private",
+      "internet_enabled": false,
+      "accelerator": "cpu",
+      "machine_evidence_recorded_at": "2026-09-06T23:53:42Z"
+    },
+    "output": {
+      "path": "submission.parquet",
+      "bytes": 2648,
+      "sha256": "71bfd543030e339d87bd9ff744d466218398a1259650b2c255626d27049c88bb",
+      "parquet_magic_valid": true,
+      "output_inventory_count": 1
+    },
+    "runtime_inventory": {
+      "path": "launch/runtime/kaggle-stage-v4-runtime-inventory.json",
+      "sha256": "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce",
+      "python_version": "3.12.13",
+      "distribution_count": 875,
+      "canonical_names_unique": true,
+      "canonical_names_sorted": true,
+      "required_versions": {
+        "arc-agi": "0.9.8",
+        "arcengine": "0.9.3",
+        "python-dotenv": "1.2.2"
+      }
+    },
+    "runtime_file_bindings": {
+      "agents/agent.py": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+      "agents/recorder.py": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8",
+      "agents/swarm.py": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39",
+      "agents/tracing.py": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f",
+      "main.py": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"
+    },
+    "runtime_license_binding": {
+      "path": "LICENSE",
+      "git_blob": "d8e1cd42ac40338c6c76a8a6ac18eea0eaf95fbe",
+      "sha256": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04",
+      "spdx": "MIT",
+      "copyright_notice": "Copyright (c) 2025 ARC Prize"
+    },
+    "machine_evidence": {
+      "evidence_manifest_sha256": "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+      "logs_sha256": "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53",
+      "private_artifact_paths_committed": false
+    },
+    "public_source_pin": {
+      "repository": "arcprize/ARC-AGI-3-Agents",
+      "commit": "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+      "tree": "6878fdfdd0156059323b541fc229b6329ad4fd28",
+      "agents_agent_git_blob": "50e3a03652226d2775779bfba90bc745256a44c5",
+      "agents_agent_sha256": "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073",
+      "arc_agi_source_version": "0.9.9",
+      "retained_unchanged": true
+    },
+    "observed_runtime_provenance": {
+      "kind": "KAGGLE_PLATFORM_COMPETITION_INPUT",
+      "repository": "arcprize/ARC-AGI-3-Agents",
+      "official_historical_commit": "135f20aaf44f13341ebc425666bf03b5cac58d3c",
+      "official_historical_tree": "d7fbafe6e2ed191189db89e5b571fd26da3dc375",
+      "inspected_file_bindings": {
+        "agents/agent.py": {"git_blob": "18758b9532ee414cdf2d0b287aeeca28e70c3112", "sha256": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087"},
+        "agents/recorder.py": {"git_blob": "0d06dc6c346f24311d4be995397555c8e3ab94d0", "sha256": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8"},
+        "agents/swarm.py": {"git_blob": "bb3a376220f636099dd910653db3e1918935f30f", "sha256": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39"},
+        "agents/tracing.py": {"git_blob": "60d13f489ad1a3fa04dc9ff7c8ee6f0f35a175f7", "sha256": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f"},
+        "main.py": {"git_blob": "4a071bc3a4ce1dab94f754a617e5c1e70d9f907b", "sha256": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b"}
+      },
+      "license_file_binding": {
+        "path": "LICENSE",
+        "git_blob": "d8e1cd42ac40338c6c76a8a6ac18eea0eaf95fbe",
+        "sha256": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04"
+      },
+      "same_agents_agent_blob_also_occurs_at_parallel_commit": "ca950a814c1a16b90e08ac9bc6e2f7720871980d",
+      "claim_ceiling": "The six admitted runtime paths match this official historical tree. No claim is made that unobserved Kaggle platform files match the entire tree, and the observed runtime is not reattributed to the separate public source pin."
+    }
+  },
+  "authority_boundary": {
+    "local_repair_authorized": true,
+    "grant_creation_or_consumption_authorized": false,
+    "local_git_commit_as_repair_step_authorized": true,
+    "remote_git_push_authorized": false,
+    "kaggle_contact_or_stage_authorized": false,
+    "gate_b_authorized": false,
+    "competition_submission_authorized": false,
+    "expired_grant_may_be_edited_or_reused": false
+  }
+}

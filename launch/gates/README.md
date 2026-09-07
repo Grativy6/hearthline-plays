@@ -11,14 +11,14 @@ not human grants, and it does not wait around, weaken, replace, or renew the
 fail-closed ledger lock below. Concurrent gate consumption therefore continues
 to fail closed exactly as documented and tested.
 
-Gate A is prepared for a private, non-competition calibration stage. Gate B is
-deliberately unavailable in this commit with status
-`RUNTIME_CLOSURE_UNFROZEN`. The private stage must first record the complete
-resolved distribution inventory and sealed framework-file identities. A
-reviewed post-Stage-A successor candidate must bind the imported dependency
-closure, regenerate and restage, and declare
-`FROZEN_POST_STAGE_SUCCESSOR` before Gate B can validate. This repository does
-not guess private Kaggle package versions.
+The reviewed private kernel version-4 evidence now closes one exact predecessor
+runtime as `FROZEN_POST_STAGE_SUCCESSOR` in `launch/source-lock.v4.json`. That
+stage predates the current repair: it does not verify or authorize a successor
+snapshot. Both gates are closed. Before Gate B can validate, an exact clean
+successor commit must be rebuilt and recorded as a verified snapshot,
+receive a fresh Gate-A grant, complete one exact private restage, and record a
+human-reviewed v4 stage result. The old grant is expired, immutable, and never
+reusable; the runtime review receipt grants local repair authority only.
 
 The live Kaggle competition record inspected on 2026-09-04 reports **one
 submission per day** and **two final submissions**. The pinned starter's
@@ -64,9 +64,11 @@ The package follows the structural contract derived from
 `arcprize/ARC-AGI-3-Kaggle-Starter` commit
 `eeb1535404f321d280a8f9194bbc1d7aca5f05fc`: Python 3.12,
 `agents.agent.Agent`/`MyAgent`, the competition rerun signal, offline wheel
-source, bundled Agents framework, and `submission.parquet`. This is offline
-compatibility evidence only; the private gateway and resolved platform wheel
-inventory remain unavailable until a human-authorized private stage.
+source, bundled Agents framework, and `submission.parquet`. The prior reviewed
+stage bound Python 3.12.13, all 875 canonical distributions, the admitted
+framework files, and `LICENSE`. A successor stage must reproduce that entire
+locked runtime closure; local compatibility still cannot establish a private
+gateway outcome.
 
 ## Gate A — private kernel staging only
 
@@ -103,32 +105,49 @@ is human-attested rather than independently observed by this repository, so a
 receipt cannot make a late platform action valid.
 
 Gate A does not authorize competition ignition. Record the resulting private
-kernel outcome by filling `stage-result.v2.template.json` (v3 record schema) under ignored
+kernel outcome by filling `stage-result.v4.template.json` (schema
+`hearthline.arc3.kaggle-stage-result.v4`) under ignored
 `.hearthline/receipts/`. Include the exact candidate, kernel/run identity,
 private/offline settings, the canonical Gate A grant hash and chained
 consumption receipt path/hash, the identical account and kernel identity,
 reviewed `submission.parquet` hash, and no credential material. The Phase A
-notebook prints one canonical
-`HEARTHLINE_STAGE_INVENTORY` line: copy its complete Python/distribution list
-and Agents file plus `LICENSE` hashes into the receipt, then reconcile them with
-`launch/source-lock.v3.json`. The resolved inventory must include exactly
-the contest wheelhouse runtime `arc-agi==0.9.8` and `arcengine==0.9.3`; the
-separately pinned public ARC-AGI source remains version 0.9.9, and every transitive distribution is still
-recorded even where this lock does not prescribe its version. A failed,
-incomplete, unreviewed, differently
-hashed, missing-inventory, or source-mismatched run closes Gate B.
+notebook prints one canonical `HEARTHLINE_STAGE_INVENTORY` line: copy its
+complete Python/distribution list and Agents file plus `LICENSE` hashes into the
+receipt, then reconcile them with `launch/source-lock.v4.json`. The result must
+match the locked ordered inventory of exactly 875 unique canonical names,
+including `arc-agi==0.9.8`, `arcengine==0.9.3`, and
+`python-dotenv==1.2.2`, plus every sealed file and license hash. The separately
+pinned public ARC-AGI source remains version 0.9.9. Public and platform runtime
+identities must never be conflated. A failed, incomplete, unreviewed,
+differently hashed, missing-inventory, reordered, or source-mismatched run keeps
+Gate B closed.
 
-The competition-rerun notebook does not rely only on that earlier receipt. It
-contains the verifier-owned exact version and controlling-file hashes from the
-committed source lock, checks them before gateway contact or copying, and
-checks the copied files and versions again before importing/running the
-framework. Any drift aborts the rerun path.
+The successor preserves the effective-distribution semantics that produced the
+reviewed version-4 inventory. Equal canonical metadata aliases collapse. When
+raw metadata exposes more than one version, `importlib.metadata.version` must
+select exactly one of the observed versions; if it is absent or selects
+anything else, validation fails deterministically and reports every observed
+version. The locked 875-row list is therefore the reviewed active runtime, not
+a claim that Kaggle contains no lower-precedence metadata shadows.
+
+In the v4 stage receipt, `accepted_runtime_binding` carries the hashes of the
+reviewed predecessor version-4 baseline. The separate `stage_evidence` object
+must carry the new run's own evidence-manifest and log hashes; its manifest hash
+must differ from the baseline. Baseline hashes must never be copied into the
+new-run evidence fields.
+
+The competition-rerun notebook does not rely only on that later result receipt.
+It contains the verifier-owned complete ordered distribution inventory, exact
+version/file/license bindings, and distinct public-source identities from the
+committed v4 source lock. It checks them before gateway contact or copying and
+again before importing/running the framework. Any drift aborts the rerun path.
 
 ## Gate B — one manual competition ignition (currently blocked)
 
 Do not create or consume this grant from the present commit. The steps below
-describe the successor-only path after the reviewed runtime closure has been
-bound and the candidate has been regenerated and privately restaged.
+describe the successor-only path after an exact clean commit has produced a
+verified snapshot, a fresh Gate-A grant has authorized one exact private
+restage, and the resulting v4 evidence has been reviewed and recorded.
 
 1. Copy `competition-ignition-grant.v2.template.json` (v3 record schema) into the ignored grant
    directory only after Gate A's run is complete and its exact output reviewed.

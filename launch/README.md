@@ -9,18 +9,18 @@
 **Hardened station ancestor:** `e2b2eec1544caeb8a1a07825d56db1d932c9e3f6`
 
 **Original parent station:** `74728f8c4ec9409bd0e6c8064a0b6b356da776f6`
-**Current phase:** `RECONCILED_OFFLINE_CANDIDATE_PREPARATION`
+**Current phase:** `FROZEN_POST_STAGE_SUCCESSOR_LOCAL_REPAIR_ONLY`
 
-**Competition/Kaggle phase:** `NOT_AUTHORIZED_NOT_STARTED`
+**Competition/Kaggle phase:** `HISTORICAL_PRIVATE_STAGE_COMPLETE_CURRENT_EXTERNAL_AUTHORITY_CLOSED`
 
 This is a removable launch layer over the earlier research station. It keeps the founding prompt, exact public-source locks, practice requests, compact world models, Spark/Pair-Static records, retired-run records, and receipts in distinct directories so later cleanup can move or delete one layer without rewriting the others.
 
-This candidate successor explicitly reconciles the canonical launch and hardened station
-siblings, retains the exact Astra embargo commit as an ancestor, and adds only
-the documentary run-entry, publication-anchor, and send-off surfaces; the exact
-model-facing Honesty PCP input; and the narrow guard/workflow updates needed to
-admit and verify that prompt. The executable candidate and source-lock bytes
-remain unchanged from the canonical launch ancestor.
+This candidate successor explicitly reconciles the canonical launch and hardened
+station siblings and retains the exact Astra embargo commit as an ancestor.
+Private kernel version 4 later completed, and its output plus full 875-entry
+runtime inventory were human-reviewed. The current source lock records that
+closed predecessor runtime for local successor repair while preserving every
+earlier source lock and receipt. It grants no present external authority.
 
 ## Fast map
 
@@ -31,8 +31,11 @@ remain unchanged from the canonical launch ancestor.
 | [`launch/RUN_GRANT_2026-09-03.md`](RUN_GRANT_2026-09-03.md) | Expired, spent historical grant with a present-day non-executable banner; the original record is preserved verbatim below it |
 | [`docs/SCIENTIFIC_RUN_ENTRY.md`](../docs/SCIENTIFIC_RUN_ENTRY.md) | Repository-adopted canonical honesty preflight; no external authority |
 | [`launch/source-lock.v2.json`](source-lock.v2.json) | Historical public-orientation source lock |
-| [`launch/source-lock.v3.json`](source-lock.v3.json) | Current official starter/toolkit/Agents/benchmark/Kaggle and bounded-context identities |
-| [`launch/status/current.json`](status/current.json) | Mutable v2 current projection over preserved legacy status |
+| [`launch/source-lock.v3.json`](source-lock.v3.json) | Preserved pre-stage runtime-closure predecessor |
+| [`launch/source-lock.v4.json`](source-lock.v4.json) | Current public-source pins plus separately reviewed `FROZEN_POST_STAGE_SUCCESSOR` Kaggle runtime binding |
+| [`launch/runtime/kaggle-stage-v4-runtime-inventory.json`](runtime/kaggle-stage-v4-runtime-inventory.json) | Sanitized, ordered 875-distribution runtime inventory from the reviewed version-4 evidence |
+| [`launch/receipts/20260907T002817Z-stage-v4-runtime-review.json`](receipts/20260907T002817Z-stage-v4-runtime-review.json) | Human review binding with local-only authority ceiling |
+| [`launch/status/current.json`](status/current.json) | Mutable v3 current projection over preserved legacy status |
 | [`launch/receipts/20260904T070000Z-orientation-reconciliation.v2.json`](receipts/20260904T070000Z-orientation-reconciliation.v2.json) | Five-run reconciled counts and exact source hashes |
 | [`launch/contracts/official-starter-eeb153.contract.json`](contracts/official-starter-eeb153.contract.json) | Ordered structural contract derived from the exact pinned starter |
 | [`agent/my_agent.py`](../agent/my_agent.py) | Offline-default starter-compatible `MyAgent` source; no environment adapter |
@@ -92,12 +95,14 @@ The compact world model keeps these five surfaces separate. Every action has a h
 
 ## Current natural stop
 
-The old public-orientation grant is expired and spent. All environment contact
-is closed. The deterministic candidate source and ignored notebook builder pass
-offline structural verification against the exact pinned public starter
-contract. This does not establish the private runtime, score, or generalization.
-Kaggle staging and competition ignition remain closed and each requires a
-separate one-use human grant under [`gates/README.md`](gates/README.md).
-The dated successor send-off preserves purpose and records the requested
-repository-preparation scope, but is not a standing grant; it does not change
-this natural stop.
+The old public-orientation and Gate-A grants are expired and remain immutable.
+The reviewed version-4 evidence establishes one exact predecessor runtime, not
+execution of the repaired successor, a score, or generalization. Both human
+gates remain closed. The exact successor snapshot is generated from the final
+local commit and recorded only in an ignored local verification receipt; its
+hash is intentionally absent from this self-referential tracked projection.
+Any later private restage requires a fresh Gate-A grant and current rules
+review. Gate B remains unavailable until that exact successor stage completes
+and its v4 result is reviewed under
+[`gates/README.md`](gates/README.md). The dated successor send-off preserves
+purpose but is not a standing grant and does not change this natural stop.

@@ -1,1 +1,6 @@
 tests/fixtures/*.blob -text
+launch/source-lock.v4.json -text
+launch/runtime/kaggle-stage-v4-runtime-inventory.json -text
+launch/receipts/20260907T002817Z-stage-v4-runtime-review.json -text
+launch/gates/stage-result.v4.template.json -text
+launch/schemas/v4/stage-result.schema.json -text

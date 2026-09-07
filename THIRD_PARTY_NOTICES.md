@@ -24,9 +24,14 @@ unrelated work. The frozen structural comparison is recorded in
 
 ## ARC-AGI toolkit, Agents framework, and Kaggle
 
-The source identities inspected for compatibility are frozen in
-[`launch/source-lock.v3.json`](launch/source-lock.v3.json). The candidate does
-not vendor those framework sources. One exact, non-executable copy of pinned
+The current source identities and reviewed runtime closure are frozen in
+[`launch/source-lock.v4.json`](launch/source-lock.v4.json); its byte-preserved
+predecessor remains `launch/source-lock.v3.json`. The public source pin retains
+`arcprize/ARC-AGI-3-Agents` commit
+`4743e7d0aaae0ded0d98a89a7e282e63564cd58b`, where `agents/agent.py` has
+SHA-256 `49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073`.
+The candidate does not vendor those framework sources. One exact,
+non-executable copy of pinned
 Agents `main.py` is retained as
 [`tests/fixtures/agents-main-4743e7d0.blob`](tests/fixtures/agents-main-4743e7d0.blob)
 solely so offline tests can recompute the Git-blob/SHA-256 pairing and catch
@@ -45,6 +50,18 @@ the official interface expects. The local registry and candidate agent are then
 written in that runtime copy. Except for the disclosed test fixture above, this
 repository does not copy those upstream bytes or make them first-party
 material.
+
+Separately, the reviewed private kernel version-4 evidence recorded the Kaggle
+platform's admitted runtime files. Those six paths match official historical
+Agents commit `135f20aaf44f13341ebc425666bf03b5cac58d3c` (tree
+`d7fbafe6e2ed191189db89e5b571fd26da3dc375`); its `agents/agent.py` SHA-256 is
+`85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087`.
+The other four executable hashes and the MIT `LICENSE` hash match the public
+pin. This is a bounded provenance match for the five observed executable paths
+plus `LICENSE`, not a claim that unobserved Kaggle platform files reproduce the
+entire historical tree. Likewise, the reviewed Kaggle distribution
+`arc-agi==0.9.8` remains distinct from the retained public ARC-AGI 0.9.9 source
+identity; neither is reattributed to or substituted for the other.
 
 ARC Prize, ARC-AGI, Kaggle, and related names may be trademarks of their
 respective owners. Compatibility, inspection, and participation do not imply

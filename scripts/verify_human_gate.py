@@ -48,6 +48,47 @@ CONSUMPTION_KEYS = {
 }
 LEDGER_KEYS = {"schema", "record_count", "head_sha256", "records"}
 LEDGER_ENTRY_KEYS = {"sequence", "path", "sha256"}
+AGENTS_FILE_KEYS = {
+    "agents/agent.py", "agents/recorder.py", "agents/swarm.py",
+    "agents/tracing.py", "main.py",
+}
+VERIFIED_INPUT_KEYS_V4 = {
+    "source_lock_sha256", "runtime_inventory_sha256",
+    "runtime_review_receipt_sha256", "runtime_closure_status",
+    "public_source_arc_agi_repository", "public_source_arc_agi_commit",
+    "public_source_arc_agi_version", "public_source_agents_repository",
+    "public_source_agents_commit", "public_source_agents_tree",
+    "public_source_agents_files", "public_source_agents_license_file",
+    "kaggle_runtime_kernel_slug", "kaggle_runtime_kernel_version",
+    "kaggle_runtime_stage_status", "kaggle_runtime_visibility",
+    "kaggle_runtime_internet_enabled", "kaggle_runtime_accelerator",
+    "kaggle_runtime_candidate_snapshot_sha256",
+    "kaggle_runtime_evidence_manifest_sha256", "kaggle_runtime_logs_sha256",
+    "kaggle_runtime_python_version", "kaggle_runtime_distributions",
+    "kaggle_runtime_files", "kaggle_runtime_license_file",
+    "kaggle_runtime_provenance_kind", "kaggle_runtime_agents_repository",
+    "kaggle_runtime_agents_commit", "kaggle_runtime_agents_tree",
+}
+PUBLIC_AGENTS_FILES = {
+    "agents/agent.py": "49f1a349cd5e2123fceb266aec4a3a758d18ef5520e0212e808f695905d9e073",
+    "agents/recorder.py": "0a08d89f4067a760012767c05d4406bd2bf409f426e29a1193106abfcbb696c8",
+    "agents/swarm.py": "d9dc48f710f1b90a6552db0921293c7e89c8a925ed00a3faefa07ae19998ad39",
+    "agents/tracing.py": "951ca56508c524504e116303f7c64f4eb5cf723c72cab892d4d1a3292b1cc51f",
+    "main.py": "864254c750bbbd12a211f2d8aa1b1025d0609283f07dea4ede83722f2435301b",
+}
+KAGGLE_RUNTIME_FILES = {
+    **PUBLIC_AGENTS_FILES,
+    "agents/agent.py": "85655f7a11a105e50bba76efd00bebf8056d02ddbae827a8f8a5b46e849fc087",
+}
+AGENTS_LICENSE_FILE = {
+    "LICENSE": "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04",
+}
+RUNTIME_INVENTORY_SHA256 = (
+    "17bfcc2ab86fd8cd3ba4a664ce0220f93c5cab008dd7336e0b7db7b88941b2ce"
+)
+RUNTIME_REVIEW_RECEIPT_SHA256 = (
+    "ad351aefdc18461bcf297d7095f8a77daa2641c583498cfad1b9f9b25a64206b"
+)
 _VALIDATION_TOKEN = object()
 
 
@@ -415,6 +456,11 @@ def validate_candidate(candidate: Any, label: str = "candidate") -> dict[str, An
 
 
 def candidate_from_verification(verification: dict[str, Any]) -> dict[str, Any]:
+    require(
+        verification.get("schema")
+        == "hearthline.arc3.offline-candidate-verification.v4",
+        "candidate verification schema is not the reviewed-runtime successor",
+    )
     require(verification.get("structural_verification") == "PASS", "candidate verification did not pass")
     require(verification.get("kaggle_stage_ready") is True, "candidate is not ready for Kaggle staging")
     snapshot = verification.get("verified_snapshot")
@@ -424,63 +470,309 @@ def candidate_from_verification(verification: dict[str, Any]) -> dict[str, Any]:
     return candidate
 
 
-def expected_agents_files(verification: dict[str, Any]) -> dict[str, str]:
-    """Use only the verifier's committed source-lock projection, never worktree bytes."""
+def verified_inputs_v4(verification: dict[str, Any]) -> dict[str, Any]:
+    """Validate the committed verifier's distinct public and Kaggle projections."""
     candidate = candidate_from_verification(verification)
     inputs = verification.get("verified_inputs")
     require_exact_keys(
         inputs,
-        {
-            "source_lock_sha256", "agents_repository", "agents_commit",
-            "agents_files", "agents_license_file", "runtime_versions",
-            "runtime_closure_status",
-        },
-        "verified source inputs",
+        VERIFIED_INPUT_KEYS_V4,
+        "verified successor inputs",
     )
     require(inputs["source_lock_sha256"] == candidate["source_lock_sha256"], "verified source-lock binding")
-    require(inputs["agents_repository"] == "arcprize/ARC-AGI-3-Agents", "verified Agents repository")
-    require(inputs["agents_commit"] == "4743e7d0aaae0ded0d98a89a7e282e63564cd58b", "verified Agents commit")
-    files = inputs["agents_files"]
+    for key, expected_hash, label in (
+        (
+            "runtime_inventory_sha256",
+            RUNTIME_INVENTORY_SHA256,
+            "runtime inventory",
+        ),
+        (
+            "runtime_review_receipt_sha256",
+            RUNTIME_REVIEW_RECEIPT_SHA256,
+            "runtime review receipt",
+        ),
+    ):
+        require(
+            isinstance(inputs[key], str)
+            and re.fullmatch(r"[0-9a-f]{64}", inputs[key]) is not None,
+            f"verified {key}",
+        )
+        require(
+            inputs[key] == expected_hash,
+            f"verified {label} hash differs from the reviewed binding",
+        )
+    require(
+        inputs["runtime_closure_status"] == "FROZEN_POST_STAGE_SUCCESSOR",
+        "RUNTIME_CLOSURE_UNFROZEN: Gate B requires a reviewed post-Stage-A successor candidate",
+    )
+
+    require(
+        inputs["public_source_arc_agi_repository"] == "arcprize/ARC-AGI",
+        "verified public ARC-AGI repository",
+    )
+    require(
+        inputs["public_source_arc_agi_commit"]
+        == "f12822c4d550121c35a275008d964afbbed47d2f",
+        "verified public ARC-AGI commit",
+    )
+    require(
+        inputs["public_source_arc_agi_version"] == "0.9.9",
+        "verified public ARC-AGI version must remain 0.9.9",
+    )
+    require(
+        inputs["public_source_agents_repository"]
+        == "arcprize/ARC-AGI-3-Agents",
+        "verified public Agents repository",
+    )
+    require(
+        inputs["public_source_agents_commit"]
+        == "4743e7d0aaae0ded0d98a89a7e282e63564cd58b",
+        "verified public Agents commit",
+    )
+    require(
+        inputs["public_source_agents_tree"]
+        == "6878fdfdd0156059323b541fc229b6329ad4fd28",
+        "verified public Agents tree",
+    )
+    public_files = inputs["public_source_agents_files"]
     require_exact_keys(
-        files,
+        public_files,
+        AGENTS_FILE_KEYS,
+        "verified public Agents files",
+    )
+    require(
+        public_files == PUBLIC_AGENTS_FILES,
+        "verified public Agents files differ from the retained public pin",
+    )
+    public_license = inputs["public_source_agents_license_file"]
+    require_exact_keys(
+        public_license,
+        {"LICENSE"},
+        "verified public Agents license file",
+    )
+    require(
+        public_license == AGENTS_LICENSE_FILE,
+        "verified public Agents license hash",
+    )
+
+    require(
+        inputs["kaggle_runtime_kernel_slug"]
+        == "grativy6/hearthline-arc3-readiness",
+        "verified Kaggle runtime kernel identity",
+    )
+    require(
+        type(inputs["kaggle_runtime_kernel_version"]) is int
+        and inputs["kaggle_runtime_kernel_version"] == 4,
+        "verified Kaggle runtime kernel version",
+    )
+    require(inputs["kaggle_runtime_stage_status"] == "COMPLETE", "verified Kaggle runtime stage status")
+    require(inputs["kaggle_runtime_visibility"] == "private", "verified Kaggle runtime visibility")
+    require(inputs["kaggle_runtime_internet_enabled"] is False, "verified Kaggle runtime internet state")
+    require(inputs["kaggle_runtime_accelerator"] == "cpu", "verified Kaggle runtime accelerator")
+    require(
+        candidate["kernel_id"] == inputs["kaggle_runtime_kernel_slug"],
+        "verified candidate kernel differs from the reviewed Kaggle runtime kernel",
+    )
+    require(
+        candidate["accelerator"] == inputs["kaggle_runtime_accelerator"],
+        "verified candidate accelerator differs from the reviewed Kaggle runtime accelerator",
+    )
+    require(
+        inputs["kaggle_runtime_candidate_snapshot_sha256"]
+        == "823cd5c7a99b16141959a09f011e361b2c03615ea37e72a65880a9eb5e8db4d0",
+        "verified Kaggle runtime evidence snapshot",
+    )
+    for key, expected_hash, label in (
+        (
+            "kaggle_runtime_evidence_manifest_sha256",
+            "b4dd87fe2a0a17e8083bdcfb81a1be2b191fb45776e33e234d369c8918e93b06",
+            "evidence manifest",
+        ),
+        (
+            "kaggle_runtime_logs_sha256",
+            "1471812acc99ca75ca234ea7defd727128a43869bea26e4e91a8577dd062eb53",
+            "logs",
+        ),
+    ):
+        observed_hash = inputs[key]
+        require(
+            isinstance(observed_hash, str)
+            and re.fullmatch(r"[0-9a-f]{64}", observed_hash) is not None,
+            f"verified Kaggle runtime {label} SHA-256",
+        )
+        require(
+            observed_hash == expected_hash,
+            f"verified Kaggle runtime {label} hash differs from reviewed evidence",
+        )
+    require(inputs["kaggle_runtime_python_version"] == "3.12.13", "verified Kaggle runtime Python version")
+
+    distributions = inputs["kaggle_runtime_distributions"]
+    require(
+        isinstance(distributions, list) and len(distributions) == 875,
+        "verified Kaggle runtime must contain exactly 875 distributions",
+    )
+    names: list[str] = []
+    for distribution in distributions:
+        require_exact_keys(distribution, {"name", "version"}, "verified runtime distribution")
+        name = distribution["name"]
+        require(
+            isinstance(name, str)
+            and re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) is not None
+            and name == re.sub(r"[-_.]+", "-", name).lower(),
+            "verified PEP 503 canonical distribution name",
+        )
+        require(
+            isinstance(distribution["version"], str)
+            and distribution["version"].strip(),
+            "verified resolved distribution version",
+        )
+        names.append(name)
+    require(len(names) == len(set(names)), "verified runtime distribution names must be unique")
+    require(names == sorted(names), "verified runtime distributions must retain deterministic name order")
+    versions = {row["name"]: row["version"] for row in distributions}
+    require(
         {
-            "agents/agent.py", "agents/recorder.py", "agents/swarm.py",
-            "agents/tracing.py", "main.py",
+            "arc-agi": "0.9.8",
+            "arcengine": "0.9.3",
+            "python-dotenv": "1.2.2",
+        }
+        == {
+            name: versions.get(name)
+            for name in ("arc-agi", "arcengine", "python-dotenv")
         },
-        "verified Agents files",
+        "verified Kaggle runtime direct versions",
     )
-    for path, digest in files.items():
-        require(isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest) is not None, f"verified Agents hash: {path}")
-    return dict(files)
 
-
-def expected_agents_license_file(verification: dict[str, Any]) -> dict[str, str]:
-    candidate = candidate_from_verification(verification)
-    inputs = verification.get("verified_inputs")
-    require(isinstance(inputs, dict), "verified source inputs missing")
+    runtime_files = inputs["kaggle_runtime_files"]
+    require_exact_keys(
+        runtime_files,
+        AGENTS_FILE_KEYS,
+        "verified Kaggle runtime Agents files",
+    )
     require(
-        inputs.get("source_lock_sha256") == candidate["source_lock_sha256"],
-        "verified source-lock binding",
+        runtime_files == KAGGLE_RUNTIME_FILES,
+        "verified Kaggle runtime Agents files differ from the reviewed binding",
     )
-    license_file = inputs.get("agents_license_file")
-    require_exact_keys(license_file, {"LICENSE"}, "verified Agents license file")
+    runtime_license = inputs["kaggle_runtime_license_file"]
+    require_exact_keys(
+        runtime_license,
+        {"LICENSE"},
+        "verified Kaggle runtime Agents license file",
+    )
     require(
-        license_file["LICENSE"]
-        == "75c4276c506fd93082b38ad39f67ee97aa859574401ef978e701710c7a40af04",
-        "verified Agents license hash",
+        runtime_license == AGENTS_LICENSE_FILE,
+        "verified Kaggle runtime Agents license hash",
     )
-    return dict(license_file)
+    reconstructed_inventory = {
+        "agents_files": dict(runtime_files),
+        "agents_license_file": dict(runtime_license),
+        "distributions": [
+            {"name": row["name"], "version": row["version"]}
+            for row in distributions
+        ],
+        "python_version": inputs["kaggle_runtime_python_version"],
+    }
+    try:
+        reconstructed_inventory_bytes = (
+            json.dumps(
+                reconstructed_inventory,
+                indent=2,
+                sort_keys=True,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
+            + "\n"
+        ).encode("utf-8")
+    except (TypeError, ValueError, UnicodeEncodeError) as exc:
+        raise GateError(
+            f"verified Kaggle runtime inventory cannot be reconstructed: {exc}"
+        ) from exc
+    require(
+        sha256(reconstructed_inventory_bytes) == inputs["runtime_inventory_sha256"],
+        "verified Kaggle runtime inventory content hash differs from the canonical committed artifact",
+    )
+    require(
+        public_files != runtime_files,
+        "public and Kaggle runtime Agents file bindings were conflated",
+    )
+    require(
+        inputs["kaggle_runtime_provenance_kind"]
+        == "KAGGLE_PLATFORM_COMPETITION_INPUT",
+        "verified Kaggle runtime provenance kind",
+    )
+    require(
+        inputs["kaggle_runtime_agents_repository"]
+        == "arcprize/ARC-AGI-3-Agents",
+        "verified Kaggle runtime Agents repository",
+    )
+    require(
+        inputs["kaggle_runtime_agents_commit"]
+        == "135f20aaf44f13341ebc425666bf03b5cac58d3c",
+        "verified Kaggle runtime Agents provenance commit",
+    )
+    require(
+        inputs["kaggle_runtime_agents_tree"]
+        == "d7fbafe6e2ed191189db89e5b571fd26da3dc375",
+        "verified Kaggle runtime Agents provenance tree",
+    )
+    return dict(inputs)
 
 
-def expected_runtime_versions(verification: dict[str, Any]) -> dict[str, str]:
-    candidate = candidate_from_verification(verification)
-    inputs = verification.get("verified_inputs")
-    require(isinstance(inputs, dict), "verified source inputs missing")
-    require(inputs.get("source_lock_sha256") == candidate["source_lock_sha256"], "verified source-lock binding")
-    versions = inputs.get("runtime_versions")
-    require_exact_keys(versions, {"arc-agi", "arcengine"}, "verified runtime versions")
-    require(versions == {"arc-agi": "0.9.8", "arcengine": "0.9.3"}, "verified runtime version pins")
-    return dict(versions)
+def expected_public_sources(verification: dict[str, Any]) -> dict[str, Any]:
+    inputs = verified_inputs_v4(verification)
+    return {
+        "arc_agi": {
+            "repository": inputs["public_source_arc_agi_repository"],
+            "commit": inputs["public_source_arc_agi_commit"],
+            "version": inputs["public_source_arc_agi_version"],
+        },
+        "agents": {
+            "repository": inputs["public_source_agents_repository"],
+            "commit": inputs["public_source_agents_commit"],
+            "tree": inputs["public_source_agents_tree"],
+            "files": dict(inputs["public_source_agents_files"]),
+            "license_file": dict(inputs["public_source_agents_license_file"]),
+        },
+    }
+
+
+def expected_accepted_runtime_binding(
+    verification: dict[str, Any],
+) -> dict[str, str]:
+    inputs = verified_inputs_v4(verification)
+    return {
+        "status": inputs["runtime_closure_status"],
+        "inventory_sha256": inputs["runtime_inventory_sha256"],
+        "human_review_receipt_sha256": inputs["runtime_review_receipt_sha256"],
+        "baseline_evidence_manifest_sha256": inputs[
+            "kaggle_runtime_evidence_manifest_sha256"
+        ],
+        "baseline_logs_sha256": inputs["kaggle_runtime_logs_sha256"],
+    }
+
+
+def expected_kaggle_runtime(verification: dict[str, Any]) -> dict[str, Any]:
+    inputs = verified_inputs_v4(verification)
+    return {
+        "captured_from": "HEARTHLINE_STAGE_INVENTORY",
+        "complete": True,
+        "python_version": inputs["kaggle_runtime_python_version"],
+        "distributions": [
+            {"name": row["name"], "version": row["version"]}
+            for row in inputs["kaggle_runtime_distributions"]
+        ],
+        "agents": {
+            "provenance": {
+                "kind": inputs["kaggle_runtime_provenance_kind"],
+                "repository": inputs["kaggle_runtime_agents_repository"],
+                "commit": inputs["kaggle_runtime_agents_commit"],
+                "tree": inputs["kaggle_runtime_agents_tree"],
+            },
+            "files": dict(inputs["kaggle_runtime_files"]),
+            "license_file": dict(inputs["kaggle_runtime_license_file"]),
+        },
+        "reviewed_by_human": True,
+    }
 
 
 def _committed_verifier_bytes() -> tuple[bytes, dict[str, Any]]:
@@ -808,6 +1100,7 @@ def validate_stage(
     ledger_state: tuple[list[dict[str, Any]], dict[str, Any]] | None = None,
 ) -> ValidatedGate:
     expected = candidate_from_verification(verification)
+    verified_inputs_v4(verification)
     issued, expires = validate_common(grant, "KAGGLE_STAGE", expected, now, ledger_state)
     require(grant["stage_evidence"] is None, "Phase A cannot contain stage evidence")
     acknowledgements = grant["acknowledgements"]
@@ -895,13 +1188,7 @@ def validate_competition(
     ledger_state: tuple[list[dict[str, Any]], dict[str, Any]] | None = None,
 ) -> ValidatedGate:
     expected = candidate_from_verification(verification)
-    verified_inputs = verification.get("verified_inputs")
-    require(
-        isinstance(verified_inputs, dict)
-        and verified_inputs.get("runtime_closure_status")
-        == "FROZEN_POST_STAGE_SUCCESSOR",
-        "RUNTIME_CLOSURE_UNFROZEN: Gate B requires a reviewed post-Stage-A successor candidate",
-    )
+    verified_inputs_v4(verification)
     issued, expires = validate_common(
         grant, "COMPETITION_IGNITION", expected, now, ledger_state
     )
@@ -912,10 +1199,11 @@ def validate_competition(
         "schema", "status", "candidate", "kernel_id", "kernel_run_id",
         "kernel_visibility", "internet_enabled", "output_reviewed", "submission",
         "recorded_by_human", "credential_material_recorded",
-        "external_effect_performed_by_gate_tool", "gate_a", "runtime_inventory",
+        "external_effect_performed_by_gate_tool", "gate_a", "public_sources",
+        "accepted_runtime_binding", "stage_evidence", "kaggle_runtime",
         "recorded_at", "claim_ceiling",
     }, "stage receipt")
-    require(stage_receipt["schema"] == "hearthline.arc3.kaggle-stage-result.v3", "stage receipt schema")
+    require(stage_receipt["schema"] == "hearthline.arc3.kaggle-stage-result.v4", "stage receipt schema")
     require(stage_receipt["status"] == "COMPLETE", "private kernel stage is not complete")
     require(validate_candidate(stage_receipt["candidate"], "stage candidate") == expected, "stage receipt candidate mismatch")
     kernel_id = stage_receipt["kernel_id"]
@@ -933,41 +1221,98 @@ def validate_competition(
     require(stage_receipt["external_effect_performed_by_gate_tool"] is False, "gate tool cannot claim the stage effect")
     require(isinstance(stage_receipt["claim_ceiling"], str) and stage_receipt["claim_ceiling"].strip(), "stage receipt claim ceiling")
 
-    runtime = stage_receipt["runtime_inventory"]
+    public_sources = stage_receipt["public_sources"]
+    require_exact_keys(public_sources, {"arc_agi", "agents"}, "stage public sources")
+    require_exact_keys(
+        public_sources["arc_agi"],
+        {"repository", "commit", "version"},
+        "stage public ARC-AGI source",
+    )
+    require_exact_keys(
+        public_sources["agents"],
+        {"repository", "commit", "tree", "files", "license_file"},
+        "stage public Agents source",
+    )
+    require(
+        public_sources == expected_public_sources(verification),
+        "stage public source identities differ from the verified public pins",
+    )
+
+    accepted_runtime_binding = stage_receipt["accepted_runtime_binding"]
+    require_exact_keys(
+        accepted_runtime_binding,
+        {
+            "status", "inventory_sha256", "human_review_receipt_sha256",
+            "baseline_evidence_manifest_sha256", "baseline_logs_sha256",
+        },
+        "accepted runtime binding",
+    )
+    require(
+        accepted_runtime_binding
+        == expected_accepted_runtime_binding(verification),
+        "accepted runtime binding differs from the verified frozen baseline",
+    )
+
+    stage_evidence = stage_receipt["stage_evidence"]
+    require_exact_keys(
+        stage_evidence,
+        {"evidence_manifest_sha256", "logs_sha256"},
+        "new-run stage evidence",
+    )
+    for key, label in (
+        ("evidence_manifest_sha256", "evidence manifest"),
+        ("logs_sha256", "logs"),
+    ):
+        require(
+            isinstance(stage_evidence[key], str)
+            and re.fullmatch(r"[0-9a-f]{64}", stage_evidence[key]) is not None,
+            f"new-run stage {label} SHA-256",
+        )
+    require(
+        stage_evidence["evidence_manifest_sha256"]
+        != accepted_runtime_binding["baseline_evidence_manifest_sha256"],
+        "new-run stage evidence manifest must differ from the accepted baseline manifest",
+    )
+
+    runtime = stage_receipt["kaggle_runtime"]
     require_exact_keys(runtime, {
         "captured_from", "complete", "python_version", "distributions",
-        "agents_repository", "agents_expected_commit", "agents_files",
-        "agents_license_file", "reviewed_by_human",
-    }, "runtime inventory")
-    require(runtime["captured_from"] == "HEARTHLINE_STAGE_INVENTORY", "runtime inventory source")
+        "agents", "reviewed_by_human",
+    }, "Kaggle runtime inventory")
+    require_exact_keys(
+        runtime["agents"],
+        {"provenance", "files", "license_file"},
+        "Kaggle runtime Agents binding",
+    )
+    require_exact_keys(
+        runtime["agents"]["provenance"],
+        {"kind", "repository", "commit", "tree"},
+        "Kaggle runtime Agents provenance",
+    )
+    expected_runtime = expected_kaggle_runtime(verification)
+    require(runtime["captured_from"] == expected_runtime["captured_from"], "runtime inventory source")
     require(runtime["complete"] is True, "runtime inventory must be complete")
-    require(re.fullmatch(r"3\.12\.\d+", str(runtime["python_version"])) is not None, "private runtime must use Python 3.12")
-    require(isinstance(runtime["distributions"], list) and runtime["distributions"], "resolved distribution inventory required")
-    names: list[str] = []
-    for distribution in runtime["distributions"]:
-        require_exact_keys(distribution, {"name", "version"}, "distribution record")
-        require(
-            isinstance(distribution["name"], str)
-            and re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", distribution["name"])
-            is not None
-            and distribution["name"]
-            == re.sub(r"[-_.]+", "-", distribution["name"]).lower(),
-            "PEP 503 canonical distribution name",
-        )
-        require(isinstance(distribution["version"], str) and distribution["version"].strip(), "resolved distribution version")
-        names.append(distribution["name"])
-    require(len(names) == len(set(names)), "resolved distribution names must be unique")
-    versions = {row["name"]: row["version"] for row in runtime["distributions"]}
-    require({"arc-agi", "arcengine", "python-dotenv"} <= set(names), "starter distributions missing from runtime inventory")
-    for name, version in expected_runtime_versions(verification).items():
-        require(versions.get(name) == version, f"private runtime version mismatch: {name}")
-    require(runtime["agents_repository"] == "arcprize/ARC-AGI-3-Agents", "Agents repository identity")
-    require(runtime["agents_expected_commit"] == "4743e7d0aaae0ded0d98a89a7e282e63564cd58b", "Agents expected commit")
-    require(runtime["agents_files"] == expected_agents_files(verification), "platform Agents files differ from source lock")
     require(
-        runtime["agents_license_file"]
-        == expected_agents_license_file(verification),
-        "platform Agents license differs from source lock",
+        runtime["python_version"] == expected_runtime["python_version"],
+        "Kaggle runtime Python version differs from the verified frozen runtime",
+    )
+    require(
+        runtime["distributions"] == expected_runtime["distributions"],
+        "Kaggle runtime distribution inventory or order differs from the verified frozen runtime",
+    )
+    require(
+        runtime["agents"]["provenance"]
+        == expected_runtime["agents"]["provenance"],
+        "Kaggle runtime Agents provenance differs from the verified frozen runtime",
+    )
+    require(
+        runtime["agents"]["files"] == expected_runtime["agents"]["files"],
+        "Kaggle runtime Agents files differ from the verified frozen runtime",
+    )
+    require(
+        runtime["agents"]["license_file"]
+        == expected_runtime["agents"]["license_file"],
+        "Kaggle runtime Agents license differs from the verified frozen runtime",
     )
     require(runtime["reviewed_by_human"] is True, "runtime inventory human review required")
 
