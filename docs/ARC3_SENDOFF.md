@@ -1,5 +1,18 @@
 # ARC-AGI-3 sendoff route — index only, no authority
 
+## 2026-09-08 — Astra development decision
+
+Christopher D. Pang has retired the self-imposed Astra embargo and will use
+Astra when useful and appropriate for the authorized task. Read the
+[current steward declaration](https://github.com/Grativy6/hearthline-plays/blob/7b29eafa2a5704c420c74109137b6ea0ff60dc82/launch/receipts/20260908-astra-development-decision.md)
+before the earlier September 4 access declaration and pre-Astra seal, which
+remain unchanged at their original paths.
+
+Earlier assistance is steward-reported; its exact first-use boundary remains
+unreconstructed. This decision does not declare the Kaggle “sent out”
+milestone satisfied. The ARC run and gate records below retain their own
+dated scope.
+
 Status: `OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED`
 
 Terminal blocker: `RUNTIME_CLOSURE_UNFROZEN`
@@ -170,11 +183,11 @@ delta adds the Astra access/embargo receipt pair and updates the receipt index.
 The merged successor joins both histories without erasing that prior
 divergence or collapsing their separate provenance.
 
-The Astra embargo remains `ACTIVE` and its milestone condition remains
-`UNRESOLVED_NOT_RECORDED`. This index neither proves an Astra invocation nor
-lifts the embargo; only a later append-only steward declaration can record its
-condition satisfied. If an Astra contribution is ever admitted, the existing
-receipt requires its own explicit grant and successor receipt.
+The September 4 Astra receipt records the historical embargo as `ACTIVE`
+and its milestone condition as `UNRESOLVED_NOT_RECORDED`. The September 8
+steward declaration linked above retires that restriction by decision, without
+declaring the milestone satisfied. The original receipt and parent seal are
+preserved; later contributions retain their own provenance.
 
 Millennium and Creature are side branches, not ARC-launch descendants. Do not
 merge either whole branch into ARC for convenience.
