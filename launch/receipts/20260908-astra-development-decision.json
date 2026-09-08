@@ -1,0 +1,56 @@
+{
+  "schema": "hearthline-plays.astra-development-decision.v1",
+  "receipt_id": "ASTRA-DEVELOPMENT-DECISION-20260908",
+  "status": "EMBARGO_RETIRED_BY_STEWARD_DECISION",
+  "decision_date": "2026-09-08",
+  "steward": "Christopher D. Pang",
+  "repository": "Grativy6/hearthline-plays",
+  "record_base_commit": "ce7e7669ae6371d22d29def096e755e7a96d22df",
+  "record_base_tree": "0d36c4d6d2dbc75d0ac9f01f72d8d0a14d04e21a",
+  "predecessor": {
+    "receipt_id": "ASTRA-ACCESS-EMBARGO-20260904T203911Z",
+    "retained_at_commit": "ce7e7669ae6371d22d29def096e755e7a96d22df",
+    "markdown_path": "launch/receipts/20260904T203911Z-astra-access-embargo-declaration.md",
+    "markdown_git_blob_sha": "d5ded5ac2ac37be8d76c010465622c9fdfd3781b",
+    "json_path": "launch/receipts/20260904T203911Z-astra-access-embargo-declaration.json",
+    "json_git_blob_sha": "4f9b4a08585a7217c5e839923c7846b18caa7a55",
+    "historical_bytes_changed": false,
+    "original_pre_astra_seal_changed": false
+  },
+  "decision": {
+    "source": "DIRECT_STEWARD_DECLARATION",
+    "previous_embargo_state": "ACTIVE",
+    "current_embargo_state": "RETIRED_BY_STEWARD_DECISION",
+    "practice": "Use Astra when Christopher considers it useful and appropriate for Hearthline work, within the scope of the task he authorizes.",
+    "original_milestone_phrase": "until the ARC-AGI-3 Kaggle work is sent out",
+    "milestone_satisfaction": "NOT_ASSERTED_BY_THIS_RECORD"
+  },
+  "earlier_assistance": {
+    "source": "STEWARD_ACKNOWLEDGMENT",
+    "astra_assistance_reported": true,
+    "first_use_at": null,
+    "first_affected_commit": null,
+    "exact_provider_model_identifier": null,
+    "affected_artifact_inventory": null,
+    "reconstruction_status": "UNRESOLVED_NOT_RECONSTRUCTED",
+    "uninterrupted_post_seal_nonuse_certified": false
+  },
+  "later_contribution_provenance": [
+    "affected artifacts and commits",
+    "displayed or verified model identifier",
+    "provider surface",
+    "contribution scope"
+  ],
+  "recording_assistance": {
+    "surface": "ChatGPT Work / Codex",
+    "exact_provider_model_identifier": null,
+    "ai_is_tool_not_author": true
+  },
+  "scope": {
+    "development_assistance_distinct_from_evaluation_configuration": true,
+    "frozen_benchmark_inputs_changed": false,
+    "runtime_gate_opened": false,
+    "submission_gate_opened": false,
+    "kaggle_result_claimed": false
+  }
+}

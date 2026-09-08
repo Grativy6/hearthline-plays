@@ -8,8 +8,12 @@ environment variables, and other private or competition material remain outside 
 
 ## Model-lineage boundary records
 
+- **Current decision — 2026-09-08:** [Astra development decision](20260908-astra-development-decision.md) with its paired [JSON declaration](20260908-astra-development-decision.json) retires the self-imposed embargo by steward decision. Earlier assistance is acknowledged; the first-use boundary remains unreconstructed. This does not declare the Kaggle milestone satisfied.
+
+The following declarations are historical and retain their original bytes:
+
 - [`20260904T001827Z-pre-astra-lineage-seal.md`](20260904T001827Z-pre-astra-lineage-seal.md) with its paired [JSON manifest](20260904T001827Z-pre-astra-lineage-seal.json) fixes the original pre-Astra cut.
-- [`20260904T203911Z-astra-access-embargo-declaration.md`](20260904T203911Z-astra-access-embargo-declaration.md) with its paired [JSON manifest](20260904T203911Z-astra-access-embargo-declaration.json) records approximate access availability and the active no-Astra-on-Hearthline embargo without treating access as use.
+- [`20260904T203911Z-astra-access-embargo-declaration.md`](20260904T203911Z-astra-access-embargo-declaration.md) with its paired [JSON manifest](20260904T203911Z-astra-access-embargo-declaration.json) records approximate access availability and the no-Astra-on-Hearthline embargo declared on September 4, without treating access as use. That restriction is retired by the current decision above.
 
 ## Public-orientation records
 
