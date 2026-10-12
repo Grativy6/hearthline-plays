@@ -87,3 +87,21 @@ def check(receipt: dict[str, Any], fixture_path: Path) -> list[str]:
 
 def verify_files(receipt_path: Path, fixture_path: Path) -> list[str]:
     return check(json.loads(receipt_path.read_text(encoding="utf-8")), fixture_path)
+
+def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Independently replay an MH-01 synthetic receipt")
+    parser.add_argument("receipt", type=Path)
+    parser.add_argument("--fixture", type=Path, required=True)
+    args = parser.parse_args()
+    failures = verify_files(args.receipt, args.fixture)
+    if failures:
+        for failure in failures:
+            print("FAIL:", failure)
+        raise SystemExit(1)
+    print("PASS: recorded gate and executor decisions match the supplied synthetic world")
+
+
+if __name__ == "__main__":
+    main()
