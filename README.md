@@ -1,102 +1,14 @@
-# Hearthline Plays
+# Hearthline Plays · Security Lab series anchor
+**Status: SERIES_SCAFFOLD_ONLY — NO_EXECUTION_OR_EXTERNAL_AUTHORITY**
 
-A public playground for building, running, and playing games with AI models.
+This branch is the series anchor for bounded security games, Gremlin Hunter (failure diagnosis) and Menace Hearthline (adversarial game play). It starts at `main@da183b6619588b87feb5c78b67485762dd317fcf` and is independent of ARC, Kaggle, Millennium and Finis Solutus titles.
 
-This repository is organized by branch so one growing playground does not become one crowded root. `main` is the front door and shared map. Each game series has a stable anchor branch; individual titles, worlds, and bounded experiments branch from that anchor.
+- This branch is **not** an executable target or an external testing grant.
+- Title implementation belongs in `security-lab/titles/<slug>`, starting from an exact series-anchor commit.
+- No network connections, accounts, credentials, bounty target probes or publication of private findings are authorized.
+- The environment is the referee; the controller executes bounded skills; the heartbeat reports material returns; Hearthline is the player. See inherited [game embodiment blueprint](docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md).
+- Before any conversational model experiment, honor the inherited [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md); no uncontrolled prompt exclusions.
 
-## Start here
+See [SECURITY_LAB_SCOPE.md](SECURITY_LAB_SCOPE.md) for the series boundary. Any later experiment must name its own grants, source lock, tested scope and independent checks.
 
-`main` is an index, not a runnable title and not a grant of external authority.
-
-- [Playground index](docs/PLAYGROUND_INDEX.md) — every current public branch,
-  exact tip, role, and honest status.
-- [Scientific Run Entry v1.0](docs/SCIENTIFIC_RUN_ENTRY.md) — the
-  repository-adopted, versioned honesty preflight for future scientific,
-  evaluation, benchmark, and ARC routes.
-- [ARC-AGI-3 sendoff route](docs/ARC3_SENDOFF.md) — the exact current
-  candidate, evidence, blocker, closed gates, and human-only reopening sequence.
-- [History and archive map](docs/HISTORY_AND_ARCHIVE_MAP.md) — retained,
-  merged, divergent, sealed, and inherited surfaces without flattening them.
-- [Machine-readable branch snapshot](manifests/branch-status.v1.json) — the
-  dated source for exact branch tips and index classifications.
-
-The current ARC-AGI-3 candidate is
-`arc-agi/titles/arc-agi-3-hearthline-launch-20260903` at
-`25e154d539b1c85e28c5334b9b940ab6880ca600`, tree
-`d249cec7b81d942b84a6f728a421e3cd18ddaf31`. Its exact reviewed source tree
-passed remote verification, but its operational status remains
-`OFFLINE_CANDIDATE_SOURCE_READY_HUMAN_GATES_CLOSED` and its terminal blocker
-remains `RUNTIME_CLOSURE_UNFROZEN`. Verification is not permission or a score.
-
-The [CHARTER and preflight predecessor](https://github.com/Grativy6/hearthline-plays/pull/4)
-remains in this title's ancestry. It reconciled the launch and hardened-station
-histories, added the published
-[CHARTER v1.0](https://doi.org/10.5281/zenodo.22288471) anchor, and adopted the
-scientific preflight and sendoff context. The
-[Homecoming return-queue successor](https://github.com/Grativy6/hearthline-plays/pull/6)
-is preserved in its ancestry. The current
-[Morrow priority-queue successor](https://github.com/Grativy6/hearthline-plays/pull/8)
-adds dispatch-time priority, retry rotation, a deterministic
-[stateless sorter](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/tools/morrow_queue.py),
-and the story
-[Morrow and the Marked Tethers](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/MORROW_AND_THE_MARKED_TETHERS.md).
-Hearthline marks priority at dispatch; the controller owns durable state and
-final admission; Morrow receives only a fresh ready-only view. Thulia remains a
-separate durable chronicler: neither may read, write, invoke, impersonate,
-depend on, or share state with the other, and each must work when the other is
-absent. The full
-[offline queue design](https://github.com/Grativy6/hearthline-plays/blob/25e154d539b1c85e28c5334b9b940ab6880ca600/design/RETURN_QUEUE.md)
-does not wire a hosted scheduler, alter executable ARC or source-lock bytes,
-open either human gate, perform external contact, or establish a result.
-
-## Shared game embodiment blueprint
-
-[`Hearthline Game Embodiment Blueprint v0.1`](docs/HEARTHLINE_GAME_EMBODIMENT_BLUEPRINT_v0.1.md) defines the title-neutral controller–heartbeat architecture for persistent AI play: the environment is the world and referee, the controller is the body, the heartbeat is the sensory return, and Hearthline is the player.
-
-Title branches may adopt an exact blueprint version and supply their own game adapter, controller profile, observer, heartbeat schema, persistent trace, intervention ledger, run manifest, and provenance record. The shared blueprint does not place executable game code on `main` or silently alter an existing title branch.
-
-## Front of the playground: Finis Solutus
-
-**Finis Solutus** is the current front-of-house project: an open-ended fantasy world built from persistent rules rather than a predetermined plot.
-
-- Series anchor: [`finis-solutus/main`](https://github.com/Grativy6/hearthline-plays/tree/finis-solutus/main)
-- Persistent world branches: `finis-solutus/worlds/<slug>`
-
-## Deeper branch: ARC-AGI
-
-ARC work has its own series branch so public ARC-AGI development can grow without taking over the repository entrance.
-
-- Series anchor: [`arc-agi/main`](https://github.com/Grativy6/hearthline-plays/tree/arc-agi/main)
-- Title or environment branches: `arc-agi/titles/<slug>`
-
-## Branch map
-
-| Branch pattern | Role |
-| --- | --- |
-| `main` | Shared front door, branch map, cross-title blueprints, and license |
-| `finis-solutus/main` | Finis Solutus series anchor and common scaffold |
-| `finis-solutus/worlds/<slug>` | One persistent Finis Solutus world |
-| `arc-agi/main` | ARC-AGI series anchor and public-development boundary |
-| `arc-agi/titles/<slug>` | One ARC title, environment, or bounded experiment |
-| `<series>/main` | Future series anchor |
-| `<series>/titles/<slug>` | Future title branch created from its series anchor |
-
-The `<series>/main` form is deliberate: Git cannot keep both a branch named `<series>` and descendants named `<series>/...`. Giving every series an explicit `/main` anchor leaves room for its children.
-
-## Branchline rules
-
-1. Create each title or world from the exact commit of its series anchor.
-2. Record that parent commit and any inherited kernel, ruleset, or environment version in the child branch README.
-3. Keep ongoing state and its ancestry explicit. A migration or major upgrade creates a child branch; it does not silently rewrite an existing world or run.
-4. Keep credentials, secrets, private holdouts, and material that cannot be redistributed out of the repository.
-5. Treat third-party rules, names, datasets, assets, APIs, and trademarks according to their own terms.
-
-There is intentionally no game implementation on `main`. Playable material belongs in the branch that owns its lineage.
-
-## License
-
-Except where a file says otherwise, original material in this repository is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
-
-Third-party material is not relicensed by its presence here.
-
-Suggested attribution: **Hearthline Plays — Christopher D. Pang — CC BY 4.0 — https://github.com/Grativy6/hearthline-plays**
+**Author/steward:** Christopher D. Pang. AI-assisted implementation; no external execution or scientific validation claimed.
