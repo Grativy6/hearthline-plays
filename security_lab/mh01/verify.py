@@ -88,6 +88,7 @@ def check(receipt: dict[str, Any], fixture_path: Path) -> list[str]:
 def verify_files(receipt_path: Path, fixture_path: Path) -> list[str]:
     return check(json.loads(receipt_path.read_text(encoding="utf-8")), fixture_path)
 
+
 def main() -> None:
     import argparse
 

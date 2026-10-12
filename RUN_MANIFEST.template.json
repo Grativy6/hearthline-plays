@@ -6,12 +6,13 @@
   "fixture": "fixtures/mh01_world.json",
   "fixture_hash": "COMPUTE_FROM_EXACT_BYTES_AT_RUN",
   "actor": "SCRIPTED_FIXTURE_NOT_AN_LLM",
-  "honesty_pcp": "NOT_APPLICABLE_NONCONVERSATIONAL_DETERMINISTIC",
+  "honesty_pcp": "NOT_APPLICABLE",
   "inherited_preflight": "docs/SCIENTIFIC_RUN_ENTRY.md",
   "external_network": false,
   "real_credentials": false,
   "model_calls": 0,
   "bounty_submission": false,
   "output_receipt": "SELECT_LOCAL_OUTPUT_PATH_AT_RUN",
-  "human_review": "PENDING"
+  "human_review": "PENDING",
+  "honesty_pcp_reason": "No model-facing boundary in the scripted deterministic demo"
 }
